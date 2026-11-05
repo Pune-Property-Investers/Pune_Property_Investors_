@@ -53,12 +53,13 @@ function Home() {
                     </aside>
                 </div>
 
-                <TrustStats />
                 <Workflow />
                 <DeveloperLogos />
 
                 {/* Full-width Architectural Contact Us section */}
                 <HomeContact />
+
+                <TrustStats />
             </main>
 
             <Footer />
