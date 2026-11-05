@@ -34,10 +34,12 @@ jobs:
         run: npm ci
 
       - name: Build application
-        run: npm run build
+        run: |
+          npm run build
+          touch ./out/.nojekyll
         env:
           CI: false
-          NEXT_PUBLIC_BASE_PATH: /Pune_property_investers
+          NEXT_PUBLIC_BASE_PATH: /Pune_Property_Investors_
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3

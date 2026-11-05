@@ -5,17 +5,22 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Base path configuration:
-// If NEXT_PUBLIC_BASE_PATH is explicitly set (even empty string ""), use that.
-// If running in GitHub Actions for GitHub Pages deployment, default to repo path.
-// For all other hosting platforms (Vercel, Netlify, custom domains, local preview), default to root "".
+// 1. If NEXT_PUBLIC_BASE_PATH is explicitly set, use that.
+// 2. If running in GitHub Actions, dynamically detect the repository name from GITHUB_REPOSITORY (e.g. "/Pune_Property_Investors_").
+// 3. For local dev / custom domains, default to "".
+const repoFromEnv = process.env.GITHUB_REPOSITORY
+  ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}`
+  : "/Pune_Property_Investors_";
+
 const basePath =
   process.env.NEXT_PUBLIC_BASE_PATH !== undefined
     ? process.env.NEXT_PUBLIC_BASE_PATH
-    : (process.env.GITHUB_ACTIONS === "true" ? "/Pune_property_investers" : "");
+    : (process.env.GITHUB_ACTIONS === "true" ? repoFromEnv : "");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "export",
+  trailingSlash: true,
   allowedDevOrigins: [
     "localhost",
     "127.0.0.1",
