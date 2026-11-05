@@ -4,7 +4,6 @@ import { useState } from "react";
 import Header from "../layouts/Header";
 import HeroSection from "../home/HeroSection";
 import FeaturedProperties from "../home/FeaturedProperties";
-import PropertyTypes from "../home/PropertyTypes";
 import Footer from "../layouts/Footer";
 import BrowseLocations from "../home/BrowseLocations";
 import NewLaunchProjects from "../home/NewLaunchProjects";
@@ -38,9 +37,6 @@ function Home() {
                         <FeaturedProperties
                             filters={{ projectType: activeTab }}
                         />
-
-                        {/* 2. Browse by Property Type */}
-                        <PropertyTypes />
 
                         <BrowseLocations />
                         <NewLaunchProjects />
