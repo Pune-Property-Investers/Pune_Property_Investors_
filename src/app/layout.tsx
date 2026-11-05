@@ -90,11 +90,16 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+        <html
+            lang="en"
+            className={`${inter.variable} ${playfair.variable}`}
+            data-scroll-behavior="smooth"
+            suppressHydrationWarning
+        >
             <head>
                 <link rel="icon" type="image/svg+xml" href={`${basePath}/favicon.svg`} />
             </head>
-            <body>{children}</body>
+            <body suppressHydrationWarning>{children}</body>
         </html>
     );
 }

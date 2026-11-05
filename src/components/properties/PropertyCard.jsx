@@ -11,6 +11,7 @@ const FALLBACK_IMAGE =
 function PropertyCard({ property }) {
     const [imgSrc, setImgSrc] = useState(property?.image || FALLBACK_IMAGE);
     const [isStarred, setIsStarred] = useState(false);
+    const [logoFailed, setLogoFailed] = useState(false);
 
     if (!property) return null;
 
@@ -26,6 +27,10 @@ function PropertyCard({ property }) {
     const statusText = property.status || "Ready to Move";
     const developerName = property.developer || property.brandName || "Prime Realty";
     const reraText = property.reraId || property.rera ? "RERA Approved" : "RERA Approved";
+
+    // Loads the official company org logo directly from Google's favicon service.
+    const developerDomain = property.domain || "parasbuildtech.com";
+    const googleLogoUrl = `https://www.google.com/s2/favicons?domain=${developerDomain}&sz=128`;
 
     const toggleStar = (e) => {
         e.preventDefault();
@@ -50,7 +55,7 @@ function PropertyCard({ property }) {
                         onError={() => setImgSrc(FALLBACK_IMAGE)}
                     />
 
-                    {/* Featured Tag (Vibrant Magenta Pill) */}
+                    {/* Featured Tag (Magenta Pill) */}
                     <span className="property-card__badge">
                         {badgeText}
                     </span>
@@ -74,19 +79,33 @@ function PropertyCard({ property }) {
                         />
                     </button>
 
-                    {/* OVERLAPPING CIRCULAR COMPANY LOGO BADGE (White circle with Crown) */}
+                    {/* OVERLAPPING CIRCULAR COMPANY ORG LOGO (From Google) */}
                     <div className="property-card__logo-wrap">
                         <div className="property-card__logo-badge">
-                            <Crown size={13} className="property-card__crown-icon" />
-                            <span className="property-card__logo-top">
-                                {property.logoBrand || developerName.split(" ")[0] || "PARAS"}
-                            </span>
-                            <span className="property-card__logo-mid">
-                                {property.name?.split(" ")[1]?.toUpperCase() || property.name?.toUpperCase() || "EMPEROR"}
-                            </span>
-                            <span className="property-card__logo-bot">
-                                {property.logoSub || "THE ICON TOWER"}
-                            </span>
+                            {!logoFailed ? (
+                                <div className="property-card__google-logo-box">
+                                    <img
+                                        src={googleLogoUrl}
+                                        alt={`${developerName} official org logo`}
+                                        className="property-card__org-logo"
+                                        loading="lazy"
+                                        onError={() => setLogoFailed(true)}
+                                    />
+                                    <span className="property-card__org-name">
+                                        {property.logoBrand || developerName.split(" ")[0]}
+                                    </span>
+                                </div>
+                            ) : (
+                                <div className="property-card__logo-fallback">
+                                    <Crown size={12} className="property-card__crown-icon" />
+                                    <span className="property-card__logo-top">
+                                        {property.logoBrand || developerName.split(" ")[0] || "PARAS"}
+                                    </span>
+                                    <span className="property-card__logo-mid">
+                                        {property.name?.split(" ")[1]?.toUpperCase() || "EMPEROR"}
+                                    </span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -109,11 +128,13 @@ function PropertyCard({ property }) {
                             {property.price}
                         </strong>
 
-                        <span className={`property-card__status ${
-                            statusText.toLowerCase().includes("ready")
-                                ? "property-card__status--ready"
-                                : "property-card__status--ongoing"
-                        }`}>
+                        <span
+                            className={`property-card__status ${
+                                statusText.toLowerCase().includes("ready")
+                                    ? "property-card__status--ready"
+                                    : "property-card__status--ongoing"
+                            }`}
+                        >
                             {statusText}
                         </span>
                     </div>

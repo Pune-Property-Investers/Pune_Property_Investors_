@@ -1,7 +1,7 @@
 /* ==========================================================================
    FEATURED PROPERTIES VIDEO SHOWCASE
    Exact match to the high-converting architectural video stage design
-   Maintains the EXACT SAME layout for both Mobile and Laptop/Desktop
+   Mobile View matches media_1793868090298_4c435816.jpg in every detail
    ========================================================================== */
 
 .pune-projects-showcase-section {
@@ -49,30 +49,30 @@
 
 .pune-projects-eyebrow {
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(10px, 0.9vw, 11px);
-    font-weight: 800;
+    font-size: clamp(10.5px, 0.9vw, 12px);
+    font-weight: 700;
     letter-spacing: 2.2px;
-    text-transform: uppercase;
-    color: #a77a48;
+    color: #c49866;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    white-space: nowrap;
+    text-transform: uppercase;
 }
 
 .pune-projects-title {
-    margin: 0 0 10px;
     font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: clamp(26px, 3.2vw, 40px);
+    font-size: clamp(24px, 3.2vw, 42px);
     font-weight: 700;
     color: #0f172a;
-    line-height: 1.25;
+    margin: 0 0 clamp(8px, 1vw, 12px);
+    line-height: 1.22;
+    letter-spacing: -0.5px;
 }
 
 .pune-projects-title span {
-    color: #a77a48;
     font-style: italic;
-    font-weight: 400;
+    color: #c49866;
+    font-weight: 600;
 }
 
 .pune-projects-subtitle {
@@ -85,13 +85,13 @@
 }
 
 /* ==========================================================================
-   MASTER SHOWCASE CARD (Black Top Stage + White Bottom Specifications)
+   MASTER SHOWCASE CARD (Video Stage + Specifications Bar)
    ========================================================================== */
 
 .pune-project-card {
     width: 100%;
     background: #ffffff;
-    border-radius: clamp(14px, 2vw, 24px);
+    border-radius: 24px;
     overflow: hidden;
     box-shadow: 0 16px 44px -8px rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.06);
     display: flex;
@@ -100,19 +100,20 @@
 }
 
 /* ==========================================================================
-   TOP HALF: VIDEO STAGE (Black Background + Center Vertical Video)
+   TOP HALF: VIDEO STAGE (Widescreen Video + Floating Action Buttons)
    ========================================================================== */
 
 .pune-project-stage {
     position: relative;
     width: 100%;
-    height: clamp(300px, 42vw, 520px);
+    height: clamp(320px, 44vw, 520px);
     background: #000000;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
+    border-bottom: 2px solid #c49866;
 }
 
 /* Large Typographic Watermark on Left Stage */
@@ -207,6 +208,10 @@
     border-color: rgba(255, 255, 255, 0.45);
 }
 
+.pune-stage-pill-btn--icon {
+    padding: clamp(4px, 0.5vw, 6px);
+}
+
 .pune-stage-yt-btn {
     display: inline-flex;
     align-items: center;
@@ -226,38 +231,97 @@
     border-color: #ff0000;
 }
 
-/* Side Navigation Arrows (‹ and › on the black stage edges) */
-.pune-stage-nav-arrow {
+/* Left Navigation Arrow (<) */
+.pune-stage-nav-arrow--left {
     position: absolute;
+    left: clamp(8px, 1.5vw, 20px);
     top: 50%;
     transform: translateY(-50%);
-    width: clamp(28px, 3.2vw, 44px);
-    height: clamp(28px, 3.2vw, 44px);
+    width: clamp(32px, 3.4vw, 44px);
+    height: clamp(32px, 3.4vw, 44px);
     border-radius: 50%;
-    background: rgba(22, 22, 22, 0.78);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(18, 24, 20, 0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     color: #ffffff;
     display: grid;
     place-items: center;
     cursor: pointer;
-    z-index: 10;
+    z-index: 12;
     transition: all 0.2s ease;
+    padding: 0;
 }
 
-.pune-stage-nav-arrow:hover {
+.pune-stage-nav-arrow--left:hover {
     background: #c49866;
     border-color: #c49866;
+    transform: translateY(-50%) scale(1.06);
 }
 
-.pune-stage-nav-arrow--left {
-    left: clamp(8px, 1.5vw, 20px);
+/* Right Side Vertical Action Stack (Matches Image: Like, Next, Share, View Project) */
+.pune-stage-right-actions {
+    position: absolute;
+    right: clamp(8px, 1.5vw, 18px);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(8px, 1vw, 12px);
+    z-index: 12;
 }
 
-.pune-stage-nav-arrow--right {
-    right: clamp(8px, 1.5vw, 20px);
+.pune-stage-side-circle-btn {
+    width: clamp(32px, 3.4vw, 42px);
+    height: clamp(32px, 3.4vw, 42px);
+    border-radius: 50%;
+    background: rgba(18, 24, 20, 0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
 }
 
-/* Full-Size Video Frame (Fills entire stage container) */
+.pune-stage-side-circle-btn:hover {
+    background: #c49866;
+    border-color: #c49866;
+    transform: scale(1.08);
+}
+
+.pune-stage-side-circle-btn--liked {
+    color: #3b82f6;
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #3b82f6;
+}
+
+/* White Circle CTA Arrow (↗) at bottom of the right stack */
+.pune-stage-circle-cta {
+    width: clamp(32px, 3.4vw, 42px);
+    height: clamp(32px, 3.4vw, 42px);
+    border-radius: 50%;
+    background: #ffffff;
+    color: #0f172a;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.pune-stage-circle-cta:hover {
+    background: #c49866;
+    color: #ffffff;
+    transform: scale(1.08);
+}
+
+/* Video Frame & Iframe */
 .pune-project-stage__video-frame {
     position: absolute;
     inset: 0;
@@ -276,44 +340,6 @@
     border: none;
     display: block;
     object-fit: cover;
-    transition: transform 0.35s ease;
-    transform: translateY(-26px);
-}
-
-/* Full size zoom fill to eliminate side pillarbox bars on wide containers, lifted up */
-.pune-project-stage--fill .pune-project-stage__iframe {
-    transform: translateY(-38px) scale(1.65);
-    transform-origin: center 28%;
-}
-
-@media (max-width: 900px) {
-    .pune-project-stage {
-        height: clamp(400px, 62vw, 500px);
-    }
-
-    .pune-project-stage__iframe {
-        transform: translateY(-20px);
-    }
-
-    .pune-project-stage--fill .pune-project-stage__iframe {
-        transform: translateY(-28px) scale(1.35);
-        transform-origin: center 28%;
-    }
-}
-
-@media (max-width: 600px) {
-    .pune-project-stage {
-        height: clamp(430px, 74vh, 560px);
-    }
-
-    .pune-project-stage__iframe {
-        transform: translateY(-16px);
-    }
-
-    .pune-project-stage--fill .pune-project-stage__iframe {
-        transform: translateY(-22px) scale(1.08);
-        transform-origin: center 30%;
-    }
 }
 
 /* Watermark logo badge on top right of video */
@@ -337,39 +363,41 @@
     object-fit: contain;
 }
 
-/* Bottom Stage Overlay: Project Details & Floating Arrow */
+/* Bottom Stage Overlay: Project Details Headline */
 .pune-project-stage__bottom-info {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: clamp(14px, 2vw, 26px) clamp(12px, 1.8vw, 24px) clamp(10px, 1.4vw, 18px);
+    padding: clamp(12px, 2vw, 24px) clamp(12px, 1.8vw, 24px) clamp(10px, 1.4vw, 16px);
     background: linear-gradient(
         180deg,
         rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.82) 48%,
-        rgba(0, 0, 0, 0.96) 100%
+        rgba(0, 0, 0, 0.75) 45%,
+        rgba(0, 0, 0, 0.95) 100%
     );
     display: flex;
     align-items: flex-end;
-    justify-content: space-between;
-    gap: clamp(10px, 1.5vw, 20px);
+    justify-content: flex-start;
     z-index: 8;
     pointer-events: none;
 }
 
 .pune-project-stage__text {
-    max-width: min(780px, 82%);
+    max-width: calc(100% - 60px);
 }
 
 .pune-project-stage__title {
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(11.5px, 1.25vw, 17px);
+    font-size: clamp(12.5px, 1.3vw, 17px);
     font-weight: 700;
     color: #ffffff;
-    margin: 0 0 4px;
+    margin: 0;
     line-height: 1.32;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .pune-project-stage__desc {
@@ -377,35 +405,12 @@
     font-size: clamp(9.5px, 0.95vw, 13px);
     color: rgba(255, 255, 255, 0.85);
     line-height: 1.45;
-    margin: 0;
+    margin: 4px 0 0;
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
-}
-
-/* Bottom Right Floating Circle CTA Arrow (↗) */
-.pune-stage-circle-cta {
-    width: clamp(30px, 3.2vw, 44px);
-    height: clamp(30px, 3.2vw, 44px);
-    border-radius: 50%;
-    background: #ffffff;
-    color: #0f172a;
-    display: grid;
-    place-items: center;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
-    pointer-events: auto;
-    text-decoration: none;
-    flex-shrink: 0;
-    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
-}
-
-.pune-stage-circle-cta:hover {
-    background: #c49866;
-    color: #ffffff;
-    transform: scale(1.08);
 }
 
 /* ==========================================================================
    BOTTOM HALF: WHITE BAR (Gallery Box + 4 Specification Cards + Actions)
-   EXACT SAME SIDE-BY-SIDE LAYOUT ON BOTH LAPTOP AND MOBILE
    ========================================================================== */
 
 .pune-project-bottom-bar {
@@ -416,11 +421,10 @@
     gap: clamp(8px, 1.5vw, 22px);
     align-items: stretch;
     box-sizing: border-box;
-    border-top: 1px solid #f1f5f9;
 }
 
 /* --------------------------------------------------------------------------
-   LEFT COLUMN: Gallery Preview Card (Always on left)
+   LEFT COLUMN: Gallery Preview Card
    -------------------------------------------------------------------------- */
 
 .pune-project-bottom-bar__left {
@@ -563,7 +567,7 @@
     min-width: 0;
 }
 
-/* 4 Specification Cards in a Single Horizontal Row (Always 4 Columns) */
+/* 4 Specification Cards in a Single Horizontal Row */
 .pune-project-specs-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -630,7 +634,7 @@
     text-overflow: ellipsis;
 }
 
-/* Bottom Action Row (Always a Single Horizontal Row) */
+/* Bottom Action Row (Navigation Controls + WhatsApp + View Details) */
 .pune-project-action-row {
     display: flex;
     align-items: center;
@@ -710,45 +714,48 @@
 
 /* WhatsApp Button */
 .pune-action-whatsapp-btn {
-    background: #25D366;
+    background: #00c853;
     color: #ffffff;
     border: none;
-    padding: clamp(5px, 0.7vw, 9px) clamp(8px, 1.3vw, 20px);
-    border-radius: clamp(5px, 0.6vw, 8px);
+    padding: clamp(6px, 0.8vw, 9px) clamp(10px, 1.4vw, 20px);
+    border-radius: 8px;
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(9.5px, 0.95vw, 13.5px);
+    font-size: clamp(10px, 0.95vw, 13.5px);
     font-weight: 700;
     display: inline-flex;
     align-items: center;
     gap: 5px;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+    box-shadow: 0 3px 10px rgba(0, 200, 83, 0.3);
     white-space: nowrap;
 }
 
 .pune-action-whatsapp-btn:hover {
-    background: #20ba5a;
+    background: #00b34a;
     transform: translateY(-1px);
 }
 
-/* View Details Link */
+/* View Details Link (Dark Forest Pill matching image) */
 .pune-action-details-link {
-    color: #ad823a;
+    background: #0d1e17;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: clamp(6px, 0.8vw, 9px) clamp(10px, 1.4vw, 20px);
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(9.5px, 0.95vw, 13.5px);
+    font-size: clamp(10px, 0.95vw, 13.5px);
     font-weight: 600;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     white-space: nowrap;
-    transition: color 0.2s ease, transform 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .pune-action-details-link:hover {
-    color: #8c6428;
-    transform: translateX(2px);
+    background: #07120e;
+    transform: translateY(-1px);
 }
 
 .pune-action-details-arrow {
@@ -760,10 +767,7 @@
     transform: translateX(2px);
 }
 
-/* ==========================================================================
-   BOTTOM PAGINATION (Active Gold Pill + Inactive Grey Dots)
-   ========================================================================== */
-
+/* Bottom Pagination */
 .pune-showcase-pagination {
     display: flex;
     justify-content: center;
@@ -791,4 +795,170 @@
     width: clamp(20px, 2.5vw, 30px);
     border-radius: 9999px;
     background: #c49866;
+}
+
+/* ==========================================================================
+   MOBILE VIEW (MATCHES REFERENCE IMAGE media_1793868090298_4c435816.jpg)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .pune-project-card {
+        border-radius: 20px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Video stage aspect matches widescreen walkthrough video */
+    .pune-project-stage {
+        height: clamp(210px, 56.25vw, 280px);
+        border-bottom: 2px solid #c49866;
+    }
+
+    .pune-project-stage__iframe {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .pune-stage-pill-btn--desktop-only {
+        display: none !important;
+    }
+
+    .pune-stage-nav-arrow--left {
+        left: 10px;
+        width: 32px;
+        height: 32px;
+    }
+
+    .pune-stage-right-actions {
+        right: 10px;
+        gap: 8px;
+    }
+
+    .pune-stage-side-circle-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .pune-stage-circle-cta {
+        width: 32px;
+        height: 32px;
+    }
+
+    .pune-project-stage__bottom-info {
+        padding: 8px 12px;
+        background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.75) 50%, rgba(0, 0, 0, 0.95) 100%);
+    }
+
+    .pune-project-stage__text {
+        max-width: calc(100% - 46px);
+    }
+
+    .pune-project-stage__title {
+        font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0;
+    }
+
+    .pune-project-stage__desc {
+        display: none !important;
+    }
+
+    /* Bottom Bar: Left gallery box + Right specs */
+    .pune-project-bottom-bar {
+        padding: 10px 8px;
+        grid-template-columns: 110px 1fr;
+        gap: 8px;
+    }
+
+    .pune-project-bottom-bar__left {
+        min-height: 100%;
+    }
+
+    .pune-gallery-card {
+        min-height: 100%;
+        border-radius: 8px;
+    }
+
+    .pune-gallery-card__top {
+        top: 6px;
+        left: 6px;
+        right: 6px;
+    }
+
+    .pune-gallery-card__badge {
+        font-size: 8px;
+        padding: 2px 6px;
+    }
+
+    .pune-gallery-card__counter {
+        font-size: 8px;
+        padding: 2px 5px;
+    }
+
+    .pune-gallery-card__bottom {
+        bottom: 6px;
+        left: 6px;
+        right: 6px;
+    }
+
+    .pune-gallery-card__label {
+        font-size: 9px;
+    }
+
+    /* 4 Specs in a single row */
+    .pune-project-specs-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4px;
+    }
+
+    .pune-spec-card {
+        padding: 4px 5px;
+        border-radius: 8px;
+        border: 1px solid #edf2f7;
+    }
+
+    .pune-spec-card__label {
+        font-size: 7.5px;
+    }
+
+    .pune-spec-card__val {
+        font-size: 10px;
+    }
+
+    .pune-spec-card__sub {
+        font-size: 7.5px;
+    }
+
+    /* Action Row */
+    .pune-project-action-row {
+        padding-top: 8px;
+        gap: 6px;
+    }
+
+    .pune-action-project-name {
+        display: none;
+    }
+
+    .pune-action-nav-btns button {
+        width: 24px;
+        height: 24px;
+    }
+
+    .pune-action-counter {
+        font-size: 10px;
+    }
+
+    .pune-action-whatsapp-btn {
+        padding: 6px 10px;
+        font-size: 10.5px;
+        border-radius: 7px;
+    }
+
+    .pune-action-details-link {
+        padding: 6px 10px;
+        font-size: 10.5px;
+        border-radius: 7px;
+    }
 }

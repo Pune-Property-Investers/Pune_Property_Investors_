@@ -17,6 +17,8 @@ import {
     ExternalLink,
     Sparkles,
     Film,
+    ThumbsUp,
+    Share2,
 } from "lucide-react";
 import { FaYoutube, FaWhatsapp } from "react-icons/fa";
 import "./FeaturedProperties.css";
@@ -283,6 +285,7 @@ export default function FeaturedProperties() {
     const [activeIndex, setActiveIndex] = useState(0);
     const [isMuted, setIsMuted] = useState(true);
     const [isFullSize, setIsFullSize] = useState(true);
+    const [isLiked, setIsLiked] = useState(false);
     const stageContainerRef = useRef(null);
 
     const totalSlides = featuredPuneProjects.length;
@@ -306,6 +309,20 @@ export default function FeaturedProperties() {
             stageContainerRef.current.requestFullscreen().catch(() => {});
         } else {
             document.exitFullscreen().catch(() => {});
+        }
+    };
+
+    const handleShare = (e) => {
+        e.stopPropagation();
+        if (typeof navigator !== "undefined" && navigator.share) {
+            navigator.share({
+                title: currentProject.name,
+                text: `${currentProject.title} - Pune Property Investor`,
+                url: window.location.href,
+            }).catch(() => {});
+        } else if (typeof navigator !== "undefined" && navigator.clipboard) {
+            navigator.clipboard.writeText(window.location.href);
+            alert("Property link copied to clipboard!");
         }
     };
 
@@ -361,12 +378,12 @@ export default function FeaturedProperties() {
                                 <span>{currentProject.badge}</span>
                             </div>
 
-                            {/* Top Right: Controls (Full Size, Shorts, Sound Off, Fullscreen, YouTube) */}
+                            {/* Top Right: Controls (Shorts / Full Size on desktop, Sound Off, Fullscreen, YouTube) */}
                             <div className="pune-project-stage__top-actions">
                                 <button
                                     type="button"
                                     onClick={() => setIsFullSize((prev) => !prev)}
-                                    className="pune-stage-pill-btn"
+                                    className="pune-stage-pill-btn pune-stage-pill-btn--desktop-only"
                                     title={isFullSize ? "Switch to Original Video Aspect" : "Switch to Full Size Container Video"}
                                 >
                                     <Film size={13} />
@@ -377,7 +394,7 @@ export default function FeaturedProperties() {
                                     href={currentProject.youtubeUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="pune-stage-pill-btn"
+                                    className="pune-stage-pill-btn pune-stage-pill-btn--desktop-only"
                                     title="Watch on YouTube Shorts"
                                 >
                                     <Clock size={13} />
@@ -397,11 +414,10 @@ export default function FeaturedProperties() {
                                 <button
                                     type="button"
                                     onClick={toggleFullscreen}
-                                    className="pune-stage-pill-btn"
+                                    className="pune-stage-pill-btn pune-stage-pill-btn--icon"
                                     title="View Fullscreen"
                                 >
                                     <Maximize2 size={13} />
-                                    <span>Fullscreen</span>
                                 </button>
 
                                 <a
@@ -429,7 +445,7 @@ export default function FeaturedProperties() {
                             <ChevronLeft size={22} />
                         </button>
 
-                        {/* Center Stage: Portrait / Shorts Video Player */}
+                        {/* Center Stage: Widescreen Video Player */}
                         <div className="pune-project-stage__video-frame">
                             <iframe
                                 src={`https://www.youtube-nocookie.com/embed/${currentProject.youtubeId}?autoplay=1&mute=${
@@ -453,18 +469,53 @@ export default function FeaturedProperties() {
                             </div>
                         </div>
 
-                        {/* Side Navigation Arrow: Right */}
-                        <button
-                            type="button"
-                            onClick={handleNextProject}
-                            className="pune-stage-nav-arrow pune-stage-nav-arrow--right"
-                            aria-label="Next property"
-                            title="Next property"
-                        >
-                            <ChevronRight size={22} />
-                        </button>
+                        {/* Right Action Column (Matches Reference Image: Like, Next, Share, View Details) */}
+                        <div className="pune-stage-right-actions">
+                            {/* 1. Like Button */}
+                            <button
+                                type="button"
+                                onClick={() => setIsLiked((prev) => !prev)}
+                                className={`pune-stage-side-circle-btn ${isLiked ? "pune-stage-side-circle-btn--liked" : ""}`}
+                                aria-label="Like property"
+                                title="Like property"
+                            >
+                                <ThumbsUp size={16} />
+                            </button>
 
-                        {/* Bottom Stage Overlay: Project Details Headline & Description */}
+                            {/* 2. Next Property Arrow */}
+                            <button
+                                type="button"
+                                onClick={handleNextProject}
+                                className="pune-stage-side-circle-btn pune-stage-side-circle-btn--next"
+                                aria-label="Next property"
+                                title="Next property"
+                            >
+                                <ChevronRight size={20} />
+                            </button>
+
+                            {/* 3. Share Button */}
+                            <button
+                                type="button"
+                                onClick={handleShare}
+                                className="pune-stage-side-circle-btn"
+                                aria-label="Share property"
+                                title="Share property"
+                            >
+                                <Share2 size={16} />
+                            </button>
+
+                            {/* 4. White View Project CTA Circle */}
+                            <Link
+                                href={`/buy`}
+                                className="pune-stage-circle-cta"
+                                aria-label={`View ${currentProject.name} details`}
+                                title="View details"
+                            >
+                                <ArrowUpRight size={18} strokeWidth={2.4} />
+                            </Link>
+                        </div>
+
+                        {/* Bottom Stage Overlay: Project Details Headline */}
                         <div className="pune-project-stage__bottom-info">
                             <div className="pune-project-stage__text">
                                 <h3 className="pune-project-stage__title">
@@ -474,16 +525,6 @@ export default function FeaturedProperties() {
                                     {currentProject.tagline}
                                 </p>
                             </div>
-
-                            {/* Bottom Right Floating Circle CTA Arrow */}
-                            <Link
-                                href={`/buy`}
-                                className="pune-stage-circle-cta"
-                                aria-label={`View ${currentProject.name} details`}
-                                title="View details"
-                            >
-                                <ArrowUpRight size={20} strokeWidth={2.4} />
-                            </Link>
                         </div>
                     </div>
 

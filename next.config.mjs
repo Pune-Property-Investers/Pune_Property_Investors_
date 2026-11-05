@@ -16,6 +16,14 @@ const basePath =
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "export",
+  allowedDevOrigins: [
+    "localhost",
+    "127.0.0.1",
+    "192.168.1.44",
+    "192.168.1.44:3000",
+    "*.local",
+    "*.loca.lt",
+  ],
   ...(basePath ? { basePath, assetPrefix: basePath } : {}),
   turbopack: {
     root: __dirname,
@@ -42,6 +50,10 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "img.youtube.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.google.com",
       },
     ],
   },

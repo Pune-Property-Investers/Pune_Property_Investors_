@@ -9,18 +9,13 @@ import Footer from "../layouts/Footer";
 import BrowseLocations from "../home/BrowseLocations";
 import NewLaunchProjects from "../home/NewLaunchProjects";
 import UpcomingProjects from "../home/UpcomingProjects";
-import TrendingProjects from "../home/TrendingProjects";
-import WhyChooseUs from "../home/WhyChooseUs";
 import AdvertisementSidebar from "../common/AdvertisementSidebar";
-import PuneRealEstateContent from "../home/PuneRealEstateContent";
-import Testimonials from "../home/Testimonials";
 import TrustStats from "../home/TrustStats";
 import FeaturedProjects from "../home/FeaturedProjects";
 import FeaturedProp from "../home/FeaturedProp";
 import Workflow from "../home/Workflow";
 import DeveloperLogos from "../home/DeveloperLogos";
 import HomeContact from "../home/HomeContact";
-import AboutSection from "../home/AboutSection";
 
 function Home() {
     const [activeTab, setActiveTab] = useState("projects");
@@ -54,9 +49,7 @@ function Home() {
                         <UpcomingProjects />
 
                         <FeaturedProjects />
-                        <TrendingProjects />
                         <FeaturedProp />
-                        <PuneRealEstateContent />
                     </div>
 
                     <aside className="home-page__sidebar">
@@ -64,15 +57,9 @@ function Home() {
                     </aside>
                 </div>
 
-                {/* About Pune Property Investors - Partnership Built on Trust */}
-                <AboutSection />
-
                 <TrustStats />
                 <Workflow />
-                <Testimonials />
-                {/* Full-width Why Choose Us section */}
                 <DeveloperLogos />
-                <WhyChooseUs />
 
                 {/* Full-width Architectural Contact Us section */}
                 <HomeContact />
