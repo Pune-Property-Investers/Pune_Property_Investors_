@@ -273,19 +273,6 @@ function Header() {
                                 </div>
                             );
                         })}
-
-                        {/* Desktop Call CTA */}
-                        <div className="header-cta-item">
-                            <a
-                                href="tel:+917398174444"
-                                className="header-cta-link"
-                                aria-label="Call Pune Property Investor"
-                            >
-                                <Phone size={15} />
-                                <span>Call Us</span>
-                                <span className="header-cta-badge" aria-hidden="true">N</span>
-                            </a>
-                        </div>
                     </nav>
 
                     {/* Mobile Hamburger Menu Toggle Button (matches Image 2) */}

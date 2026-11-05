@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -211,8 +210,8 @@ function HeroSection({ activeTab = "projects", onTabChange }) {
                             role="tab"
                             aria-selected={activeTab === tab.key}
                             className={`hero-oyo-tab ${activeTab === tab.key
-                                    ? "hero-oyo-tab--active"
-                                    : ""
+                                ? "hero-oyo-tab--active"
+                                : ""
                                 }`}
                             onClick={() => handleTabChange(tab.key)}
                         >
