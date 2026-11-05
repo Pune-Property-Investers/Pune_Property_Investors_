@@ -483,7 +483,7 @@
 
 @media (max-width: 1080px) {
     .hero-oyo-stage {
-        padding-top: 110px;
+        padding-top: 135px;
     }
 
     .hero-oyo-trust-divider {
@@ -533,7 +533,7 @@
     }
 
     .hero-oyo-stage {
-        padding: 112px 14px 18px 14px;
+        padding: 130px 14px 18px 14px;
         margin: 0 auto;
         width: 100%;
         max-width: 100%;
@@ -759,7 +759,7 @@
 
 @media (max-width: 420px) {
     .hero-oyo-stage {
-        padding: 104px 10px 14px 10px;
+        padding: 124px 10px 14px 10px;
     }
 
     .hero-oyo-title {
