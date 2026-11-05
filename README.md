@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Pune Property Investors - Next.js App Router Platform
 
 A modern, production-grade real estate platform built with **Next.js (App Router)**, **React 19**, **TypeScript**, and **Tailwind CSS**. Migrated from Vite + React to Next.js while preserving 100% of the ultra-premium branding, design system, business logic, and property catalog.
@@ -139,3 +140,6 @@ If deploying as a purely static site:
 1. In `next.config.mjs`, add `output: 'export'`.
 2. Run `npm run build` to generate the static files inside the `out/` folder.
 3. Note that dynamic server-side redirects should be configured using standard static HTML meta redirects or client routing.
+=======
+# Pune_Property_Investors_
+>>>>>>> f5cca45c896b709ce6db1e2db2df2de2af146c67
