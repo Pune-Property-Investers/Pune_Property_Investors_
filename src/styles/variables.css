@@ -1,55 +1,58 @@
 :root {
-    /* Exact font family system requested */
+    /* Editorial Luxury Font System */
     --font-serif: var(--font-serif), "Playfair Display", Georgia, serif;
     --font-sans: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     --font-inter: var(--font-sans);
 
-    /* Professional Black & White / Obsidian Text Theme */
-    --text-primary: #0f172a;        /* Deep obsidian black for primary headings & text on light surfaces */
-    --text-secondary: #334155;      /* Slate charcoal for body text, subtitles, descriptions, specs on light */
-    --text-muted: #64748b;          /* Graphite for captions, meta, helpers */
+    /* Editorial Theme Palette */
+    --text-primary: #0f172a;        /* Deep obsidian black for headings */
+    --text-secondary: #475569;      /* Slate charcoal for body descriptions */
+    --text-muted: #64748b;          /* Soft graphite for metadata */
     --text-light: #94a3b8;          /* Light slate */
-    --text-white: #ffffff;          /* Pure crisp white for text on dark backgrounds (hero, footer, dark overlays) */
-    --text-white-muted: rgba(255, 255, 255, 0.88); /* Soft white for readable body on dark surfaces */
-    --text-white-subtle: rgba(255, 255, 255, 0.65); /* Subtle white for captions on dark */
-    --text-gold: #c59b27;           /* Warm luxury gold for accents & highlights */
+    --text-white: #ffffff;          /* Pure crisp white */
+    --text-white-muted: rgba(255, 255, 255, 0.92);
+    --text-white-subtle: rgba(255, 255, 255, 0.65);
+    --text-gold: #a77a48;           /* Warm metallic bronze/gold */
 
     font-family: var(--font-sans);
 
-    /* Ultra-Premium Brand Palette */
-    --primary-color: #c59b27;
-    --primary-light: #e5c158;
-    --primary-dark: #9e7616;
-    --secondary-color: #0c1017;
-    --secondary-light: #161e2e;
+    /* Luxury Editorial Brand Palette */
+    --primary-color: #a77a48;       /* Refined Architectural Bronze/Gold */
+    --primary-light: #c49866;
+    --primary-dark: #8c6334;
+    --secondary-color: #0f172a;     /* Deep Obsidian */
+    --secondary-light: #1e293b;
 
-    /* Accent & Status */
-    --accent-gold: #d4af37;
+    /* Accent */
+    --accent-gold: #a77a48;
+    --accent-bronze: #a77a48;
     --accent-emerald: #059669;
     --accent-emerald-light: #e6f7ef;
 
-    /* Luxury Backgrounds */
-    --background-color: #faf9f6;
-    --background-light: #ffffff;
-    --border-color: rgba(212, 175, 55, 0.22);
-    --border-subtle: #eae7df;
+    /* Luxury Warm Surfaces & Borders */
+    --background-color: #faf8f5;    /* Luxury Ivory / Warm Linen */
+    --background-light: #ffffff;    /* Pure White */
+    --background-surface: #f8f7f3;  /* Subtly tinted section surface */
+    --border-color: #e8e6e0;        /* Warm Architectural Stone Border */
+    --border-subtle: #e8e6e0;
+    --border-card: #ede8df;
 
     /* UI Measurements */
-    --border-radius: 10px;
-    --border-radius-lg: 16px;
-    --border-radius-xl: 24px;
-    --container-width: 1280px;
+    --border-radius-sm: 4px;
+    --border-radius: 8px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --container-width: 1400px;
 
-    /* 3D Shadows & Depth */
-    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
-    --shadow-md: 0 10px 30px rgba(12, 16, 23, 0.08);
-    --shadow-3d: 0 20px 40px -10px rgba(12, 16, 23, 0.12), 0 0 20px rgba(212, 175, 55, 0.15);
-    --shadow-gold-glow: 0 0 25px rgba(212, 175, 55, 0.35);
+    /* Luxury Shadows */
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.06);
+    --shadow-3d: 0 16px 36px rgba(15, 23, 42, 0.08);
 
-    /* Typography */
+    /* Typography Scale */
     --font-size-sm: 13px;
     --font-size-base: 15px;
     --font-size-lg: 18px;
     --font-size-xl: 24px;
-    --font-size-heading: 38px;
+    --font-size-heading: 36px;
 }

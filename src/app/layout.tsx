@@ -14,7 +14,7 @@ const playfair = Playfair_Display({
     variable: "--font-serif",
 });
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "/Pune_property_investers";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export const viewport: Viewport = {
     width: "device-width",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
             "Find verified residential properties, newly launched projects, and premium apartments across Pune.",
         images: [
             {
-                url: "/images/logo.jpg",
+                url: "/images/logo.png",
                 width: 800,
                 height: 800,
                 alt: "Pune Property Investors Logo",
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
         title: "Pune Property Investors",
         description:
             "Find verified residential properties, newly launched projects, and premium apartments across Pune.",
-        images: ["/images/logo.jpg"],
+        images: ["/images/logo.png"],
     },
     robots: {
         index: true,

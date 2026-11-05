@@ -1,0 +1,97 @@
+/* =========================================================
+   PLACEHOLDER PAGE STYLES
+   Pune Property Investor
+========================================================= */
+
+.placeholder-main {
+    min-height: 75vh;
+    padding-top: 140px;
+    padding-bottom: 80px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.placeholder-card {
+    max-width: 680px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 30px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.placeholder-tag {
+    display: inline-block;
+    padding: 6px 14px;
+    background: rgba(180, 139, 62, 0.12);
+    color: var(--primary-color, #b48b3e);
+    border-radius: 20px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+}
+
+.placeholder-title {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+    font-weight: 700;
+}
+
+.placeholder-desc {
+    font-family: var(--font-sans);
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.65;
+    margin-bottom: 28px;
+}
+
+.placeholder-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.placeholder-btn-primary {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--primary-color, #b48b3e);
+    color: #ffffff;
+    border-radius: 8px;
+    font-family: var(--font-sans);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.placeholder-btn-primary:hover {
+    background: var(--primary-dark, #9e7616);
+    transform: translateY(-2px);
+}
+
+.placeholder-btn-secondary {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--secondary-color, #1a2b49);
+    color: #ffffff;
+    border-radius: 8px;
+    font-family: var(--font-sans);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.placeholder-btn-secondary:hover {
+    background: var(--secondary-light, #161e2e);
+    transform: translateY(-2px);
+}
+

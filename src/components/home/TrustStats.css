@@ -26,7 +26,7 @@
 .trust-stats__eyebrow {
     display: block;
     margin-bottom: 10px;
-    color: #a9823d;
+    color: #a77a48;
     font-family: var(--font-sans);
     font-size: 11px;
     font-weight: 700;
@@ -48,7 +48,7 @@
     height: 3px;
     margin: 15px auto 0;
     border-radius: 5px;
-    background: #a9823d;
+    background: #a77a48;
 }
 
 /* Grid */
@@ -80,8 +80,8 @@
     border-right: 1px solid #eee8df;
     border-bottom: 1px solid #eee8df;
 
-    opacity: 0;
-    transform: translateY(18px);
+    opacity: 1;
+    transform: none;
 }
 
 /* Circular gold dotted ring */
@@ -94,7 +94,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px dotted #c7a15b;
+    border: 3px dotted #a77a48;
     border-radius: 50%;
     transition: transform 0.35s ease;
 }
@@ -129,7 +129,7 @@
     justify-content: center;
     border: 3px solid #ffffff;
     border-radius: 50%;
-    background: #30243a;
+    background: #0f172a;
     color: #ffffff;
     font-family: var(--font-sans);
     font-size: 10px;
@@ -168,7 +168,7 @@
     left: 50%;
     width: 0;
     height: 3px;
-    background: #a9823d;
+    background: #a77a48;
     transform: translateX(-50%);
     transition: width 0.3s ease;
 }
@@ -195,13 +195,13 @@
     }
 
     .trust-stats__card:hover .trust-stats__icon {
-        background: #30243a;
+        background: #0f172a;
         color: #ffffff;
         transform: scale(0.96);
     }
 
     .trust-stats__card:hover .trust-stats__number-badge {
-        background: #a9823d;
+        background: #a77a48;
     }
 
     .trust-stats__card:hover .trust-stats__accent {
@@ -209,79 +209,107 @@
     }
 }
 
-/* Tablet */
+/* Mobile & Small Screens - All 5 stats in ONE single line without box structure */
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
     .trust-stats {
-        padding: 42px 4% 48px;
-    }
-
-    .trust-stats__grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .trust-stats__card {
-        min-height: 245px;
-    }
-}
-
-/* Mobile */
-
-@media (max-width: 600px) {
-    .trust-stats {
-        padding: 35px 16px 40px;
+        padding: 24px 8px 32px;
     }
 
     .trust-stats__heading-wrap {
-        margin-bottom: 28px;
+        margin-bottom: 20px;
     }
 
     .trust-stats__heading {
-        font-size: 25px;
+        font-size: 21px;
+    }
+
+    .trust-stats__eyebrow {
+        font-size: 10px;
+        letter-spacing: 1.5px;
+        margin-bottom: 6px;
     }
 
     .trust-stats__grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        border: none !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        overflow: visible;
+        padding: 0;
+        margin: 0;
+        gap: 2px;
     }
 
     .trust-stats__card {
-        min-height: 225px;
-        padding: 22px 7px;
+        min-width: 0;
+        min-height: auto;
+        padding: 8px 2px 10px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        border: none !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        opacity: 1;
+        transform: none;
+    }
+
+    .trust-stats__card:last-child {
+        border: none !important;
     }
 
     .trust-stats__icon-ring {
-        width: 108px;
-        height: 108px;
+        width: clamp(44px, 12vw, 68px);
+        height: clamp(44px, 12vw, 68px);
+        border: 2px dotted #a77a48;
     }
 
     .trust-stats__icon {
-        width: 86px;
-        height: 86px;
+        width: clamp(34px, 9vw, 54px);
+        height: clamp(34px, 9vw, 54px);
+        background: #f3f3ee;
     }
 
     .trust-stats__icon svg {
-        width: 30px;
-        height: 30px;
+        width: clamp(16px, 4.5vw, 24px);
+        height: clamp(16px, 4.5vw, 24px);
     }
 
     .trust-stats__number-badge {
-        width: 29px;
-        height: 29px;
+        width: clamp(15px, 4vw, 20px);
+        height: clamp(15px, 4vw, 20px);
+        font-size: clamp(7.5px, 2vw, 9.5px);
+        bottom: -1px;
+        right: -2px;
+        border: 1.5px solid #ffffff;
+        background: #0f172a;
+        color: #ffffff;
     }
 
     .trust-stats__value {
-        margin-top: 19px;
-        font-size: 20px;
+        margin: 8px 0 2px;
+        font-size: clamp(12px, 3.2vw, 17px);
+        font-weight: 700;
+        min-height: auto;
+        line-height: 1.2;
     }
 
     .trust-stats__label {
-        font-size: 12px;
+        font-size: clamp(8px, 2.2vw, 11px);
+        line-height: 1.2;
+        color: #737a75;
+        font-weight: 600;
+        padding: 0 1px;
     }
-}
 
-@media (max-width: 360px) {
-    .trust-stats__grid {
-        grid-template-columns: 1fr;
+    .trust-stats__accent {
+        display: none !important;
     }
 }
 

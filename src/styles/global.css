@@ -132,3 +132,14 @@ ul {
         --font-size-heading: 30px;
     }
 }
+
+
+.page-loading-fallback {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-sans);
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}

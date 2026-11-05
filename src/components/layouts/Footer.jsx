@@ -27,7 +27,7 @@ const propertyLinks = [
     { label: "Plots & Land", path: "/plots" },
 ];
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "/Pune_property_investers";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 function Footer() {
     const currentYear = new Date().getFullYear();
@@ -41,7 +41,7 @@ function Footer() {
                     <div className="footer-company">
                         <Link href="/" className="footer-brand">
                             <Image
-                                src={`${basePath}/images/logo.jpg`}
+                                src={`${basePath}/images/logo.png`}
                                 alt="Pune Property Investor logo"
                                 className="footer-brand__logo"
                                 width={52}
@@ -70,7 +70,7 @@ function Footer() {
                             <a
                                 href="https://www.facebook.com/punepropertyinvestors/"
                                 target="_blank"
-                                rel="noreferrer"
+                                rel="noopener noreferrer"
                                 aria-label="Facebook"
                             >
                                 <FaFacebookF />
@@ -79,7 +79,7 @@ function Footer() {
                             <a
                                 href="https://www.instagram.com/punepropertyinvestor/"
                                 target="_blank"
-                                rel="noreferrer"
+                                rel="noopener noreferrer"
                                 aria-label="Instagram"
                             >
                                 <FaInstagram />
@@ -88,7 +88,7 @@ function Footer() {
                             <a
                                 href="https://www.linkedin.com/company/puneproperty-investor/home/"
                                 target="_blank"
-                                rel="noreferrer"
+                                rel="noopener noreferrer"
                                 aria-label="LinkedIn"
                             >
                                 <FaLinkedinIn />
@@ -97,7 +97,7 @@ function Footer() {
                             <a
                                 href="https://www.youtube.com/@PunePropertyInvestor/posts"
                                 target="_blank"
-                                rel="noreferrer"
+                                rel="noopener noreferrer"
                                 aria-label="YouTube"
                             >
                                 <FaYoutube />
@@ -151,7 +151,7 @@ function Footer() {
                         <a
                             href="https://maps.app.goo.gl/49jQdRiP4CCgNMCP7"
                             target="_blank"
-                            rel="noreferrer"
+                            rel="noopener noreferrer"
                             className="footer-contact__item"
                         >
                             <FaMapMarkerAlt />
@@ -163,7 +163,7 @@ function Footer() {
                             className="footer-contact__item"
                         >
                             <FaPhoneAlt />
-                            <span>+917398174444</span>
+                            <span>+91 73981 74444</span>
                         </a>
 
                         <a

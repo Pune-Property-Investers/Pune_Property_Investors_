@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 import { Star, Quote } from "lucide-react";
 import { testimonials } from "../../data/testimonials.js";

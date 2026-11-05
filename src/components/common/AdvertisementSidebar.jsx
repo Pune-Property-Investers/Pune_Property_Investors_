@@ -76,7 +76,7 @@ function AdvertisementVideo({ ad, videoId }) {
                         title={videoTitle}
                         allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
                         referrerPolicy="strict-origin-when-cross-origin"
-                        loading="eager"
+                        loading="lazy"
                         allowFullScreen
                     />
 

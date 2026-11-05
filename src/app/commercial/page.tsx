@@ -15,16 +15,7 @@ export default function CommercialPage() {
     return (
         <Suspense
             fallback={
-                <div
-                    style={{
-                        minHeight: "100vh",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    Loading commercial properties...
-                </div>
+                <div className="page-loading-fallback">Loading commercial properties...</div>
             }
         >
             <BuyProperties

@@ -1,9 +1,7 @@
-
 "use client";
 
 import Link from "next/link";
 import {
-    Building2,
     ShieldCheck,
     MapPin,
     Users,
@@ -16,10 +14,12 @@ import {
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import PageHeroBanner from "../common/PageHeroBanner";
+import AboutSection from "../home/AboutSection";
+import "./About.css";
 
 export default function AboutPage() {
     return (
-        <div style={{ background: "var(--background-color)", minHeight: "100vh" }}>
+        <div className="about-page">
             <Header />
 
             <main>
@@ -36,57 +36,18 @@ export default function AboutPage() {
                     backgroundImage="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85"
                 />
 
-                <div style={{ padding: "60px 0 80px" }}>
+                <div className="about-page__content">
                     {/* Core Pillars */}
-                    <section className="container" style={{ marginBottom: "70px" }}>
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                                gap: "24px",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    background: "#ffffff",
-                                    padding: "36px 28px",
-                                    borderRadius: "16px",
-                                    border: "1px solid var(--border-subtle)",
-                                    boxShadow: "var(--shadow-sm)",
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        width: "52px",
-                                        height: "52px",
-                                        borderRadius: "12px",
-                                        background: "rgba(197, 155, 39, 0.12)",
-                                        color: "var(--primary-color)",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        marginBottom: "20px",
-                                    }}
-                                >
+                    <section className="container about-pillars-section">
+                        <div className="about-pillars-grid">
+                            <div className="about-pillar-card">
+                                <div className="about-pillar-icon">
                                     <ShieldCheck size={26} />
                                 </div>
-                                <h3
-                                    style={{
-                                        fontSize: "1.3rem",
-                                        fontWeight: "700",
-                                        color: "var(--secondary-color)",
-                                        marginBottom: "12px",
-                                    }}
-                                >
+                                <h3 className="about-pillar-title">
                                     100% Verified Properties
                                 </h3>
-                                <p
-                                    style={{
-                                        color: "var(--text-secondary)",
-                                        lineHeight: 1.6,
-                                        fontSize: "0.95rem",
-                                    }}
-                                >
+                                <p className="about-pillar-desc">
                                     Every property listed is vetted for legal
                                     compliance, developer credentials, RERA
                                     approvals, and clear titles to ensure your
@@ -94,47 +55,14 @@ export default function AboutPage() {
                                 </p>
                             </div>
 
-                            <div
-                                style={{
-                                    background: "#ffffff",
-                                    padding: "36px 28px",
-                                    borderRadius: "16px",
-                                    border: "1px solid var(--border-subtle)",
-                                    boxShadow: "var(--shadow-sm)",
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        width: "52px",
-                                        height: "52px",
-                                        borderRadius: "12px",
-                                        background: "rgba(197, 155, 39, 0.12)",
-                                        color: "var(--primary-color)",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        marginBottom: "20px",
-                                    }}
-                                >
+                            <div className="about-pillar-card">
+                                <div className="about-pillar-icon">
                                     <TrendingUp size={26} />
                                 </div>
-                                <h3
-                                    style={{
-                                        fontSize: "1.3rem",
-                                        fontWeight: "700",
-                                        color: "var(--secondary-color)",
-                                        marginBottom: "12px",
-                                    }}
-                                >
+                                <h3 className="about-pillar-title">
                                     High Capital Appreciation
                                 </h3>
-                                <p
-                                    style={{
-                                        color: "var(--text-secondary)",
-                                        lineHeight: 1.6,
-                                        fontSize: "0.95rem",
-                                    }}
-                                >
+                                <p className="about-pillar-desc">
                                     We identify strategic micro-markets positioned
                                     near major upcoming infrastructure like Metro
                                     corridors, Ring Road, and IT hubs for maximum
@@ -142,47 +70,14 @@ export default function AboutPage() {
                                 </p>
                             </div>
 
-                            <div
-                                style={{
-                                    background: "#ffffff",
-                                    padding: "36px 28px",
-                                    borderRadius: "16px",
-                                    border: "1px solid var(--border-subtle)",
-                                    boxShadow: "var(--shadow-sm)",
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        width: "52px",
-                                        height: "52px",
-                                        borderRadius: "12px",
-                                        background: "rgba(197, 155, 39, 0.12)",
-                                        color: "var(--primary-color)",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        marginBottom: "20px",
-                                    }}
-                                >
+                            <div className="about-pillar-card">
+                                <div className="about-pillar-icon">
                                     <Users size={26} />
                                 </div>
-                                <h3
-                                    style={{
-                                        fontSize: "1.3rem",
-                                        fontWeight: "700",
-                                        color: "var(--secondary-color)",
-                                        marginBottom: "12px",
-                                    }}
-                                >
+                                <h3 className="about-pillar-title">
                                     Personalized Advisory
                                 </h3>
-                                <p
-                                    style={{
-                                        color: "var(--text-secondary)",
-                                        lineHeight: 1.6,
-                                        fontSize: "0.95rem",
-                                    }}
-                                >
+                                <p className="about-pillar-desc">
                                     Our seasoned real estate consultants guide you
                                     end-to-end, from requirement analysis, site
                                     visits, price negotiations, to loan
@@ -192,209 +87,88 @@ export default function AboutPage() {
                         </div>
                     </section>
 
+                    {/* Partnership Built on Trust */}
+                    <AboutSection />
+
                     {/* Company Story & Office */}
-                    <section className="container" style={{ marginBottom: "20px" }}>
-                        <div
-                            style={{
-                                background: "#ffffff",
-                                padding: "48px 36px",
-                                borderRadius: "20px",
-                                border: "1px solid var(--border-subtle)",
-                                boxShadow: "var(--shadow-md)",
-                                display: "grid",
-                                gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-                                gap: "40px",
-                                alignItems: "center",
-                            }}
-                        >
+                    <section className="container about-story-section">
+                        <div className="about-story-card">
                             <div>
-                                <span
-                                    style={{
-                                        color: "var(--primary-color)",
-                                        fontWeight: "700",
-                                        fontSize: "0.85rem",
-                                        letterSpacing: "1px",
-                                        textTransform: "uppercase",
-                                    }}
-                                >
+                                <span className="about-mission-tag">
                                     OUR MISSION
                                 </span>
-                                <h2
-                                    style={{
-                                        fontSize: "2rem",
-                                        color: "var(--secondary-color)",
-                                        fontWeight: "800",
-                                        margin: "12px 0 20px",
-                                    }}
-                                >
+                                <h2 className="about-mission-heading">
                                     Empowering Homebuyers With Market Transparency
                                 </h2>
-                                <p
-                                    style={{
-                                        color: "var(--text-secondary)",
-                                        lineHeight: 1.7,
-                                        marginBottom: "20px",
-                                    }}
-                                >
+                                <p className="about-mission-desc">
                                     Headquartered in Kharadi, Pune, Pune Property
                                     Investors was founded with a singular focus:
                                     bringing complete honesty, professional advisory,
                                     and data-backed market analysis to Pune's
                                     thriving real estate landscape.
                                 </p>
-                                <ul
-                                    style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: "12px",
-                                        marginBottom: "30px",
-                                    }}
-                                >
-                                    <li
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "10px",
-                                            color: "var(--text-primary)",
-                                        }}
-                                    >
-                                        <CheckCircle2
-                                            size={18}
-                                            color="var(--primary-color)"
-                                        />{" "}
+                                <ul className="about-checklist">
+                                    <li className="about-checklist-item">
+                                        <CheckCircle2 size={18} />
                                         Direct builder tie-ups offering exclusive
                                         zero-brokerage deals.
                                     </li>
-                                    <li
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "10px",
-                                            color: "var(--text-primary)",
-                                        }}
-                                    >
-                                        <CheckCircle2
-                                            size={18}
-                                            color="var(--primary-color)"
-                                        />{" "}
+                                    <li className="about-checklist-item">
+                                        <CheckCircle2 size={18} />
                                         Complete portfolio across East, West, North,
                                         and South Pune corridors.
                                     </li>
-                                    <li
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "10px",
-                                            color: "var(--text-primary)",
-                                        }}
-                                    >
-                                        <CheckCircle2
-                                            size={18}
-                                            color="var(--primary-color)"
-                                        />{" "}
+                                    <li className="about-checklist-item">
+                                        <CheckCircle2 size={18} />
                                         Dedicated post-sales and property management
                                         assistance.
                                     </li>
                                 </ul>
                                 <Link
                                     href="/buy"
-                                    className="primary-button"
-                                    style={{ display: "inline-flex" }}
+                                    className="primary-button about-browse-btn"
                                 >
                                     Browse Available Properties
                                     <ArrowRight size={17} />
                                 </Link>
                             </div>
 
-                            <div
-                                style={{
-                                    background: "var(--secondary-color)",
-                                    color: "#ffffff",
-                                    padding: "36px 30px",
-                                    borderRadius: "16px",
-                                }}
-                            >
-                                <h3
-                                    style={{
-                                        color: "var(--accent-gold)",
-                                        fontSize: "1.4rem",
-                                        fontWeight: "700",
-                                        marginBottom: "20px",
-                                    }}
-                                >
+                            <div className="about-contact-card">
+                                <h3 className="about-contact-title">
                                     Get in Touch With Us
                                 </h3>
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: "18px",
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            gap: "14px",
-                                            alignItems: "flex-start",
-                                        }}
-                                    >
+                                <div className="about-contact-list">
+                                    <div className="about-contact-row">
                                         <MapPin
                                             size={20}
-                                            color="var(--primary-color)"
-                                            style={{
-                                                flexShrink: 0,
-                                                marginTop: "4px",
-                                            }}
+                                            className="about-contact-icon"
                                         />
-                                        <span
-                                            style={{
-                                                fontSize: "0.95rem",
-                                                color: "#e2e8f0",
-                                                lineHeight: 1.6,
-                                            }}
-                                        >
+                                        <span className="about-contact-text">
                                             3rd Floor, Gera Imperium Alpha, Grant
                                             Road, Vitthal Nagar, Kharadi, Pune,
                                             Maharashtra 411014
                                         </span>
                                     </div>
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            gap: "14px",
-                                            alignItems: "center",
-                                        }}
-                                    >
+                                    <div className="about-contact-row about-contact-row--center">
                                         <Phone
                                             size={18}
-                                            color="var(--primary-color)"
-                                            style={{ flexShrink: 0 }}
+                                            className="about-contact-icon about-contact-icon--center"
                                         />
                                         <a
                                             href="tel:+917398174444"
-                                            style={{
-                                                color: "#ffffff",
-                                                fontWeight: "600",
-                                            }}
+                                            className="about-contact-link"
                                         >
                                             +91 73981 74444
                                         </a>
                                     </div>
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            gap: "14px",
-                                            alignItems: "center",
-                                        }}
-                                    >
+                                    <div className="about-contact-row about-contact-row--center">
                                         <Mail
                                             size={18}
-                                            color="var(--primary-color)"
-                                            style={{ flexShrink: 0 }}
+                                            className="about-contact-icon about-contact-icon--center"
                                         />
                                         <a
                                             href="mailto:info@punepropertyinvestor.com"
-                                            style={{ color: "#ffffff" }}
+                                            className="about-contact-link"
                                         >
                                             info@punepropertyinvestor.com
                                         </a>

@@ -8,7 +8,10 @@ import {
     IndianRupee,
     Building2,
     ArrowDownUp,
+    X,
+    Check,
 } from "lucide-react";
+import "./PropertyFilters.css";
 
 const locations = [
     "Kharadi",
@@ -16,6 +19,9 @@ const locations = [
     "Wakad",
     "Hinjewadi",
     "Wagholi",
+    "Hadapsar",
+    "Kalyani Nagar",
+    "Bavdhan",
 ];
 
 const bhkOptions = [
@@ -34,51 +40,68 @@ const propertyTypes = [
 ];
 
 function PropertyFilters({
-                             filters,
-                             onFilterChange,
-                             onReset,
-                             resultCount,
-                         }) {
+    filters,
+    onFilterChange,
+    onReset,
+    resultCount,
+    onCloseMobile,
+}) {
     const handleChange = (key, value) => {
         onFilterChange(key, value);
     };
 
     return (
-        <aside className="property-filters">
+        <aside className="property-filters" aria-label="Property Search Filters">
             {/* Filter heading */}
             <div className="property-filters__header">
                 <div className="property-filters__heading">
-                    <SlidersHorizontal size={20} />
-
+                    <SlidersHorizontal size={18} />
                     <div>
                         <h2>Filters</h2>
-                        <p>Find your perfect property</p>
+                        <p>Find your ideal property</p>
                     </div>
                 </div>
 
-                <button
-                    type="button"
-                    className="property-filters__reset"
-                    onClick={onReset}
-                    aria-label="Reset all filters"
-                >
-                    <RotateCcw size={15} />
-                    Reset
-                </button>
+                <div className="property-filters__header-actions">
+                    <button
+                        type="button"
+                        className="property-filters__reset"
+                        onClick={onReset}
+                        aria-label="Reset all filters"
+                        title="Reset All Filters"
+                    >
+                        <RotateCcw size={13} />
+                        <span>Reset</span>
+                    </button>
+
+                    {onCloseMobile && (
+                        <button
+                            type="button"
+                            className="property-filters__close-btn"
+                            onClick={onCloseMobile}
+                            aria-label="Close filters"
+                        >
+                            <X size={20} />
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Results count badge */}
             <div className="property-filters__count-badge">
-                <span>{resultCount}</span>
-                <span>{resultCount === 1 ? "Property Available" : "Properties Available"}</span>
+                <span className="property-filters__count-dot" />
+                <span className="property-filters__count-number">{resultCount}</span>
+                <span className="property-filters__count-text">
+                    {resultCount === 1 ? "Property Available" : "Properties Available"}
+                </span>
             </div>
 
             <div className="property-filters__body">
-                {/* Location filter */}
+                {/* 1. Location filter */}
                 <div className="property-filters__group">
                     <label className="property-filters__label">
-                        <MapPin size={16} />
-                        Location
+                        <MapPin size={15} />
+                        <span>Location in Pune</span>
                     </label>
 
                     <div className="property-filters__chips">
@@ -97,8 +120,7 @@ function PropertyFilters({
                                 type="button"
                                 key={item}
                                 className={`property-filters__chip ${
-                                    filters.location.toLowerCase() ===
-                                    item.toLowerCase()
+                                    filters.location.toLowerCase() === item.toLowerCase()
                                         ? "is-selected"
                                         : ""
                                 }`}
@@ -110,11 +132,11 @@ function PropertyFilters({
                     </div>
                 </div>
 
-                {/* BHK filter */}
+                {/* 2. BHK filter */}
                 <div className="property-filters__group">
                     <label className="property-filters__label">
-                        <BedDouble size={16} />
-                        BHK Configuration
+                        <BedDouble size={15} />
+                        <span>BHK Configuration</span>
                     </label>
 
                     <div className="property-filters__bhk-buttons">
@@ -123,13 +145,9 @@ function PropertyFilters({
                                 type="button"
                                 key={item.value}
                                 className={`property-filters__bhk-button ${
-                                    filters.bhk === item.value
-                                        ? "is-selected"
-                                        : ""
+                                    filters.bhk === item.value ? "is-selected" : ""
                                 }`}
-                                onClick={() =>
-                                    handleChange("bhk", item.value)
-                                }
+                                onClick={() => handleChange("bhk", item.value)}
                             >
                                 {item.label}
                             </button>
@@ -137,17 +155,16 @@ function PropertyFilters({
                     </div>
                 </div>
 
-                {/* Price range */}
+                {/* 3. Budget range */}
                 <div className="property-filters__group">
                     <label className="property-filters__label">
-                        <IndianRupee size={16} />
-                        Budget Range (INR)
+                        <IndianRupee size={15} />
+                        <span>Budget Range (INR)</span>
                     </label>
 
                     <div className="property-filters__price-inputs">
                         <div className="property-filters__input-wrapper">
-                            <span>₹ Min</span>
-
+                            <span className="property-filters__currency-tag">₹ Min</span>
                             <input
                                 type="number"
                                 placeholder="50,00,000"
@@ -164,8 +181,7 @@ function PropertyFilters({
                         <span className="property-filters__price-to">to</span>
 
                         <div className="property-filters__input-wrapper">
-                            <span>₹ Max</span>
-
+                            <span className="property-filters__currency-tag">₹ Max</span>
                             <input
                                 type="number"
                                 placeholder="1,50,00,000"
@@ -187,27 +203,34 @@ function PropertyFilters({
                             { label: "60L - 1 Cr", min: "6000000", max: "10000000" },
                             { label: "1 Cr - 1.5 Cr", min: "10000000", max: "15000000" },
                             { label: "> 1.5 Cr", min: "15000000", max: "" },
-                        ].map((preset) => (
-                            <button
-                                type="button"
-                                key={preset.label}
-                                className="property-filters__chip"
-                                onClick={() => {
-                                    handleChange("minPrice", preset.min);
-                                    handleChange("maxPrice", preset.max);
-                                }}
-                            >
-                                {preset.label}
-                            </button>
-                        ))}
+                        ].map((preset) => {
+                            const isPresetActive =
+                                String(filters.minPrice || "") === String(preset.min) &&
+                                String(filters.maxPrice || "") === String(preset.max);
+                            return (
+                                <button
+                                    type="button"
+                                    key={preset.label}
+                                    className={`property-filters__chip ${
+                                        isPresetActive ? "is-selected" : ""
+                                    }`}
+                                    onClick={() => {
+                                        handleChange("minPrice", preset.min);
+                                        handleChange("maxPrice", preset.max);
+                                    }}
+                                >
+                                    {preset.label}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
 
-                {/* Property type */}
+                {/* 4. Property type */}
                 <div className="property-filters__group">
                     <label className="property-filters__label">
-                        <Building2 size={16} />
-                        Property Type
+                        <Building2 size={15} />
+                        <span>Property Type</span>
                     </label>
 
                     <div className="property-filters__chips">
@@ -216,9 +239,7 @@ function PropertyFilters({
                                 type="button"
                                 key={item.value}
                                 className={`property-filters__chip ${
-                                    filters.propertyType === item.value
-                                        ? "is-selected"
-                                        : ""
+                                    filters.propertyType === item.value ? "is-selected" : ""
                                 }`}
                                 onClick={() =>
                                     handleChange("propertyType", item.value)
@@ -230,14 +251,14 @@ function PropertyFilters({
                     </div>
                 </div>
 
-                {/* Sort order */}
+                {/* 5. Sort order */}
                 <div className="property-filters__group">
                     <label
                         className="property-filters__label"
                         htmlFor="property-sort"
                     >
-                        <ArrowDownUp size={16} />
-                        Sort Listings
+                        <ArrowDownUp size={15} />
+                        <span>Sort Listings</span>
                     </label>
 
                     <div className="property-filters__select-wrapper">
@@ -247,21 +268,28 @@ function PropertyFilters({
                             onChange={(event) =>
                                 handleChange("sortBy", event.target.value)
                             }
+                            className="property-filters__select"
                         >
-                            <option value="recommended">
-                                Recommended
-                            </option>
-
-                            <option value="price-low-high">
-                                Price: Low to High
-                            </option>
-
-                            <option value="price-high-low">
-                                Price: High to Low
-                            </option>
+                            <option value="recommended">Recommended (Featured First)</option>
+                            <option value="price-low-high">Price: Low to High</option>
+                            <option value="price-high-low">Price: High to Low</option>
                         </select>
                     </div>
                 </div>
+
+                {/* Mobile Apply Button */}
+                {onCloseMobile && (
+                    <div className="property-filters__mobile-apply">
+                        <button
+                            type="button"
+                            className="property-filters__apply-btn"
+                            onClick={onCloseMobile}
+                        >
+                            <Check size={16} />
+                            <span>Show {resultCount} Properties</span>
+                        </button>
+                    </div>
+                )}
             </div>
         </aside>
     );

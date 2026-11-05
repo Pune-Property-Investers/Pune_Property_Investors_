@@ -6,7 +6,7 @@ type PageProps = {
 };
 
 export function generateStaticParams() {
-    return [{ slug: ["updates"] }];
+    return [{ slug: ["updates"] }, { slug: ["market-updates"] }];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

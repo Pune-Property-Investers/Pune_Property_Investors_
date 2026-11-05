@@ -1,244 +1,640 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import {
+    ChevronLeft,
+    ChevronRight,
+    ArrowUpRight,
+    Calendar,
+    Layers,
+    Home,
+    Tag,
+    Clock,
+    Volume2,
+    VolumeX,
+    Maximize2,
+    ExternalLink,
+    Sparkles,
+    Film,
+} from "lucide-react";
+import { FaYoutube, FaWhatsapp } from "react-icons/fa";
+import "./FeaturedProperties.css";
 
-import properties from "../../data/properties";
-import PropertyCard from "../properties/PropertyCard";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const WHATSAPP_NUMBER = "917398174444";
+const youtubeChannelUrl = "https://www.youtube.com/@PunePropertyInvestor";
 
-const TAB_META = {
-    "projects": {
-        eyebrow: "POPULAR PROJECTS",
-        heading: "Projects in Pune",
-        description: "Explore trending and popular residential projects across Pune.",
-        viewAllText: "View All Projects",
-        viewAllHref: "/projects",
+export const featuredPuneProjects = [
+    {
+        id: 1,
+        name: "Mantra Magnus",
+        brandName: "MANTRA",
+        location: "Mundhwa, Pune",
+        localityName: "Mundhwa",
+        youtubeId: "v1KcS0G22EQ",
+        startSeconds: 0,
+        youtubeUrl: "https://www.youtube.com/watch?v=v1KcS0G22EQ",
+        title: "Mantra Magnus Mundhwa Project Details | 2, 2.5, 3.5 BHK | Vridhi Bhava Concept",
+        tagline: "Iconic Vridhi Bhava architectural design concept delivering optimal privacy, 360-degree cross ventilation, and scenic views.",
+        completion: "Q4 2026",
+        completionSub: "MahaRERA",
+        configurations: "2, 2.5 & 3.5 BHK",
+        configSub: "5 Towers // 22 Storeys",
+        carpet: "420 M²",
+        carpetSub: "1,420 - 2,150 SQ.FT",
+        price: "₹ 1.55 Cr*",
+        priceSub: "Direct Price",
+        badge: "SAMPLE FLAT TOUR",
+        propertySlug: "mantra-magnus",
+        thumbnail: `${basePath}/images/mantra-magnus-shorts-thumb.jpg`,
+        siteImages: [
+            { url: `${basePath}/images/mantra-magnus-site-elevation.jpg`, label: "Site Elevation & Towers" },
+            { url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", label: "Sample Flat Living Room" },
+            { url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80", label: "Grand Entrance & Reflecting Pool" },
+            { url: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80", label: "Landscaped Courtyards" },
+            { url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80", label: "Master Suite & Private Deck" }
+        ],
     },
-    "new-launches": {
-        eyebrow: "LATEST PROPERTY LAUNCHES",
-        heading: "New Launches in Pune",
-        description: "Discover the latest newly launched residential projects across Pune.",
-        viewAllText: "View All New Launches",
-        viewAllHref: "/buy?projectType=new-launches",
+    {
+        id: 2,
+        name: "Godrej Elements",
+        brandName: "GODREJ",
+        location: "Hinjewadi, Pune",
+        localityName: "Hinjewadi",
+        youtubeId: "M1sDYNUJQrY",
+        startSeconds: 203,
+        youtubeUrl: "https://www.youtube.com/watch?v=M1sDYNUJQrY&t=203s",
+        title: "Godrej Elements Hinjewadi Project Details | 2 & 3 BHK Eco-Luxury Residences",
+        tagline: "Eco-architectural high-rises centered on active wellness, smart automation, and panoramic Hinjewadi skyline views.",
+        completion: "Q2 2027",
+        completionSub: "MahaRERA",
+        configurations: "2 & 3 BHK",
+        configSub: "6 Towers // 28 Storeys",
+        carpet: "380 M²",
+        carpetSub: "980 - 1,420 SQ.FT",
+        price: "₹ 1.30 Cr*",
+        priceSub: "Direct Price",
+        badge: "SAMPLE FLAT TOUR",
+        propertySlug: "godrej-elements",
+        thumbnail: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+        siteImages: [
+            { url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80", label: "Tower Elevation & Skyline" },
+            { url: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=800&q=80", label: "Living & Dining Room" },
+            { url: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80", label: "Rooftop Infinity Pool" },
+            { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80", label: "Wellness Club & Gym" }
+        ],
     },
-    "residential": {
-        eyebrow: "FIND YOUR HOME",
-        heading: "Residential Properties in Pune",
-        description: "Browse apartments, flats, and homes in Pune's top localities.",
-        viewAllText: "View All Residential",
-        viewAllHref: "/buy?type=Residential",
+    {
+        id: 3,
+        name: "VTP HiLife",
+        brandName: "VTP REALTY",
+        location: "Kharadi, Pune",
+        localityName: "Kharadi",
+        youtubeId: "FbWb8gl35BE",
+        startSeconds: 0,
+        youtubeUrl: "https://www.youtube.com/watch?v=FbWb8gl35BE",
+        title: "VTP HiLife Kharadi Project Details | 2 & 3 BHK Riverfront Luxury",
+        tagline: "Riverfront promenade lifestyle with Maximum Livable Area (MLA) architectural design in prime New Kharadi.",
+        completion: "Q4 2026",
+        completionSub: "MahaRERA",
+        configurations: "2 & 3 BHK",
+        configSub: "8 Towers // 24 Storeys",
+        carpet: "360 M²",
+        carpetSub: "890 - 1,320 SQ.FT",
+        price: "₹ 1.05 Cr*",
+        priceSub: "Direct Price",
+        badge: "SAMPLE FLAT TOUR",
+        propertySlug: "vtp-hilife",
+        thumbnail: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+        siteImages: [
+            { url: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80", label: "Riverfront Facade" },
+            { url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80", label: "Designer Show Flat" },
+            { url: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=800&q=80", label: "Olympic-Length Pool" },
+            { url: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80", label: "Sky Deck Lounge" }
+        ],
     },
-    "commercial": {
-        eyebrow: "BUSINESS SPACES",
-        heading: "Commercial Properties in Pune",
-        description: "Explore office spaces, retail showrooms, and IT park developments.",
-        viewAllText: "View All Commercial",
-        viewAllHref: "/commercial",
+    {
+        id: 4,
+        name: "Kumar Primus",
+        brandName: "KUMAR",
+        location: "Kalyani Nagar, Pune",
+        localityName: "Kalyani Nagar",
+        youtubeId: "v1KcS0G22EQ",
+        startSeconds: 0,
+        youtubeUrl: "https://www.youtube.com/watch?v=v1KcS0G22EQ",
+        title: "Kumar Primus Kalyani Nagar | 3 & 4 BHK Bespoke High-Rise Residences",
+        tagline: "Bespoke high-rises commanding sweeping views of Koregaon Park skyline with private sundecks and plunge pools.",
+        completion: "Ready to Move",
+        completionSub: "MahaRERA",
+        configurations: "3 & 4 BHK",
+        configSub: "3 Towers // 26 Storeys",
+        carpet: "540 M²",
+        carpetSub: "1,750 - 2,450 SQ.FT",
+        price: "₹ 1.85 Cr*",
+        priceSub: "Direct Price",
+        badge: "SAMPLE FLAT TOUR",
+        propertySlug: "kumar-primus",
+        thumbnail: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
+        siteImages: [
+            { url: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80", label: "Grand Tower Elevation" },
+            { url: "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?auto=format&fit=crop&w=800&q=80", label: "Ultra Luxury Suite" },
+            { url: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80", label: "Private Sundeck" }
+        ],
     },
-    "plot-land": {
-        eyebrow: "BUILD YOUR DREAM",
-        heading: "Plots & Land in Pune",
-        description: "Find clear-title NA residential plots and gated community layouts.",
-        viewAllText: "View All Plots & Land",
-        viewAllHref: "/plots",
+    {
+        id: 5,
+        name: "The Ark Voyage",
+        brandName: "TRIBECA",
+        location: "Wakad, Pune",
+        localityName: "Wakad",
+        youtubeId: "M1sDYNUJQrY",
+        startSeconds: 203,
+        youtubeUrl: "https://www.youtube.com/watch?v=M1sDYNUJQrY&t=203s",
+        title: "The Ark Voyage Wakad | 3 & 4 BHK Cruise-Inspired Architecture",
+        tagline: "Cruise-inspired towers surrounded by protected green reserves, rooftop sky-bridge, and Trump Tower design pedigree.",
+        completion: "Q4 2027",
+        completionSub: "MahaRERA",
+        configurations: "3 & 4 BHK",
+        configSub: "4 Towers // 30 Storeys",
+        carpet: "610 M²",
+        carpetSub: "1,920 - 2,680 SQ.FT",
+        price: "₹ 2.10 Cr*",
+        priceSub: "Direct Price",
+        badge: "SAMPLE FLAT TOUR",
+        propertySlug: "the-ark-voyage",
+        thumbnail: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=800&q=80",
+        siteImages: [
+            { url: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80", label: "The Ark Facade" },
+            { url: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80", label: "Duplex Penthouse" },
+            { url: "https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80", label: "Sky Promenade" }
+        ],
     },
-    "upcoming": {
-        eyebrow: "COMING SOON",
-        heading: "Upcoming Projects in Pune",
-        description: "Pre-launch and pre-booking opportunities in exciting upcoming developments.",
-        viewAllText: "View All Upcoming",
-        viewAllHref: "/buy?projectType=upcoming",
+    {
+        id: 6,
+        name: "Kohinoor Kaleido",
+        brandName: "KOHINOOR",
+        location: "Wagholi, Pune",
+        localityName: "Wagholi",
+        youtubeId: "FbWb8gl35BE",
+        startSeconds: 0,
+        youtubeUrl: "https://www.youtube.com/watch?v=FbWb8gl35BE",
+        title: "Kohinoor Kaleido Wagholi | 3 & 4 BHK Urban Forest Residences",
+        tagline: "An urban masterpiece celebrating natural sunlight, forested landscape, and innovative residential design in East Pune.",
+        completion: "Q1 2027",
+        completionSub: "MahaRERA",
+        configurations: "3 & 4 BHK",
+        configSub: "5 Towers // 22 Storeys",
+        carpet: "480 M²",
+        carpetSub: "1,450 - 2,200 SQ.FT",
+        price: "₹ 1.45 Cr*",
+        priceSub: "Direct Price",
+        badge: "SAMPLE FLAT TOUR",
+        propertySlug: "kohinoor-kaleido",
+        thumbnail: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80",
+        siteImages: [
+            { url: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80", label: "Urban Forest Facade" },
+            { url: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80", label: "Bespoke Salon" },
+            { url: "https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80", label: "Panoramic Deck" }
+        ],
     },
-};
+];
 
-function FeaturedProperties({ filters = null }) {
-    const featuredProperties = properties
-        .filter((property) => {
-            if (!filters) return true;
+/* --------------------------------------------------------------------------
+   Mini Gallery Slideshow (Left box in the bottom bar)
+   -------------------------------------------------------------------------- */
+function SiteImageSlideshow({ images = [], projectName = "Project" }) {
+    const [currentIdx, setCurrentIdx] = useState(0);
+    const total = images.length || 1;
 
-            // Filter by active tab category
-            if (filters.projectType) {
-                const tab = filters.projectType;
+    useEffect(() => {
+        setCurrentIdx(0);
+    }, [projectName]);
 
-                if (tab === "projects" && property.category !== "projects") {
-                    return false;
-                }
-                if (tab === "new-launches" && property.category !== "new-launches") {
-                    return false;
-                }
-                if (tab === "residential" && property.category !== "residential") {
-                    return false;
-                }
-                if (tab === "commercial" && property.category !== "commercial") {
-                    return false;
-                }
-                if (tab === "plot-land" && property.category !== "plot-land") {
-                    return false;
-                }
-                if (tab === "upcoming" && property.category !== "upcoming") {
-                    return false;
-                }
-            }
+    const handlePrev = (e) => {
+        e.stopPropagation();
+        setCurrentIdx((prev) => (prev - 1 + total) % total);
+    };
 
-            // Filter by location
-            if (
-                filters.location &&
-                filters.location !== "All Locations" &&
-                !property.location
-                    ?.toLowerCase()
-                    .includes(filters.location.toLowerCase())
-            ) {
-                return false;
-            }
+    const handleNext = (e) => {
+        e.stopPropagation();
+        setCurrentIdx((prev) => (prev + 1) % total);
+    };
 
-            // Filter by property type
-            if (
-                filters.type &&
-                filters.type !== "Residential" &&
-                property.propertyType?.toLowerCase() !==
-                    filters.type.toLowerCase()
-            ) {
-                return false;
-            }
+    const currentImg = images[currentIdx] || images[0] || {};
+    const imgUrl = typeof currentImg === "string" ? currentImg : currentImg.url;
+    const imgLabel = typeof currentImg === "object" && currentImg.label ? currentImg.label : "Site Elevation & Towers";
 
-            // Filter by BHK
-            if (filters.bhk && filters.bhk !== "Any") {
-                const bedrooms = Number(property.bedrooms);
+    return (
+        <div className="pune-gallery-card" aria-label={`${projectName} gallery`}>
+            {/* Background Image */}
+            <img
+                src={imgUrl}
+                alt={`${projectName} - ${imgLabel}`}
+                className="pune-gallery-card__img"
+                loading="lazy"
+            />
+            <div className="pune-gallery-card__overlay" />
 
-                if (filters.bhk === "5+") {
-                    if (bedrooms < 5) return false;
-                } else if (bedrooms !== Number(filters.bhk)) {
-                    return false;
-                }
-            }
+            {/* Top Bar: GALLERY badge + 01/05 Counter */}
+            <div className="pune-gallery-card__top">
+                <span className="pune-gallery-card__badge">
+                    <span className="pune-gallery-card__badge-dot" />
+                    <span>GALLERY</span>
+                </span>
+                <span className="pune-gallery-card__counter">
+                    {String(currentIdx + 1).padStart(2, "0")}/{String(total).padStart(2, "0")}
+                </span>
+            </div>
 
-            // Filter by budget
-            if (
-                filters.budget &&
-                filters.budget !== "Any Budget" &&
-                Number.isFinite(Number(property.priceValue))
-            ) {
-                const price = Number(property.priceValue);
+            {/* Bottom Info: Label + mini arrow controls */}
+            <div className="pune-gallery-card__bottom">
+                <span className="pune-gallery-card__label" title={imgLabel}>
+                    {imgLabel}
+                </span>
 
-                if (filters.budget === "Under 30 Lakhs" && price >= 3000000) {
-                    return false;
-                }
+                <div className="pune-gallery-card__controls">
+                    <button
+                        type="button"
+                        onClick={handlePrev}
+                        className="pune-gallery-card__btn"
+                        aria-label="Previous gallery image"
+                    >
+                        <ChevronLeft size={13} />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={handleNext}
+                        className="pune-gallery-card__btn"
+                        aria-label="Next gallery image"
+                    >
+                        <ChevronRight size={13} />
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
 
-                if (
-                    filters.budget === "30-50 Lakhs" &&
-                    (price < 3000000 || price > 5000000)
-                ) {
-                    return false;
-                }
+/* --------------------------------------------------------------------------
+   Main FeaturedProperties Component
+   -------------------------------------------------------------------------- */
+export default function FeaturedProperties() {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [isMuted, setIsMuted] = useState(true);
+    const [isFullSize, setIsFullSize] = useState(true);
+    const stageContainerRef = useRef(null);
 
-                if (
-                    filters.budget === "50-80 Lakhs" &&
-                    (price < 5000000 || price > 8000000)
-                ) {
-                    return false;
-                }
+    const totalSlides = featuredPuneProjects.length;
+    const currentProject = featuredPuneProjects[activeIndex] || featuredPuneProjects[0];
 
-                if (
-                    filters.budget === "80 Lakhs-1.5 Crore" &&
-                    (price < 8000000 || price > 15000000)
-                ) {
-                    return false;
-                }
+    const handlePrevProject = () => {
+        setActiveIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+    };
 
-                if (
-                    filters.budget === "Above 1.5 Crore" &&
-                    price <= 15000000
-                ) {
-                    return false;
-                }
-            }
+    const handleNextProject = () => {
+        setActiveIndex((prev) => (prev + 1) % totalSlides);
+    };
 
-            return true;
-        })
-        .slice(0, filters ? undefined : 4);
+    const toggleSound = () => {
+        setIsMuted((prev) => !prev);
+    };
 
-    const tabKey = filters?.projectType || null;
-    const meta = tabKey && TAB_META[tabKey] ? TAB_META[tabKey] : null;
+    const toggleFullscreen = () => {
+        if (!stageContainerRef.current) return;
+        if (!document.fullscreenElement) {
+            stageContainerRef.current.requestFullscreen().catch(() => {});
+        } else {
+            document.exitFullscreen().catch(() => {});
+        }
+    };
+
+    const handleWhatsApp = (e) => {
+        e.stopPropagation();
+        const msg = `Hello Pune Property Investor, I am interested in ${currentProject.name} (${currentProject.location}) starting at ${currentProject.price}. Please share project details, brochure, and sample flat visit appointment.`;
+        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+        window.open(url, "_blank", "noopener,noreferrer");
+    };
 
     return (
         <section
-            className="featured-properties section"
+            className="pune-projects-showcase-section"
             id="featured-properties"
+            aria-label="Projects in Pune Showcase"
         >
-            <div className="container">
-                <div className="featured-properties__heading">
-                    <div className="section-heading">
-                        <span className="featured-properties__eyebrow">
-                            {meta
-                                ? meta.eyebrow
-                                : filters
-                                  ? "PROJECTS MATCHING YOUR SEARCH"
-                                  : "HANDPICKED FOR YOU"}
+            <div className="pune-projects-showcase-container">
+                {/* Section Header (Curated Asset Classes Style) */}
+                <div className="pune-projects-header">
+                    <div className="pune-projects-eyebrow-wrap">
+                        <span className="pune-projects-eyebrow-line" />
+                        <span className="pune-projects-eyebrow">
+                            <Sparkles size={13} /> CURATED ASSET CLASSES
                         </span>
-
-                        <h2>
-                            {meta
-                                ? meta.heading
-                                : filters
-                                  ? "Projects in Pune"
-                                  : "Featured Properties in Pune"}
-                        </h2>
-
-                        <p>
-                            {meta
-                                ? meta.description
-                                : filters
-                                  ? "Explore projects based on your selected location, property type, BHK, and budget."
-                                  : "Explore selected homes across some of Pune's popular residential localities."}
-                        </p>
+                        <span className="pune-projects-eyebrow-line" />
                     </div>
 
-                    <Link
-                        href={meta?.viewAllHref || "/buy"}
-                        className="featured-properties__view-all"
-                    >
-                        {meta?.viewAllText || "View All Properties"}
-                        <ArrowRight size={17} />
-                    </Link>
+                    <h2 className="pune-projects-title">
+                        Properties in <span>Pune</span>
+                    </h2>
+
+                    <p className="pune-projects-subtitle">
+                        From high-rise riverfront apartments to private gated villas and high-yield commercial spaces across Pune.
+                    </p>
                 </div>
 
-                {featuredProperties.length > 0 ? (
-                    <div className="featured-properties__grid">
-                        {featuredProperties.map((property) => (
-                            <PropertyCard
-                                key={property.id}
-                                property={property}
-                            />
-                        ))}
-                    </div>
-                ) : (
-                    <div className="featured-properties__empty">
-                        <h3>No matching properties found</h3>
-                        <p>
-                            Try changing your location, BHK, property type, or
-                            budget to see more projects.
-                        </p>
+                {/* Master Showcase Frame (Matches Reference Image) */}
+                <div className="pune-project-card" ref={stageContainerRef}>
+                    {/* ========================================================
+                        TOP HALF: Video Stage (Black Background + Center Vertical Video)
+                        ======================================================== */}
+                    <div className={`pune-project-stage ${isFullSize ? "pune-project-stage--fill" : ""}`}>
+                        {/* Huge Typography Watermark on Left Stage */}
+                        <div className="pune-project-stage__watermark" aria-hidden="true">
+                            {currentProject.brandName}
+                        </div>
 
-                        <Link
-                            href={meta?.viewAllHref || "/buy"}
-                            className="primary-button"
+                        {/* Top Controls Row */}
+                        <div className="pune-project-stage__top-row">
+                            {/* Top Left: SAMPLE FLAT TOUR badge */}
+                            <div className="pune-project-stage__tour-badge">
+                                <span className="pune-project-stage__tour-dot" />
+                                <span>{currentProject.badge}</span>
+                            </div>
+
+                            {/* Top Right: Controls (Full Size, Shorts, Sound Off, Fullscreen, YouTube) */}
+                            <div className="pune-project-stage__top-actions">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsFullSize((prev) => !prev)}
+                                    className="pune-stage-pill-btn"
+                                    title={isFullSize ? "Switch to Original Video Aspect" : "Switch to Full Size Container Video"}
+                                >
+                                    <Film size={13} />
+                                    <span>{isFullSize ? "Full Size" : "Original"}</span>
+                                </button>
+
+                                <a
+                                    href={currentProject.youtubeUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="pune-stage-pill-btn"
+                                    title="Watch on YouTube Shorts"
+                                >
+                                    <Clock size={13} />
+                                    <span>Shorts</span>
+                                </a>
+
+                                <button
+                                    type="button"
+                                    onClick={toggleSound}
+                                    className="pune-stage-pill-btn"
+                                    title={isMuted ? "Turn Sound On" : "Turn Sound Off"}
+                                >
+                                    {isMuted ? <VolumeX size={13} /> : <Volume2 size={13} />}
+                                    <span>{isMuted ? "Sound Off" : "Sound On"}</span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={toggleFullscreen}
+                                    className="pune-stage-pill-btn"
+                                    title="View Fullscreen"
+                                >
+                                    <Maximize2 size={13} />
+                                    <span>Fullscreen</span>
+                                </button>
+
+                                <a
+                                    href={currentProject.youtubeUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="pune-stage-yt-btn"
+                                    aria-label="Open YouTube"
+                                    title="Open YouTube video"
+                                >
+                                    <FaYoutube size={15} color="#ffffff" />
+                                    <ExternalLink size={11} color="rgba(255,255,255,0.85)" />
+                                </a>
+                            </div>
+                        </div>
+
+                        {/* Side Navigation Arrow: Left */}
+                        <button
+                            type="button"
+                            onClick={handlePrevProject}
+                            className="pune-stage-nav-arrow pune-stage-nav-arrow--left"
+                            aria-label="Previous property"
+                            title="Previous property"
                         >
-                            {meta?.viewAllText || "Explore All Properties"}
-                            <ArrowRight size={17} />
-                        </Link>
-                    </div>
-                )}
+                            <ChevronLeft size={22} />
+                        </button>
 
-                <div className="featured-properties__mobile-action">
-                    <Link
-                        href={meta?.viewAllHref || "/buy"}
-                        className="primary-button"
-                    >
-                        {meta?.viewAllText || "Explore All Properties"}
-                        <ArrowRight size={17} />
-                    </Link>
+                        {/* Center Stage: Portrait / Shorts Video Player */}
+                        <div className="pune-project-stage__video-frame">
+                            <iframe
+                                src={`https://www.youtube-nocookie.com/embed/${currentProject.youtubeId}?autoplay=1&mute=${
+                                    isMuted ? 1 : 0
+                                }&loop=1&playlist=${currentProject.youtubeId}&controls=1&modestbranding=1&rel=0&playsinline=1${
+                                    currentProject.startSeconds ? `&start=${currentProject.startSeconds}` : ""
+                                }`}
+                                title={currentProject.name}
+                                className="pune-project-stage__iframe"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            />
+
+                            {/* Watermark logo badge in top right of video */}
+                            <div className="pune-video-watermark-pill" aria-hidden="true">
+                                <img
+                                    src={`${basePath}/images/logo.png`}
+                                    alt="PPI Logo"
+                                    className="pune-video-watermark-logo"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Side Navigation Arrow: Right */}
+                        <button
+                            type="button"
+                            onClick={handleNextProject}
+                            className="pune-stage-nav-arrow pune-stage-nav-arrow--right"
+                            aria-label="Next property"
+                            title="Next property"
+                        >
+                            <ChevronRight size={22} />
+                        </button>
+
+                        {/* Bottom Stage Overlay: Project Details Headline & Description */}
+                        <div className="pune-project-stage__bottom-info">
+                            <div className="pune-project-stage__text">
+                                <h3 className="pune-project-stage__title">
+                                    {currentProject.title}
+                                </h3>
+                                <p className="pune-project-stage__desc">
+                                    {currentProject.tagline}
+                                </p>
+                            </div>
+
+                            {/* Bottom Right Floating Circle CTA Arrow */}
+                            <Link
+                                href={`/buy`}
+                                className="pune-stage-circle-cta"
+                                aria-label={`View ${currentProject.name} details`}
+                                title="View details"
+                            >
+                                <ArrowUpRight size={20} strokeWidth={2.4} />
+                            </Link>
+                        </div>
+                    </div>
+
+                    {/* ========================================================
+                        BOTTOM HALF: White Bar (Gallery Preview + 4 Specs + Actions)
+                        ======================================================== */}
+                    <div className="pune-project-bottom-bar">
+                        {/* LEFT COLUMN: Gallery Preview Card */}
+                        <div className="pune-project-bottom-bar__left">
+                            <SiteImageSlideshow
+                                images={currentProject.siteImages}
+                                projectName={currentProject.name}
+                            />
+                        </div>
+
+                        {/* RIGHT COLUMN: 4 Spec Cards + Bottom Action Row */}
+                        <div className="pune-project-bottom-bar__right">
+                            {/* 4 Specification Cards in a Row */}
+                            <div className="pune-project-specs-grid">
+                                {/* 1. COMPLETION */}
+                                <div className="pune-spec-card">
+                                    <div className="pune-spec-card__header">
+                                        <Calendar size={14} className="pune-spec-card__icon" />
+                                        <span className="pune-spec-card__label">COMPLETION</span>
+                                    </div>
+                                    <strong className="pune-spec-card__val">
+                                        {currentProject.completion}
+                                    </strong>
+                                    <span className="pune-spec-card__sub">
+                                        {currentProject.completionSub}
+                                    </span>
+                                </div>
+
+                                {/* 2. CONFIG */}
+                                <div className="pune-spec-card">
+                                    <div className="pune-spec-card__header">
+                                        <Layers size={14} className="pune-spec-card__icon" />
+                                        <span className="pune-spec-card__label">CONFIG</span>
+                                    </div>
+                                    <strong className="pune-spec-card__val">
+                                        {currentProject.configurations}
+                                    </strong>
+                                    <span className="pune-spec-card__sub">
+                                        {currentProject.configSub}
+                                    </span>
+                                </div>
+
+                                {/* 3. CARPET */}
+                                <div className="pune-spec-card">
+                                    <div className="pune-spec-card__header">
+                                        <Home size={14} className="pune-spec-card__icon" />
+                                        <span className="pune-spec-card__label">CARPET</span>
+                                    </div>
+                                    <strong className="pune-spec-card__val">
+                                        {currentProject.carpet}
+                                    </strong>
+                                    <span className="pune-spec-card__sub">
+                                        {currentProject.carpetSub}
+                                    </span>
+                                </div>
+
+                                {/* 4. PRICE */}
+                                <div className="pune-spec-card">
+                                    <div className="pune-spec-card__header">
+                                        <Tag size={14} className="pune-spec-card__icon" />
+                                        <span className="pune-spec-card__label">PRICE</span>
+                                    </div>
+                                    <strong className="pune-spec-card__val">
+                                        {currentProject.price}
+                                    </strong>
+                                    <span className="pune-spec-card__sub">
+                                        {currentProject.priceSub}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Bottom Action Row (Navigation Controls + WhatsApp + View Details) */}
+                            <div className="pune-project-action-row">
+                                <div className="pune-project-action-row__left">
+                                    {/* Arrow buttons */}
+                                    <div className="pune-action-nav-btns">
+                                        <button
+                                            type="button"
+                                            onClick={handlePrevProject}
+                                            className="pune-action-nav-btn"
+                                            aria-label="Previous project"
+                                        >
+                                            <ChevronLeft size={16} />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={handleNextProject}
+                                            className="pune-action-nav-btn"
+                                            aria-label="Next project"
+                                        >
+                                            <ChevronRight size={16} />
+                                        </button>
+                                    </div>
+
+                                    {/* Counter (01 / 06) */}
+                                    <span className="pune-action-counter">
+                                        <strong>{String(activeIndex + 1).padStart(2, "0")}</strong>
+                                        <span className="pune-action-counter__sep">/</span>
+                                        <span>{String(totalSlides).padStart(2, "0")}</span>
+                                    </span>
+
+                                    {/* Project Name • Locality */}
+                                    <span className="pune-action-project-name">
+                                        {currentProject.name} • {currentProject.localityName}
+                                    </span>
+                                </div>
+
+                                <div className="pune-project-action-row__right">
+                                    <button
+                                        type="button"
+                                        onClick={handleWhatsApp}
+                                        className="pune-action-whatsapp-btn"
+                                        aria-label="Connect on WhatsApp"
+                                    >
+                                        <FaWhatsapp size={16} />
+                                        <span>WhatsApp</span>
+                                    </button>
+
+                                    <Link
+                                        href="/buy"
+                                        className="pune-action-details-link"
+                                    >
+                                        <span>View Details</span>
+                                        <span className="pune-action-details-arrow">→</span>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom Pagination Dots (Active Gold Pill + Grey Dots) */}
+                <div className="pune-showcase-pagination" aria-label="Slide indicators">
+                    {featuredPuneProjects.map((_, idx) => (
+                        <button
+                            key={idx}
+                            type="button"
+                            onClick={() => setActiveIndex(idx)}
+                            className={`pune-showcase-dot ${
+                                idx === activeIndex ? "pune-showcase-dot--active" : ""
+                            }`}
+                            aria-label={`Jump to slide ${idx + 1}`}
+                        />
+                    ))}
                 </div>
             </div>
         </section>
     );
 }
-
-export default FeaturedProperties;

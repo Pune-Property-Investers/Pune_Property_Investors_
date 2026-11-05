@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function PropertiesPage() {
     return (
-        <Suspense fallback={<div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>Loading properties...</div>}>
+        <Suspense fallback={<div className="page-loading-fallback">Loading properties...</div>}>
             <BuyProperties />
         </Suspense>
     );

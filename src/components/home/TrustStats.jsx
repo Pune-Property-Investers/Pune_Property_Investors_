@@ -1,3 +1,4 @@
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 import {
@@ -19,41 +20,24 @@ const stats = [
 ];
 
 function AnimatedNumber({ target, suffix, started }) {
-    const [count, setCount] = useState(
-        target === 0 ? 5 : Math.max(0, target - (target >= 1000 ? 150 : 50))
-    );
-
+    const [count, setCount] = useState(0);
     const hasAnimated = useRef(false);
 
     useEffect(() => {
         if (!started || hasAnimated.current) return;
-
         hasAnimated.current = true;
 
-        const initialValue =
-            target === 0
-                ? 5
-                : Math.max(0, target - (target >= 1000 ? 150 : 50));
-
-        const duration = 2700;
+        const duration = 2000;
         let frameId;
         let startTime;
-
-        setCount(initialValue);
 
         const animate = (timestamp) => {
             if (startTime === undefined) startTime = timestamp;
 
-            const progress = Math.min(
-                (timestamp - startTime) / duration,
-                1
-            );
-
-            // Fast counting with a smooth finish.
-            const eased = 1 - Math.pow(1 - progress, 2.5);
-            const value = Math.round(
-                initialValue + (target - initialValue) * eased
-            );
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            // Ease out cubic for satisfying counter effect
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const value = Math.round(target * eased);
 
             setCount(value);
 
@@ -83,8 +67,19 @@ export default function TrustStats() {
 
     useEffect(() => {
         const section = sectionRef.current;
-
         if (!section || started) return;
+
+        const triggerAnimation = () => {
+            if (section) {
+                const rect = section.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    setStarted(true);
+                }
+            }
+        };
+
+        // Check immediately on mount in case section is already in or near viewport
+        triggerAnimation();
 
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -93,12 +88,16 @@ export default function TrustStats() {
                     observer.disconnect();
                 }
             },
-            { threshold: 0.15 }
+            { threshold: 0.02, rootMargin: "60px 0px" }
         );
 
         observer.observe(section);
+        window.addEventListener("scroll", triggerAnimation, { passive: true });
 
-        return () => observer.disconnect();
+        return () => {
+            observer.disconnect();
+            window.removeEventListener("scroll", triggerAnimation);
+        };
     }, [started]);
 
     return (

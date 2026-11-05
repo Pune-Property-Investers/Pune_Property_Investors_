@@ -41,7 +41,7 @@
 
 .footer-brand {
     display: inline-flex;
-    align-items: center;
+    align-items: flex-end;
     gap: 12px;
     margin-bottom: 23px;
     color: #ffffff;
@@ -61,6 +61,8 @@
     flex-direction: column;
     gap: 5px;
     line-height: 1.1;
+    align-items: center;
+    padding-bottom: 2px;
 }
 
 .footer-brand__name {
@@ -76,6 +78,9 @@
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 4px;
+    text-align: center;
+    width: 100%;
+    padding-left: 4px;
 }
 
 .footer-description {

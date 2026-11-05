@@ -28,7 +28,6 @@ import PropertyAmenities from "../property-details/PropertyAmenities";
 import PropertyEnquiry from "../property-details/PropertyEnquiry";
 
 import AdvertisementSidebar from "../common/AdvertisementSidebar";
-import PageHeroBanner from "../common/PageHeroBanner";
 import propertyListingsData from "../../data/propertyListingsData.js";
 import trendingProjects from "../../data/trendingProjectsData.js";
 
@@ -176,9 +175,8 @@ function PropertyDetails({ propertyId, propertySlug }) {
     );
 
     const area = property.area
-        ? `${Number(property.area).toLocaleString("en-IN")} ${
-              property.areaUnit || "sq.ft."
-          }`
+        ? `${Number(property.area).toLocaleString("en-IN")} ${property.areaUnit || "sq.ft."
+        }`
         : "On request";
 
     const highlights = [

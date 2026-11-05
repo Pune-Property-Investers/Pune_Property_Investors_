@@ -1,19 +1,23 @@
 /* =========================================================
    PROPERTY HERO HEAD SECTION (VIEW DETAILS PAGES)
-   Pune Property Investor
+   Pune Property Investor - Clean Luxury Hero Layout
 ========================================================= */
 
 .property-hero-head {
     position: relative;
     width: 100%;
-    min-height: 420px;
-    padding: 135px 0 45px;
+    min-height: 400px;
+    /* Clear the fixed header (~75-80px) with comfortable breathing room */
+    padding-top: clamp(125px, 14vw, 155px);
+    padding-bottom: clamp(40px, 5vw, 60px);
+    padding-left: clamp(18px, 4%, 48px);
+    padding-right: clamp(18px, 4%, 48px);
     overflow: hidden;
     isolation: isolate;
     background: #0c1017;
     color: var(--text-white, #ffffff);
     box-sizing: border-box;
-    font-family: var(--font-sans);
+    font-family: var(--font-sans), Inter, sans-serif;
 }
 
 .property-hero-head *,
@@ -22,160 +26,149 @@
     box-sizing: border-box;
 }
 
-/* Background image & deep cinematic overlay */
-.property-hero-head__bg {
+/* =========================================================
+   PHOTO SLIDESHOW (Smooth Crossfade & Ken Burns Zoom)
+   ========================================================= */
+
+.property-hero-head__slides {
     position: absolute;
     inset: 0;
     z-index: -2;
-    background-size: cover;
-    background-position: center 42%;
-    background-repeat: no-repeat;
-    transform: scale(1.02);
-    filter: brightness(0.9);
+    overflow: hidden;
 }
 
+.property-hero-head__slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center 48%;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transform: scale(1.08);
+    transition:
+        opacity 1.4s cubic-bezier(0.25, 1, 0.5, 1),
+        transform 8s cubic-bezier(0.25, 1, 0.5, 1);
+    pointer-events: none;
+    will-change: opacity, transform;
+}
+
+.property-hero-head__slide.is-active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 1;
+}
+
+/* Balanced Dual-Layer Overlay: Photo shines through clearly, text is crisp */
 .property-hero-head__overlay {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(
-        90deg,
-        rgba(12, 16, 23, 0.96) 0%,
-        rgba(12, 16, 23, 0.88) 52%,
-        rgba(12, 16, 23, 0.62) 100%
-    );
+    pointer-events: none;
+    background:
+        /* Vertical gradient: transparent middle lets architectural photos shine */
+        linear-gradient(
+            180deg,
+            rgba(12, 16, 23, 0.70) 0%,
+            rgba(12, 16, 23, 0.28) 35%,
+            rgba(12, 16, 23, 0.40) 70%,
+            rgba(12, 16, 23, 0.86) 100%
+        ),
+        /* Left-to-right vignette: readable text on left, bright photo on right */
+        linear-gradient(
+            90deg,
+            rgba(12, 16, 23, 0.84) 0%,
+            rgba(12, 16, 23, 0.52) 55%,
+            rgba(12, 16, 23, 0.20) 100%
+        );
 }
 
 .property-hero-head__container {
     width: min(94%, 1500px);
     margin: 0 auto;
+    position: relative;
+    z-index: 2;
 }
 
 /* =========================================================
    BREADCRUMBS
-========================================================= */
+   ========================================================= */
 
 .property-hero-head__breadcrumb {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 9px;
-    margin-bottom: 22px;
+    gap: 8px;
+    margin-bottom: 24px;
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(255, 255, 255, 0.75);
 }
 
-.property-hero-head__breadcrumb a {
+.property-hero-head__breadcrumb-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     color: rgba(255, 255, 255, 0.88);
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
-.property-hero-head__breadcrumb a:hover {
-    color: #ffd875;
+.property-hero-head__breadcrumb a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.property-hero-head__breadcrumb a:hover,
+.property-hero-head__breadcrumb-home:hover {
+    color: #ffffff;
 }
 
 .property-hero-head__crumb-sep {
-    color: rgba(255, 255, 255, 0.45);
-    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    flex-shrink: 0;
 }
 
 .property-hero-head__crumb-current {
-    max-width: 380px;
+    max-width: 360px;
     overflow: hidden;
-    color: #f3cf8a;
+    color: #e5be85;
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 /* =========================================================
-   HERO CONTENT GRID
-========================================================= */
+   HERO CONTENT
+   ========================================================= */
 
-.property-hero-head__content-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.65fr) minmax(290px, 1fr);
-    align-items: end;
-    gap: 36px;
+.property-hero-head__content {
+    max-width: 920px;
 }
 
-.property-hero-head__info {
-    min-width: 0;
-}
-
-/* =========================================================
-   BADGES
-========================================================= */
-
-.property-hero-head__badges {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 15px;
-}
-
-.property-hero-head__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-}
-
-.property-hero-head__badge--eyebrow {
-    background: rgba(212, 175, 55, 0.2);
-    border: 1px solid rgba(212, 175, 55, 0.5);
-    color: #ffd875;
-}
-
-.property-hero-head__badge--verified {
-    background: rgba(16, 185, 129, 0.22);
-    border: 1px solid rgba(16, 185, 129, 0.5);
-    color: #6ee7b7;
-}
-
-.property-hero-head__badge--featured {
-    background: rgba(245, 158, 11, 0.22);
-    border: 1px solid rgba(245, 158, 11, 0.5);
-    color: #fcd34d;
-}
-
-.property-hero-head__badge--type {
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    color: #ffffff;
-}
-
-/* =========================================================
-   TITLE & META
-========================================================= */
-
+/* TITLE */
 .property-hero-head__title {
-    margin: 0 0 14px;
-    color: var(--text-white, #ffffff);
-    font-family: var(--font-serif);
-    font-size: clamp(28px, 3.6vw, 46px);
+    margin: 0 0 16px;
+    color: #ffffff;
+    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
+    font-size: clamp(32px, 4.2vw, 54px);
     font-weight: 700;
     line-height: 1.18;
     letter-spacing: -0.015em;
-    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
-    overflow-wrap: anywhere;
+    text-shadow: 0 3px 18px rgba(0, 0, 0, 0.75);
+    overflow-wrap: break-word;
+    word-break: normal;
 }
 
+/* META: Location, Project, Developer */
 .property-hero-head__meta {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 8px 14px;
-    margin-bottom: 22px;
+    margin-bottom: 24px;
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
 }
 
 .property-hero-head__location {
@@ -189,19 +182,16 @@
 
 .property-hero-head__location svg {
     flex-shrink: 0;
-    color: #f3cf8a;
+    color: #e5be85;
 }
 
 .property-hero-head__project-name,
 .property-hero-head__developer {
-    color: rgba(255, 255, 255, 0.78);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 13px;
 }
 
-/* =========================================================
-   HIGHLIGHT PILLS
-========================================================= */
-
+/* HIGHLIGHT PILLS */
 .property-hero-head__highlights {
     display: flex;
     align-items: center;
@@ -214,158 +204,105 @@
     align-items: center;
     gap: 8px;
     padding: 8px 14px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(18, 24, 22, 0.65);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 8px;
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(224, 183, 127, 0.35);
+    border-radius: 9px;
     color: #ffffff;
     font-size: 13px;
     font-weight: 600;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.property-hero-head__pill:hover {
+    border-color: rgba(224, 183, 127, 0.6);
+    background: rgba(18, 24, 22, 0.8);
 }
 
 .property-hero-head__pill svg {
     flex-shrink: 0;
-    color: #f3cf8a;
+    color: #e5be85;
 }
 
 /* =========================================================
-   RIGHT ACTION / PRICE CARD
-========================================================= */
+   SLIDESHOW CONTROLS FOOTER
+   ========================================================= */
 
-.property-hero-head__action-card {
+.property-hero-head__footer {
     display: flex;
-    flex-direction: column;
-    padding: 24px 26px;
-    background: rgba(20, 27, 39, 0.82);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(212, 175, 55, 0.35);
-    border-radius: 16px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 36px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
 }
 
-.property-hero-head__price-wrap {
-    margin-bottom: 20px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.property-hero-head__price-label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.68);
-}
-
-.property-hero-head__price-value {
-    font-family: var(--font-serif);
-    font-size: clamp(28px, 2.6vw, 38px);
-    font-weight: 700;
-    color: #fadc8c;
-    line-height: 1.15;
-    letter-spacing: -0.01em;
-}
-
-.property-hero-head__price-rate {
-    display: inline-block;
-    margin-top: 6px;
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.72);
-}
-
-/* =========================================================
-   CTA BUTTONS
-========================================================= */
-
-.property-hero-head__cta-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.property-hero-head__btn {
+.property-hero-head__location-pill {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: 7px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(18, 24, 22, 0.65);
+    border: 1px solid rgba(224, 183, 127, 0.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.property-hero-head__location-pill svg {
+    color: #e5be85;
+}
+
+.property-hero-head__pill-dot {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.property-hero-head__pill-tag {
+    color: #e5be85;
+    font-weight: 600;
+}
+
+.property-hero-head__dots {
+    display: flex;
+    align-items: center;
     gap: 8px;
-    width: 100%;
-    min-height: 44px;
-    padding: 10px 18px;
-    border-radius: 9px;
-    font-size: 13.5px;
-    font-weight: 700;
-    text-decoration: none;
+}
+
+.property-hero-head__dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.35);
     cursor: pointer;
-    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.property-hero-head__btn:hover {
-    transform: translateY(-2px);
+.property-hero-head__dot:hover {
+    background: rgba(255, 255, 255, 0.7);
 }
 
-.property-hero-head__btn--primary {
-    background: linear-gradient(135deg, #c59b27 0%, #aa7c11 100%);
-    border: 1px solid #e5c158;
-    color: #ffffff;
-    box-shadow: 0 4px 16px rgba(197, 155, 39, 0.35);
-}
-
-.property-hero-head__btn--primary:hover {
-    background: linear-gradient(135deg, #d4af37 0%, #b88615 100%);
-}
-
-.property-hero-head__contact-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.property-hero-head__btn--whatsapp {
-    background: rgba(37, 211, 102, 0.16);
-    border: 1px solid rgba(37, 211, 102, 0.45);
-    color: #25d366;
-}
-
-.property-hero-head__btn--whatsapp:hover {
-    background: rgba(37, 211, 102, 0.26);
-    color: #ffffff;
-}
-
-.property-hero-head__btn--call {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    color: #ffffff;
-}
-
-.property-hero-head__btn--call:hover {
-    background: rgba(255, 255, 255, 0.18);
+.property-hero-head__dot.is-active {
+    width: 24px;
+    background: #e5be85;
+    box-shadow: 0 0 10px rgba(229, 190, 133, 0.6);
 }
 
 /* =========================================================
    RESPONSIVE DESIGN
-========================================================= */
-
-@media (max-width: 1100px) {
-    .property-hero-head {
-        padding: 120px 0 40px;
-        min-height: auto;
-    }
-
-    .property-hero-head__content-grid {
-        grid-template-columns: 1fr;
-        gap: 26px;
-    }
-
-    .property-hero-head__action-card {
-        padding: 20px;
-    }
-}
+   ========================================================= */
 
 @media (max-width: 680px) {
     .property-hero-head {
-        padding: 105px 0 35px;
+        padding-top: 105px;
+        padding-bottom: 35px;
     }
 
     .property-hero-head__title {
@@ -381,8 +318,26 @@
         font-size: 12px;
     }
 
-    .property-hero-head__contact-row {
-        grid-template-columns: 1fr;
+    .property-hero-head__footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .property-hero-head__dots {
+        width: 100%;
+        justify-content: flex-start;
     }
 }
 
+/* =========================================================
+   ACCESSIBILITY: REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .property-hero-head__slide {
+        transition: opacity 0.3s ease !important;
+        transform: none !important;
+    }
+}

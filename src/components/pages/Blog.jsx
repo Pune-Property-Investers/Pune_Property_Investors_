@@ -5,15 +5,13 @@ import Link from "next/link";
 import {
     Calendar,
     Clock,
-    User,
     ArrowRight,
-    Tag,
     BookOpen,
-    TrendingUp,
 } from "lucide-react";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import PageHeroBanner from "../common/PageHeroBanner";
+import "./Blog.css";
 
 const blogPosts = [
     {
@@ -69,13 +67,13 @@ const blogPosts = [
         image:
             "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85",
         excerpt:
-            "Compare upfront capital outlays, price escalation advantages, tax saving benefits, and occupancy timeline risks when picking between ready and newly launched towers.",
+            "A clear financial comparison of price appreciation, construction milestones, GST implications, and possession guarantees under RERA guidelines.",
         featured: false,
     },
     {
         id: 5,
-        title: "Pune Metro Line 3 Impact: How IT Hub Transit Drives Baner & Hinjewadi Values",
-        slug: "pune-metro-line-3-impact-baner-hinjewadi",
+        title: "Pune Metro Line 3 Route Map & Property Value Impact on Hinjewadi, Wakad & Baner",
+        slug: "pune-metro-line-3-property-value-impact",
         category: "Infrastructure",
         date: "September 28, 2026",
         readTime: "6 min read",
@@ -83,17 +81,17 @@ const blogPosts = [
         image:
             "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=85",
         excerpt:
-            "Connecting Hinjewadi Phase 3 to Shivajinagar, Metro Line 3 is slashing commute times and driving 15-20% price appreciation along Balewadi and Baner corridors.",
+            "How the 23-station elevated Metro line between Hinjewadi IT Park and Civil Court is altering rental demand and capital appreciation along the western expressway.",
         featured: false,
     },
     {
         id: 6,
-        title: "Gated Community NA Plots in Pune: What Smart Investors Must Check Before Buying",
-        slug: "gated-community-na-plots-pune-checklist",
-        category: "Buying Guide",
+        title: "A Complete Guide to Buying Plots & NA Farmhouses Around Pune Suburbs",
+        slug: "complete-guide-buying-plots-pune-suburbs",
+        category: "Locality Guide",
         date: "September 20, 2026",
-        readTime: "5 min read",
-        author: "Land & Plot Specialist",
+        readTime: "9 min read",
+        author: "Land Advisory Division",
         image:
             "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=85",
         excerpt:
@@ -121,7 +119,7 @@ export default function Blog() {
     const featuredPost = blogPosts.find((p) => p.featured) || blogPosts[0];
 
     return (
-        <div style={{ background: "var(--background-color)", minHeight: "100vh" }}>
+        <div className="blog-page">
             <Header />
 
             <main>
@@ -139,108 +137,37 @@ export default function Blog() {
                     icon={BookOpen}
                 />
 
-                <div className="container" style={{ padding: "60px 0 80px" }}>
+                <div className="container blog-page__content">
                     {/* Featured Article Spotlight */}
                     {selectedCategory === "All" && (
-                        <div
-                            style={{
-                                background: "#ffffff",
-                                borderRadius: "20px",
-                                overflow: "hidden",
-                                border: "1px solid var(--border-subtle)",
-                                boxShadow: "var(--shadow-md)",
-                                display: "grid",
-                                gridTemplateColumns:
-                                    "repeat(auto-fit, minmax(320px, 1fr))",
-                                marginBottom: "50px",
-                            }}
-                        >
-                            <div style={{ height: "340px", overflow: "hidden" }}>
+                        <div className="blog-featured-card">
+                            <div className="blog-featured-image-wrap">
                                 <img
                                     src={featuredPost.image}
                                     alt={featuredPost.title}
-                                    style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        objectFit: "cover",
-                                    }}
+                                    className="blog-featured-image"
                                 />
                             </div>
 
-                            <div
-                                style={{
-                                    padding: "40px 36px",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    justifyContent: "center",
-                                }}
-                            >
-                                <span
-                                    style={{
-                                        display: "inline-block",
-                                        alignSelf: "flex-start",
-                                        padding: "5px 12px",
-                                        borderRadius: "20px",
-                                        background: "rgba(180, 139, 62, 0.12)",
-                                        color: "var(--primary-color)",
-                                        fontSize: "0.8rem",
-                                        fontWeight: "700",
-                                        marginBottom: "14px",
-                                    }}
-                                >
+                            <div className="blog-featured-body">
+                                <span className="blog-featured-tag">
                                     FEATURED STORY • {featuredPost.category}
                                 </span>
 
-                                <h2
-                                    style={{
-                                        fontSize: "1.75rem",
-                                        fontWeight: "800",
-                                        color: "var(--secondary-color)",
-                                        marginBottom: "14px",
-                                        lineHeight: 1.3,
-                                    }}
-                                >
+                                <h2 className="blog-featured-title">
                                     {featuredPost.title}
                                 </h2>
 
-                                <p
-                                    style={{
-                                        color: "var(--text-secondary)",
-                                        fontSize: "0.98rem",
-                                        lineHeight: 1.65,
-                                        marginBottom: "20px",
-                                    }}
-                                >
+                                <p className="blog-featured-excerpt">
                                     {featuredPost.excerpt}
                                 </p>
 
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: "18px",
-                                        fontSize: "0.85rem",
-                                        color: "var(--text-muted)",
-                                        marginBottom: "24px",
-                                    }}
-                                >
-                                    <span
-                                        style={{
-                                            display: "inline-flex",
-                                            alignItems: "center",
-                                            gap: "6px",
-                                        }}
-                                    >
+                                <div className="blog-meta-row">
+                                    <span className="blog-meta-item">
                                         <Calendar size={15} />
                                         {featuredPost.date}
                                     </span>
-                                    <span
-                                        style={{
-                                            display: "inline-flex",
-                                            alignItems: "center",
-                                            gap: "6px",
-                                        }}
-                                    >
+                                    <span className="blog-meta-item">
                                         <Clock size={15} />
                                         {featuredPost.readTime}
                                     </span>
@@ -248,11 +175,7 @@ export default function Blog() {
 
                                 <Link
                                     href={`/buy?projectType=projects`}
-                                    className="primary-button"
-                                    style={{
-                                        display: "inline-flex",
-                                        alignSelf: "flex-start",
-                                    }}
+                                    className="primary-button blog-featured-cta"
                                 >
                                     Explore Top Localities
                                     <ArrowRight size={17} />
@@ -262,40 +185,17 @@ export default function Blog() {
                     )}
 
                     {/* Category Filter Pills */}
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            flexWrap: "wrap",
-                            marginBottom: "36px",
-                        }}
-                    >
+                    <div className="blog-categories-wrap">
                         {categories.map((cat) => (
                             <button
                                 key={cat}
                                 type="button"
                                 onClick={() => setSelectedCategory(cat)}
-                                style={{
-                                    padding: "8px 18px",
-                                    borderRadius: "24px",
-                                    border:
-                                        selectedCategory === cat
-                                            ? "1px solid var(--primary-color)"
-                                            : "1px solid #e2e8f0",
-                                    background:
-                                        selectedCategory === cat
-                                            ? "var(--secondary-color)"
-                                            : "#ffffff",
-                                    color:
-                                        selectedCategory === cat
-                                            ? "#ffffff"
-                                            : "var(--text-secondary)",
-                                    fontWeight: "600",
-                                    fontSize: "0.9rem",
-                                    cursor: "pointer",
-                                    transition: "all 0.2s ease",
-                                }}
+                                className={`blog-category-btn ${
+                                    selectedCategory === cat
+                                        ? "blog-category-btn--active"
+                                        : ""
+                                }`}
                             >
                                 {cat}
                             </button>
@@ -303,138 +203,46 @@ export default function Blog() {
                     </div>
 
                     {/* Blog Posts Grid */}
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns:
-                                "repeat(auto-fill, minmax(320px, 1fr))",
-                            gap: "28px",
-                        }}
-                    >
+                    <div className="blog-posts-grid">
                         {filteredPosts.map((post) => (
                             <article
                                 key={post.id}
-                                style={{
-                                    background: "#ffffff",
-                                    borderRadius: "16px",
-                                    overflow: "hidden",
-                                    border: "1px solid var(--border-subtle)",
-                                    boxShadow: "var(--shadow-sm)",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    transition: "transform 0.25s ease",
-                                }}
+                                className="blog-post-card"
                             >
-                                <div
-                                    style={{
-                                        position: "relative",
-                                        height: "210px",
-                                        overflow: "hidden",
-                                    }}
-                                >
+                                <div className="blog-post-image-wrap">
                                     <img
                                         src={post.image}
                                         alt={post.title}
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "cover",
-                                        }}
+                                        className="blog-post-image"
                                     />
-                                    <span
-                                        style={{
-                                            position: "absolute",
-                                            top: "14px",
-                                            left: "14px",
-                                            padding: "5px 12px",
-                                            borderRadius: "6px",
-                                            background: "rgba(24, 30, 27, 0.85)",
-                                            backdropFilter: "blur(4px)",
-                                            color: "#e0b77f",
-                                            fontSize: "0.78rem",
-                                            fontWeight: "700",
-                                            letterSpacing: "0.5px",
-                                        }}
-                                    >
+                                    <span className="blog-post-badge">
                                         {post.category}
                                     </span>
                                 </div>
 
-                                <div
-                                    style={{
-                                        padding: "24px 22px",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        flex: 1,
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "14px",
-                                            fontSize: "0.8rem",
-                                            color: "var(--text-muted)",
-                                            marginBottom: "12px",
-                                        }}
-                                    >
-                                        <span
-                                            style={{
-                                                display: "inline-flex",
-                                                alignItems: "center",
-                                                gap: "5px",
-                                            }}
-                                        >
+                                <div className="blog-post-body">
+                                    <div className="blog-post-meta">
+                                        <span className="blog-meta-item">
                                             <Calendar size={14} />
                                             {post.date}
                                         </span>
-                                        <span
-                                            style={{
-                                                display: "inline-flex",
-                                                alignItems: "center",
-                                                gap: "5px",
-                                            }}
-                                        >
+                                        <span className="blog-meta-item">
                                             <Clock size={14} />
                                             {post.readTime}
                                         </span>
                                     </div>
 
-                                    <h3
-                                        style={{
-                                            fontSize: "1.15rem",
-                                            fontWeight: "700",
-                                            color: "var(--secondary-color)",
-                                            marginBottom: "12px",
-                                            lineHeight: 1.4,
-                                        }}
-                                    >
+                                    <h3 className="blog-post-title">
                                         {post.title}
                                     </h3>
 
-                                    <p
-                                        style={{
-                                            color: "var(--text-secondary)",
-                                            fontSize: "0.9rem",
-                                            lineHeight: 1.6,
-                                            marginBottom: "20px",
-                                            flex: 1,
-                                        }}
-                                    >
+                                    <p className="blog-post-excerpt">
                                         {post.excerpt}
                                     </p>
 
                                     <Link
                                         href="/contact"
-                                        style={{
-                                            display: "inline-flex",
-                                            alignItems: "center",
-                                            gap: "8px",
-                                            color: "var(--primary-color)",
-                                            fontWeight: "700",
-                                            fontSize: "0.9rem",
-                                            textDecoration: "none",
-                                        }}
+                                        className="blog-post-link"
                                     >
                                         Speak with an Advisor
                                         <ArrowRight size={15} />
@@ -450,4 +258,3 @@ export default function Blog() {
         </div>
     );
 }
-

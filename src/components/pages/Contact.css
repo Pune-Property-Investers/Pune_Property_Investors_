@@ -1,0 +1,253 @@
+/* =========================================================
+   CONTACT US PAGE STYLES
+   Pune Property Investor
+========================================================= */
+
+.contact-page {
+    background: var(--background-color);
+    min-height: 100vh;
+}
+
+.contact-page__content {
+    padding: 60px 0 80px;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 40px;
+}
+
+/* Contact Form Card */
+.contact-form-card {
+    background: #ffffff;
+    padding: 40px 32px;
+    border-radius: 20px;
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-md);
+}
+
+.contact-form-title {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.contact-form-desc {
+    font-family: var(--font-sans);
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 28px;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.contact-form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+}
+
+.contact-label {
+    display: block;
+    margin-bottom: 6px;
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.contact-input,
+.contact-select,
+.contact-textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    background: #ffffff;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.contact-input:focus,
+.contact-select:focus,
+.contact-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.contact-textarea {
+    resize: vertical;
+}
+
+.contact-submit-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px;
+}
+
+/* Direct Contact Info & Office Column */
+.contact-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.contact-office-card {
+    background: #ffffff;
+    padding: 36px 30px;
+    border-radius: 20px;
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
+}
+
+.contact-office-title {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+}
+
+.contact-office-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 22px;
+}
+
+.contact-office-item--center {
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.contact-office-item:last-child {
+    margin-bottom: 0;
+}
+
+.contact-office-icon {
+    flex-shrink: 0;
+    color: var(--primary-color);
+    margin-top: 4px;
+}
+
+.contact-office-icon--center {
+    margin-top: 0;
+}
+
+.contact-office-name {
+    display: block;
+    color: var(--text-primary);
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.contact-office-address {
+    font-family: var(--font-sans);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.contact-office-meta-label {
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    display: block;
+}
+
+.contact-office-link {
+    font-family: var(--font-sans);
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.contact-office-link:hover {
+    color: var(--primary-color);
+}
+
+.contact-office-val {
+    font-family: var(--font-sans);
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* WhatsApp Fast Track Card */
+.contact-whatsapp-card {
+    background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
+    color: #ffffff;
+    padding: 32px 28px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+}
+
+.contact-whatsapp-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.contact-whatsapp-title {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+.contact-whatsapp-desc {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    opacity: 0.95;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.contact-whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    color: #075E54;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-whatsapp-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .contact-form-card,
+    .contact-office-card {
+        padding: 30px 20px;
+    }
+
+    .contact-page__content {
+        padding: 40px 0 60px;
+    }
+}
+

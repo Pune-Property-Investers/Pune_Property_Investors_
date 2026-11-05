@@ -1,631 +1,825 @@
+/* ==========================================================================
+   OYO-STYLE FULL VIEWPORT CINEMATIC VIDEO HERO SECTION
+   Full 100vh Video Stage with Centered Headline, Capsule Search & Bottom Trust Strip
+   ========================================================================== */
 
-    /* ========================================
-       HERO SECTION
-    ======================================== */
-
-.hero-section {
+.hero-oyo-section {
     position: relative;
     width: 100%;
-    padding: 0 0 4px;
-    margin: 0;
-    background: #ffffff;
-}
-
-/* ========================================
-   ROTATING HERO BANNER
-======================================== */
-
-.hero-banner {
-    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    min-height: 385px;
+    justify-content: center;
     overflow: hidden;
-    padding: 70px max(5%, calc((100% - 1240px) / 2)) 90px;
     isolation: isolate;
-    background: #28160f;
-    color: #ffffff;
+    background: #0a0807;
+    margin: 0;
+    padding: 0;
 }
 
-.hero-banner__image {
+/* --------------------------------------------------------------------------
+   Full-Bleed Cinematic Background Video (Spans 100% of the entire section)
+   -------------------------------------------------------------------------- */
+
+.hero-oyo-video-wrapper {
     position: absolute;
     inset: 0;
     z-index: 0;
-    display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
+    overflow: hidden;
     pointer-events: none;
+    background: #0a0807;
 }
 
-.hero-banner__image--active {
-    opacity: 1;
+/*
+   Gumlet iframe cover sizing:
+   - Keeps the iframe's top edge aligned with the hero's top edge.
+   - Scales a 16:9 video to cover the complete hero without empty bars.
+   - object-fit/object-position do not control iframe content.
+*/
+.hero-oyo-video {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    display: block;
+    width: max(100vw, 177.78vh);
+    height: max(100vh, 56.25vw);
+    min-width: 100%;
+    min-height: 100%;
+    transform: translateX(-50%);
+    border: 0;
+    pointer-events: none;
+    filter: brightness(1.22) contrast(1.1) saturate(1.15);
 }
 
-.hero-banner__overlay {
+/* Luminous clear overlay allowing the video to shine brightly and clearly */
+.hero-oyo-overlay {
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: linear-gradient(
-            90deg,
-            rgba(20, 10, 7, 0.82) 0%,
-            rgba(20, 10, 7, 0.55) 55%,
-            rgba(20, 10, 7, 0.2) 100%
-    );
+    background:
+        /* Soft top header scrim for logo/nav contrast */
+        linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.12) 30%, transparent 60%),
+        /* Gentle bottom scrim */
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35) 0%, transparent 25%);
     pointer-events: none;
 }
 
-/* ========================================
-   HERO CONTENT
-======================================== */
+/* --------------------------------------------------------------------------
+   Center Stage (Headline, Tabs & Search Capsule Vertically Centered)
+   -------------------------------------------------------------------------- */
 
-.hero-banner__content {
+.hero-oyo-stage {
     position: relative;
     z-index: 2;
-    width: min(700px, 100%);
-    margin-left: 12px;
+    width: 100%;
+    max-width: 1220px;
+    margin: 120px auto 0 auto;
+    padding: 30px 24px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
-.hero-eyebrow {
-    font-family: var(--font-sans);
+/* Eyebrow Tagline */
+.hero-oyo-eyebrow {
     display: inline-block;
-    margin-bottom: 10px;
-    color: #f1d49e;
-    font-size: 11px;
+    color: #f6d28b;
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: clamp(11px, 1.2vw, 13px);
+    font-weight: 700;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    margin: 16px auto 10px auto;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 1px 3px rgba(0, 0, 0, 0.85);
+}
+
+/* Big Bold Centered Headline */
+.hero-oyo-title {
+    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
+    font-size: clamp(30px, 4.2vw, 52px);
     font-weight: 800;
-    letter-spacing: 2px;
-    line-height: 1.5;
-}
-
-.hero-banner__content h1 {
-    font-family: var(--font-serif);
-    max-width: 680px;
-    margin: 0;
-    color: var(--text-white, #ffffff);
-    font-size: clamp(34px, 4.3vw, 56px);
-    font-weight: 800;
-    line-height: 1.12;
-    letter-spacing: -1.2px;
-}
-
-.hero-banner__content h1 span {
-    display: block;
-    margin-top: 4px;
-    color: #f1d49e;
-}
-
-.hero-banner__content > p {
-    font-family: var(--font-sans);
-    max-width: 620px;
-    margin: 14px 0 0;
-    color: var(--text-white-muted, rgba(255, 255, 255, 0.94));
-    font-size: 15px;
-    line-height: 1.65;
-}
-
-.hero-banner__highlights {
+    color: #ffffff;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin: 0 auto 22px auto;
+    text-align: center;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.95), 0 2px 6px rgba(0, 0, 0, 0.9);
     display: flex;
-    flex-wrap: wrap;
-    gap: 9px 18px;
-    margin-top: 17px;
-}
-
-.hero-banner__highlights span {
-    font-family: var(--font-sans);
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    color: var(--text-white, #ffffff);
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-.hero-banner__highlights svg {
-    flex-shrink: 0;
-    color: #f1d49e;
-}
-
-/* ========================================
-   FLOATING SEARCH BOX
-======================================== */
-
-.hero-search-wrap {
-    position: relative;
-    z-index: 5;
-    width: min(94%, 1200px);
-    margin: -48px auto 0;
-}
-
-.property-search-box {
-    padding: 0 20px 6px;
-    overflow: visible;
-    border: 1px solid #e7e9ee;
-    border-radius: 12px;
-    background: #ffffff;
-    box-shadow: 0 4px 16px rgba(20, 30, 45, 0.12);
-}
-
-/* ========================================
-   SEARCH TABS
-======================================== */
-
-.search-tabs {
-    display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 4px;
-    min-height: 40px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    border-bottom: 1px solid #e7e9ee;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
 }
 
-.search-tabs::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    height: 0;
+.hero-oyo-title-sub {
+    color: #f6d28b;
+    font-weight: 700;
+    text-shadow: 0 3px 18px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 0.85);
 }
 
-.search-tab {
-    position: relative;
+/* --------------------------------------------------------------------------
+   Category Tabs Bar (Pills Centered Above Capsule)
+   -------------------------------------------------------------------------- */
+
+.hero-oyo-tabs {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    padding: 9px 12px 8px;
+    gap: 6px;
+    padding: 5px;
+    margin: 0 auto 22px auto;
+    background: rgba(10, 8, 7, 0.52);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 9999px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    max-width: 95vw;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.hero-oyo-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.hero-oyo-tab {
+    padding: 8px 18px;
+    border-radius: 9999px;
     border: none;
     background: transparent;
-    color: var(--text-secondary, #334155);
-    font-family: var(--font-sans);
+    color: rgba(255, 255, 255, 0.88);
+    font-family: var(--font-sans), Inter, sans-serif;
     font-size: 13px;
     font-weight: 600;
-    white-space: nowrap;
     cursor: pointer;
-    transition: color 0.2s ease;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.search-tab:hover {
-    color: #0877d9;
+.hero-oyo-tab:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
 }
 
-.search-tab.active {
-    color: var(--text-primary, #0f172a);
+.hero-oyo-tab--active {
+    background: #ffffff !important;
+    color: #111827 !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
-.search-tab.active::after {
-    position: absolute;
-    right: 0;
-    bottom: -1px;
-    left: 0;
-    height: 2.5px;
-    border-radius: 3px 3px 0 0;
-    background: #0877d9;
-    content: "";
+/* --------------------------------------------------------------------------
+   Floating Glassmorphic Search Card (Desktop/Laptop: Single Line Capsule)
+   -------------------------------------------------------------------------- */
+
+.hero-search-card {
+    width: min(94%, 1060px);
+    margin: 0 auto;
+    background: rgba(14, 11, 9, 0.74);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    border: 1px solid rgba(196, 152, 102, 0.32);
+    border-radius: 18px;
+    padding: 8px 10px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 8px;
+    box-sizing: border-box;
 }
 
-/* ========================================
-   SEARCH FORM
-======================================== */
-
-.property-search-form {
-    display: grid;
-    grid-template-columns:
-        minmax(150px, 1.2fr)
-        minmax(140px, 1fr)
-        minmax(95px, 0.7fr)
-        minmax(135px, 1fr)
-        120px;
-    align-items: end;
-    gap: 10px;
-    padding-top: 10px;
-    margin: 0;
-}
-
-.search-field {
+/* Individual Field Box */
+.hero-search-card__field {
+    flex: 1 1 0;
     min-width: 0;
+    min-height: 52px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 6px 12px 7px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    box-sizing: border-box;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.search-field label {
-    font-family: var(--font-sans);
+.hero-search-card__field:first-of-type {
+    flex: 1.25 1 0;
+}
+
+.hero-search-card__field:hover,
+.hero-search-card__field:focus-within {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(196, 152, 102, 0.6);
+    box-shadow: 0 0 14px rgba(196, 152, 102, 0.2);
+}
+
+.hero-search-card__field--half {
+    flex: 0.95 1 0;
+    min-width: 0;
+    min-height: 52px;
+}
+
+/* Small Upper Label (Matched with Page Warm Gold Accent) */
+.hero-search-card__label {
     display: block;
-    margin-bottom: 3px;
-    color: var(--text-primary, #0f172a);
-    font-size: 11px;
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 9.5px;
     font-weight: 700;
-    line-height: 1.4;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    color: #f6d28b;
+    line-height: 1.2;
+    cursor: pointer;
+    text-align: left;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
-/* ========================================
-   INPUTS AND SELECTS
-======================================== */
-
-.field-control {
-    font-family: var(--font-sans);
-    position: relative;
+/* Input / Select Row */
+.hero-search-card__input-row {
     display: flex;
     align-items: center;
     gap: 8px;
-    min-width: 0;
-    min-height: 38px;
-    padding: 0 10px;
-    border: 1px solid #dedede;
-    border-radius: 8px;
-    background: #ffffff;
-    color: var(--text-primary, #0f172a);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.field-control:focus-within {
-    border-color: #0877d9;
-    box-shadow: 0 0 0 3px rgba(8, 119, 217, 0.09);
-}
-
-.field-control > svg:first-child {
-    flex-shrink: 0;
-    color: #526586;
-}
-
-.field-control input,
-.field-control select {
-    display: block;
     width: 100%;
+}
+
+/* Architectural Bronze/Gold Icons */
+.hero-search-card__icon {
+    color: #c49866;
+    flex-shrink: 0;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+}
+
+/* Select Dropdown */
+.hero-search-card__select {
+    flex: 1;
     min-width: 0;
-    min-height: 36px;
-    padding: 0;
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #ffffff;
     border: none;
     outline: none;
     background: transparent;
-    color: var(--text-primary, #0f172a);
-    font-family: var(--font-sans);
-    font-size: 12px;
-}
-
-.field-control input::placeholder {
-    color: var(--text-muted, #64748b);
-}
-
-.field-control select {
-    padding-right: 20px;
-    appearance: none;
     cursor: pointer;
+    padding: 0;
+    -webkit-appearance: none;
+    appearance: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
-.field-control select option {
-    background: #ffffff;
-    color: #333333;
+.hero-search-card__select:focus {
+    outline: none;
 }
 
-.field-chevron {
-    position: absolute;
-    top: 50%;
-    right: 9px;
-    width: 14px;
-    height: 14px;
+.hero-search-card__select option {
+    background: #181512;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Chevron Down */
+.hero-search-card__chevron {
+    color: rgba(255, 255, 255, 0.65);
     flex-shrink: 0;
-    color: #526586;
-    transform: translateY(-50%);
     pointer-events: none;
 }
 
-/* ========================================
-   SEARCH BUTTON
-======================================== */
+/* Bottom Split Row (Unwrapped on Desktop/Laptop so all 5 items sit in a single line) */
+.hero-search-card__bottom-row {
+    display: contents;
+}
 
-.search-submit-button {
-    display: inline-flex;
+/* Luxury Architectural Bronze/Gold Search Button (Matched with Brand Palette) */
+.hero-search-card__submit-btn {
+    flex: 0 0 auto;
+    min-width: 125px;
+    min-height: 52px;
+    padding: 0 20px;
+    background: linear-gradient(135deg, #c49866 0%, #a77a48 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: 7px;
-    width: 100%;
-    min-width: 0;
-    min-height: 38px;
-    padding: 0 10px;
-    border: none;
-    border-radius: 8px;
-    background: #0877d9;
-    color: var(--text-white, #ffffff);
-    font-family: var(--font-sans);
-    font-size: 13px;
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 14.5px;
     font-weight: 700;
-    white-space: nowrap;
+    letter-spacing: 0.3px;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 6px 18px rgba(167, 122, 72, 0.45);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
-.search-submit-button:hover {
-    background: #0562b4;
+.hero-search-card__submit-btn:hover {
+    background: linear-gradient(135deg, #b38856 0%, #8c6334 100%);
+    box-shadow: 0 8px 24px rgba(167, 122, 72, 0.55);
+    transform: scale(1.02);
 }
 
-.search-submit-button:active {
+.hero-search-card__submit-btn:active {
     transform: scale(0.98);
 }
 
-.search-submit-button svg {
+.hero-search-card__submit-btn svg {
+    color: #ffffff;
+    stroke: #ffffff;
     flex-shrink: 0;
-    font-size: 16px;
 }
 
-/* ========================================
-   POPULAR LOCALITIES
-======================================== */
+/* --------------------------------------------------------------------------
+   Minimalist Glassmorphic Video Controls (Sound / Pause)
+   -------------------------------------------------------------------------- */
 
-.search-footer {
-    font-family: var(--font-sans);
+.hero-oyo-controls {
+    position: absolute;
+    right: max(5%, calc((100% - 1240px) / 2));
+    bottom: 78px;
+    z-index: 3;
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.hero-oyo-control-btn {
+    display: inline-flex;
+    align-items: center;
     gap: 6px;
-    margin-top: 7px;
-    padding-bottom: 2px;
-    color: var(--text-muted, #64748b);
-    font-size: 12px;
-}
-
-.search-footer > span {
-    margin-right: 4px;
+    padding: 7px 14px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(15, 12, 10, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #ffffff;
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 11.5px;
     font-weight: 600;
-}
-
-.search-footer button {
-    padding: 4px 10px;
-    border: 1px solid #e3e8ef;
-    border-radius: 22px;
-    background: #ffffff;
-    color: var(--text-secondary, #334155);
-    font-family: var(--font-sans);
-    font-size: 11px;
     cursor: pointer;
-    transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+    transition: all 0.2s ease;
+    user-select: none;
 }
 
-.search-footer button:hover,
-.search-footer button.popular-location-active {
-    border-color: #0877d9;
-    background: #eef7ff;
-    color: #0877d9;
+.hero-oyo-control-btn:hover {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
 }
 
-/* ========================================
-   LAPTOP AND TABLET
-======================================== */
+.hero-oyo-control-btn--icon {
+    padding: 7px;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+}
 
-@media (max-width: 1100px) {
-    .hero-banner {
-        min-height: 375px;
-        padding: 70px 5% 85px;
+/* --------------------------------------------------------------------------
+   OYO-Style Bottom Trust Strip Docked at Base with Continuous Left Marquee
+   -------------------------------------------------------------------------- */
+
+.hero-oyo-trust-strip {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    width: 100%;
+    background: transparent;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 14px 0;
+    overflow: hidden;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    user-select: none;
+}
+
+.hero-oyo-trust-marquee {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+}
+
+.hero-oyo-trust-track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    animation: heroTrustMarquee 30s linear infinite;
+    will-change: transform;
+}
+
+.hero-oyo-trust-strip:hover .hero-oyo-trust-track {
+    animation-play-state: paused;
+}
+
+.hero-oyo-trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 32px 0 0;
+    margin-right: 32px;
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 13.5px;
+    color: rgba(255, 255, 255, 0.92);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.hero-oyo-trust-item strong {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.hero-oyo-trust-icon {
+    color: #f6d28b;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+}
+
+.hero-oyo-trust-divider {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.22);
+}
+
+@keyframes heroTrustMarquee {
+    0% {
+        transform: translate3d(0, 0, 0);
     }
 
-    .hero-banner__content {
-        max-width: 650px;
-        margin-left: 8px;
+    100% {
+        transform: translate3d(-50%, 0, 0);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Adaptations (Tablet & Mobile-First Optimization)
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1080px) {
+    .hero-oyo-stage {
+        padding-top: 110px;
     }
 
-    .property-search-form {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
+    .hero-oyo-trust-divider {
+        display: none;
     }
 
-    .search-submit-button {
+    .hero-oyo-trust-container {
+        justify-content: center;
+        gap: 16px 24px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Phones & Touch Devices (Mobile-First Experience)
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+    .hero-oyo-section {
+        min-height: 100svh;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    .hero-oyo-video-wrapper {
+        position: absolute;
+        inset: 0;
         width: 100%;
-    }
-}
-
-@media (max-width: 760px) {
-    .hero-banner {
-        min-height: 370px;
-        padding: 75px 5%;
+        height: 100%;
     }
 
-    .hero-banner__content {
+    .hero-oyo-video {
+        top: 0;
+        width: max(100vw, 177.78vh);
+        height: max(100vh, 56.25vw);
+        min-width: 100%;
+        min-height: 100%;
+    }
+
+    .hero-oyo-overlay {
+        background:
+            /* Light, clear scrim for mobile: bright vivid video with crisp text readability */
+            linear-gradient(180deg, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.14) 28%, rgba(0, 0, 0, 0.1) 65%, rgba(0, 0, 0, 0.32) 100%);
+    }
+
+    .hero-oyo-stage {
+        padding: 112px 14px 18px 14px;
+        margin: 0 auto;
         width: 100%;
-        max-width: 600px;
-        margin-left: 0;
+        max-width: 100%;
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 
-    .hero-banner__content h1 {
-        font-size: clamp(32px, 6vw, 44px);
-    }
-
-    .hero-banner__content > p {
-        max-width: 540px;
-        font-size: 14px;
-    }
-
-    .hero-search-wrap {
-        width: 94%;
-        margin-top: -40px;
-    }
-
-    .property-search-box {
-        padding-right: 16px;
-        padding-left: 16px;
-    }
-}
-
-/* ========================================
-   MOBILE
-======================================== */
-
-@media (max-width: 600px) {
-    .hero-section {
-        padding-bottom: 3px;
-    }
-
-    .hero-banner {
-        min-height: 365px;
-        align-items: flex-start;
-        padding: 85px 5% 65px;
-    }
-
-    .hero-banner__image {
-        object-position: center;
-    }
-
-    .hero-banner__overlay {
-        background: linear-gradient(
-                90deg,
-                rgba(20, 10, 7, 0.88) 0%,
-                rgba(20, 10, 7, 0.7) 100%
-        );
-    }
-
-    .hero-banner__content {
-        width: 100%;
-    }
-
-    .hero-eyebrow {
-        margin-bottom: 9px;
-        font-size: 9px;
-        letter-spacing: 1.3px;
-    }
-
-    .hero-banner__content h1 {
-        font-size: clamp(29px, 8vw, 38px);
-        line-height: 1.18;
-        letter-spacing: -0.5px;
-    }
-
-    .hero-banner__content h1 span {
-        margin-top: 4px;
-    }
-
-    .hero-banner__content > p {
-        margin-top: 11px;
-        font-size: 13px;
-        line-height: 1.6;
-    }
-
-    .hero-banner__highlights {
-        gap: 8px 12px;
+    /* Eyebrow */
+    .hero-oyo-eyebrow {
+        font-size: 11px;
+        letter-spacing: 2px;
         margin-top: 14px;
+        margin-bottom: 8px;
+        line-height: 1.3;
+        text-align: center;
     }
 
-    .hero-banner__highlights span {
+    /* Main Headline */
+    .hero-oyo-title {
+        font-size: clamp(24px, 6.4vw, 32px);
+        line-height: 1.18;
+        letter-spacing: -0.3px;
+        margin-bottom: 14px;
+        gap: 2px;
+        text-align: center;
+    }
+
+    .hero-oyo-title-sub {
+        font-size: clamp(22px, 5.8vw, 29px);
+        line-height: 1.2;
+    }
+
+    /* Category Pill Tabs (Smooth Horizontal Touch Carousel) */
+    .hero-oyo-tabs {
+        width: 100%;
+        max-width: 100%;
+        justify-content: flex-start;
+        align-items: center;
         gap: 6px;
-        font-size: 10px;
+        padding: 4px 6px;
+        margin: 0 auto 14px auto;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        scroll-snap-type: x mandatory;
+        background: rgba(12, 10, 8, 0.68);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 9999px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
     }
 
-    .hero-search-wrap {
-        width: 92%;
-        margin-top: -35px;
+    .hero-oyo-tab {
+        padding: 7px 15px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 9999px;
+        white-space: nowrap;
+        scroll-snap-align: center;
+        flex-shrink: 0;
     }
 
-    .property-search-box {
-        padding: 0 12px 5px;
+    /* Responsive Floating Glassmorphic Search Card (Strictly Stacked for Mobile) */
+    .hero-search-card {
+        flex-direction: column;
+        max-width: 360px;
+        width: 100%;
+        padding: 10px;
+        gap: 6px;
+        border-radius: 16px;
+    }
+
+    .hero-search-card__field {
+        width: 100%;
+        flex: none;
+        min-height: auto;
+        padding: 6px 10px 7px;
+        border-radius: 11px;
+    }
+
+    .hero-search-card__field:first-of-type {
+        flex: none;
+    }
+
+    .hero-search-card__label {
+        font-size: 9px;
+    }
+
+    .hero-search-card__select {
+        font-size: 16px;
+        /* 16px prevents iOS Safari auto-zoom on mobile taps */
+    }
+
+    .hero-search-card__bottom-row {
+        display: grid;
+        grid-template-columns: 0.92fr 1.28fr;
+        gap: 8px;
+        width: 100%;
+        align-items: stretch;
+        box-sizing: border-box;
+    }
+
+    .hero-search-card__field--half {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0;
+        min-height: 48px;
+        border-radius: 14px;
+        padding: 6px 10px 7px;
+        box-sizing: border-box;
+    }
+
+    /* Search button precisely matching the uploaded screenshot */
+    .hero-search-card__submit-btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0;
+        min-height: 48px;
+        height: 100%;
+        align-self: stretch;
+        padding: 0 16px;
+        background: #ba864a;
+        background: linear-gradient(135deg, #ba874a 0%, #a4733b 100%);
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 4px 14px rgba(186, 134, 74, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+        box-sizing: border-box;
+        transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .hero-search-card__submit-btn:hover {
+        filter: brightness(1.05);
+    }
+
+    .hero-search-card__submit-btn:active {
+        transform: scale(0.98);
+    }
+
+    .hero-search-card__submit-btn svg {
+        color: #0f172a !important;
+        stroke: #0f172a !important;
+        width: 18px !important;
+        height: 18px !important;
+        flex-shrink: 0;
+    }
+
+    .hero-search-card__submit-btn span {
+        color: #ffffff !important;
+        font-family: var(--font-sans), Inter, sans-serif;
+        font-size: 15.5px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+    }
+
+    /* Bottom Trust Strip: Flowing Docked Base with Continuous Left Marquee */
+    .hero-oyo-trust-strip {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        right: auto;
+        margin-top: auto;
+        width: 100%;
+        background: rgba(10, 8, 7, 0.6);
+        border-top: 1px solid rgba(255, 255, 255, 0.14);
+        padding: 11px 0;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 3;
+        overflow: hidden;
+    }
+
+    .hero-oyo-trust-track {
+        animation: heroTrustMarquee 20s linear infinite;
+    }
+
+    .hero-oyo-trust-item {
+        padding: 0 20px 0 0;
+        margin-right: 20px;
+        font-size: 12px;
+        gap: 8px;
+    }
+
+    .hero-oyo-trust-divider {
+        height: 14px;
+    }
+
+    /* Video Sound / Pause Controls at Top-Right */
+    .hero-oyo-controls {
+        position: absolute;
+        top: 86px;
+        right: 14px;
+        bottom: auto;
+        z-index: 4;
+        gap: 6px;
+    }
+
+    .hero-oyo-control-btn {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hero-oyo-control-btn span {
+        display: none;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Small Mobile Phones (iPhone SE, Galaxy A series, <= 420px)
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 420px) {
+    .hero-oyo-stage {
+        padding: 104px 10px 14px 10px;
+    }
+
+    .hero-oyo-title {
+        font-size: clamp(21px, 6vw, 25px);
+    }
+
+    .hero-oyo-title-sub {
+        font-size: clamp(19px, 5.5vw, 23px);
+    }
+
+    .hero-search-card {
+        max-width: 335px;
+        padding: 9px;
+        gap: 6px;
+        border-radius: 16px;
+    }
+
+    .hero-search-card__field {
+        padding: 5px 9px 6px;
         border-radius: 12px;
     }
 
-    .search-tabs {
-        min-height: 40px;
-        gap: 4px;
+    .hero-search-card__label {
+        font-size: 8.5px;
     }
 
-    .search-tab {
-        padding: 9px 6px 7px;
-        font-size: 11px;
+    .hero-search-card__select {
+        font-size: 16px;
+        /* Prevents auto-zoom on iOS Safari */
     }
 
-    .property-search-form {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 9px;
-        padding-top: 9px;
-    }
-
-    .search-field label {
-        margin-bottom: 3px;
-        font-size: 11px;
-    }
-
-    .field-control {
-        min-height: 38px;
-        padding: 0 10px;
-    }
-
-    .field-control input,
-    .field-control select {
-        min-height: 36px;
-        font-size: 12px;
-    }
-
-    .search-submit-button {
-        min-height: 38px;
-        font-size: 13px;
-    }
-
-    .search-footer {
+    .hero-search-card__bottom-row {
+        display: grid;
+        grid-template-columns: 0.92fr 1.28fr;
         gap: 6px;
-        margin-top: 6px;
+        width: 100%;
+        align-items: stretch;
+        box-sizing: border-box;
     }
 
-    .search-footer > span {
-        flex-basis: 100%;
-        margin-bottom: 0;
+    .hero-search-card__field--half {
+        width: 100% !important;
+        min-height: 46px;
+        border-radius: 12px;
+        padding: 5px 8px 6px;
+        box-sizing: border-box;
     }
 
-    .search-footer button {
-        padding: 4px 9px;
-        font-size: 10px;
-    }
-}
-
-/* ========================================
-   SMALL PHONES
-======================================== */
-
-@media (max-width: 360px) {
-    .hero-banner {
-        min-height: 350px;
-        padding-top: 78px;
+    .hero-search-card__submit-btn {
+        width: 100% !important;
+        min-height: 46px;
+        height: 100%;
+        align-self: stretch;
+        border-radius: 14px;
+        padding: 0 10px;
+        gap: 6px;
+        box-sizing: border-box;
     }
 
-    .hero-banner__content h1 {
-        font-size: 28px;
-    }
-
-    .hero-banner__content > p {
-        font-size: 12px;
-    }
-
-    .hero-search-wrap {
-        width: 94%;
-    }
-
-    .property-search-box {
-        padding-right: 10px;
-        padding-left: 10px;
-    }
-
-    .search-tabs {
-        gap: 2px;
-    }
-
-    .search-tab {
-        font-size: 10px;
-        padding: 8px 4px 6px;
-    }
-}
-
-/* ========================================
-   ACCESSIBILITY
-======================================== */
-
-.search-tab:focus-visible,
-.search-footer button:focus-visible,
-.search-submit-button:focus-visible {
-    outline: 2px solid #0877d9;
-    outline-offset: 3px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .hero-banner__image,
-    .search-tab,
-    .search-footer button,
-    .search-submit-button,
-    .field-control {
-        transition: none;
+    .hero-search-card__submit-btn span {
+        font-size: 14px;
     }
 }

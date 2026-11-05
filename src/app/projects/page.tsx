@@ -15,16 +15,7 @@ export default function ProjectsPage() {
     return (
         <Suspense
             fallback={
-                <div
-                    style={{
-                        minHeight: "100vh",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    Loading projects...
-                </div>
+                <div className="page-loading-fallback">Loading projects...</div>
             }
         >
             <BuyProperties pageTitle="New Projects in Pune" />

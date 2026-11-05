@@ -1,0 +1,293 @@
+/* ==========================================================================
+   ABOUT PUNE PROPERTY INVESTORS SECTION (MATCHES IMAGE 3)
+   "More Than Property. A Partnership Built on Trust."
+   ========================================================================== */
+
+.about-ppi-section {
+    padding: clamp(48px, 6vw, 84px) 0;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.about-ppi-container {
+    width: min(92%, 1280px);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+}
+
+/* --------------------------------------------------------------------------
+   Left Column: Team Office Photo with Corner Accent & Floating Card
+   -------------------------------------------------------------------------- */
+
+.about-ppi-media-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.about-ppi-corner-accent {
+    position: absolute;
+    top: -16px;
+    left: -16px;
+    width: 110px;
+    height: 110px;
+    border-top: 2.5px solid #c49866;
+    border-left: 2.5px solid #c49866;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.about-ppi-image-frame {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.1);
+    background: #f1f5f9;
+}
+
+.about-ppi-image {
+    width: 100%;
+    height: auto;
+    min-height: 380px;
+    max-height: 520px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.about-ppi-image-frame:hover .about-ppi-image {
+    transform: scale(1.02);
+}
+
+/* Floating Trust Badge (Bottom Left) */
+.about-ppi-floating-card {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    max-width: calc(100% - 36px);
+    z-index: 3;
+    animation: ppiFloat 4s ease-in-out infinite alternate;
+}
+
+@keyframes ppiFloat {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-4px); }
+}
+
+.about-ppi-heart-icon-wrap {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #fef3c7;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.about-ppi-heart-icon {
+    color: #b45309;
+}
+
+.about-ppi-floating-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.about-ppi-floating-title {
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.25;
+}
+
+.about-ppi-floating-sub {
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 11.5px;
+    color: #64748b;
+    margin-top: 2px;
+    line-height: 1.3;
+}
+
+/* --------------------------------------------------------------------------
+   Right Column: Content, Typography, Checklist & Dark Green CTA
+   -------------------------------------------------------------------------- */
+
+.about-ppi-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.about-ppi-eyebrow {
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #b48450;
+    margin-bottom: 12px;
+}
+
+.about-ppi-title {
+    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
+    font-size: clamp(28px, 3.2vw, 42px);
+    font-weight: 700;
+    line-height: 1.18;
+    color: #112a20;
+    margin: 0 0 18px;
+    letter-spacing: -0.5px;
+}
+
+.about-ppi-title-gold {
+    color: #a77a48;
+}
+
+.about-ppi-lead {
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: #475569;
+    margin: 0 0 14px;
+}
+
+.about-ppi-body {
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: #64748b;
+    margin: 0 0 24px;
+}
+
+/* Checklist with circular ticks */
+.about-ppi-checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.about-ppi-check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1e293b;
+}
+
+.about-ppi-check-icon {
+    color: #c49866;
+    flex-shrink: 0;
+}
+
+/* Dark Forest Green Pill Button */
+.about-ppi-action {
+    display: flex;
+    width: auto;
+}
+
+.about-ppi-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #14362a;
+    color: #ffffff;
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 13px 26px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 14px rgba(20, 54, 42, 0.25);
+}
+
+.about-ppi-btn:hover {
+    background: #0d251d;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(20, 54, 42, 0.35);
+}
+
+.about-ppi-btn-arrow {
+    transition: transform 0.2s ease;
+}
+
+.about-ppi-btn:hover .about-ppi-btn-arrow {
+    transform: translateX(4px);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Rules
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 992px) {
+    .about-ppi-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .about-ppi-corner-accent {
+        width: 80px;
+        height: 80px;
+        top: -10px;
+        left: -10px;
+    }
+
+    .about-ppi-image {
+        min-height: 320px;
+        max-height: 420px;
+    }
+}
+
+@media (max-width: 640px) {
+    .about-ppi-section {
+        padding: 40px 0;
+    }
+
+    .about-ppi-title {
+        font-size: 26px;
+    }
+
+    .about-ppi-floating-card {
+        left: 12px;
+        bottom: 12px;
+        padding: 10px 14px;
+        gap: 10px;
+    }
+
+    .about-ppi-heart-icon-wrap {
+        width: 32px;
+        height: 32px;
+    }
+
+    .about-ppi-floating-title {
+        font-size: 13px;
+    }
+
+    .about-ppi-floating-sub {
+        font-size: 10.5px;
+    }
+
+    .about-ppi-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+

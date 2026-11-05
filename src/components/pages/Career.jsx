@@ -1,24 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
     Briefcase,
     MapPin,
-    Clock,
     Award,
     TrendingUp,
     Users,
     HeartHandshake,
     Send,
     CheckCircle2,
-    Phone,
     Mail,
     ArrowRight,
 } from "lucide-react";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import PageHeroBanner from "../common/PageHeroBanner";
+import "./Career.css";
 
 const openRoles = [
     {
@@ -60,23 +58,23 @@ const openRoles = [
         location: "Pune (Hybrid)",
         type: "Full Time",
         experience: "2–4 Years",
-        salary: "Industry Standard + Performance Bonuses",
+        salary: "Best in Industry",
         description:
-            "Drive high-intent buyer acquisition through Google Ads, Meta Ads, SEO, and content campaigns for Pune's most sought-after new residential and commercial launches.",
+            "Drive qualified homebuyer acquisition through Meta Ads, Google Performance Max campaigns, hyper-local SEO, and conversion optimization across Pune micro-markets.",
         requirements: [
-            "Hands-on expertise with Meta Ads Manager and Google Ads.",
-            "Experience in real estate lead generation and CPL optimization.",
-            "Knowledge of analytics, CRM integrations, and landing page testing.",
+            "Hands-on experience running real estate lead generation campaigns.",
+            "Proficiency in GA4, Meta Ads Manager, and landing page testing.",
+            "Analytical approach to lowering CPL and increasing show-up ratios.",
         ],
     },
     {
         id: 4,
-        title: "Site Visit Coordinator / Field Executive",
+        title: "Site Visit & Relationship Coordinator",
         department: "Client Operations",
-        location: "Wakad, Hinjewadi & Kharadi",
+        location: "Wakad & Balewadi, Pune",
         type: "Full Time",
         experience: "1–3 Years",
-        salary: "Fixed Salary + Travel Allowance + Incentives",
+        salary: "Competitive + Visit Incentives",
         description:
             "Coordinate and conduct on-ground property viewings for prospective buyers. Provide firsthand insights on project amenities, master layout plans, and neighborhood infrastructure.",
         requirements: [
@@ -115,7 +113,6 @@ const perks = [
 ];
 
 export default function Career() {
-    const [selectedRole, setSelectedRole] = useState(null);
     const [applicantName, setApplicantName] = useState("");
     const [applicantPhone, setApplicantPhone] = useState("");
     const [applicantEmail, setApplicantEmail] = useState("");
@@ -140,7 +137,7 @@ export default function Career() {
     };
 
     return (
-        <div style={{ background: "var(--background-color)", minHeight: "100vh" }}>
+        <div className="career-page">
             <Header />
 
             <main>
@@ -158,99 +155,36 @@ export default function Career() {
                     icon={Users}
                 />
 
-                <div className="container" style={{ padding: "60px 0 80px" }}>
+                <div className="container career-page__content">
                     {/* Why Join Us */}
-                    <section style={{ marginBottom: "70px" }}>
-                        <div
-                            style={{
-                                textAlign: "center",
-                                maxWidth: "700px",
-                                margin: "0 auto 40px",
-                            }}
-                        >
-                            <span
-                                style={{
-                                    display: "inline-block",
-                                    padding: "5px 14px",
-                                    borderRadius: "20px",
-                                    background: "rgba(180, 139, 62, 0.12)",
-                                    color: "var(--primary-color)",
-                                    fontSize: "0.82rem",
-                                    fontWeight: "700",
-                                    marginBottom: "12px",
-                                }}
-                            >
+                    <section className="career-why-section">
+                        <div className="career-section-header">
+                            <span className="career-eyebrow-tag">
                                 WHY CHOOSE US
                             </span>
-                            <h2
-                                style={{
-                                    fontSize: "2rem",
-                                    fontWeight: "800",
-                                    color: "var(--secondary-color)",
-                                    marginBottom: "12px",
-                                }}
-                            >
+                            <h2 className="career-section-title">
                                 Grow Your Real Estate Career With Pune's Trusted Advisory
                             </h2>
-                            <p style={{ color: "var(--text-secondary)", lineHeight: 1.6 }}>
+                            <p className="career-section-subtitle">
                                 We provide the resources, builder relationships, and training you need to excel in the real estate consulting landscape.
                             </p>
                         </div>
 
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns:
-                                    "repeat(auto-fit, minmax(260px, 1fr))",
-                                gap: "24px",
-                            }}
-                        >
+                        <div className="career-perks-grid">
                             {perks.map((perk) => {
                                 const IconComponent = perk.icon;
                                 return (
                                     <div
                                         key={perk.title}
-                                        style={{
-                                            background: "#ffffff",
-                                            padding: "32px 24px",
-                                            borderRadius: "16px",
-                                            border: "1px solid var(--border-subtle)",
-                                            boxShadow: "var(--shadow-sm)",
-                                        }}
+                                        className="career-perk-card"
                                     >
-                                        <div
-                                            style={{
-                                                width: "48px",
-                                                height: "48px",
-                                                borderRadius: "12px",
-                                                background:
-                                                    "rgba(180, 139, 62, 0.12)",
-                                                color: "var(--primary-color)",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                marginBottom: "18px",
-                                            }}
-                                        >
+                                        <div className="career-perk-icon">
                                             <IconComponent size={24} />
                                         </div>
-                                        <h3
-                                            style={{
-                                                fontSize: "1.15rem",
-                                                fontWeight: "700",
-                                                color: "var(--secondary-color)",
-                                                marginBottom: "10px",
-                                            }}
-                                        >
+                                        <h3 className="career-perk-title">
                                             {perk.title}
                                         </h3>
-                                        <p
-                                            style={{
-                                                color: "var(--text-secondary)",
-                                                fontSize: "0.92rem",
-                                                lineHeight: 1.6,
-                                            }}
-                                        >
+                                        <p className="career-perk-desc">
                                             {perk.description}
                                         </p>
                                     </div>
@@ -261,187 +195,67 @@ export default function Career() {
 
                     {/* Open Roles & Quick Apply Form */}
                     <section>
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "flex-end",
-                                flexWrap: "wrap",
-                                gap: "20px",
-                                marginBottom: "36px",
-                            }}
-                        >
+                        <div className="career-openings-header">
                             <div>
-                                <span
-                                    style={{
-                                        color: "var(--primary-color)",
-                                        fontWeight: "700",
-                                        fontSize: "0.85rem",
-                                        letterSpacing: "1px",
-                                        textTransform: "uppercase",
-                                    }}
-                                >
+                                <span className="career-eyebrow-tag">
                                     CURRENT OPENINGS
                                 </span>
-                                <h2
-                                    style={{
-                                        fontSize: "2rem",
-                                        fontWeight: "800",
-                                        color: "var(--secondary-color)",
-                                        marginTop: "8px",
-                                    }}
-                                >
+                                <h2 className="career-openings-title">
                                     Explore Available Positions
                                 </h2>
                             </div>
 
                             <a
                                 href="mailto:careers@punepropertyinvestor.com"
-                                style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: "8px",
-                                    color: "var(--primary-color)",
-                                    fontWeight: "700",
-                                    textDecoration: "none",
-                                    fontSize: "0.95rem",
-                                }}
+                                className="career-email-link"
                             >
                                 <Mail size={16} />
                                 Send CV directly via email
                             </a>
                         </div>
 
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns:
-                                    "repeat(auto-fit, minmax(340px, 1fr))",
-                                gap: "26px",
-                                marginBottom: "60px",
-                            }}
-                        >
+                        <div className="career-roles-grid">
                             {openRoles.map((role) => (
                                 <article
                                     key={role.id}
-                                    style={{
-                                        background: "#ffffff",
-                                        borderRadius: "16px",
-                                        padding: "32px 28px",
-                                        border: "1px solid var(--border-subtle)",
-                                        boxShadow: "var(--shadow-sm)",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                    }}
+                                    className="career-role-card"
                                 >
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            alignItems: "flex-start",
-                                            gap: "12px",
-                                            marginBottom: "12px",
-                                        }}
-                                    >
-                                        <span
-                                            style={{
-                                                padding: "4px 10px",
-                                                borderRadius: "6px",
-                                                background:
-                                                    "rgba(180, 139, 62, 0.12)",
-                                                color: "var(--primary-color)",
-                                                fontSize: "0.78rem",
-                                                fontWeight: "700",
-                                            }}
-                                        >
+                                    <div className="career-role-top">
+                                        <span className="career-role-dept">
                                             {role.department}
                                         </span>
-                                        <span
-                                            style={{
-                                                fontSize: "0.8rem",
-                                                color: "var(--text-muted)",
-                                                fontWeight: "600",
-                                            }}
-                                        >
+                                        <span className="career-role-type">
                                             {role.type}
                                         </span>
                                     </div>
 
-                                    <h3
-                                        style={{
-                                            fontSize: "1.25rem",
-                                            fontWeight: "800",
-                                            color: "var(--secondary-color)",
-                                            marginBottom: "12px",
-                                            lineHeight: 1.35,
-                                        }}
-                                    >
+                                    <h3 className="career-role-title">
                                         {role.title}
                                     </h3>
 
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            flexWrap: "wrap",
-                                            gap: "14px",
-                                            fontSize: "0.85rem",
-                                            color: "var(--text-muted)",
-                                            marginBottom: "16px",
-                                        }}
-                                    >
-                                        <span
-                                            style={{
-                                                display: "inline-flex",
-                                                alignItems: "center",
-                                                gap: "5px",
-                                            }}
-                                        >
+                                    <div className="career-role-meta">
+                                        <span className="career-role-meta-item">
                                             <MapPin size={15} />
                                             {role.location}
                                         </span>
-                                        <span
-                                            style={{
-                                                display: "inline-flex",
-                                                alignItems: "center",
-                                                gap: "5px",
-                                            }}
-                                        >
+                                        <span className="career-role-meta-item">
                                             <Briefcase size={15} />
                                             {role.experience}
                                         </span>
                                     </div>
 
-                                    <p
-                                        style={{
-                                            color: "var(--text-secondary)",
-                                            fontSize: "0.92rem",
-                                            lineHeight: 1.6,
-                                            marginBottom: "20px",
-                                            flex: 1,
-                                        }}
-                                    >
+                                    <p className="career-role-desc">
                                         {role.description}
                                     </p>
 
-                                    <div
-                                        style={{
-                                            borderTop: "1px solid #f1f5f9",
-                                            paddingTop: "18px",
-                                            marginTop: "auto",
-                                        }}
-                                    >
+                                    <div className="career-role-action">
                                         <a
                                             href={`https://wa.me/917398174444?text=${encodeURIComponent(
                                                 `Hello, I want to apply for the ${role.title} role at Pune Property Investors.`
                                             )}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="primary-button"
-                                            style={{
-                                                width: "100%",
-                                                justifyContent: "center",
-                                                display: "inline-flex",
-                                            }}
+                                            className="primary-button career-apply-btn"
                                         >
                                             Apply via WhatsApp
                                             <ArrowRight size={16} />
@@ -452,56 +266,31 @@ export default function Career() {
                         </div>
 
                         {/* Quick Resume Upload Form */}
-                        <div
-                            style={{
-                                background: "#ffffff",
-                                padding: "40px 32px",
-                                borderRadius: "20px",
-                                border: "1px solid var(--border-subtle)",
-                                boxShadow: "var(--shadow-md)",
-                                maxWidth: "780px",
-                                margin: "0 auto",
-                            }}
-                        >
-                            <div style={{ textAlign: "center", marginBottom: "28px" }}>
-                                <h3
-                                    style={{
-                                        fontSize: "1.5rem",
-                                        fontWeight: "800",
-                                        color: "var(--secondary-color)",
-                                        marginBottom: "8px",
-                                    }}
-                                >
+                        <div className="career-form-card">
+                            <div className="career-form-header">
+                                <h3 className="career-form-title">
                                     Can't Find Your Exact Role?
                                 </h3>
-                                <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>
+                                <p className="career-form-desc">
                                     Submit your contact details and our talent acquisition team will get in touch when a matching opening arises.
                                 </p>
                             </div>
 
                             {submitted ? (
-                                <div
-                                    style={{
-                                        textAlign: "center",
-                                        padding: "30px 20px",
-                                        background: "rgba(34, 197, 94, 0.1)",
-                                        borderRadius: "12px",
-                                        color: "#15803d",
-                                    }}
-                                >
-                                    <CheckCircle2 size={36} style={{ margin: "0 auto 10px" }} />
-                                    <h4 style={{ fontWeight: "700", marginBottom: "6px" }}>
+                                <div className="career-success-box">
+                                    <CheckCircle2 size={36} className="career-success-icon" />
+                                    <h4 className="career-success-title">
                                         Application Initiated!
                                     </h4>
-                                    <p style={{ fontSize: "0.9rem" }}>
+                                    <p className="career-success-desc">
                                         Our recruitment team has received your application. Thank you for your interest in joining Pune Property Investors.
                                     </p>
                                 </div>
                             ) : (
-                                <form onSubmit={handleApply} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
+                                <form onSubmit={handleApply} className="career-form">
+                                    <div className="career-form-row">
                                         <div>
-                                            <label style={{ display: "block", marginBottom: "6px", fontSize: "0.88rem", fontWeight: "600", color: "var(--secondary-color)" }}>
+                                            <label className="career-label">
                                                 Your Full Name *
                                             </label>
                                             <input
@@ -510,12 +299,12 @@ export default function Career() {
                                                 value={applicantName}
                                                 onChange={(e) => setApplicantName(e.target.value)}
                                                 placeholder="e.g. Rahul Sharma"
-                                                style={{ width: "100%", padding: "12px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem" }}
+                                                className="career-input"
                                             />
                                         </div>
 
                                         <div>
-                                            <label style={{ display: "block", marginBottom: "6px", fontSize: "0.88rem", fontWeight: "600", color: "var(--secondary-color)" }}>
+                                            <label className="career-label">
                                                 Phone Number *
                                             </label>
                                             <input
@@ -524,14 +313,14 @@ export default function Career() {
                                                 value={applicantPhone}
                                                 onChange={(e) => setApplicantPhone(e.target.value)}
                                                 placeholder="e.g. +91 98765 43210"
-                                                style={{ width: "100%", padding: "12px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem" }}
+                                                className="career-input"
                                             />
                                         </div>
                                     </div>
 
-                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
+                                    <div className="career-form-row">
                                         <div>
-                                            <label style={{ display: "block", marginBottom: "6px", fontSize: "0.88rem", fontWeight: "600", color: "var(--secondary-color)" }}>
+                                            <label className="career-label">
                                                 Email Address *
                                             </label>
                                             <input
@@ -540,18 +329,18 @@ export default function Career() {
                                                 value={applicantEmail}
                                                 onChange={(e) => setApplicantEmail(e.target.value)}
                                                 placeholder="e.g. rahul@example.com"
-                                                style={{ width: "100%", padding: "12px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem" }}
+                                                className="career-input"
                                             />
                                         </div>
 
                                         <div>
-                                            <label style={{ display: "block", marginBottom: "6px", fontSize: "0.88rem", fontWeight: "600", color: "var(--secondary-color)" }}>
+                                            <label className="career-label">
                                                 Position of Interest
                                             </label>
                                             <select
                                                 value={applicantRole}
                                                 onChange={(e) => setApplicantRole(e.target.value)}
-                                                style={{ width: "100%", padding: "12px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem", background: "#ffffff" }}
+                                                className="career-select"
                                             >
                                                 <option value="Senior Property Advisory Consultant">Senior Property Advisory Consultant</option>
                                                 <option value="Relationship Manager - Commercial">Relationship Manager - Commercial</option>
@@ -564,8 +353,7 @@ export default function Career() {
 
                                     <button
                                         type="submit"
-                                        className="primary-button"
-                                        style={{ marginTop: "10px", width: "100%", justifyContent: "center" }}
+                                        className="primary-button career-submit-btn"
                                     >
                                         Submit Application via HR Desk
                                         <Send size={16} />
@@ -581,4 +369,3 @@ export default function Career() {
         </div>
     );
 }
-

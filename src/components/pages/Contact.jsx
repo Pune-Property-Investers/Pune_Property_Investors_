@@ -7,13 +7,12 @@ import {
     Mail,
     Send,
     MessageCircle,
-    ShieldCheck,
-    Building2,
     Clock,
 } from "lucide-react";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import PageHeroBanner from "../common/PageHeroBanner";
+import "./Contact.css";
 
 const WHATSAPP_NUMBER = "917398174444";
 const PHONE_NUMBER = "+917398174444";
@@ -26,7 +25,6 @@ export default function ContactPage() {
         locality: "Kharadi",
         message: "",
     });
-    const [submitted, setSubmitted] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -46,11 +44,10 @@ export default function ContactPage() {
 
         const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
         window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-        setSubmitted(true);
     };
 
     return (
-        <div style={{ background: "var(--background-color)", minHeight: "100vh" }}>
+        <div className="contact-page">
             <Header />
 
             <main>
@@ -68,62 +65,20 @@ export default function ContactPage() {
                     icon={Phone}
                 />
 
-                <div className="container" style={{ padding: "60px 0 80px" }}>
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
-                            gap: "40px",
-                        }}
-                    >
+                <div className="container contact-page__content">
+                    <div className="contact-grid">
                         {/* Contact Form */}
-                        <div
-                            style={{
-                                background: "#ffffff",
-                                padding: "40px 32px",
-                                borderRadius: "20px",
-                                border: "1px solid var(--border-subtle)",
-                                boxShadow: "var(--shadow-md)",
-                            }}
-                        >
-                            <h2
-                                style={{
-                                    fontSize: "1.6rem",
-                                    fontWeight: "700",
-                                    color: "var(--secondary-color)",
-                                    marginBottom: "8px",
-                                }}
-                            >
+                        <div className="contact-form-card">
+                            <h2 className="contact-form-title">
                                 Send Us a Message
                             </h2>
-                            <p
-                                style={{
-                                    color: "var(--text-secondary)",
-                                    fontSize: "0.95rem",
-                                    marginBottom: "28px",
-                                }}
-                            >
+                            <p className="contact-form-desc">
                                 Fill out your details below and we will connect with you right away on WhatsApp or by call.
                             </p>
 
-                            <form
-                                onSubmit={handleSubmit}
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: "18px",
-                                }}
-                            >
+                            <form onSubmit={handleSubmit} className="contact-form">
                                 <div>
-                                    <label
-                                        style={{
-                                            display: "block",
-                                            marginBottom: "6px",
-                                            fontSize: "0.88rem",
-                                            fontWeight: "600",
-                                            color: "var(--secondary-color)",
-                                        }}
-                                    >
+                                    <label className="contact-label">
                                         Your Full Name *
                                     </label>
                                     <input
@@ -133,34 +88,13 @@ export default function ContactPage() {
                                         value={formData.name}
                                         onChange={handleChange}
                                         placeholder="e.g. Amit Patil"
-                                        style={{
-                                            width: "100%",
-                                            padding: "12px 14px",
-                                            borderRadius: "8px",
-                                            border: "1px solid #cbd5e1",
-                                            fontSize: "0.95rem",
-                                        }}
+                                        className="contact-input"
                                     />
                                 </div>
 
-                                <div
-                                    style={{
-                                        display: "grid",
-                                        gridTemplateColumns:
-                                            "repeat(auto-fit, minmax(180px, 1fr))",
-                                        gap: "14px",
-                                    }}
-                                >
+                                <div className="contact-form-row">
                                     <div>
-                                        <label
-                                            style={{
-                                                display: "block",
-                                                marginBottom: "6px",
-                                                fontSize: "0.88rem",
-                                                fontWeight: "600",
-                                                color: "var(--secondary-color)",
-                                            }}
-                                        >
+                                        <label className="contact-label">
                                             Phone / WhatsApp *
                                         </label>
                                         <input
@@ -170,26 +104,12 @@ export default function ContactPage() {
                                             value={formData.phone}
                                             onChange={handleChange}
                                             placeholder="e.g. +91 98765 43210"
-                                            style={{
-                                                width: "100%",
-                                                padding: "12px 14px",
-                                                borderRadius: "8px",
-                                                border: "1px solid #cbd5e1",
-                                                fontSize: "0.95rem",
-                                            }}
+                                            className="contact-input"
                                         />
                                     </div>
 
                                     <div>
-                                        <label
-                                            style={{
-                                                display: "block",
-                                                marginBottom: "6px",
-                                                fontSize: "0.88rem",
-                                                fontWeight: "600",
-                                                color: "var(--secondary-color)",
-                                            }}
-                                        >
+                                        <label className="contact-label">
                                             Email Address
                                         </label>
                                         <input
@@ -198,41 +118,20 @@ export default function ContactPage() {
                                             value={formData.email}
                                             onChange={handleChange}
                                             placeholder="e.g. amit@example.com"
-                                            style={{
-                                                width: "100%",
-                                                padding: "12px 14px",
-                                                borderRadius: "8px",
-                                                border: "1px solid #cbd5e1",
-                                                fontSize: "0.95rem",
-                                            }}
+                                            className="contact-input"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label
-                                        style={{
-                                            display: "block",
-                                            marginBottom: "6px",
-                                            fontSize: "0.88rem",
-                                            fontWeight: "600",
-                                            color: "var(--secondary-color)",
-                                        }}
-                                    >
+                                    <label className="contact-label">
                                         Preferred Pune Locality
                                     </label>
                                     <select
                                         name="locality"
                                         value={formData.locality}
                                         onChange={handleChange}
-                                        style={{
-                                            width: "100%",
-                                            padding: "12px 14px",
-                                            borderRadius: "8px",
-                                            border: "1px solid #cbd5e1",
-                                            fontSize: "0.95rem",
-                                            background: "#ffffff",
-                                        }}
+                                        className="contact-select"
                                     >
                                         <option value="Kharadi">Kharadi (East Pune)</option>
                                         <option value="Baner">Baner (West Pune)</option>
@@ -246,15 +145,7 @@ export default function ContactPage() {
                                 </div>
 
                                 <div>
-                                    <label
-                                        style={{
-                                            display: "block",
-                                            marginBottom: "6px",
-                                            fontSize: "0.88rem",
-                                            fontWeight: "600",
-                                            color: "var(--secondary-color)",
-                                        }}
-                                    >
+                                    <label className="contact-label">
                                         Your Requirements / Message
                                     </label>
                                     <textarea
@@ -263,25 +154,13 @@ export default function ContactPage() {
                                         value={formData.message}
                                         onChange={handleChange}
                                         placeholder="Looking for 2 or 3 BHK near IT Park with budget around 80 Lakhs..."
-                                        style={{
-                                            width: "100%",
-                                            padding: "12px 14px",
-                                            borderRadius: "8px",
-                                            border: "1px solid #cbd5e1",
-                                            fontSize: "0.95rem",
-                                            fontFamily: "inherit",
-                                        }}
+                                        className="contact-textarea"
                                     />
                                 </div>
 
                                 <button
                                     type="submit"
-                                    className="primary-button"
-                                    style={{
-                                        width: "100%",
-                                        justifyContent: "center",
-                                        padding: "14px",
-                                    }}
+                                    className="primary-button contact-submit-btn"
                                 >
                                     Send Inquiry via WhatsApp
                                     <Send size={16} />
@@ -290,62 +169,22 @@ export default function ContactPage() {
                         </div>
 
                         {/* Direct Contact Info & Office */}
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "24px",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    background: "#ffffff",
-                                    padding: "36px 30px",
-                                    borderRadius: "20px",
-                                    border: "1px solid var(--border-subtle)",
-                                    boxShadow: "var(--shadow-sm)",
-                                }}
-                            >
-                                <h3
-                                    style={{
-                                        fontSize: "1.3rem",
-                                        fontWeight: "700",
-                                        color: "var(--secondary-color)",
-                                        marginBottom: "20px",
-                                    }}
-                                >
+                        <div className="contact-info-col">
+                            <div className="contact-office-card">
+                                <h3 className="contact-office-title">
                                     Office Headquarters
                                 </h3>
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        gap: "14px",
-                                        alignItems: "flex-start",
-                                        marginBottom: "22px",
-                                    }}
-                                >
+
+                                <div className="contact-office-item">
                                     <MapPin
                                         size={22}
-                                        color="var(--primary-color)"
-                                        style={{ flexShrink: 0, marginTop: "4px" }}
+                                        className="contact-office-icon"
                                     />
                                     <div>
-                                        <strong
-                                            style={{
-                                                display: "block",
-                                                color: "var(--secondary-color)",
-                                                marginBottom: "4px",
-                                            }}
-                                        >
+                                        <strong className="contact-office-name">
                                             Pune Property Investors
                                         </strong>
-                                        <span
-                                            style={{
-                                                color: "var(--text-secondary)",
-                                                lineHeight: 1.6,
-                                                fontSize: "0.95rem",
-                                            }}
-                                        >
+                                        <span className="contact-office-address">
                                             3rd Floor, Gera Imperium Alpha, Grant Road,
                                             Vitthal Nagar, Kharadi, Pune, Maharashtra
                                             411014
@@ -353,108 +192,52 @@ export default function ContactPage() {
                                     </div>
                                 </div>
 
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        gap: "14px",
-                                        alignItems: "center",
-                                        marginBottom: "16px",
-                                    }}
-                                >
+                                <div className="contact-office-item contact-office-item--center">
                                     <Phone
                                         size={20}
-                                        color="var(--primary-color)"
-                                        style={{ flexShrink: 0 }}
+                                        className="contact-office-icon contact-office-icon--center"
                                     />
                                     <div>
-                                        <span
-                                            style={{
-                                                fontSize: "0.82rem",
-                                                color: "var(--text-muted)",
-                                                display: "block",
-                                            }}
-                                        >
+                                        <span className="contact-office-meta-label">
                                             Advisory Hotline
                                         </span>
                                         <a
                                             href={`tel:${PHONE_NUMBER}`}
-                                            style={{
-                                                color: "var(--secondary-color)",
-                                                fontWeight: "700",
-                                                fontSize: "1.05rem",
-                                                textDecoration: "none",
-                                            }}
+                                            className="contact-office-link"
                                         >
                                             +91 73981 74444
                                         </a>
                                     </div>
                                 </div>
 
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        gap: "14px",
-                                        alignItems: "center",
-                                        marginBottom: "16px",
-                                    }}
-                                >
+                                <div className="contact-office-item contact-office-item--center">
                                     <Mail
                                         size={20}
-                                        color="var(--primary-color)"
-                                        style={{ flexShrink: 0 }}
+                                        className="contact-office-icon contact-office-icon--center"
                                     />
                                     <div>
-                                        <span
-                                            style={{
-                                                fontSize: "0.82rem",
-                                                color: "var(--text-muted)",
-                                                display: "block",
-                                            }}
-                                        >
+                                        <span className="contact-office-meta-label">
                                             General & Builder Inquiries
                                         </span>
                                         <a
                                             href="mailto:info@punepropertyinvestor.com"
-                                            style={{
-                                                color: "var(--secondary-color)",
-                                                fontWeight: "600",
-                                                textDecoration: "none",
-                                            }}
+                                            className="contact-office-link"
                                         >
                                             info@punepropertyinvestor.com
                                         </a>
                                     </div>
                                 </div>
 
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        gap: "14px",
-                                        alignItems: "center",
-                                    }}
-                                >
+                                <div className="contact-office-item contact-office-item--center">
                                     <Clock
                                         size={20}
-                                        color="var(--primary-color)"
-                                        style={{ flexShrink: 0 }}
+                                        className="contact-office-icon contact-office-icon--center"
                                     />
                                     <div>
-                                        <span
-                                            style={{
-                                                fontSize: "0.82rem",
-                                                color: "var(--text-muted)",
-                                                display: "block",
-                                            }}
-                                        >
+                                        <span className="contact-office-meta-label">
                                             Working Hours
                                         </span>
-                                        <span
-                                            style={{
-                                                color: "var(--secondary-color)",
-                                                fontWeight: "600",
-                                                fontSize: "0.95rem",
-                                            }}
-                                        >
+                                        <span className="contact-office-val">
                                             Monday – Sunday: 9:30 AM – 7:30 PM
                                         </span>
                                     </div>
@@ -462,42 +245,14 @@ export default function ContactPage() {
                             </div>
 
                             {/* WhatsApp Fast Track Card */}
-                            <div
-                                style={{
-                                    background:
-                                        "linear-gradient(135deg, #128C7E 0%, #075E54 100%)",
-                                    color: "#ffffff",
-                                    padding: "32px 28px",
-                                    borderRadius: "20px",
-                                    boxShadow: "var(--shadow-md)",
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: "12px",
-                                        marginBottom: "14px",
-                                    }}
-                                >
+                            <div className="contact-whatsapp-card">
+                                <div className="contact-whatsapp-header">
                                     <MessageCircle size={30} />
-                                    <h4
-                                        style={{
-                                            fontSize: "1.3rem",
-                                            fontWeight: "700",
-                                        }}
-                                    >
+                                    <h4 className="contact-whatsapp-title">
                                         Instant WhatsApp Consultation
                                     </h4>
                                 </div>
-                                <p
-                                    style={{
-                                        fontSize: "0.95rem",
-                                        lineHeight: 1.6,
-                                        opacity: 0.95,
-                                        marginBottom: "20px",
-                                    }}
-                                >
+                                <p className="contact-whatsapp-desc">
                                     Need instant brochures, floor plans, and
                                     pricing for Pune properties? Chat directly with
                                     our senior property consultant.
@@ -508,18 +263,7 @@ export default function ContactPage() {
                                     )}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    style={{
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: "8px",
-                                        background: "#ffffff",
-                                        color: "#075E54",
-                                        padding: "12px 22px",
-                                        borderRadius: "8px",
-                                        fontWeight: "700",
-                                        fontSize: "0.95rem",
-                                        textDecoration: "none",
-                                    }}
+                                    className="contact-whatsapp-btn"
                                 >
                                     Start WhatsApp Chat
                                 </a>

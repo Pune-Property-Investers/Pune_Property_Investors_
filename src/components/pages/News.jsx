@@ -5,15 +5,12 @@ import Link from "next/link";
 import {
     Calendar,
     Newspaper,
-    ExternalLink,
     ArrowRight,
-    MapPin,
-    AlertCircle,
-    TrendingUp,
 } from "lucide-react";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import PageHeroBanner from "../common/PageHeroBanner";
+import "./News.css";
 
 const newsArticles = [
     {
@@ -61,20 +58,20 @@ const newsArticles = [
         image:
             "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=85",
         summary:
-            "All residential developments above 500 units must now undergo quarterly construction progress certification by independent structural engineers to ensure timely delivery.",
-        impact: "Boosts buyer confidence and prevents project delivery delays across Maharashtra.",
+            "New regulatory mandate requires independent structural audits and quarterly geo-tagged photographic updates for all housing projects exceeding 50,000 sq. meters.",
+        impact: "Significantly enhances buyer security and ensures timely possession handover.",
     },
     {
         id: 5,
-        title: "Pune Ring Road Phase-1 Land Acquisition Progresses Across 14 Key Southern Villages",
+        title: "Ring Road Package 2 Land Acquisition Completed: Bidding Initiated for Phase 1",
         category: "Infrastructure",
         date: "September 30, 2026",
-        source: "MSRDC Infrastructure Updates",
+        source: "State Highway Authority",
         image:
             "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=85",
         summary:
-            "The 173 km Ring Road network aims to divert inter-state through traffic away from central city roads, spurring rapid logistics and plotted community development along Shirwal and Pirangut corridors.",
-        impact: "Transforms peripheral micro-markets into prime suburban residential destinations.",
+            "The 128 km Pune Ring Road achieves 94% land acquisition milestone. Peripheral growth pockets like Wagholi, Charholi, and Shirwal prepare for accelerated residential zoning.",
+        impact: "Boosts long-term capital appreciation for NA plotted layouts and township developments.",
     },
     {
         id: 6,
@@ -107,7 +104,7 @@ export default function News() {
     });
 
     return (
-        <div style={{ background: "var(--background-color)", minHeight: "100vh" }}>
+        <div className="news-page">
             <Header />
 
             <main>
@@ -125,42 +122,19 @@ export default function News() {
                     icon={Newspaper}
                 />
 
-                <div className="container" style={{ padding: "60px 0 80px" }}>
+                <div className="container news-page__content">
                     {/* Category Filter Pills */}
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            flexWrap: "wrap",
-                            marginBottom: "36px",
-                        }}
-                    >
+                    <div className="news-categories-wrap">
                         {categories.map((cat) => (
                             <button
                                 key={cat}
                                 type="button"
                                 onClick={() => setSelectedCategory(cat)}
-                                style={{
-                                    padding: "8px 18px",
-                                    borderRadius: "24px",
-                                    border:
-                                        selectedCategory === cat
-                                            ? "1px solid var(--primary-color)"
-                                            : "1px solid #e2e8f0",
-                                    background:
-                                        selectedCategory === cat
-                                            ? "var(--secondary-color)"
-                                            : "#ffffff",
-                                    color:
-                                        selectedCategory === cat
-                                            ? "#ffffff"
-                                            : "var(--text-secondary)",
-                                    fontWeight: "600",
-                                    fontSize: "0.9rem",
-                                    cursor: "pointer",
-                                    transition: "all 0.2s ease",
-                                }}
+                                className={`news-category-btn ${
+                                    selectedCategory === cat
+                                        ? "news-category-btn--active"
+                                        : ""
+                                }`}
                             >
                                 {cat}
                             </button>
@@ -168,145 +142,49 @@ export default function News() {
                     </div>
 
                     {/* News Grid */}
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns:
-                                "repeat(auto-fill, minmax(340px, 1fr))",
-                            gap: "28px",
-                        }}
-                    >
+                    <div className="news-articles-grid">
                         {filteredArticles.map((article) => (
                             <article
                                 key={article.id}
-                                style={{
-                                    background: "#ffffff",
-                                    borderRadius: "16px",
-                                    overflow: "hidden",
-                                    border: "1px solid var(--border-subtle)",
-                                    boxShadow: "var(--shadow-sm)",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                }}
+                                className="news-article-card"
                             >
-                                <div
-                                    style={{
-                                        position: "relative",
-                                        height: "200px",
-                                        overflow: "hidden",
-                                    }}
-                                >
+                                <div className="news-article-image-wrap">
                                     <img
                                         src={article.image}
                                         alt={article.title}
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "cover",
-                                        }}
+                                        className="news-article-image"
                                     />
-                                    <span
-                                        style={{
-                                            position: "absolute",
-                                            top: "14px",
-                                            left: "14px",
-                                            padding: "5px 12px",
-                                            borderRadius: "6px",
-                                            background: "rgba(24, 30, 27, 0.88)",
-                                            backdropFilter: "blur(4px)",
-                                            color: "#e0b77f",
-                                            fontSize: "0.78rem",
-                                            fontWeight: "700",
-                                        }}
-                                    >
+                                    <span className="news-article-badge">
                                         {article.category}
                                     </span>
                                 </div>
 
-                                <div
-                                    style={{
-                                        padding: "24px 22px",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        flex: 1,
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "space-between",
-                                            fontSize: "0.8rem",
-                                            color: "var(--text-muted)",
-                                            marginBottom: "12px",
-                                        }}
-                                    >
-                                        <span
-                                            style={{
-                                                display: "inline-flex",
-                                                alignItems: "center",
-                                                gap: "5px",
-                                            }}
-                                        >
+                                <div className="news-article-body">
+                                    <div className="news-article-meta">
+                                        <span className="news-article-date">
                                             <Calendar size={14} />
                                             {article.date}
                                         </span>
                                         <span>{article.source}</span>
                                     </div>
 
-                                    <h3
-                                        style={{
-                                            fontSize: "1.15rem",
-                                            fontWeight: "700",
-                                            color: "var(--secondary-color)",
-                                            marginBottom: "12px",
-                                            lineHeight: 1.4,
-                                        }}
-                                    >
+                                    <h3 className="news-article-title">
                                         {article.title}
                                     </h3>
 
-                                    <p
-                                        style={{
-                                            color: "var(--text-secondary)",
-                                            fontSize: "0.9rem",
-                                            lineHeight: 1.6,
-                                            marginBottom: "18px",
-                                            flex: 1,
-                                        }}
-                                    >
+                                    <p className="news-article-summary">
                                         {article.summary}
                                     </p>
 
                                     {article.impact && (
-                                        <div
-                                            style={{
-                                                background: "#f8fafc",
-                                                borderLeft:
-                                                    "3px solid var(--primary-color)",
-                                                padding: "10px 14px",
-                                                borderRadius: "0 8px 8px 0",
-                                                fontSize: "0.82rem",
-                                                color: "var(--secondary-color)",
-                                                fontWeight: "600",
-                                                marginBottom: "20px",
-                                            }}
-                                        >
+                                        <div className="news-article-takeaway">
                                             Key Takeaway: {article.impact}
                                         </div>
                                     )}
 
                                     <Link
                                         href="/contact"
-                                        style={{
-                                            display: "inline-flex",
-                                            alignItems: "center",
-                                            gap: "8px",
-                                            color: "var(--primary-color)",
-                                            fontWeight: "700",
-                                            fontSize: "0.9rem",
-                                            textDecoration: "none",
-                                        }}
+                                        className="news-article-link"
                                     >
                                         Consult Our Advisors
                                         <ArrowRight size={15} />
@@ -322,4 +200,3 @@ export default function News() {
         </div>
     );
 }
-

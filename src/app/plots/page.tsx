@@ -15,16 +15,7 @@ export default function PlotsPage() {
     return (
         <Suspense
             fallback={
-                <div
-                    style={{
-                        minHeight: "100vh",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    Loading plots and land...
-                </div>
+                <div className="page-loading-fallback">Loading plots and land...</div>
             }
         >
             <BuyProperties

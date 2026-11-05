@@ -91,3 +91,18 @@ span {
         padding: 10px 16px;
     }
 }
+
+
+/* Touch-friendly mobile optimizations */
+@media (max-width: 768px) {
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    button,
+    a,
+    select,
+    input {
+        touch-action: manipulation;
+    }
+}

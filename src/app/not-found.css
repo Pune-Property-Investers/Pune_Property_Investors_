@@ -1,0 +1,97 @@
+/* =========================================================
+   404 NOT FOUND PAGE STYLES
+   Pune Property Investor
+========================================================= */
+
+.not-found-page {
+    background: var(--background-color);
+    min-height: 100vh;
+}
+
+.not-found-main {
+    min-height: 75vh;
+    padding-top: 140px;
+    padding-bottom: 80px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.not-found-card {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 50px 30px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.not-found-icon-wrap {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(197, 155, 39, 0.12);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.not-found-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background: rgba(197, 155, 39, 0.12);
+    color: var(--primary-color);
+    border-radius: 20px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.not-found-title {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+    font-weight: 800;
+}
+
+.not-found-desc {
+    font-family: var(--font-sans);
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 28px;
+}
+
+.not-found-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.not-found-home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    background: var(--secondary-color);
+    color: #ffffff;
+    border-radius: var(--border-radius);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.not-found-home-btn:hover {
+    background: var(--secondary-light);
+    transform: translateY(-2px);
+}
+
