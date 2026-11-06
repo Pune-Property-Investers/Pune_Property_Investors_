@@ -44,8 +44,11 @@ export const metadata: Metadata = {
     creator: "Pune Property Investors",
     publisher: "Pune Property Investors",
     icons: {
-        icon: `${basePath}/favicon.svg`,
-        apple: `${basePath}/favicon.svg`,
+        icon: [
+            { url: `${basePath}/logo/logo.png`, type: "image/png" },
+        ],
+        shortcut: `${basePath}/logo/logo.png`,
+        apple: `${basePath}/logo/logo.png`,
     },
     openGraph: {
         type: "website",
@@ -97,7 +100,9 @@ export default function RootLayout({
             suppressHydrationWarning
         >
             <head>
-                <link rel="icon" type="image/svg+xml" href={`${basePath}/favicon.svg`} />
+                <link rel="icon" type="image/png" href={`${basePath}/logo/logo.png`} />
+                <link rel="shortcut icon" href={`${basePath}/logo/logo.png`} />
+                <link rel="apple-touch-icon" href={`${basePath}/logo/logo.png`} />
             </head>
             <body suppressHydrationWarning>{children}</body>
         </html>
