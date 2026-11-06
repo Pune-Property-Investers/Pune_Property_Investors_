@@ -1,12 +1,12 @@
 /* ==========================================================================
-   FEATURED PROPERTIES VIDEO SHOWCASE
-   Exact match to the high-converting architectural video stage design
-   Mobile View matches media_1793868090298_4c435816.jpg in every detail
+   FEATURED PROPERTIES VIDEO SHOWCASE - MULTI-CONTAINER SIDEWAYS SLIDER
+   Exact match to the reference image (media_1793942370885_0c6f72ee.png)
+   Same visual layout and identical container sizes across mobile and laptop.
    ========================================================================== */
 
 .pune-projects-showcase-section {
     width: 100%;
-    padding: 12px 0 28px;
+    padding: clamp(12px, 2vw, 24px) 0 clamp(24px, 3vw, 40px);
     background: transparent;
     position: relative;
     box-sizing: border-box;
@@ -25,7 +25,7 @@
 
 .pune-projects-header {
     text-align: center;
-    margin-bottom: clamp(20px, 2.5vw, 32px);
+    margin-bottom: clamp(18px, 2.2vw, 28px);
     padding: 0 12px;
 }
 
@@ -49,9 +49,9 @@
 
 .pune-projects-eyebrow {
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(10.5px, 0.9vw, 12px);
+    font-size: clamp(10px, 0.85vw, 12px);
     font-weight: 700;
-    letter-spacing: 2.2px;
+    letter-spacing: 2px;
     color: #c49866;
     display: inline-flex;
     align-items: center;
@@ -61,10 +61,10 @@
 
 .pune-projects-title {
     font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: clamp(24px, 3.2vw, 42px);
+    font-size: clamp(24px, 3.2vw, 40px);
     font-weight: 700;
     color: #0f172a;
-    margin: 0 0 clamp(8px, 1vw, 12px);
+    margin: 0 0 clamp(6px, 0.8vw, 10px);
     line-height: 1.22;
     letter-spacing: -0.5px;
 }
@@ -78,35 +78,75 @@
 .pune-projects-subtitle {
     margin: 0 auto;
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(12.5px, 1vw, 14px);
+    font-size: clamp(12px, 0.95vw, 14px);
     color: #64748b;
-    max-width: 640px;
-    line-height: 1.6;
+    max-width: 620px;
+    line-height: 1.55;
 }
 
 /* ==========================================================================
-   MASTER SHOWCASE CARD (Video Stage + Specifications Bar)
+   MULTI-CONTAINER SIDEWAYS SLIDER TRACK
+   All containers have identical width and height
+   ========================================================================== */
+
+.pune-projects-slider-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: clamp(16px, 2vw, 24px);
+    box-shadow: 0 18px 48px -10px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.06);
+    background: #000000;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y pinch-zoom;
+}
+
+.pune-projects-slider-wrapper:active {
+    cursor: grabbing;
+}
+
+.pune-projects-slider-track {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+
+.pune-project-slide {
+    min-width: 100%;
+    width: 100%;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    display: flex;
+    height: 100%;
+}
+
+/* ==========================================================================
+   INDIVIDUAL PROJECT CARD (LOCKED UNIFORM DIMENSIONS FOR ALL SLIDES)
    ========================================================================== */
 
 .pune-project-card {
     width: 100%;
+    height: 100%;
+    flex: 1;
     background: #ffffff;
-    border-radius: 24px;
     overflow: hidden;
-    box-shadow: 0 16px 44px -8px rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.06);
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
 }
 
 /* ==========================================================================
-   TOP HALF: VIDEO STAGE (Widescreen Video + Floating Action Buttons)
+   TOP HALF: VIDEO STAGE (Uniform Locked Height)
    ========================================================================== */
 
 .pune-project-stage {
     position: relative;
     width: 100%;
-    height: clamp(320px, 44vw, 520px);
+    height: clamp(250px, 42vw, 500px);
+    flex-shrink: 0;
     background: #000000;
     overflow: hidden;
     display: flex;
@@ -119,10 +159,10 @@
 /* Large Typographic Watermark on Left Stage */
 .pune-project-stage__watermark {
     position: absolute;
-    top: 8%;
+    top: 6%;
     left: 4%;
     font-family: var(--font-sans), Impact, "Arial Black", sans-serif;
-    font-size: clamp(34px, 8vw, 110px);
+    font-size: clamp(34px, 7.5vw, 105px);
     font-weight: 900;
     letter-spacing: -2px;
     color: rgba(255, 255, 255, 0.05);
@@ -133,7 +173,7 @@
     line-height: 1;
 }
 
-/* Top Row: Left Tour Badge + Right Action Controls */
+/* Top Row: Left Tour Badges + Right Action Controls */
 .pune-project-stage__top-row {
     position: absolute;
     top: clamp(8px, 1.4vw, 18px);
@@ -147,60 +187,101 @@
     pointer-events: auto;
 }
 
+.pune-project-stage__left-badges {
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(6px, 0.8vw, 10px);
+    flex-shrink: 0;
+}
+
 /* SAMPLE FLAT TOUR pill badge */
 .pune-project-stage__tour-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     padding: clamp(4px, 0.5vw, 6px) clamp(8px, 1vw, 14px);
-    background: rgba(18, 18, 18, 0.72);
+    background: rgba(18, 18, 18, 0.82);
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 9999px;
     color: #ffffff;
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(9px, 0.85vw, 11px);
+    font-size: clamp(8.5px, 0.8vw, 11px);
     font-weight: 700;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.6px;
     text-transform: uppercase;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    user-select: none;
     white-space: nowrap;
 }
 
 .pune-project-stage__tour-dot {
-    width: clamp(5px, 0.5vw, 6.5px);
-    height: clamp(5px, 0.5vw, 6.5px);
+    width: clamp(5px, 0.55vw, 7px);
+    height: clamp(5px, 0.55vw, 7px);
     border-radius: 50%;
     background: #ef4444;
     box-shadow: 0 0 8px #ef4444;
+    animation: tourPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Top Right Action Pills */
+@keyframes tourPulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(0.85);
+    }
+}
+
+/* PPI SHORTS pill badge (Red pill matching reference) */
+.pune-stage-pill-btn--shorts {
+    background: #dc2626 !important;
+    border-color: #ef4444 !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 0 12px rgba(220, 38, 38, 0.55);
+}
+
+.pune-stage-pill-btn--shorts:hover {
+    background: #b91c1c !important;
+    border-color: #dc2626 !important;
+}
+
+.pune-stage-pill-dot--white {
+    width: clamp(5px, 0.55vw, 7px);
+    height: clamp(5px, 0.55vw, 7px);
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+}
+
+/* Top Right Action Controls: Sound Off, Fullscreen, YouTube */
 .pune-project-stage__top-actions {
     display: inline-flex;
     align-items: center;
-    gap: clamp(4px, 0.6vw, 8px);
+    gap: clamp(5px, 0.6vw, 8px);
+    flex-shrink: 0;
 }
 
 .pune-stage-pill-btn {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: clamp(4px, 0.5vw, 6px) clamp(7px, 0.9vw, 13px);
-    background: rgba(18, 18, 18, 0.72);
+    gap: 5px;
+    padding: clamp(4px, 0.5vw, 6px) clamp(8px, 0.9vw, 13px);
+    background: rgba(18, 18, 18, 0.82);
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 9999px;
     color: #ffffff;
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(9.5px, 0.85vw, 11.5px);
+    font-size: clamp(8.5px, 0.8vw, 11px);
     font-weight: 600;
-    text-decoration: none;
     cursor: pointer;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     transition: all 0.2s ease;
     white-space: nowrap;
+    text-decoration: none;
 }
 
 .pune-stage-pill-btn:hover {
@@ -216,14 +297,15 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    padding: clamp(4px, 0.5vw, 6px) clamp(6px, 0.7vw, 10px);
-    background: rgba(18, 18, 18, 0.72);
+    padding: clamp(4px, 0.5vw, 6px) clamp(7px, 0.75vw, 11px);
+    background: rgba(18, 18, 18, 0.82);
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 9999px;
     cursor: pointer;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     transition: all 0.2s ease;
+    text-decoration: none;
 }
 
 .pune-stage-yt-btn:hover {
@@ -234,11 +316,11 @@
 /* Left Navigation Arrow (<) */
 .pune-stage-nav-arrow--left {
     position: absolute;
-    left: clamp(8px, 1.5vw, 20px);
+    left: clamp(8px, 1.4vw, 20px);
     top: 50%;
     transform: translateY(-50%);
-    width: clamp(32px, 3.4vw, 44px);
-    height: clamp(32px, 3.4vw, 44px);
+    width: clamp(32px, 3.2vw, 44px);
+    height: clamp(32px, 3.2vw, 44px);
     border-radius: 50%;
     background: rgba(18, 24, 20, 0.78);
     backdrop-filter: blur(8px);
@@ -256,13 +338,13 @@
 .pune-stage-nav-arrow--left:hover {
     background: #c49866;
     border-color: #c49866;
-    transform: translateY(-50%) scale(1.06);
+    transform: translateY(-50%) scale(1.08);
 }
 
-/* Right Side Vertical Action Stack (Matches Image: Like, Next, Share, View Project) */
+/* Right Side Vertical Action Stack (Like, Next, Share, Circular CTA) */
 .pune-stage-right-actions {
     position: absolute;
-    right: clamp(8px, 1.5vw, 18px);
+    right: clamp(8px, 1.4vw, 18px);
     top: 50%;
     transform: translateY(-50%);
     display: flex;
@@ -273,8 +355,8 @@
 }
 
 .pune-stage-side-circle-btn {
-    width: clamp(32px, 3.4vw, 42px);
-    height: clamp(32px, 3.4vw, 42px);
+    width: clamp(30px, 3.2vw, 42px);
+    height: clamp(30px, 3.2vw, 42px);
     border-radius: 50%;
     background: rgba(18, 24, 20, 0.78);
     backdrop-filter: blur(8px);
@@ -300,10 +382,23 @@
     border-color: #3b82f6;
 }
 
-/* White Circle CTA Arrow (↗) at bottom of the right stack */
+/* Next button with glowing emerald green ring (Matches reference image) */
+.pune-stage-side-circle-btn--next {
+    border: 2px solid #22c55e !important;
+    box-shadow: 0 0 16px rgba(34, 197, 94, 0.55);
+    color: #ffffff !important;
+}
+
+.pune-stage-side-circle-btn--next:hover {
+    background: #22c55e !important;
+    border-color: #22c55e !important;
+    box-shadow: 0 0 22px rgba(34, 197, 94, 0.8);
+}
+
+/* White Circle CTA Arrow (↗) */
 .pune-stage-circle-cta {
-    width: clamp(32px, 3.4vw, 42px);
-    height: clamp(32px, 3.4vw, 42px);
+    width: clamp(30px, 3.2vw, 42px);
+    height: clamp(30px, 3.2vw, 42px);
     border-radius: 50%;
     background: #ffffff;
     color: #0f172a;
@@ -340,6 +435,40 @@
     border: none;
     display: block;
     object-fit: cover;
+}
+
+/* Poster preview for non-active slides */
+.pune-project-stage__poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.pune-project-stage__poster-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pune-project-stage__poster-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.38);
+    display: grid;
+    place-items: center;
+}
+
+.pune-project-stage__poster-play {
+    width: clamp(44px, 5vw, 60px);
+    height: clamp(44px, 5vw, 60px);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.68);
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
 }
 
 /* Watermark logo badge on top right of video */
@@ -389,7 +518,7 @@
 
 .pune-project-stage__title {
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(12.5px, 1.3vw, 17px);
+    font-size: clamp(12px, 1.3vw, 17px);
     font-weight: 700;
     color: #ffffff;
     margin: 0;
@@ -411,27 +540,41 @@
 
 /* ==========================================================================
    BOTTOM HALF: WHITE BAR (Gallery Box + 4 Specification Cards + Actions)
+   Exact match to the reference image media_1793942370885_0c6f72ee.png
+   Locked uniform dimensions so all containers are the exact same size.
    ========================================================================== */
 
 .pune-project-bottom-bar {
     background: #ffffff;
-    padding: clamp(10px, 1.6vw, 20px) clamp(10px, 1.8vw, 24px);
+    /* Fit to border: Left, bottom, and top are 0 so side photo container fits flush to outer card border */
+    padding: 0 clamp(10px, 1.6vw, 22px) 0 0;
     display: grid;
-    grid-template-columns: clamp(96px, 24vw, 240px) minmax(0, 1fr);
-    gap: clamp(8px, 1.5vw, 22px);
+    /* Consistently 2 columns across all screens (Gallery on left, Specs on right) */
+    grid-template-columns: clamp(110px, 22vw, 230px) minmax(0, 1fr);
+    gap: clamp(8px, 1.4vw, 20px);
     align-items: stretch;
     box-sizing: border-box;
+    height: clamp(125px, 14vw, 165px);
+    min-height: clamp(125px, 14vw, 165px);
+    max-height: clamp(125px, 14vw, 165px);
+    flex-shrink: 0;
 }
 
 /* --------------------------------------------------------------------------
-   LEFT COLUMN: Gallery Preview Card
+   LEFT COLUMN: Gallery Preview Card (Fitted Flush to Outer Border)
+   Curves seamlessly with the master container's bottom-left border radius
    -------------------------------------------------------------------------- */
 
 .pune-project-bottom-bar__left {
     position: relative;
-    border-radius: clamp(8px, 1vw, 12px);
+    border-top-left-radius: 0;
+    border-top-right-radius: clamp(8px, 1vw, 12px);
+    border-bottom-right-radius: clamp(8px, 1vw, 12px);
+    border-bottom-left-radius: clamp(16px, 2vw, 24px);
     overflow: hidden;
-    min-height: clamp(100px, 14vw, 165px);
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
     display: flex;
 }
 
@@ -439,36 +582,52 @@
     position: relative;
     width: 100%;
     height: 100%;
-    min-height: clamp(100px, 14vw, 165px);
-    border-radius: clamp(8px, 1vw, 12px);
+    min-height: 100%;
+    max-height: 100%;
+    border-top-left-radius: 0;
+    border-top-right-radius: clamp(8px, 1vw, 12px);
+    border-bottom-right-radius: clamp(8px, 1vw, 12px);
+    border-bottom-left-radius: clamp(16px, 2vw, 24px);
     overflow: hidden;
     background: #090b0e;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .pune-gallery-card__img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    border-top-left-radius: 0;
+    border-top-right-radius: clamp(8px, 1vw, 12px);
+    border-bottom-right-radius: clamp(8px, 1vw, 12px);
+    border-bottom-left-radius: clamp(16px, 2vw, 24px);
 }
 
 .pune-gallery-card__overlay {
     position: absolute;
     inset: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: clamp(8px, 1vw, 12px);
+    border-bottom-right-radius: clamp(8px, 1vw, 12px);
+    border-bottom-left-radius: clamp(16px, 2vw, 24px);
     background: linear-gradient(
         180deg,
-        rgba(0, 0, 0, 0.5) 0%,
+        rgba(0, 0, 0, 0.6) 0%,
         rgba(0, 0, 0, 0.1) 40%,
-        rgba(0, 0, 0, 0.85) 100%
+        rgba(0, 0, 0, 0.88) 100%
     );
     pointer-events: none;
 }
 
+/* Gallery Top: • GALLERY badge + 01/05 counter */
 .pune-gallery-card__top {
-    position: absolute;
-    top: clamp(6px, 0.8vw, 10px);
-    left: clamp(6px, 0.8vw, 10px);
-    right: clamp(6px, 0.8vw, 10px);
+    position: relative;
+    padding: clamp(5px, 0.7vw, 9px);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -476,18 +635,19 @@
 }
 
 .pune-gallery-card__badge {
-    background: rgba(0, 0, 0, 0.68);
+    background: rgba(0, 0, 0, 0.75);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 9999px;
-    padding: clamp(2px, 0.4vw, 3px) clamp(5px, 0.7vw, 9px);
+    padding: clamp(2px, 0.35vw, 3px) clamp(5px, 0.6vw, 8px);
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(7.5px, 0.75vw, 10px);
+    font-size: clamp(7.5px, 0.7vw, 9.5px);
     font-weight: 700;
     color: #ffffff;
     display: inline-flex;
     align-items: center;
     gap: 4px;
     white-space: nowrap;
+    letter-spacing: 0.5px;
 }
 
 .pune-gallery-card__badge-dot {
@@ -499,109 +659,152 @@
 }
 
 .pune-gallery-card__counter {
-    background: rgba(0, 0, 0, 0.68);
+    background: rgba(0, 0, 0, 0.75);
     border-radius: 9999px;
-    padding: clamp(2px, 0.4vw, 3px) clamp(5px, 0.6vw, 8px);
+    padding: clamp(2px, 0.35vw, 3px) clamp(5px, 0.55vw, 8px);
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(7.5px, 0.75vw, 10px);
+    font-size: clamp(7.5px, 0.7vw, 9.5px);
     font-weight: 700;
     color: #ffffff;
     white-space: nowrap;
 }
 
+/* Gallery Bottom: Title + Subrow (< > and pagination dots) */
 .pune-gallery-card__bottom {
-    position: absolute;
-    bottom: clamp(6px, 0.8vw, 10px);
-    left: clamp(6px, 0.8vw, 10px);
-    right: clamp(6px, 0.8vw, 10px);
+    position: relative;
+    padding: clamp(5px, 0.7vw, 9px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3px, 0.4vw, 5px);
+    z-index: 2;
+}
+
+.pune-gallery-card__title {
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: clamp(8px, 0.82vw, 11px);
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+.pune-gallery-card__footer-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 4px;
-    z-index: 2;
 }
 
-.pune-gallery-card__label {
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(8.5px, 0.85vw, 12px);
-    font-weight: 600;
-    color: #ffffff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
-}
-
-.pune-gallery-card__controls {
+.pune-gallery-card__arrows {
     display: flex;
+    align-items: center;
     gap: 3px;
-    flex-shrink: 0;
 }
 
-.pune-gallery-card__btn {
-    width: clamp(16px, 1.8vw, 22px);
-    height: clamp(16px, 1.8vw, 22px);
+.pune-gallery-card__arrow-btn {
+    width: clamp(16px, 1.6vw, 21px);
+    height: clamp(16px, 1.6vw, 21px);
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.68);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(0, 0, 0, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.28);
     color: #ffffff;
     display: grid;
     place-items: center;
     cursor: pointer;
+    padding: 0;
     transition: background 0.2s ease;
 }
 
-.pune-gallery-card__btn:hover {
+.pune-gallery-card__arrow-btn:hover {
     background: rgba(255, 255, 255, 0.3);
 }
 
+.pune-gallery-card__dots {
+    display: flex;
+    align-items: center;
+    gap: clamp(3px, 0.35vw, 4px);
+}
+
+.pune-gallery-card__dot {
+    width: clamp(4px, 0.4vw, 5px);
+    height: clamp(4px, 0.4vw, 5px);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pune-gallery-card__dot--active {
+    width: clamp(12px, 1.4vw, 18px);
+    border-radius: 9999px;
+    background: #c49866;
+}
+
 /* --------------------------------------------------------------------------
-   RIGHT COLUMN: 4 Specifications Cards + Action Row
+   RIGHT COLUMN: 4 Specifications Cards + Action Row (Locked Height)
    -------------------------------------------------------------------------- */
 
 .pune-project-bottom-bar__right {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: clamp(8px, 1.2vw, 16px);
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
     min-width: 0;
+    padding-top: clamp(8px, 1.2vw, 14px);
+    padding-bottom: clamp(8px, 1.2vw, 14px);
+    box-sizing: border-box;
 }
 
-/* 4 Specification Cards in a Single Horizontal Row */
+/* 4 Specification Cards in a Single Horizontal Row (ALL 4 CARDS IDENTICAL SIZE) */
 .pune-project-specs-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: clamp(4px, 1vw, 12px);
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(4px, 0.8vw, 10px);
+    flex: 1;
+    min-height: 0;
+    align-items: stretch;
 }
 
 .pune-spec-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: clamp(8px, 1vw, 12px);
-    padding: clamp(6px, 0.9vw, 12px) clamp(6px, 1vw, 14px);
+    background: #fafaf9;
+    border: 1px solid #f0eeeb;
+    border-radius: clamp(7px, 0.8vw, 10px);
+    padding: clamp(4px, 0.7vw, 9px) clamp(4px, 0.8vw, 10px);
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    justify-content: center;
+    gap: 1px;
+    width: 100%;
+    height: 100%;
     min-width: 0;
+    min-height: 0;
     box-sizing: border-box;
 }
 
 .pune-spec-card__header {
     display: flex;
     align-items: center;
-    gap: clamp(3px, 0.5vw, 6px);
+    gap: clamp(3px, 0.4vw, 5px);
+    min-width: 0;
 }
 
 .pune-spec-card__icon {
     color: #b48344;
     flex-shrink: 0;
-    width: clamp(10px, 1vw, 14px);
-    height: clamp(10px, 1vw, 14px);
+    width: clamp(10px, 0.9vw, 13px);
+    height: clamp(10px, 0.9vw, 13px);
 }
 
 .pune-spec-card__label {
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(7.5px, 0.75vw, 10.5px);
+    font-size: clamp(7px, 0.7vw, 9.5px);
     font-weight: 700;
     letter-spacing: 0.5px;
     color: #64748b;
@@ -613,7 +816,7 @@
 
 .pune-spec-card__val {
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(10px, 1.15vw, 16px);
+    font-size: clamp(9.5px, 1.1vw, 15px);
     font-weight: 700;
     color: #0f172a;
     line-height: 1.25;
@@ -625,7 +828,7 @@
 
 .pune-spec-card__sub {
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(7.5px, 0.75vw, 11px);
+    font-size: clamp(7px, 0.7vw, 10px);
     color: #94a3b8;
     font-weight: 500;
     line-height: 1.2;
@@ -639,15 +842,18 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: clamp(6px, 1vw, 14px);
+    padding-top: clamp(4px, 0.6vw, 8px);
     border-top: 1px solid #f1f5f9;
-    gap: clamp(8px, 1.2vw, 16px);
+    gap: clamp(6px, 1vw, 14px);
+    flex-shrink: 0;
+    height: clamp(28px, 3.2vw, 38px);
+    box-sizing: border-box;
 }
 
 .pune-project-action-row__left {
     display: flex;
     align-items: center;
-    gap: clamp(6px, 1vw, 14px);
+    gap: clamp(5px, 0.8vw, 12px);
     min-width: 0;
     overflow: hidden;
 }
@@ -660,8 +866,8 @@
 }
 
 .pune-action-nav-btn {
-    width: clamp(22px, 2.4vw, 32px);
-    height: clamp(22px, 2.4vw, 32px);
+    width: clamp(20px, 2.2vw, 28px);
+    height: clamp(20px, 2.2vw, 28px);
     border: 1px solid #e2e8f0;
     border-radius: clamp(4px, 0.5vw, 6px);
     background: #ffffff;
@@ -681,7 +887,7 @@
 
 .pune-action-counter {
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(9.5px, 0.9vw, 13px);
+    font-size: clamp(9px, 0.85vw, 12.5px);
     font-weight: 700;
     color: #0f172a;
     letter-spacing: 0.5px;
@@ -697,9 +903,9 @@
 
 .pune-action-project-name {
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(9.5px, 0.95vw, 13.5px);
+    font-size: clamp(9px, 0.88vw, 12.5px);
     font-weight: 600;
-    color: #334155;
+    color: #475569;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -712,73 +918,76 @@
     flex-shrink: 0;
 }
 
-/* WhatsApp Button */
+/* WhatsApp Button (Bright Green matching reference) */
 .pune-action-whatsapp-btn {
-    background: #00c853;
+    background: #22c55e;
     color: #ffffff;
     border: none;
-    padding: clamp(6px, 0.8vw, 9px) clamp(10px, 1.4vw, 20px);
-    border-radius: 8px;
+    padding: clamp(4px, 0.6vw, 7px) clamp(8px, 1.2vw, 16px);
+    border-radius: 7px;
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(10px, 0.95vw, 13.5px);
+    font-size: clamp(9.5px, 0.85vw, 12.5px);
     font-weight: 700;
     display: inline-flex;
     align-items: center;
     gap: 5px;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 3px 10px rgba(0, 200, 83, 0.3);
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
     white-space: nowrap;
 }
 
 .pune-action-whatsapp-btn:hover {
-    background: #00b34a;
+    background: #16a34a;
     transform: translateY(-1px);
 }
 
-/* View Details Link (Dark Forest Pill matching image) */
+/* View Details Link (Warm Gold font matching reference image) */
 .pune-action-details-link {
-    background: #0d1e17;
-    color: #ffffff;
-    border-radius: 8px;
-    padding: clamp(6px, 0.8vw, 9px) clamp(10px, 1.4vw, 20px);
+    color: #c49866;
+    background: transparent;
+    border: none;
+    padding: clamp(4px, 0.6vw, 7px) clamp(4px, 0.8vw, 8px);
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(10px, 0.95vw, 13.5px);
-    font-weight: 600;
+    font-size: clamp(9.5px, 0.85vw, 12.5px);
+    font-weight: 700;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     white-space: nowrap;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .pune-action-details-link:hover {
-    background: #07120e;
-    transform: translateY(-1px);
+    color: #a87943;
+    transform: translateX(1px);
 }
 
 .pune-action-details-arrow {
-    font-size: clamp(11px, 1.1vw, 15px);
+    font-size: clamp(11px, 1vw, 14px);
     transition: transform 0.2s ease;
 }
 
 .pune-action-details-link:hover .pune-action-details-arrow {
-    transform: translateX(2px);
+    transform: translateX(3px);
 }
 
-/* Bottom Pagination */
+/* ==========================================================================
+   BOTTOM PAGINATION (Active Gold Pill + Grey Dots for the 6 projects)
+   ========================================================================== */
+
 .pune-showcase-pagination {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: clamp(5px, 0.7vw, 8px);
-    margin-top: clamp(10px, 1.5vw, 18px);
+    gap: clamp(5px, 0.6vw, 7px);
+    margin-top: clamp(12px, 1.5vw, 18px);
 }
 
 .pune-showcase-dot {
-    width: clamp(5px, 0.6vw, 7px);
-    height: clamp(5px, 0.6vw, 7px);
+    width: clamp(5px, 0.55vw, 7px);
+    height: clamp(5px, 0.55vw, 7px);
     border-radius: 50%;
     background: #d1d5db;
     border: none;
@@ -792,61 +1001,48 @@
 }
 
 .pune-showcase-dot--active {
-    width: clamp(20px, 2.5vw, 30px);
+    width: clamp(22px, 2.5vw, 32px);
     border-radius: 9999px;
     background: #c49866;
 }
 
 /* ==========================================================================
-   MOBILE VIEW (MATCHES REFERENCE IMAGE media_1793868090298_4c435816.jpg)
+   RESPONSIVE SCALING - SAME VIEW FOR MOBILE AND LAPTOP
+   Locked equal dimensions across mobile breakpoints
    ========================================================================== */
 
 @media (max-width: 768px) {
-    .pune-project-card {
-        border-radius: 20px;
-        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+    .pune-projects-slider-wrapper {
+        border-radius: 16px;
     }
 
-    /* Video stage aspect matches widescreen walkthrough video */
     .pune-project-stage {
         height: clamp(210px, 56.25vw, 280px);
-        border-bottom: 2px solid #c49866;
-    }
-
-    .pune-project-stage__iframe {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .pune-stage-pill-btn--desktop-only {
-        display: none !important;
     }
 
     .pune-stage-nav-arrow--left {
-        left: 10px;
-        width: 32px;
-        height: 32px;
+        left: 8px;
+        width: 30px;
+        height: 30px;
     }
 
     .pune-stage-right-actions {
-        right: 10px;
-        gap: 8px;
+        right: 8px;
+        gap: 7px;
     }
 
     .pune-stage-side-circle-btn {
-        width: 32px;
-        height: 32px;
+        width: 30px;
+        height: 30px;
     }
 
     .pune-stage-circle-cta {
-        width: 32px;
-        height: 32px;
+        width: 30px;
+        height: 30px;
     }
 
     .pune-project-stage__bottom-info {
-        padding: 8px 12px;
-        background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.75) 50%, rgba(0, 0, 0, 0.95) 100%);
+        padding: 8px 10px;
     }
 
     .pune-project-stage__text {
@@ -854,111 +1050,106 @@
     }
 
     .pune-project-stage__title {
-        font-size: 13px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin: 0;
+        font-size: 12px;
     }
 
     .pune-project-stage__desc {
         display: none !important;
     }
 
-    /* Bottom Bar: Left gallery box + Right specs */
+    /* Retains 2-column layout on mobile with locked uniform height and fit to border */
     .pune-project-bottom-bar {
-        padding: 10px 8px;
-        grid-template-columns: 110px 1fr;
-        gap: 8px;
-    }
-
-    .pune-project-bottom-bar__left {
-        min-height: 100%;
-    }
-
-    .pune-gallery-card {
-        min-height: 100%;
-        border-radius: 8px;
-    }
-
-    .pune-gallery-card__top {
-        top: 6px;
-        left: 6px;
-        right: 6px;
-    }
-
-    .pune-gallery-card__badge {
-        font-size: 8px;
-        padding: 2px 6px;
-    }
-
-    .pune-gallery-card__counter {
-        font-size: 8px;
-        padding: 2px 5px;
-    }
-
-    .pune-gallery-card__bottom {
-        bottom: 6px;
-        left: 6px;
-        right: 6px;
-    }
-
-    .pune-gallery-card__label {
-        font-size: 9px;
-    }
-
-    /* 4 Specs in a single row */
-    .pune-project-specs-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 4px;
-    }
-
-    .pune-spec-card {
-        padding: 4px 5px;
-        border-radius: 8px;
-        border: 1px solid #edf2f7;
-    }
-
-    .pune-spec-card__label {
-        font-size: 7.5px;
-    }
-
-    .pune-spec-card__val {
-        font-size: 10px;
-    }
-
-    .pune-spec-card__sub {
-        font-size: 7.5px;
-    }
-
-    /* Action Row */
-    .pune-project-action-row {
-        padding-top: 8px;
+        padding: 0 6px 0 0;
+        grid-template-columns: 105px 1fr;
         gap: 6px;
+        height: 108px;
+        min-height: 108px;
+        max-height: 108px;
+    }
+
+    .pune-project-bottom-bar__left,
+    .pune-gallery-card,
+    .pune-gallery-card__img,
+    .pune-gallery-card__overlay {
+        border-bottom-left-radius: 16px;
+    }
+
+    .pune-project-bottom-bar__right {
+        padding-top: 6px;
+        padding-bottom: 6px;
     }
 
     .pune-action-project-name {
         display: none;
     }
 
-    .pune-action-nav-btns button {
-        width: 24px;
-        height: 24px;
+    .pune-project-action-row {
+        padding-top: 4px;
+        gap: 4px;
+        height: 28px;
     }
 
-    .pune-action-counter {
-        font-size: 10px;
+    .pune-spec-card {
+        padding: 3px 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pune-project-stage {
+        height: clamp(195px, 56.25vw, 240px);
+    }
+
+    .pune-project-stage__top-row {
+        top: 6px;
+        left: 6px;
+        right: 6px;
+    }
+
+    .pune-project-bottom-bar {
+        padding: 0 4px 0 0;
+        grid-template-columns: 92px 1fr;
+        gap: 5px;
+        height: 98px;
+        min-height: 98px;
+        max-height: 98px;
+    }
+
+    .pune-project-bottom-bar__left,
+    .pune-gallery-card,
+    .pune-gallery-card__img,
+    .pune-gallery-card__overlay {
+        border-bottom-left-radius: 16px;
+    }
+
+    .pune-project-bottom-bar__right {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    .pune-spec-card__label {
+        font-size: 6.5px;
+    }
+
+    .pune-spec-card__val {
+        font-size: 9px;
+    }
+
+    .pune-spec-card__sub {
+        font-size: 6.5px;
     }
 
     .pune-action-whatsapp-btn {
-        padding: 6px 10px;
-        font-size: 10.5px;
-        border-radius: 7px;
+        padding: 3px 6px;
+        font-size: 9px;
+        gap: 3px;
     }
 
     .pune-action-details-link {
-        padding: 6px 10px;
-        font-size: 10.5px;
-        border-radius: 7px;
+        font-size: 9px;
+        padding: 3px 3px;
+    }
+
+    .pune-action-counter {
+        font-size: 8.5px;
     }
 }

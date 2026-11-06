@@ -19,6 +19,7 @@ import {
     Film,
     ThumbsUp,
     Share2,
+    Play,
 } from "lucide-react";
 import { FaYoutube, FaWhatsapp } from "react-icons/fa";
 import "./FeaturedProperties.css";
@@ -203,7 +204,7 @@ export const featuredPuneProjects = [
 ];
 
 /* --------------------------------------------------------------------------
-   Mini Gallery Slideshow (Left box in the bottom bar)
+   Mini Gallery Slideshow (Left box in the bottom bar - matches reference)
    -------------------------------------------------------------------------- */
 function SiteImageSlideshow({ images = [], projectName = "Project" }) {
     const [currentIdx, setCurrentIdx] = useState(0);
@@ -238,7 +239,7 @@ function SiteImageSlideshow({ images = [], projectName = "Project" }) {
             />
             <div className="pune-gallery-card__overlay" />
 
-            {/* Top Bar: GALLERY badge + 01/05 Counter */}
+            {/* Top Bar: • GALLERY badge + 01/05 Counter */}
             <div className="pune-gallery-card__top">
                 <span className="pune-gallery-card__badge">
                     <span className="pune-gallery-card__badge-dot" />
@@ -249,29 +250,50 @@ function SiteImageSlideshow({ images = [], projectName = "Project" }) {
                 </span>
             </div>
 
-            {/* Bottom Info: Label + mini arrow controls */}
+            {/* Bottom Content: Title + Sub-row with (< > buttons) and (Pagination dots) */}
             <div className="pune-gallery-card__bottom">
-                <span className="pune-gallery-card__label" title={imgLabel}>
+                <h4 className="pune-gallery-card__title" title={imgLabel}>
                     {imgLabel}
-                </span>
+                </h4>
 
-                <div className="pune-gallery-card__controls">
-                    <button
-                        type="button"
-                        onClick={handlePrev}
-                        className="pune-gallery-card__btn"
-                        aria-label="Previous gallery image"
-                    >
-                        <ChevronLeft size={13} />
-                    </button>
-                    <button
-                        type="button"
-                        onClick={handleNext}
-                        className="pune-gallery-card__btn"
-                        aria-label="Next gallery image"
-                    >
-                        <ChevronRight size={13} />
-                    </button>
+                <div className="pune-gallery-card__footer-row">
+                    {/* Mini Arrow buttons < > */}
+                    <div className="pune-gallery-card__arrows">
+                        <button
+                            type="button"
+                            onClick={handlePrev}
+                            className="pune-gallery-card__arrow-btn"
+                            aria-label="Previous gallery image"
+                        >
+                            <ChevronLeft size={13} strokeWidth={2.4} />
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleNext}
+                            className="pune-gallery-card__arrow-btn"
+                            aria-label="Next gallery image"
+                        >
+                            <ChevronRight size={13} strokeWidth={2.4} />
+                        </button>
+                    </div>
+
+                    {/* Active Gold Pill + Grey Dots Indicator */}
+                    <div className="pune-gallery-card__dots" aria-label="Gallery slide indicators">
+                        {images.map((_, idx) => (
+                            <button
+                                key={idx}
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setCurrentIdx(idx);
+                                }}
+                                className={`pune-gallery-card__dot ${
+                                    idx === currentIdx ? "pune-gallery-card__dot--active" : ""
+                                }`}
+                                aria-label={`Go to photo ${idx + 1}`}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
@@ -279,17 +301,19 @@ function SiteImageSlideshow({ images = [], projectName = "Project" }) {
 }
 
 /* --------------------------------------------------------------------------
-   Main FeaturedProperties Component
+   Main FeaturedProperties Component - Multi-Container Sideways Project Slideshow
    -------------------------------------------------------------------------- */
 export default function FeaturedProperties() {
     const [activeIndex, setActiveIndex] = useState(0);
     const [isMuted, setIsMuted] = useState(true);
     const [isFullSize, setIsFullSize] = useState(true);
-    const [isLiked, setIsLiked] = useState(false);
+    const [likedProjects, setLikedProjects] = useState({});
+    const [touchStartX, setTouchStartX] = useState(0);
+    const [touchEndX, setTouchEndX] = useState(0);
+    const [isDragging, setIsDragging] = useState(false);
     const stageContainerRef = useRef(null);
 
     const totalSlides = featuredPuneProjects.length;
-    const currentProject = featuredPuneProjects[activeIndex] || featuredPuneProjects[0];
 
     const handlePrevProject = () => {
         setActiveIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
@@ -312,12 +336,16 @@ export default function FeaturedProperties() {
         }
     };
 
-    const handleShare = (e) => {
+    const toggleLike = (projectId) => {
+        setLikedProjects((prev) => ({ ...prev, [projectId]: !prev[projectId] }));
+    };
+
+    const handleShare = (project, e) => {
         e.stopPropagation();
         if (typeof navigator !== "undefined" && navigator.share) {
             navigator.share({
-                title: currentProject.name,
-                text: `${currentProject.title} - Pune Property Investor`,
+                title: project.name,
+                text: `${project.title} - Pune Property Investor`,
                 url: window.location.href,
             }).catch(() => {});
         } else if (typeof navigator !== "undefined" && navigator.clipboard) {
@@ -326,11 +354,67 @@ export default function FeaturedProperties() {
         }
     };
 
-    const handleWhatsApp = (e) => {
+    const handleWhatsApp = (project, e) => {
         e.stopPropagation();
-        const msg = `Hello Pune Property Investor, I am interested in ${currentProject.name} (${currentProject.location}) starting at ${currentProject.price}. Please share project details, brochure, and sample flat visit appointment.`;
+        const msg = `Hello Pune Property Investor, I am interested in ${project.name} (${project.location}) starting at ${project.price}. Please share project details, brochure, and sample flat visit appointment.`;
         const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
         window.open(url, "_blank", "noopener,noreferrer");
+    };
+
+    // Keyboard Arrow Left/Right controls
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "ArrowLeft") handlePrevProject();
+            else if (e.key === "ArrowRight") handleNextProject();
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [totalSlides]);
+
+    // Touch Swipe Handlers for mobile & tablet
+    const handleTouchStart = (e) => {
+        setTouchStartX(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchMove = (e) => {
+        setTouchEndX(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchEnd = () => {
+        if (!touchStartX || !touchEndX) return;
+        const diff = touchStartX - touchEndX;
+        if (diff > 45) {
+            handleNextProject();
+        } else if (diff < -45) {
+            handlePrevProject();
+        }
+        setTouchStartX(0);
+        setTouchEndX(0);
+    };
+
+    // Mouse Drag Handlers for laptop
+    const handleMouseDown = (e) => {
+        setIsDragging(true);
+        setTouchStartX(e.clientX);
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isDragging) return;
+        setTouchEndX(e.clientX);
+    };
+
+    const handleMouseUp = () => {
+        if (!isDragging) return;
+        setIsDragging(false);
+        if (!touchStartX || !touchEndX) return;
+        const diff = touchStartX - touchEndX;
+        if (diff > 50) {
+            handleNextProject();
+        } else if (diff < -50) {
+            handlePrevProject();
+        }
+        setTouchStartX(0);
+        setTouchEndX(0);
     };
 
     return (
@@ -359,309 +443,338 @@ export default function FeaturedProperties() {
                     </p>
                 </div>
 
-                {/* Master Showcase Frame (Matches Reference Image) */}
-                <div className="pune-project-card" ref={stageContainerRef}>
-                    {/* ========================================================
-                        TOP HALF: Video Stage (Black Background + Center Vertical Video)
-                        ======================================================== */}
-                    <div className={`pune-project-stage ${isFullSize ? "pune-project-stage--fill" : ""}`}>
-                        {/* Huge Typography Watermark on Left Stage */}
-                        <div className="pune-project-stage__watermark" aria-hidden="true">
-                            {currentProject.brandName}
-                        </div>
+                {/* Slideshow Viewport: Each Project has its Own Distinct Slide Container */}
+                <div
+                    className="pune-projects-slider-wrapper"
+                    ref={stageContainerRef}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                >
+                    <div
+                        className="pune-projects-slider-track"
+                        style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+                    >
+                        {featuredPuneProjects.map((project, pIdx) => {
+                            const isCurrent = pIdx === activeIndex;
+                            const isLiked = !!likedProjects[project.id];
 
-                        {/* Top Controls Row */}
-                        <div className="pune-project-stage__top-row">
-                            {/* Top Left: SAMPLE FLAT TOUR badge */}
-                            <div className="pune-project-stage__tour-badge">
-                                <span className="pune-project-stage__tour-dot" />
-                                <span>{currentProject.badge}</span>
-                            </div>
+                            return (
+                                <div key={project.id} className="pune-project-slide">
+                                    <div className="pune-project-card">
+                                        {/* TOP HALF: Video / Media Stage */}
+                                        <div className={`pune-project-stage ${isFullSize ? "pune-project-stage--fill" : ""}`}>
+                                            {/* Huge Typography Watermark on Left Stage */}
+                                            <div className="pune-project-stage__watermark" aria-hidden="true">
+                                                {project.brandName}
+                                            </div>
 
-                            {/* Top Right: Controls (Shorts / Full Size on desktop, Sound Off, Fullscreen, YouTube) */}
-                            <div className="pune-project-stage__top-actions">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsFullSize((prev) => !prev)}
-                                    className="pune-stage-pill-btn pune-stage-pill-btn--desktop-only"
-                                    title={isFullSize ? "Switch to Original Video Aspect" : "Switch to Full Size Container Video"}
-                                >
-                                    <Film size={13} />
-                                    <span>{isFullSize ? "Full Size" : "Original"}</span>
-                                </button>
+                                            {/* Top Controls Row (Matches Reference Exactly) */}
+                                            <div className="pune-project-stage__top-row">
+                                                {/* Left Badges: SAMPLE FLAT TOUR + PPI SHORTS */}
+                                                <div className="pune-project-stage__left-badges">
+                                                    <div className="pune-project-stage__tour-badge">
+                                                        <span className="pune-project-stage__tour-dot" />
+                                                        <span>{project.badge}</span>
+                                                    </div>
 
-                                <a
-                                    href={currentProject.youtubeUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="pune-stage-pill-btn pune-stage-pill-btn--desktop-only"
-                                    title="Watch on YouTube Shorts"
-                                >
-                                    <Clock size={13} />
-                                    <span>Shorts</span>
-                                </a>
+                                                    <a
+                                                        href={project.youtubeUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="pune-stage-pill-btn pune-stage-pill-btn--shorts"
+                                                        title="Watch on PPI Shorts"
+                                                    >
+                                                        <span className="pune-stage-pill-dot--white" />
+                                                        <span>PPI SHORTS</span>
+                                                    </a>
+                                                </div>
 
-                                <button
-                                    type="button"
-                                    onClick={toggleSound}
-                                    className="pune-stage-pill-btn"
-                                    title={isMuted ? "Turn Sound On" : "Turn Sound Off"}
-                                >
-                                    {isMuted ? <VolumeX size={13} /> : <Volume2 size={13} />}
-                                    <span>{isMuted ? "Sound Off" : "Sound On"}</span>
-                                </button>
+                                                {/* Right Action Controls: Sound Off, Fullscreen, YouTube */}
+                                                <div className="pune-project-stage__top-actions">
+                                                    <button
+                                                        type="button"
+                                                        onClick={toggleSound}
+                                                        className="pune-stage-pill-btn"
+                                                        title={isMuted ? "Turn Sound On" : "Turn Sound Off"}
+                                                    >
+                                                        {isMuted ? <VolumeX size={13} /> : <Volume2 size={13} />}
+                                                        <span>{isMuted ? "Sound Off" : "Sound On"}</span>
+                                                    </button>
 
-                                <button
-                                    type="button"
-                                    onClick={toggleFullscreen}
-                                    className="pune-stage-pill-btn pune-stage-pill-btn--icon"
-                                    title="View Fullscreen"
-                                >
-                                    <Maximize2 size={13} />
-                                </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={toggleFullscreen}
+                                                        className="pune-stage-pill-btn pune-stage-pill-btn--icon"
+                                                        title="View Fullscreen"
+                                                    >
+                                                        <Maximize2 size={13} />
+                                                    </button>
 
-                                <a
-                                    href={currentProject.youtubeUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="pune-stage-yt-btn"
-                                    aria-label="Open YouTube"
-                                    title="Open YouTube video"
-                                >
-                                    <FaYoutube size={15} color="#ffffff" />
-                                    <ExternalLink size={11} color="rgba(255,255,255,0.85)" />
-                                </a>
-                            </div>
-                        </div>
+                                                    <a
+                                                        href={project.youtubeUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="pune-stage-yt-btn"
+                                                        aria-label="Open YouTube"
+                                                        title="Open YouTube video"
+                                                    >
+                                                        <FaYoutube size={15} color="#ffffff" />
+                                                        <ExternalLink size={11} color="rgba(255,255,255,0.85)" />
+                                                    </a>
+                                                </div>
+                                            </div>
 
-                        {/* Side Navigation Arrow: Left */}
-                        <button
-                            type="button"
-                            onClick={handlePrevProject}
-                            className="pune-stage-nav-arrow pune-stage-nav-arrow--left"
-                            aria-label="Previous property"
-                            title="Previous property"
-                        >
-                            <ChevronLeft size={22} />
-                        </button>
+                                            {/* Side Navigation Arrow: Left (Slides sideways) */}
+                                            <button
+                                                type="button"
+                                                onClick={handlePrevProject}
+                                                className="pune-stage-nav-arrow pune-stage-nav-arrow--left"
+                                                aria-label="Previous property"
+                                                title="Previous property"
+                                            >
+                                                <ChevronLeft size={22} />
+                                            </button>
 
-                        {/* Center Stage: Widescreen Video Player */}
-                        <div className="pune-project-stage__video-frame">
-                            <iframe
-                                src={`https://www.youtube-nocookie.com/embed/${currentProject.youtubeId}?autoplay=1&mute=${
-                                    isMuted ? 1 : 0
-                                }&loop=1&playlist=${currentProject.youtubeId}&controls=1&modestbranding=1&rel=0&playsinline=1${
-                                    currentProject.startSeconds ? `&start=${currentProject.startSeconds}` : ""
-                                }`}
-                                title={currentProject.name}
-                                className="pune-project-stage__iframe"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                            />
+                                            {/* Center Stage: Widescreen Video Player or Poster */}
+                                            <div className="pune-project-stage__video-frame">
+                                                {isCurrent ? (
+                                                    <iframe
+                                                        src={`https://www.youtube-nocookie.com/embed/${project.youtubeId}?autoplay=1&mute=${
+                                                            isMuted ? 1 : 0
+                                                        }&loop=1&playlist=${project.youtubeId}&controls=1&modestbranding=1&rel=0&playsinline=1${
+                                                            project.startSeconds ? `&start=${project.startSeconds}` : ""
+                                                        }`}
+                                                        title={project.name}
+                                                        className="pune-project-stage__iframe"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowFullScreen
+                                                    />
+                                                ) : (
+                                                    <div className="pune-project-stage__poster">
+                                                        <img
+                                                            src={project.thumbnail}
+                                                            alt={project.name}
+                                                            className="pune-project-stage__poster-img"
+                                                            loading="lazy"
+                                                        />
+                                                        <div className="pune-project-stage__poster-overlay">
+                                                            <div className="pune-project-stage__poster-play">
+                                                                <Play size={28} fill="#ffffff" color="#ffffff" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
 
-                            {/* Watermark logo badge in top right of video */}
-                            <div className="pune-video-watermark-pill" aria-hidden="true">
-                                <img
-                                    src={`${basePath}/images/logo.png`}
-                                    alt="PPI Logo"
-                                    className="pune-video-watermark-logo"
-                                />
-                            </div>
-                        </div>
+                                                {/* Watermark logo badge in top right of video */}
+                                                <div className="pune-video-watermark-pill" aria-hidden="true">
+                                                    <img
+                                                        src={`${basePath}/images/logo.png`}
+                                                        alt="PPI Logo"
+                                                        className="pune-video-watermark-logo"
+                                                    />
+                                                </div>
+                                            </div>
 
-                        {/* Right Action Column (Matches Reference Image: Like, Next, Share, View Details) */}
-                        <div className="pune-stage-right-actions">
-                            {/* 1. Like Button */}
-                            <button
-                                type="button"
-                                onClick={() => setIsLiked((prev) => !prev)}
-                                className={`pune-stage-side-circle-btn ${isLiked ? "pune-stage-side-circle-btn--liked" : ""}`}
-                                aria-label="Like property"
-                                title="Like property"
-                            >
-                                <ThumbsUp size={16} />
-                            </button>
+                                            {/* Right Action Column (Matches Reference Image) */}
+                                            <div className="pune-stage-right-actions">
+                                                {/* Like Button */}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => toggleLike(project.id)}
+                                                    className={`pune-stage-side-circle-btn ${isLiked ? "pune-stage-side-circle-btn--liked" : ""}`}
+                                                    aria-label="Like property"
+                                                    title="Like property"
+                                                >
+                                                    <ThumbsUp size={16} />
+                                                </button>
 
-                            {/* 2. Next Property Arrow */}
-                            <button
-                                type="button"
-                                onClick={handleNextProject}
-                                className="pune-stage-side-circle-btn pune-stage-side-circle-btn--next"
-                                aria-label="Next property"
-                                title="Next property"
-                            >
-                                <ChevronRight size={20} />
-                            </button>
+                                                {/* Next Property Arrow with Glowing Green Border */}
+                                                <button
+                                                    type="button"
+                                                    onClick={handleNextProject}
+                                                    className="pune-stage-side-circle-btn pune-stage-side-circle-btn--next"
+                                                    aria-label="Next property"
+                                                    title="Next property"
+                                                >
+                                                    <ChevronRight size={20} />
+                                                </button>
 
-                            {/* 3. Share Button */}
-                            <button
-                                type="button"
-                                onClick={handleShare}
-                                className="pune-stage-side-circle-btn"
-                                aria-label="Share property"
-                                title="Share property"
-                            >
-                                <Share2 size={16} />
-                            </button>
+                                                {/* Share Button */}
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => handleShare(project, e)}
+                                                    className="pune-stage-side-circle-btn"
+                                                    aria-label="Share property"
+                                                    title="Share property"
+                                                >
+                                                    <Share2 size={16} />
+                                                </button>
 
-                            {/* 4. White View Project CTA Circle */}
-                            <Link
-                                href={`/buy`}
-                                className="pune-stage-circle-cta"
-                                aria-label={`View ${currentProject.name} details`}
-                                title="View details"
-                            >
-                                <ArrowUpRight size={18} strokeWidth={2.4} />
-                            </Link>
-                        </div>
+                                                {/* White Circular CTA with Arrow */}
+                                                <Link
+                                                    href={`/buy`}
+                                                    className="pune-stage-circle-cta"
+                                                    aria-label={`View ${project.name} details`}
+                                                    title="View details"
+                                                >
+                                                    <ArrowUpRight size={18} strokeWidth={2.4} />
+                                                </Link>
+                                            </div>
 
-                        {/* Bottom Stage Overlay: Project Details Headline */}
-                        <div className="pune-project-stage__bottom-info">
-                            <div className="pune-project-stage__text">
-                                <h3 className="pune-project-stage__title">
-                                    {currentProject.title}
-                                </h3>
-                                <p className="pune-project-stage__desc">
-                                    {currentProject.tagline}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                                            {/* Bottom Stage Overlay: Project Details Headline */}
+                                            <div className="pune-project-stage__bottom-info">
+                                                <div className="pune-project-stage__text">
+                                                    <h3 className="pune-project-stage__title">
+                                                        {project.title}
+                                                    </h3>
+                                                    <p className="pune-project-stage__desc">
+                                                        {project.tagline}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                    {/* ========================================================
-                        BOTTOM HALF: White Bar (Gallery Preview + 4 Specs + Actions)
-                        ======================================================== */}
-                    <div className="pune-project-bottom-bar">
-                        {/* LEFT COLUMN: Gallery Preview Card */}
-                        <div className="pune-project-bottom-bar__left">
-                            <SiteImageSlideshow
-                                images={currentProject.siteImages}
-                                projectName={currentProject.name}
-                            />
-                        </div>
+                                        {/* BOTTOM HALF: White Bar (Gallery Preview + 4 Specs + Actions) */}
+                                        <div className="pune-project-bottom-bar">
+                                            {/* LEFT COLUMN: Gallery Preview Card matching reference */}
+                                            <div className="pune-project-bottom-bar__left">
+                                                <SiteImageSlideshow
+                                                    images={project.siteImages}
+                                                    projectName={project.name}
+                                                />
+                                            </div>
 
-                        {/* RIGHT COLUMN: 4 Spec Cards + Bottom Action Row */}
-                        <div className="pune-project-bottom-bar__right">
-                            {/* 4 Specification Cards in a Row */}
-                            <div className="pune-project-specs-grid">
-                                {/* 1. COMPLETION */}
-                                <div className="pune-spec-card">
-                                    <div className="pune-spec-card__header">
-                                        <Calendar size={14} className="pune-spec-card__icon" />
-                                        <span className="pune-spec-card__label">COMPLETION</span>
+                                            {/* RIGHT COLUMN: 4 Spec Cards + Bottom Action Row */}
+                                            <div className="pune-project-bottom-bar__right">
+                                                {/* 4 Specification Cards in a Row */}
+                                                <div className="pune-project-specs-grid">
+                                                    {/* 1. COMPLETION */}
+                                                    <div className="pune-spec-card">
+                                                        <div className="pune-spec-card__header">
+                                                            <Calendar size={14} className="pune-spec-card__icon" />
+                                                            <span className="pune-spec-card__label">COMPLETION</span>
+                                                        </div>
+                                                        <strong className="pune-spec-card__val">
+                                                            {project.completion}
+                                                        </strong>
+                                                        <span className="pune-spec-card__sub">
+                                                            {project.completionSub}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* 2. CONFIG */}
+                                                    <div className="pune-spec-card">
+                                                        <div className="pune-spec-card__header">
+                                                            <Layers size={14} className="pune-spec-card__icon" />
+                                                            <span className="pune-spec-card__label">CONFIG</span>
+                                                        </div>
+                                                        <strong className="pune-spec-card__val">
+                                                            {project.configurations}
+                                                        </strong>
+                                                        <span className="pune-spec-card__sub">
+                                                            {project.configSub}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* 3. CARPET */}
+                                                    <div className="pune-spec-card">
+                                                        <div className="pune-spec-card__header">
+                                                            <Home size={14} className="pune-spec-card__icon" />
+                                                            <span className="pune-spec-card__label">CARPET</span>
+                                                        </div>
+                                                        <strong className="pune-spec-card__val">
+                                                            {project.carpet}
+                                                        </strong>
+                                                        <span className="pune-spec-card__sub">
+                                                            {project.carpetSub}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* 4. PRICE */}
+                                                    <div className="pune-spec-card">
+                                                        <div className="pune-spec-card__header">
+                                                            <Tag size={14} className="pune-spec-card__icon" />
+                                                            <span className="pune-spec-card__label">PRICE</span>
+                                                        </div>
+                                                        <strong className="pune-spec-card__val">
+                                                            {project.price}
+                                                        </strong>
+                                                        <span className="pune-spec-card__sub">
+                                                            {project.priceSub}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                {/* Bottom Action Row (Navigation Controls + WhatsApp + View Details) */}
+                                                <div className="pune-project-action-row">
+                                                    <div className="pune-project-action-row__left">
+                                                        {/* Arrow buttons to slide sideways */}
+                                                        <div className="pune-action-nav-btns">
+                                                            <button
+                                                                type="button"
+                                                                onClick={handlePrevProject}
+                                                                className="pune-action-nav-btn"
+                                                                aria-label="Previous project"
+                                                            >
+                                                                <ChevronLeft size={15} />
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                onClick={handleNextProject}
+                                                                className="pune-action-nav-btn"
+                                                                aria-label="Next project"
+                                                            >
+                                                                <ChevronRight size={15} />
+                                                            </button>
+                                                        </div>
+
+                                                        {/* Counter (01 / 06) */}
+                                                        <span className="pune-action-counter">
+                                                            <strong>{String(pIdx + 1).padStart(2, "0")}</strong>
+                                                            <span className="pune-action-counter__sep">/</span>
+                                                            <span>{String(totalSlides).padStart(2, "0")}</span>
+                                                        </span>
+
+                                                        {/* Project Name • Locality (Desktop/Laptop) */}
+                                                        <span className="pune-action-project-name">
+                                                            {project.name} • {project.localityName}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="pune-project-action-row__right">
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => handleWhatsApp(project, e)}
+                                                            className="pune-action-whatsapp-btn"
+                                                            aria-label="Connect on WhatsApp"
+                                                        >
+                                                            <FaWhatsapp size={15} />
+                                                            <span>WhatsApp</span>
+                                                        </button>
+
+                                                        <Link
+                                                            href="/buy"
+                                                            className="pune-action-details-link"
+                                                        >
+                                                            <span>View Details</span>
+                                                            <span className="pune-action-details-arrow">→</span>
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <strong className="pune-spec-card__val">
-                                        {currentProject.completion}
-                                    </strong>
-                                    <span className="pune-spec-card__sub">
-                                        {currentProject.completionSub}
-                                    </span>
                                 </div>
-
-                                {/* 2. CONFIG */}
-                                <div className="pune-spec-card">
-                                    <div className="pune-spec-card__header">
-                                        <Layers size={14} className="pune-spec-card__icon" />
-                                        <span className="pune-spec-card__label">CONFIG</span>
-                                    </div>
-                                    <strong className="pune-spec-card__val">
-                                        {currentProject.configurations}
-                                    </strong>
-                                    <span className="pune-spec-card__sub">
-                                        {currentProject.configSub}
-                                    </span>
-                                </div>
-
-                                {/* 3. CARPET */}
-                                <div className="pune-spec-card">
-                                    <div className="pune-spec-card__header">
-                                        <Home size={14} className="pune-spec-card__icon" />
-                                        <span className="pune-spec-card__label">CARPET</span>
-                                    </div>
-                                    <strong className="pune-spec-card__val">
-                                        {currentProject.carpet}
-                                    </strong>
-                                    <span className="pune-spec-card__sub">
-                                        {currentProject.carpetSub}
-                                    </span>
-                                </div>
-
-                                {/* 4. PRICE */}
-                                <div className="pune-spec-card">
-                                    <div className="pune-spec-card__header">
-                                        <Tag size={14} className="pune-spec-card__icon" />
-                                        <span className="pune-spec-card__label">PRICE</span>
-                                    </div>
-                                    <strong className="pune-spec-card__val">
-                                        {currentProject.price}
-                                    </strong>
-                                    <span className="pune-spec-card__sub">
-                                        {currentProject.priceSub}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Bottom Action Row (Navigation Controls + WhatsApp + View Details) */}
-                            <div className="pune-project-action-row">
-                                <div className="pune-project-action-row__left">
-                                    {/* Arrow buttons */}
-                                    <div className="pune-action-nav-btns">
-                                        <button
-                                            type="button"
-                                            onClick={handlePrevProject}
-                                            className="pune-action-nav-btn"
-                                            aria-label="Previous project"
-                                        >
-                                            <ChevronLeft size={16} />
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={handleNextProject}
-                                            className="pune-action-nav-btn"
-                                            aria-label="Next project"
-                                        >
-                                            <ChevronRight size={16} />
-                                        </button>
-                                    </div>
-
-                                    {/* Counter (01 / 06) */}
-                                    <span className="pune-action-counter">
-                                        <strong>{String(activeIndex + 1).padStart(2, "0")}</strong>
-                                        <span className="pune-action-counter__sep">/</span>
-                                        <span>{String(totalSlides).padStart(2, "0")}</span>
-                                    </span>
-
-                                    {/* Project Name • Locality */}
-                                    <span className="pune-action-project-name">
-                                        {currentProject.name} • {currentProject.localityName}
-                                    </span>
-                                </div>
-
-                                <div className="pune-project-action-row__right">
-                                    <button
-                                        type="button"
-                                        onClick={handleWhatsApp}
-                                        className="pune-action-whatsapp-btn"
-                                        aria-label="Connect on WhatsApp"
-                                    >
-                                        <FaWhatsapp size={16} />
-                                        <span>WhatsApp</span>
-                                    </button>
-
-                                    <Link
-                                        href="/buy"
-                                        className="pune-action-details-link"
-                                    >
-                                        <span>View Details</span>
-                                        <span className="pune-action-details-arrow">→</span>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
+                            );
+                        })}
                     </div>
                 </div>
 
-                {/* Bottom Pagination Dots (Active Gold Pill + Grey Dots) */}
+                {/* Bottom Pagination Dots (Active Gold Pill + Grey Dots for the 6 projects) */}
                 <div className="pune-showcase-pagination" aria-label="Slide indicators">
                     {featuredPuneProjects.map((_, idx) => (
                         <button
