@@ -24,9 +24,27 @@ function PropertyCard({ property }) {
             ? `${property.bedrooms} BHK Apartment`
             : property.propertyType || "Residential");
 
-    const statusText = property.status || "Ready to Move";
     const developerName = property.developer || property.brandName || "Prime Realty";
-    const reraText = property.reraId || property.rera ? "RERA Approved" : "RERA Approved";
+
+    /* ── Price: split into amount line + "Cr" line ── */
+    const rawPrice = property.price || "";
+    // Extract the rupee amount part and the unit (Cr/Lac)
+    const priceMatch = rawPrice.match(/^(₹\s*[\d.,]+\s*-\s*[\d.,]+)\s*(Cr|Lac|L)?$/i);
+    const priceAmount = priceMatch ? priceMatch[1] : rawPrice;
+    const priceUnit = priceMatch ? priceMatch[2] || "" : "";
+
+    /* ── Possession / Status pill ── */
+    const possessionRaw = property.possession || property.status || "Ready to Move";
+    const isReady = possessionRaw.toLowerCase() === "ready";
+    const possessionLabel = isReady
+        ? "Ready to Move"
+        : `Possession ${possessionRaw}`;
+
+    /* ── RERA: show the actual RERA ID when available ── */
+    const reraDisplay =
+        property.reraId && property.reraId !== "RERA Approved"
+            ? property.reraId
+            : property.rera || "RERA Approved";
 
     // Loads the official company org logo directly from Google's favicon service.
     const developerDomain = property.domain || "parasbuildtech.com";
@@ -63,9 +81,8 @@ function PropertyCard({ property }) {
                     {/* Star Favorite Button */}
                     <button
                         type="button"
-                        className={`property-card__star-btn ${
-                            isStarred ? "property-card__star-btn--active" : ""
-                        }`}
+                        className={`property-card__star-btn ${isStarred ? "property-card__star-btn--active" : ""
+                            }`}
                         onClick={toggleStar}
                         aria-label={
                             isStarred ? "Remove from favorites" : "Add to favorites"
@@ -79,7 +96,11 @@ function PropertyCard({ property }) {
                         />
                     </button>
 
-                    {/* OVERLAPPING CIRCULAR COMPANY ORG LOGO (From Google) */}
+                </div>
+
+                {/* ── INNER CARD (smaller, sits inside the outer card's bottom) ── */}
+                <div className="property-card__inner">
+                    {/* Overlapping Circular Company Logo */}
                     <div className="property-card__logo-wrap">
                         <div className="property-card__logo-badge">
                             {!logoFailed ? (
@@ -108,47 +129,49 @@ function PropertyCard({ property }) {
                             )}
                         </div>
                     </div>
-                </div>
 
-                {/* BOTTOM WHITE CARD BODY */}
-                <div className="property-card__body">
-                    {/* Project Title */}
-                    <h3 className="property-card__title">
-                        {property.name}
-                    </h3>
+                    {/* Inner card text body */}
+                    <div className="property-card__body">
+                        {/* Project Title */}
+                        <h3 className="property-card__title">
+                            {property.name}
+                        </h3>
 
-                    {/* Configuration & Locality Subtitle */}
-                    <p className="property-card__sub">
-                        {configText}, {property.location}
-                    </p>
+                        {/* Configuration & Locality Subtitle (truncated with ellipsis) */}
+                        <p className="property-card__sub">
+                            {configText},…
+                        </p>
 
-                    {/* Price & Status Row */}
-                    <div className="property-card__price-row">
-                        <strong className="property-card__price">
-                            {property.price}
-                        </strong>
+                        {/* Price & Status Row */}
+                        <div className="property-card__price-row">
+                            <strong className="property-card__price">
+                                <span className="property-card__price-amount">{priceAmount}</span>
+                                {priceUnit && (
+                                    <span className="property-card__price-unit">{priceUnit}</span>
+                                )}
+                            </strong>
 
-                        <span
-                            className={`property-card__status ${
-                                statusText.toLowerCase().includes("ready")
-                                    ? "property-card__status--ready"
-                                    : "property-card__status--ongoing"
-                            }`}
-                        >
-                            {statusText}
-                        </span>
-                    </div>
+                            <span
+                                className={`property-card__status ${isReady
+                                        ? "property-card__status--ready"
+                                        : "property-card__status--possession"
+                                    }`}
+                            >
+                                {possessionLabel}
+                            </span>
+                        </div>
 
-                    {/* Footer Row: RERA Approved & View Project CTA */}
-                    <div className="property-card__footer">
-                        <span className="property-card__rera">
-                            {reraText}
-                        </span>
+                        {/* Footer Row: RERA ID & View Project CTA */}
+                        <div className="property-card__footer">
+                            <span className="property-card__rera">
+                                {reraDisplay}
+                            </span>
 
-                        <span className="property-card__cta">
-                            <span>View Project</span>
-                            <ArrowUpRight size={14} className="property-card__cta-arrow" />
-                        </span>
+                            <span className="property-card__cta">
+                                <span>View Project</span>
+                                <ArrowUpRight size={14} className="property-card__cta-arrow" />
+                            </span>
+                        </div>
                     </div>
                 </div>
             </Link>

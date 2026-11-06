@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import locationsData from "../../data/locationsData";
@@ -10,7 +10,7 @@ import "./BrowseLocations.css";
 function LocalityCard({
     location,
     keyPrefix = "",
-    isActive = false,
+    activeType = null, // "top" | "bottom" | null
     onCardClick = null,
     isDesktop = false,
 }) {
@@ -88,13 +88,19 @@ function LocalityCard({
         );
     }
 
-    // Mobile uses interactive clickable card that updates the spotlight container & can be tapped
+    // Mobile uses interactive card with live boundary touch detection
+    const activeClass =
+        activeType === "top"
+            ? "locality-card--active-top"
+            : activeType === "bottom"
+            ? "locality-card--active-bottom"
+            : "";
+
     return (
         <div
             onClick={onCardClick}
-            className={`locality-card ${location.isFeatured ? "locality-card--featured" : ""} ${
-                isActive ? "locality-card--active" : ""
-            }`}
+            data-location-id={location.id}
+            className={`locality-card ${location.isFeatured ? "locality-card--featured" : ""} ${activeClass}`}
             key={`${keyPrefix}${location.id}`}
             role="button"
             tabIndex={0}
@@ -113,60 +119,63 @@ function LocalitySpotlightCard({ location, position = "top" }) {
 
     return (
         <div className={`locality-spotlight-card locality-spotlight-card--${position}`}>
-            {/* Full-Size Background Image spanning 100% of the container */}
-            <img
-                className="locality-spotlight-card__bg-image"
-                src={location.image}
-                alt={`${location.name}, Pune`}
-                loading="lazy"
-            />
-            <div className="locality-spotlight-card__overlay" />
+            {/* Keyed inner wrapper: Triggers smooth cinematic crossfade on every location switch */}
+            <div key={location.id} className="locality-spotlight-card__transition-wrapper">
+                {/* Full-Size Background Image spanning 100% of the container */}
+                <img
+                    className="locality-spotlight-card__bg-image"
+                    src={location.image}
+                    alt={`${location.name}, Pune`}
+                    loading="lazy"
+                />
+                <div className="locality-spotlight-card__overlay" />
 
-            {/* Top Badge Row */}
-            <div className="locality-spotlight-card__top">
-                <span className="locality-spotlight-card__zone-badge">
-                    {location.zone}
-                </span>
+                {/* Top Badge Row */}
+                <div className="locality-spotlight-card__top">
+                    <span className="locality-spotlight-card__zone-badge">
+                        {location.zone}
+                    </span>
 
-                <span className="locality-spotlight-card__stream-badge">
-                    {isTop ? "▲ Upward Scroll Spotlight" : "▼ Downward Scroll Spotlight"}
-                </span>
-            </div>
-
-            {/* Middle Main Content Overlay */}
-            <div className="locality-spotlight-card__content">
-                <span className="locality-spotlight-card__eyebrow">
-                    <Sparkles size={11} className="text-gold" />
-                    <span>{isTop ? "West & Core Corridor" : "East & Scenic Valley"}</span>
-                </span>
-                <h3 className="locality-spotlight-card__name">
-                    {location.name}
-                </h3>
-                <p className="locality-spotlight-card__sub">
-                    {location.subtitle || location.description}
-                </p>
-            </div>
-
-            {/* Bottom Transparent / Glassmorphic Information Bar */}
-            <div className="locality-spotlight-card__body">
-                <div className="locality-spotlight-card__stat">
-                    <span className="locality-spotlight-card__label">AVG. RATE</span>
-                    <strong className="locality-spotlight-card__val">{location.avgRate}</strong>
+                    <span className="locality-spotlight-card__stream-badge">
+                        {isTop ? "▲ Upward Scroll Spotlight" : "▼ Downward Scroll Spotlight"}
+                    </span>
                 </div>
 
-                <div className="locality-spotlight-card__stat">
-                    <span className="locality-spotlight-card__label">DEMO LISTINGS</span>
-                    <span className="locality-spotlight-card__pill">{location.listingsCount}</span>
+                {/* Middle Main Content Overlay */}
+                <div className="locality-spotlight-card__content">
+                    <span className="locality-spotlight-card__eyebrow">
+                        <Sparkles size={11} className="text-gold" />
+                        <span>{isTop ? "West & Core Corridor" : "East & Scenic Valley"}</span>
+                    </span>
+                    <h3 className="locality-spotlight-card__name">
+                        {location.name}
+                    </h3>
+                    <p className="locality-spotlight-card__sub">
+                        {location.subtitle || location.description}
+                    </p>
                 </div>
 
-                <Link
-                    href={`/buy?location=${encodeURIComponent(location.searchLocation)}`}
-                    className="locality-spotlight-card__cta"
-                    aria-label={`Explore properties in ${location.name}`}
-                >
-                    <span>Explore</span>
-                    <ArrowRight size={13} />
-                </Link>
+                {/* Bottom Transparent / Glassmorphic Information Bar */}
+                <div className="locality-spotlight-card__body">
+                    <div className="locality-spotlight-card__stat">
+                        <span className="locality-spotlight-card__label">AVG. RATE</span>
+                        <strong className="locality-spotlight-card__val">{location.avgRate}</strong>
+                    </div>
+
+                    <div className="locality-spotlight-card__stat">
+                        <span className="locality-spotlight-card__label">DEMO LISTINGS</span>
+                        <span className="locality-spotlight-card__pill">{location.listingsCount}</span>
+                    </div>
+
+                    <Link
+                        href={`/buy?location=${encodeURIComponent(location.searchLocation)}`}
+                        className="locality-spotlight-card__cta"
+                        aria-label={`Explore properties in ${location.name}`}
+                    >
+                        <span>Explore</span>
+                        <ArrowRight size={13} />
+                    </Link>
+                </div>
             </div>
         </div>
     );
@@ -174,8 +183,6 @@ function LocalitySpotlightCard({ location, position = "top" }) {
 
 export default function BrowseLocations() {
     const [isPaused, setIsPaused] = useState(false);
-    const [activeLeftIdx, setActiveLeftIdx] = useState(0);
-    const [activeRightIdx, setActiveRightIdx] = useState(0);
 
     // Split locations into Left Column (even index) & Right Column (odd index)
     const leftColumn = locationsData.filter((_, idx) => idx % 2 === 0);
@@ -185,20 +192,99 @@ export default function BrowseLocations() {
     const leftColDouble = [...leftColumn, ...leftColumn];
     const rightColDouble = [...rightColumn, ...rightColumn];
 
-    // Current active items for Top & Bottom Spotlight containers
-    const activeLeftLocation = leftColumn[activeLeftIdx] || leftColumn[0];
-    const activeRightLocation = rightColumn[activeRightIdx] || rightColumn[0];
+    // Refs for real-time boundary touch detection
+    const wrapperRef = useRef(null);
+    const leftTrackRef = useRef(null);
+    const rightTrackRef = useRef(null);
+    const topIdRef = useRef(null);
+    const bottomIdRef = useRef(null);
 
-    // Sync Spotlight containers with the scroll speed (every ~5.4s moves to next card)
+    // Active location objects for Top & Bottom Spotlight panels
+    const [activeLeftLocation, setActiveLeftLocation] = useState(leftColumn[0]);
+    const [activeRightLocation, setActiveRightLocation] = useState(rightColumn[0]);
+
+    // Boundary Touch Detection:
+    // Top Panel updates strictly when a left scrolling card touches the TOP edge.
+    // Bottom Panel updates strictly when a right scrolling card touches the BOTTOM edge.
+    // The middle cards do NOT trigger the panel.
     useEffect(() => {
-        if (isPaused) return;
-        const timer = setInterval(() => {
-            setActiveLeftIdx((prev) => (prev + 1) % leftColumn.length);
-            setActiveRightIdx((prev) => (prev + 1) % rightColumn.length);
-        }, 5400);
+        let isMounted = true;
 
-        return () => clearInterval(timer);
-    }, [isPaused, leftColumn.length, rightColumn.length]);
+        const checkBoundaries = () => {
+            if (!isMounted || !wrapperRef.current) return;
+            const wrapperRect = wrapperRef.current.getBoundingClientRect();
+            // Inactive / hidden on desktop view
+            if (wrapperRect.width === 0 || wrapperRect.height === 0) return;
+
+            // 1. LEFT TRACK: Find the card touching the TOP edge
+            if (leftTrackRef.current) {
+                const leftCards = leftTrackRef.current.children;
+                let topCardId = null;
+                let minTopDiff = Infinity;
+
+                for (let i = 0; i < leftCards.length; i++) {
+                    const card = leftCards[i];
+                    const rect = card.getBoundingClientRect();
+                    // Distance between the card's top edge and the scrolling window's top boundary
+                    const diff = Math.abs(rect.top - wrapperRect.top);
+                    if (diff < minTopDiff) {
+                        minTopDiff = diff;
+                        topCardId = card.getAttribute("data-location-id");
+                    }
+                }
+
+                if (topCardId && topCardId !== topIdRef.current) {
+                    topIdRef.current = topCardId;
+                    const matched = leftColumn.find((loc) => String(loc.id) === String(topCardId));
+                    if (matched) {
+                        setActiveLeftLocation(matched);
+                    }
+                }
+            }
+
+            // 2. RIGHT TRACK: Find the card touching the BOTTOM edge
+            if (rightTrackRef.current) {
+                const rightCards = rightTrackRef.current.children;
+                let bottomCardId = null;
+                let minBottomDiff = Infinity;
+
+                for (let i = 0; i < rightCards.length; i++) {
+                    const card = rightCards[i];
+                    const rect = card.getBoundingClientRect();
+                    // Distance between the card's bottom edge and the scrolling window's bottom boundary
+                    const diff = Math.abs(rect.bottom - wrapperRect.bottom);
+                    if (diff < minBottomDiff) {
+                        minBottomDiff = diff;
+                        bottomCardId = card.getAttribute("data-location-id");
+                    }
+                }
+
+                if (bottomCardId && bottomCardId !== bottomIdRef.current) {
+                    bottomIdRef.current = bottomCardId;
+                    const matched = rightColumn.find((loc) => String(loc.id) === String(bottomCardId));
+                    if (matched) {
+                        setActiveRightLocation(matched);
+                    }
+                }
+            }
+        };
+
+        const intervalId = setInterval(checkBoundaries, 100);
+        return () => {
+            isMounted = false;
+            clearInterval(intervalId);
+        };
+    }, [leftColumn, rightColumn]);
+
+    // Active indices for count indicators (01 / 05)
+    const activeLeftIdx = Math.max(
+        0,
+        leftColumn.findIndex((l) => l.id === activeLeftLocation?.id)
+    );
+    const activeRightIdx = Math.max(
+        0,
+        rightColumn.findIndex((l) => l.id === activeRightLocation?.id)
+    );
 
     return (
         <section className="browse-locations" id="browse-locations" aria-label="Explore Properties by Locality">
@@ -242,7 +328,7 @@ export default function BrowseLocations() {
 
                 {/* Mobile & Tablet Interactive Showcase: Top Container + Dual Tracks + Bottom Container */}
                 <div className="browse-locations__mobile-showcase">
-                    {/* 1. ABOVE FULL SIZE CONTAINER (Updates as Left Column scrolls UP) */}
+                    {/* 1. ABOVE FULL SIZE CONTAINER (Updates when Left Column card touches TOP) */}
                     <div className="browse-locations__spotlight-wrap browse-locations__spotlight-wrap--top">
                         <div className="browse-locations__spotlight-header">
                             <span className="browse-locations__spotlight-indicator">
@@ -258,6 +344,7 @@ export default function BrowseLocations() {
 
                     {/* 2. MIDDLE COUNTER-SCROLLING MARQUEE (Left UP, Right DOWN) */}
                     <div
+                        ref={wrapperRef}
                         className={`browse-locations__marquee-wrapper ${isPaused ? "is-paused" : ""}`}
                         onTouchStart={() => setIsPaused(true)}
                         onTouchEnd={() => setIsPaused(false)}
@@ -267,14 +354,14 @@ export default function BrowseLocations() {
                     >
                         {/* Column 1 (Left): Moves UPWARDS */}
                         <div className="browse-locations__column">
-                            <div className="browse-locations__track browse-locations__track--up">
+                            <div ref={leftTrackRef} className="browse-locations__track browse-locations__track--up">
                                 {leftColDouble.map((location, idx) => (
                                     <LocalityCard
                                         key={`left-${location.id}-${idx}`}
                                         location={location}
                                         keyPrefix={`left-${idx}-`}
-                                        isActive={location.id === activeLeftLocation.id}
-                                        onCardClick={() => setActiveLeftIdx(idx % leftColumn.length)}
+                                        activeType={location.id === activeLeftLocation?.id ? "top" : null}
+                                        onCardClick={() => setActiveLeftLocation(location)}
                                     />
                                 ))}
                             </div>
@@ -282,21 +369,21 @@ export default function BrowseLocations() {
 
                         {/* Column 2 (Right): Moves DOWNWARDS */}
                         <div className="browse-locations__column">
-                            <div className="browse-locations__track browse-locations__track--down">
+                            <div ref={rightTrackRef} className="browse-locations__track browse-locations__track--down">
                                 {rightColDouble.map((location, idx) => (
                                     <LocalityCard
                                         key={`right-${location.id}-${idx}`}
                                         location={location}
                                         keyPrefix={`right-${idx}-`}
-                                        isActive={location.id === activeRightLocation.id}
-                                        onCardClick={() => setActiveRightIdx(idx % rightColumn.length)}
+                                        activeType={location.id === activeRightLocation?.id ? "bottom" : null}
+                                        onCardClick={() => setActiveRightLocation(location)}
                                     />
                                 ))}
                             </div>
                         </div>
                     </div>
 
-                    {/* 3. BELOW FULL SIZE CONTAINER (Updates as Right Column scrolls DOWN) */}
+                    {/* 3. BELOW FULL SIZE CONTAINER (Updates when Right Column card touches BOTTOM) */}
                     <div className="browse-locations__spotlight-wrap browse-locations__spotlight-wrap--bottom">
                         <div className="browse-locations__spotlight-header">
                             <span className="browse-locations__spotlight-indicator">

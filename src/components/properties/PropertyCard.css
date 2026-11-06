@@ -1,12 +1,15 @@
 /* ==========================================================================
-   PROPERTY CARD (MATCHES THE EXACT REFERENCE DESIGN - PARAS EMPEROR STYLE)
-   Site Building Image + Centered Circular Crown Logo + Left-Aligned Content
+   PROPERTY CARD — Two-Card Nested Design
+   OUTER CARD  →  image (top) + white space (bottom)
+   INNER CARD  →  logo (overlapping top) + text info, narrower than outer
    ========================================================================== */
+
+/* ── OUTER CARD ───────────────────────────────────────────────────────────── */
 
 .property-card {
     background: #ffffff;
     border-radius: 20px;
-    overflow: hidden;
+    overflow: visible;
     box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
     border: 1px solid rgba(15, 23, 42, 0.08);
     transition: transform 0.28s ease, box-shadow 0.28s ease;
@@ -28,16 +31,15 @@
     height: 100%;
 }
 
-/* --------------------------------------------------------------------------
-   Top Media Area with Building Site Image
-   -------------------------------------------------------------------------- */
+/* ── Top Media Area (part of outer card) ──────────────────────────────────── */
 
 .property-card__media {
     position: relative;
     width: 100%;
     height: 220px;
-    overflow: visible;
+    overflow: hidden;
     background: #e2e8f0;
+    border-radius: 20px 20px 0 0;
 }
 
 .property-card__img {
@@ -46,7 +48,6 @@
     object-fit: cover;
     display: block;
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    border-radius: 20px 20px 0 0;
 }
 
 .property-card:hover .property-card__img {
@@ -100,16 +101,29 @@
     border-color: #fbbf24;
 }
 
-/* --------------------------------------------------------------------------
-   Overlapping Circular Company Logo Badge
-   Positioned halfway between the site photo and the bottom white card
-   -------------------------------------------------------------------------- */
+/* ── INNER CARD (smaller, inset inside outer card's bottom) ───────────────── */
+
+.property-card__inner {
+    position: relative;
+    margin: -18px 10px 10px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    z-index: 3;
+}
+
+/* ── Overlapping Circular Company Logo (sits on top edge of inner card) ──── */
 
 .property-card__logo-wrap {
     position: absolute;
     left: 50%;
-    bottom: 0;
-    transform: translate(-50%, 50%);
+    top: 0;
+    transform: translate(-50%, -50%);
     width: 66px;
     height: 66px;
     border-radius: 50%;
@@ -200,31 +214,30 @@
     color: #0f172a;
 }
 
-/* --------------------------------------------------------------------------
-   Bottom White Sheet Card Body (Left Aligned)
-   -------------------------------------------------------------------------- */
+/* ── Inner Card Text Body ─────────────────────────────────────────────────── */
 
 .property-card__body {
-    background: #ffffff;
-    padding: 40px 18px 18px;
+    width: 100%;
+    padding: 42px 16px 16px;
     text-align: left;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
     flex: 1;
-    border-radius: 0 0 20px 20px;
 }
 
+/* Project Title — Serif Bold */
 .property-card__title {
     font-family: var(--font-serif), "Playfair Display", Georgia, serif;
     font-size: 19px;
     font-weight: 700;
     color: #0f172a;
-    margin: 0 0 6px;
+    margin: 0 0 4px;
     line-height: 1.3;
 }
 
+/* Configuration Subtitle — Single line, ellipsis truncated */
 .property-card__sub {
     font-family: var(--font-sans), Inter, sans-serif;
     font-size: 13px;
@@ -232,9 +245,14 @@
     font-weight: 400;
     margin: 0 0 16px;
     line-height: 1.4;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* Price & Status Row */
+/* ── Price & Status Row ───────────────────────────────────────────────────── */
+
 .property-card__price-row {
     display: flex;
     align-items: center;
@@ -243,22 +261,42 @@
     margin-bottom: 14px;
 }
 
+/* Two-line price block: amount on top, unit (Cr) below */
 .property-card__price {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.property-card__price-amount {
     font-family: var(--font-sans), Inter, -apple-system, sans-serif;
-    font-size: 17px;
+    font-size: 20px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.3px;
+}
+
+.property-card__price-unit {
+    font-family: var(--font-sans), Inter, -apple-system, sans-serif;
+    font-size: 18px;
     font-weight: 800;
     color: #0f172a;
     letter-spacing: -0.2px;
 }
 
+/* Possession / Status Pill */
 .property-card__status {
     border-radius: 6px;
     font-family: var(--font-sans), Inter, sans-serif;
     font-size: 11px;
     font-weight: 600;
-    padding: 3px 9px;
+    padding: 5px 10px;
     letter-spacing: 0.1px;
     white-space: nowrap;
+    text-align: center;
+    line-height: 1.3;
+    flex-shrink: 0;
+    align-self: center;
 }
 
 .property-card__status--ready {
@@ -267,13 +305,20 @@
     border: 1px solid #a7f3d0;
 }
 
+.property-card__status--possession {
+    background: #f0fdfa;
+    color: #0f766e;
+    border: 1px solid #99f6e4;
+}
+
 .property-card__status--ongoing {
     background: #eff6ff;
     color: #2563eb;
     border: 1px solid #bfdbfe;
 }
 
-/* Footer Row: RERA & View Project CTA */
+/* ── Footer Row: RERA ID & View Project CTA ───────────────────────────────── */
+
 .property-card__footer {
     display: flex;
     align-items: center;
@@ -288,6 +333,7 @@
     font-size: 11.5px;
     color: #94a3b8;
     font-weight: 500;
+    letter-spacing: 0.1px;
 }
 
 .property-card__cta {
@@ -313,9 +359,7 @@
     transform: translate(2px, -2px);
 }
 
-/* --------------------------------------------------------------------------
-   Responsive Rules
-   -------------------------------------------------------------------------- */
+/* ── Responsive Rules ─────────────────────────────────────────────────────── */
 
 @media (max-width: 768px) {
     .property-card {
@@ -324,10 +368,12 @@
 
     .property-card__media {
         height: 200px;
+        border-radius: 18px 18px 0 0;
     }
 
-    .property-card__img {
-        border-radius: 18px 18px 0 0;
+    .property-card__inner {
+        margin: -16px 8px 8px;
+        border-radius: 14px;
     }
 
     .property-card__logo-wrap {
@@ -336,8 +382,7 @@
     }
 
     .property-card__body {
-        padding: 36px 14px 16px;
-        border-radius: 0 0 18px 18px;
+        padding: 38px 14px 14px;
     }
 
     .property-card__title {
@@ -349,7 +394,11 @@
         margin-bottom: 12px;
     }
 
-    .property-card__price {
+    .property-card__price-amount {
+        font-size: 18px;
+    }
+
+    .property-card__price-unit {
         font-size: 16px;
     }
 }
