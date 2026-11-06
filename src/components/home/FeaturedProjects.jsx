@@ -7,22 +7,10 @@ import PropertyCard from "../properties/PropertyCard";
 import { projects } from "../../data/projects";
 import "./FeaturedProjects.css";
 
-const DEVELOPER_TAGS = [
-    "All Developers",
-    "Paras Buildtech",
-    "Kolte-Patil",
-    "VTP Realty",
-    "Sobha Limited",
-    "Shapoorji Pallonji",
-    "Godrej Properties",
-    "Lodha Group",
-];
-
 export default function FeaturedProjects() {
     const sectionRef = useRef(null);
     const carouselRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
-    const [selectedDeveloper, setSelectedDeveloper] = useState("All Developers");
     const [activeSlideIndex, setActiveSlideIndex] = useState(0);
     const [isGrabbing, setIsGrabbing] = useState(false);
 
@@ -32,9 +20,7 @@ export default function FeaturedProjects() {
     const scrollLeftRef = useRef(0);
     const hasDraggedRef = useRef(false);
 
-    const filteredProjects = selectedDeveloper === "All Developers"
-        ? projects
-        : projects.filter((p) => p.developer === selectedDeveloper);
+    const filteredProjects = projects;
 
     const getScrollStep = () => {
         if (!carouselRef.current) return 320;
@@ -171,29 +157,6 @@ export default function FeaturedProjects() {
                         Discover thoughtfully selected properties across Pune
                         that match your lifestyle and investment goals.
                     </p>
-                </div>
-
-                {/* Developer Filter Pills matching reference image */}
-                <div className="featured-projects__tags-wrap" role="tablist" aria-label="Filter by developer">
-                    {DEVELOPER_TAGS.map((tag) => (
-                        <button
-                            key={tag}
-                            type="button"
-                            role="tab"
-                            aria-selected={selectedDeveloper === tag}
-                            className={`featured-projects__tag-pill ${selectedDeveloper === tag ? "featured-projects__tag-pill--active" : ""
-                                }`}
-                            onClick={() => {
-                                setSelectedDeveloper(tag);
-                                setActiveSlideIndex(0);
-                                if (carouselRef.current) {
-                                    carouselRef.current.scrollTo({ left: 0, behavior: "smooth" });
-                                }
-                            }}
-                        >
-                            {tag}
-                        </button>
-                    ))}
                 </div>
 
                 {/* Subheader: ALL LANDMARK DEVELOPMENTS + Project Counter + Nav Chevrons */}
