@@ -105,7 +105,7 @@ function LocalityCard({
     );
 }
 
-// Full-Size Spotlight Container (Top & Bottom)
+// Full-Size Spotlight Container (Top & Bottom) with Full-Size Image & Transparent Content
 function LocalitySpotlightCard({ location, position = "top" }) {
     if (!location) return null;
 
@@ -113,42 +113,41 @@ function LocalitySpotlightCard({ location, position = "top" }) {
 
     return (
         <div className={`locality-spotlight-card locality-spotlight-card--${position}`}>
-            <div className="locality-spotlight-card__media">
-                <img
-                    className="locality-spotlight-card__image"
-                    src={location.image}
-                    alt={`${location.name}, Pune`}
-                    loading="lazy"
-                />
-                <div className="locality-spotlight-card__overlay" />
+            {/* Full-Size Background Image spanning 100% of the container */}
+            <img
+                className="locality-spotlight-card__bg-image"
+                src={location.image}
+                alt={`${location.name}, Pune`}
+                loading="lazy"
+            />
+            <div className="locality-spotlight-card__overlay" />
 
-                {/* Top Badge Row */}
-                <div className="locality-spotlight-card__top">
-                    <span className="locality-spotlight-card__zone-badge">
-                        {location.zone}
-                    </span>
+            {/* Top Badge Row */}
+            <div className="locality-spotlight-card__top">
+                <span className="locality-spotlight-card__zone-badge">
+                    {location.zone}
+                </span>
 
-                    <span className="locality-spotlight-card__stream-badge">
-                        {isTop ? "▲ Upward Scroll Spotlight" : "▼ Downward Scroll Spotlight"}
-                    </span>
-                </div>
-
-                {/* Content Overlay */}
-                <div className="locality-spotlight-card__content">
-                    <span className="locality-spotlight-card__eyebrow">
-                        <Sparkles size={11} className="text-gold" />
-                        <span>{isTop ? "West & Core Corridor" : "East & Scenic Valley"}</span>
-                    </span>
-                    <h3 className="locality-spotlight-card__name">
-                        {location.name}
-                    </h3>
-                    <p className="locality-spotlight-card__sub">
-                        {location.subtitle || location.description}
-                    </p>
-                </div>
+                <span className="locality-spotlight-card__stream-badge">
+                    {isTop ? "▲ Upward Scroll Spotlight" : "▼ Downward Scroll Spotlight"}
+                </span>
             </div>
 
-            {/* Bottom Information Bar */}
+            {/* Middle Main Content Overlay */}
+            <div className="locality-spotlight-card__content">
+                <span className="locality-spotlight-card__eyebrow">
+                    <Sparkles size={11} className="text-gold" />
+                    <span>{isTop ? "West & Core Corridor" : "East & Scenic Valley"}</span>
+                </span>
+                <h3 className="locality-spotlight-card__name">
+                    {location.name}
+                </h3>
+                <p className="locality-spotlight-card__sub">
+                    {location.subtitle || location.description}
+                </p>
+            </div>
+
+            {/* Bottom Transparent / Glassmorphic Information Bar */}
             <div className="locality-spotlight-card__body">
                 <div className="locality-spotlight-card__stat">
                     <span className="locality-spotlight-card__label">AVG. RATE</span>

@@ -410,15 +410,17 @@
         border-radius: 9999px;
     }
 
-    /* FULL SIZE SPOTLIGHT CARD (TOP & BOTTOM) */
+    /* FULL SIZE SPOTLIGHT CARD (TOP & BOTTOM) - FULL IMAGE & TRANSPARENT OVERLAY */
     .locality-spotlight-card {
-        background: #ffffff;
-        border-radius: 18px;
+        position: relative;
+        border-radius: 20px;
         overflow: hidden;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
+        height: clamp(210px, 58vw, 255px);
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -430,39 +432,40 @@
         border-bottom: 3px solid #c49866;
     }
 
-    .locality-spotlight-card__media {
-        position: relative;
-        width: 100%;
-        height: 150px;
-        overflow: hidden;
-        background: #0f172a;
-    }
-
-    .locality-spotlight-card__image {
+    /* Full-Size Background Image spanning 100% of the entire card */
+    .locality-spotlight-card__bg-image {
+        position: absolute;
+        inset: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
-        transition: transform 0.4s ease;
+        transition: transform 0.5s ease;
+        z-index: 0;
     }
 
+    .locality-spotlight-card:hover .locality-spotlight-card__bg-image {
+        transform: scale(1.04);
+    }
+
+    /* Overall Dark Gradient Overlay for optimal contrast across the entire card */
     .locality-spotlight-card__overlay {
         position: absolute;
         inset: 0;
         background: linear-gradient(
             180deg,
-            rgba(0, 0, 0, 0.25) 0%,
+            rgba(0, 0, 0, 0.45) 0%,
             rgba(0, 0, 0, 0.2) 35%,
             rgba(0, 0, 0, 0.88) 100%
         );
         pointer-events: none;
+        z-index: 1;
     }
 
+    /* Top Badges */
     .locality-spotlight-card__top {
-        position: absolute;
-        top: 9px;
-        left: 10px;
-        right: 10px;
+        position: relative;
+        padding: 10px 12px 6px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -470,33 +473,33 @@
     }
 
     .locality-spotlight-card__zone-badge {
-        background: #ffffff;
+        background: rgba(255, 255, 255, 0.95);
         color: #0f172a;
         font-family: var(--font-sans), Inter, sans-serif;
         font-size: 10px;
         font-weight: 700;
         padding: 3px 9px;
         border-radius: 9999px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     }
 
     .locality-spotlight-card__stream-badge {
-        background: rgba(15, 23, 42, 0.75);
-        backdrop-filter: blur(4px);
+        background: rgba(15, 23, 42, 0.72);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
         color: #ffffff;
         font-family: var(--font-sans), Inter, sans-serif;
         font-size: 9px;
         font-weight: 700;
-        padding: 3px 8px;
+        padding: 3px 9px;
         border-radius: 9999px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.22);
     }
 
+    /* Middle Main Content */
     .locality-spotlight-card__content {
-        position: absolute;
-        bottom: 9px;
-        left: 10px;
-        right: 10px;
+        position: relative;
+        padding: 0 12px 8px;
         z-index: 2;
         text-align: left;
     }
@@ -506,43 +509,50 @@
         align-items: center;
         gap: 4px;
         font-family: var(--font-sans), Inter, sans-serif;
-        font-size: 8.5px;
-        font-weight: 700;
-        letter-spacing: 0.6px;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.7px;
         color: #e2b97f;
         text-transform: uppercase;
         margin-bottom: 2px;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
     }
 
     .locality-spotlight-card__name {
         font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-        font-size: 20px;
+        font-size: 22px;
         font-weight: 800;
         color: #ffffff;
         margin: 0 0 2px;
         line-height: 1.2;
-        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
     }
 
     .locality-spotlight-card__sub {
         font-family: var(--font-sans), Inter, sans-serif;
-        font-size: 10.5px;
-        color: rgba(255, 255, 255, 0.9);
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.92);
         margin: 0;
-        line-height: 1.3;
+        line-height: 1.35;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
     }
 
+    /* Bottom Transparent / Glassmorphism Information Bar */
     .locality-spotlight-card__body {
-        background: #ffffff;
-        padding: 8px 11px;
+        position: relative;
+        background: rgba(15, 23, 42, 0.45);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-top: 1px solid rgba(255, 255, 255, 0.16);
+        padding: 9px 12px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 8px;
-        border-top: 1px solid #f1f5f9;
+        z-index: 2;
     }
 
     .locality-spotlight-card__stat {
@@ -555,38 +565,41 @@
         font-family: var(--font-sans), Inter, sans-serif;
         font-size: 7.5px;
         font-weight: 700;
-        letter-spacing: 0.5px;
-        color: #64748b;
+        letter-spacing: 0.6px;
+        color: rgba(255, 255, 255, 0.72);
+        text-transform: uppercase;
     }
 
     .locality-spotlight-card__val {
         font-family: var(--font-sans), Inter, sans-serif;
-        font-size: 11.5px;
+        font-size: 12px;
         font-weight: 800;
-        color: #0f172a;
+        color: #ffffff;
         white-space: nowrap;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
     }
 
     .locality-spotlight-card__pill {
-        background: #f0fdf4;
-        color: #15803d;
-        border: 1px solid #bbf7d0;
+        background: rgba(34, 197, 94, 0.22);
+        color: #4ade80;
+        border: 1px solid rgba(74, 222, 128, 0.4);
         font-family: var(--font-sans), Inter, sans-serif;
-        font-size: 9px;
+        font-size: 9.5px;
         font-weight: 700;
-        padding: 1.5px 5px;
+        padding: 2px 7px;
         border-radius: 6px;
         white-space: nowrap;
         margin-top: 2px;
+        backdrop-filter: blur(4px);
     }
 
     .locality-spotlight-card__cta {
-        background: #0f172a;
+        background: #c49866;
         color: #ffffff;
         font-family: var(--font-sans), Inter, sans-serif;
-        font-size: 11px;
+        font-size: 11.5px;
         font-weight: 700;
-        padding: 5px 12px;
+        padding: 5px 13px;
         border-radius: 9999px;
         display: inline-flex;
         align-items: center;
@@ -595,10 +608,11 @@
         transition: background 0.2s ease, transform 0.2s ease;
         white-space: nowrap;
         flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(196, 152, 102, 0.45);
     }
 
     .locality-spotlight-card__cta:hover {
-        background: #c49866;
+        background: #dfa85b;
         transform: translateX(1px);
     }
 
@@ -774,12 +788,12 @@
         font-size: 8.5px;
     }
 
-    .locality-spotlight-card__media {
-        height: 135px;
+    .locality-spotlight-card {
+        height: clamp(195px, 60vw, 220px);
     }
 
     .locality-spotlight-card__name {
-        font-size: 18px;
+        font-size: 19px;
     }
 }
 
