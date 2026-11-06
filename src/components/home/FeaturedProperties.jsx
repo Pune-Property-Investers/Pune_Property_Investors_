@@ -204,39 +204,104 @@ export const featuredPuneProjects = [
 ];
 
 /* --------------------------------------------------------------------------
-   Mini Gallery Slideshow (Left box in the bottom bar - matches reference)
+   Mini Gallery Slideshow (Left box in the bottom bar - with smooth slide transition)
    -------------------------------------------------------------------------- */
 function SiteImageSlideshow({ images = [], projectName = "Project" }) {
     const [currentIdx, setCurrentIdx] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
+    const [touchStartX, setTouchStartX] = useState(0);
+    const [touchEndX, setTouchEndX] = useState(0);
     const total = images.length || 1;
 
     useEffect(() => {
         setCurrentIdx(0);
     }, [projectName]);
 
+    // Automatic slideshow effect (runs continuously on both mobile and laptop)
+    useEffect(() => {
+        if (total <= 1 || isPaused) return;
+        const timer = setInterval(() => {
+            setCurrentIdx((prev) => (prev + 1) % total);
+        }, 3000);
+        return () => clearInterval(timer);
+    }, [total, isPaused]);
+
     const handlePrev = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         setCurrentIdx((prev) => (prev - 1 + total) % total);
     };
 
     const handleNext = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         setCurrentIdx((prev) => (prev + 1) % total);
     };
 
+    // Only pause on true mouse hover (not on mobile touch screens)
+    const handleMouseEnter = () => {
+        if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) {
+            setIsPaused(true);
+        }
+    };
+
+    const handleMouseLeave = () => {
+        setIsPaused(false);
+    };
+
+    const handleTouchStart = (e) => {
+        e.stopPropagation();
+        setTouchStartX(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchMove = (e) => {
+        e.stopPropagation();
+        setTouchEndX(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchEnd = (e) => {
+        e.stopPropagation();
+        if (!touchStartX || !touchEndX) return;
+        const diff = touchStartX - touchEndX;
+        if (diff > 30) {
+            handleNext(e);
+        } else if (diff < -30) {
+            handlePrev(e);
+        }
+        setTouchStartX(0);
+        setTouchEndX(0);
+    };
+
     const currentImg = images[currentIdx] || images[0] || {};
-    const imgUrl = typeof currentImg === "string" ? currentImg : currentImg.url;
     const imgLabel = typeof currentImg === "object" && currentImg.label ? currentImg.label : "Site Elevation & Towers";
 
     return (
-        <div className="pune-gallery-card" aria-label={`${projectName} gallery`}>
-            {/* Background Image */}
-            <img
-                src={imgUrl}
-                alt={`${projectName} - ${imgLabel}`}
-                className="pune-gallery-card__img"
-                loading="lazy"
-            />
+        <div
+            className="pune-gallery-card"
+            aria-label={`${projectName} gallery`}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+        >
+            {/* Sliding Image Track (Slideshow Effect) */}
+            <div
+                className="pune-gallery-card__track"
+                style={{ transform: `translateX(-${currentIdx * 100}%)` }}
+            >
+                {images.map((img, idx) => {
+                    const url = typeof img === "string" ? img : img.url;
+                    const label = typeof img === "object" && img.label ? img.label : `Photo ${idx + 1}`;
+                    return (
+                        <img
+                            key={idx}
+                            src={url}
+                            alt={`${projectName} - ${label}`}
+                            className="pune-gallery-slide-img"
+                            loading="lazy"
+                        />
+                    );
+                })}
+            </div>
             <div className="pune-gallery-card__overlay" />
 
             {/* Top Bar: • GALLERY badge + 01/05 Counter */}

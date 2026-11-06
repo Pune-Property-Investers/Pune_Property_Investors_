@@ -550,13 +550,13 @@
     padding: 0 clamp(10px, 1.6vw, 22px) 0 0;
     display: grid;
     /* Consistently 2 columns across all screens (Enlarged prominent gallery on left, Specs on right) */
-    grid-template-columns: clamp(140px, 27vw, 290px) minmax(0, 1fr);
+    grid-template-columns: clamp(155px, 29vw, 320px) minmax(0, 1fr);
     gap: clamp(8px, 1.4vw, 20px);
     align-items: stretch;
     box-sizing: border-box;
-    height: clamp(152px, 17vw, 205px);
-    min-height: clamp(152px, 17vw, 205px);
-    max-height: clamp(152px, 17vw, 205px);
+    height: clamp(165px, 18.5vw, 225px);
+    min-height: clamp(165px, 18.5vw, 225px);
+    max-height: clamp(165px, 18.5vw, 225px);
     flex-shrink: 0;
 }
 
@@ -595,6 +595,28 @@
     justify-content: space-between;
 }
 
+/* Sliding Photo Track (Smooth Slideshow Effect) */
+.pune-gallery-card__track {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+    z-index: 0;
+}
+
+.pune-gallery-slide-img {
+    min-width: 100%;
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    object-fit: cover;
+    display: block;
+}
+
 .pune-gallery-card__img {
     position: absolute;
     inset: 0;
@@ -622,6 +644,7 @@
         rgba(0, 0, 0, 0.88) 100%
     );
     pointer-events: none;
+    z-index: 1;
 }
 
 /* Gallery Top: • GALLERY badge + 01/05 counter */
@@ -1057,14 +1080,14 @@
         display: none !important;
     }
 
-    /* Retains 2-column layout on mobile with locked uniform height and fit to border */
+    /* Retains 2-column layout on mobile with significantly wider photo slideshow and fit to border */
     .pune-project-bottom-bar {
         padding: 0 6px 0 0;
-        grid-template-columns: 130px 1fr;
+        grid-template-columns: clamp(175px, 42vw, 240px) minmax(0, 1fr);
         gap: 6px;
-        height: 130px;
-        min-height: 130px;
-        max-height: 130px;
+        height: clamp(158px, 26vw, 185px);
+        min-height: clamp(158px, 26vw, 185px);
+        max-height: clamp(158px, 26vw, 185px);
     }
 
     .pune-project-bottom-bar__left,
@@ -1090,7 +1113,7 @@
     }
 
     .pune-spec-card {
-        padding: 3px 4px;
+        padding: 3px 3px;
     }
 }
 
@@ -1107,11 +1130,12 @@
 
     .pune-project-bottom-bar {
         padding: 0 4px 0 0;
-        grid-template-columns: 114px 1fr;
-        gap: 5px;
-        height: 116px;
-        min-height: 116px;
-        max-height: 116px;
+        /* Substantially wider sideways on mobile phones (46vw) */
+        grid-template-columns: clamp(165px, 46vw, 205px) minmax(0, 1fr);
+        gap: 4px;
+        height: clamp(152px, 38vw, 175px);
+        min-height: clamp(152px, 38vw, 175px);
+        max-height: clamp(152px, 38vw, 175px);
     }
 
     .pune-project-bottom-bar__left,
@@ -1122,34 +1146,54 @@
     }
 
     .pune-project-bottom-bar__right {
-        padding-top: 5px;
-        padding-bottom: 5px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    .pune-project-specs-grid {
+        gap: 2px;
+    }
+
+    .pune-spec-card {
+        padding: 2.5px 2px;
+        border-radius: 6px;
     }
 
     .pune-spec-card__label {
-        font-size: 6.5px;
+        font-size: 6px;
     }
 
     .pune-spec-card__val {
-        font-size: 9px;
+        font-size: 8.5px;
     }
 
     .pune-spec-card__sub {
-        font-size: 6.5px;
+        font-size: 6px;
     }
 
-    .pune-action-whatsapp-btn {
-        padding: 3px 6px;
-        font-size: 9px;
+    .pune-project-action-row {
+        padding-top: 3px;
         gap: 3px;
+        height: 26px;
     }
 
-    .pune-action-details-link {
-        font-size: 9px;
-        padding: 3px 3px;
+    .pune-action-nav-btns button {
+        width: 18px;
+        height: 18px;
     }
 
     .pune-action-counter {
+        font-size: 8px;
+    }
+
+    .pune-action-whatsapp-btn {
+        padding: 2.5px 5px;
         font-size: 8.5px;
+        gap: 2px;
+    }
+
+    .pune-action-details-link {
+        font-size: 8.5px;
+        padding: 2px 2px;
     }
 }
