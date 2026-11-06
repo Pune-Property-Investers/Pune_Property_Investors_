@@ -144,18 +144,17 @@
     height: 100%;
     border-radius: 50%;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     color: #0f172a;
     text-align: center;
-    padding: 2px;
+    padding: 6px;
     background: #ffffff;
 }
 
+.property-card__brand-logo-box,
 .property-card__google-logo-box {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -163,26 +162,12 @@
 }
 
 .property-card__org-logo {
-    width: 32px;
-    height: 32px;
+    width: 100%;
+    height: 100%;
+    max-width: 50px;
+    max-height: 44px;
     object-fit: contain;
     display: block;
-    border-radius: 4px;
-}
-
-.property-card__org-name {
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 6.5px;
-    font-weight: 800;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-    color: #0f172a;
-    margin-top: 2px;
-    max-width: 52px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1;
 }
 
 .property-card__logo-fallback {

@@ -46,9 +46,13 @@ function PropertyCard({ property }) {
             ? property.reraId
             : property.rera || "RERA Approved";
 
-    // Loads the official company org logo directly from Google's favicon service.
+    // Base path support for GitHub Pages and relative asset resolution
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+    const rawLogo = property.logo || property.logoUrl;
     const developerDomain = property.domain || "parasbuildtech.com";
-    const googleLogoUrl = `https://www.google.com/s2/favicons?domain=${developerDomain}&sz=128`;
+    const logoSrc = rawLogo
+        ? (rawLogo.startsWith("http") ? rawLogo : `${basePath}${rawLogo}`)
+        : `https://www.google.com/s2/favicons?domain=${developerDomain}&sz=128`;
 
     const toggleStar = (e) => {
         e.preventDefault();
@@ -104,22 +108,19 @@ function PropertyCard({ property }) {
                     {/* Overlapping Circular Company Logo */}
                     <div className="property-card__logo-wrap">
                         <div className="property-card__logo-badge">
-                            {!logoFailed ? (
-                                <div className="property-card__google-logo-box">
+                            {!logoFailed && logoSrc ? (
+                                <div className="property-card__brand-logo-box">
                                     <img
-                                        src={googleLogoUrl}
-                                        alt={`${developerName} official org logo`}
+                                        src={logoSrc}
+                                        alt={`${developerName} official logo`}
                                         className="property-card__org-logo"
                                         loading="lazy"
                                         onError={() => setLogoFailed(true)}
                                     />
-                                    <span className="property-card__org-name">
-                                        {property.logoBrand || developerName.split(" ")[0]}
-                                    </span>
                                 </div>
                             ) : (
                                 <div className="property-card__logo-fallback">
-                                    <Crown size={12} className="property-card__crown-icon" />
+                                    <Crown size={14} className="property-card__crown-icon" />
                                     <span className="property-card__logo-top">
                                         {property.logoBrand || developerName.split(" ")[0] || "PARAS"}
                                     </span>
