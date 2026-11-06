@@ -20,64 +20,116 @@ const TRUST_ITEMS = [
     {
         id: "price",
         title: "BEST LAUNCH PRICE",
+        line1: "BEST LAUNCH",
+        line2: "PRICE",
         desc: "Exclusive Launch Offers. Maximum Savings.",
         icon: Sparkles,
     },
 ];
 
-function TypewriterHeader({ text, isStarted }) {
-    const [displayedText, setDisplayedText] = useState("");
-    const [showCursor, setShowCursor] = useState(false);
-    const [isMounted, setIsMounted] = useState(false);
+    function TypewriterHeader({ title, line1, line2, isStarted }) {
+        const isMultiLine = Boolean(line1 && line2);
+        const fullText = isMultiLine ? `${line1} ${line2}` : title;
+        const [charCount, setCharCount] = useState(0);
+        const [showCursor, setShowCursor] = useState(false);
+        const [isMounted, setIsMounted] = useState(false);
 
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
+        useEffect(() => {
+            setIsMounted(true);
+        }, []);
 
-    useEffect(() => {
-        if (!isStarted) return;
+        useEffect(() => {
+            if (!isStarted) return;
 
-        setShowCursor(true);
-        let index = 0;
-        let intervalId;
+            setShowCursor(true);
+            let count = 0;
+            let intervalId;
 
-        // Gentle pause before starting typing
-        const initialTimer = setTimeout(() => {
-            intervalId = setInterval(() => {
-                index++;
-                setDisplayedText(text.slice(0, index));
+            // Smooth initial breath before typing begins
+            const initialTimer = setTimeout(() => {
+                intervalId = setInterval(() => {
+                    count++;
+                    setCharCount(count);
 
-                if (index >= text.length) {
-                    clearInterval(intervalId);
-                    // Keep cursor blinking calmly after completion, then fade out
-                    setTimeout(() => {
-                        setShowCursor(false);
-                    }, 1500);
-                }
-            }, 110);
-        }, 200);
+                        if (count >= fullText.length) {
+                            clearInterval(intervalId);
+                            // Keep cursor pulsing gently then smoothly fade out
+                            setTimeout(() => {
+                                setShowCursor(false);
+                        }, 1400);
+            }
+}, 70);
+        }, 180);
 
-        return () => {
-            clearTimeout(initialTimer);
-            if (intervalId) clearInterval(intervalId);
-        };
-    }, [isStarted, text]);
+return () => {
+    clearTimeout(initialTimer);
+    if (intervalId) clearInterval(intervalId);
+};
+    }, [isStarted, fullText]);
 
-    // SSR fallback: pre-render the full text for search engines and SEO
-    if (!isMounted) {
-        return <span className="trust-highlights__typing-text">{text}</span>;
+// SSR fallback: pre-render the full text for search engines and SEO
+if (!isMounted) {
+    if (isMultiLine) {
+        return (
+            <span className="trust-highlights__typing-wrapper trust-highlights__typing-wrapper--multiline">
+                <span className="trust-highlights__title-line1">{line1}</span>
+                <span className="trust-highlights__break-mobile" />
+                <span className="trust-highlights__title-line2">{line2}</span>
+            </span>
+        );
     }
+    return <span className="trust-highlights__typing-text">{title}</span>;
+}
+
+if (isMultiLine) {
+    // Line 1: line1 (e.g. "BEST LAUNCH", 11 chars)
+    // Line 2: line2 (e.g. "PRICE", 5 chars)
+    const line1Target = line1.length;
+    const line1Count = Math.min(charCount, line1Target);
+    // After line1 and the space, count progresses for line2
+    const line2Count = Math.max(0, Math.min(charCount - (line1Target + 1), line2.length));
+
+    const displayedLine1 = line1.slice(0, line1Count);
+    const displayedLine2 = line2.slice(0, line2Count);
+    const isCursorOnLine1 = charCount <= line1Target;
 
     return (
-        <span className="trust-highlights__typing-wrapper">
-            <span className="trust-highlights__typing-text">{displayedText}</span>
-            {showCursor && (
-                <span className="trust-highlights__cursor" aria-hidden="true">
-                    |
+        <span className="trust-highlights__typing-wrapper trust-highlights__typing-wrapper--multiline">
+            <span className="trust-highlights__title-line1">
+                {displayedLine1}
+                {showCursor && isCursorOnLine1 && (
+                    <span className="trust-highlights__cursor" aria-hidden="true">
+                        |
+                    </span>
+                )}
+            </span>
+            <span className="trust-highlights__break-mobile" />
+            {(charCount > line1Target || displayedLine2.length > 0) && (
+                <span className="trust-highlights__title-line2">
+                    {displayedLine2}
+                    {showCursor && !isCursorOnLine1 && (
+                        <span className="trust-highlights__cursor" aria-hidden="true">
+                            |
+                        </span>
+                    )}
                 </span>
             )}
         </span>
     );
+}
+
+return (
+    <span className="trust-highlights__typing-wrapper">
+        <span className="trust-highlights__typing-text">
+            {title.slice(0, charCount)}
+        </span>
+        {showCursor && (
+            <span className="trust-highlights__cursor" aria-hidden="true">
+                |
+            </span>
+        )}
+    </span>
+);
 }
 
 export default function TrustHighlights() {
@@ -113,7 +165,7 @@ export default function TrustHighlights() {
     return (
         <section
             ref={sectionRef}
-            className="trust-highlights"
+            className={`trust-highlights ${isStarted ? "trust-highlights--visible" : ""}`}
             aria-label="Trust and Benefits"
         >
             <div className="trust-highlights__card">
@@ -122,17 +174,19 @@ export default function TrustHighlights() {
                     return (
                         <div key={item.id} className="trust-highlights__item">
                             <div className="trust-highlights__header">
-                                    <span
-                                        className={`trust-highlights__icon-box trust-highlights__icon-box--${item.id}`}
-                                    >
-                                        <IconComponent size={16} strokeWidth={2.4} />
-                                    </span>
-                                    <h3 className="trust-highlights__title">
-                                        <TypewriterHeader
-                                            text={item.title}
-                                            isStarted={isStarted}
-                                        />
-                                    </h3>
+                                <span
+                                    className={`trust-highlights__icon-box trust-highlights__icon-box--${item.id}`}
+                                >
+                                    <IconComponent size={16} strokeWidth={2.4} />
+                                </span>
+                                <h3 className="trust-highlights__title">
+                                    <TypewriterHeader
+                                        title={item.title}
+                                        line1={item.line1}
+                                        line2={item.line2}
+                                        isStarted={isStarted}
+                                    />
+                                </h3>
                             </div>
                             <p className="trust-highlights__desc">{item.desc}</p>
                         </div>
