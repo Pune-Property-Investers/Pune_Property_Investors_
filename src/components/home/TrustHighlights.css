@@ -191,24 +191,28 @@
     text-overflow: ellipsis;
 }
 
-    .trust-highlights__cursor {
-        display: inline-block;
-        color: #a77a48;
-        font-weight: 400;
-        font-size: 11.5px;
-        margin-left: 1.5px;
-        animation: trustCursorSmooth 0.95s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        user-select: none;
-        line-height: 1;
-        transition: opacity 0.5s ease;
+.trust-highlights__cursor {
+    display: inline-block;
+    color: #a77a48;
+    font-weight: 400;
+    font-size: 11.5px;
+    margin-left: 1.5px;
+    animation: trustCursorSmooth 0.95s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    user-select: none;
+    line-height: 1;
+    transition: opacity 0.5s ease;
+}
 
-        0%,
-        100% {
-            opacity: 1;
-        }
+@keyframes trustCursorSmooth {
+    0%,
+    100% {
+        opacity: 1;
+    }
 
-        50% {
-            opacity: 0.15;
+    50% {
+        opacity: 0.15;
+    }
+}
 .trust-highlights__desc {
     font-family: var(--font-sans), Inter, -apple-system, sans-serif;
     font-size: 12px;
