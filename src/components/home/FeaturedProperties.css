@@ -549,14 +549,14 @@
     /* Fit to border: Left, bottom, and top are 0 so side photo container fits flush to outer card border */
     padding: 0 clamp(10px, 1.6vw, 22px) 0 0;
     display: grid;
-    /* Consistently 2 columns across all screens (Enlarged prominent gallery on left, Specs on right) */
-    grid-template-columns: clamp(155px, 29vw, 320px) minmax(0, 1fr);
+    /* Consistently 2 columns across all screens (Gallery on left, Specs on right) */
+    grid-template-columns: clamp(145px, 26vw, 280px) minmax(0, 1fr);
     gap: clamp(8px, 1.4vw, 20px);
     align-items: stretch;
     box-sizing: border-box;
-    height: clamp(165px, 18.5vw, 225px);
-    min-height: clamp(165px, 18.5vw, 225px);
-    max-height: clamp(165px, 18.5vw, 225px);
+    height: clamp(125px, 14vw, 165px);
+    min-height: clamp(125px, 14vw, 165px);
+    max-height: clamp(125px, 14vw, 165px);
     flex-shrink: 0;
 }
 
@@ -941,28 +941,26 @@
     flex-shrink: 0;
 }
 
-/* WhatsApp Button (Bright Green matching reference) */
+/* WhatsApp Button (Sleek Green Icon-Only Button) */
 .pune-action-whatsapp-btn {
     background: #22c55e;
     color: #ffffff;
     border: none;
-    padding: clamp(4px, 0.6vw, 7px) clamp(8px, 1.2vw, 16px);
-    border-radius: 7px;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: clamp(9.5px, 0.85vw, 12.5px);
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
+    width: clamp(26px, 2.8vw, 32px);
+    height: clamp(26px, 2.8vw, 32px);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
-    white-space: nowrap;
+    padding: 0;
+    flex-shrink: 0;
 }
 
 .pune-action-whatsapp-btn:hover {
     background: #16a34a;
-    transform: translateY(-1px);
+    transform: scale(1.08);
 }
 
 /* View Details Link (Warm Gold font matching reference image) */
@@ -1080,14 +1078,14 @@
         display: none !important;
     }
 
-    /* Retains 2-column layout on mobile with significantly wider photo slideshow and fit to border */
+    /* Retains 2-column layout on mobile with improved photo slideshow size and fit to border */
     .pune-project-bottom-bar {
         padding: 0 6px 0 0;
-        grid-template-columns: clamp(175px, 42vw, 240px) minmax(0, 1fr);
+        grid-template-columns: 178px minmax(0, 1fr);
         gap: 6px;
-        height: clamp(158px, 26vw, 185px);
-        min-height: clamp(158px, 26vw, 185px);
-        max-height: clamp(158px, 26vw, 185px);
+        height: 128px;
+        min-height: 128px;
+        max-height: 128px;
     }
 
     .pune-project-bottom-bar__left,
@@ -1113,7 +1111,7 @@
     }
 
     .pune-spec-card {
-        padding: 3px 3px;
+        padding: 3px 4px;
     }
 }
 
@@ -1130,12 +1128,11 @@
 
     .pune-project-bottom-bar {
         padding: 0 4px 0 0;
-        /* Substantially wider sideways on mobile phones (46vw) */
-        grid-template-columns: clamp(165px, 46vw, 205px) minmax(0, 1fr);
-        gap: 4px;
-        height: clamp(152px, 38vw, 175px);
-        min-height: clamp(152px, 38vw, 175px);
-        max-height: clamp(152px, 38vw, 175px);
+        grid-template-columns: clamp(160px, 44vw, 188px) minmax(0, 1fr);
+        gap: 5px;
+        height: 122px;
+        min-height: 122px;
+        max-height: 122px;
     }
 
     .pune-project-bottom-bar__left,
@@ -1146,54 +1143,40 @@
     }
 
     .pune-project-bottom-bar__right {
-        padding-top: 4px;
-        padding-bottom: 4px;
-    }
-
-    .pune-project-specs-grid {
-        gap: 2px;
-    }
-
-    .pune-spec-card {
-        padding: 2.5px 2px;
-        border-radius: 6px;
+        padding-top: 5px;
+        padding-bottom: 5px;
     }
 
     .pune-spec-card__label {
-        font-size: 6px;
+        font-size: 6.5px;
     }
 
     .pune-spec-card__val {
-        font-size: 8.5px;
+        font-size: 9px;
     }
 
     .pune-spec-card__sub {
-        font-size: 6px;
-    }
-
-    .pune-project-action-row {
-        padding-top: 3px;
-        gap: 3px;
-        height: 26px;
-    }
-
-    .pune-action-nav-btns button {
-        width: 18px;
-        height: 18px;
-    }
-
-    .pune-action-counter {
-        font-size: 8px;
+        font-size: 6.5px;
     }
 
     .pune-action-whatsapp-btn {
-        padding: 2.5px 5px;
-        font-size: 8.5px;
-        gap: 2px;
+        width: 26px;
+        height: 26px;
+        min-width: 26px;
+        min-height: 26px;
+        border-radius: 50%;
+        padding: 0;
+        display: grid;
+        place-items: center;
+        gap: 0;
     }
 
     .pune-action-details-link {
+        font-size: 9px;
+        padding: 3px 3px;
+    }
+
+    .pune-action-counter {
         font-size: 8.5px;
-        padding: 2px 2px;
     }
 }

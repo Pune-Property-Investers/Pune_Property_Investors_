@@ -1,10 +1,5 @@
 @import "tailwindcss";
 
-@theme {
-    --font-serif: var(--font-serif), "Playfair Display", Georgia, serif;
-    --font-sans: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
 /* Design Tokens & Theme Variables */
 @import "../styles/variables.css";
 
@@ -56,4 +51,9 @@
 @import "../components/common/PageHeroBanner.css";
 @import "../components/common/PlaceholderPage.css";
 
-/* cache-bust: 1793862800000 */
+@theme {
+    --font-serif: var(--font-serif), "Playfair Display", Georgia, serif;
+    --font-sans: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* cache-bust: 1793950000000 */

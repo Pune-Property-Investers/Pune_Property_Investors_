@@ -217,12 +217,12 @@ function SiteImageSlideshow({ images = [], projectName = "Project" }) {
         setCurrentIdx(0);
     }, [projectName]);
 
-    // Automatic slideshow effect (runs continuously on both mobile and laptop)
+    // Automatic slideshow effect (runs smoothly on both mobile and laptop)
     useEffect(() => {
         if (total <= 1 || isPaused) return;
         const timer = setInterval(() => {
             setCurrentIdx((prev) => (prev + 1) % total);
-        }, 3000);
+        }, 3400);
         return () => clearInterval(timer);
     }, [total, isPaused]);
 
@@ -236,7 +236,6 @@ function SiteImageSlideshow({ images = [], projectName = "Project" }) {
         setCurrentIdx((prev) => (prev + 1) % total);
     };
 
-    // Only pause on true mouse hover (not on mobile touch screens)
     const handleMouseEnter = () => {
         if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) {
             setIsPaused(true);
@@ -816,9 +815,9 @@ export default function FeaturedProperties() {
                                                             onClick={(e) => handleWhatsApp(project, e)}
                                                             className="pune-action-whatsapp-btn"
                                                             aria-label="Connect on WhatsApp"
+                                                            title="Connect on WhatsApp"
                                                         >
                                                             <FaWhatsapp size={15} />
-                                                            <span>WhatsApp</span>
                                                         </button>
 
                                                         <Link
