@@ -4,8 +4,11 @@
    - 100% TRUST (Complete Transparency. Confident Decisions.)
    - ZERO BROKERAGE (No Brokerage. No Hidden Charges.)
    - BEST LAUNCH PRICE (Exclusive Launch Offers. Maximum Savings.)
-   Icon and Header (Title) are aligned on ONE line.
-   Maintained horizontally across Desktop, Tablet, and Mobile.
+   Features:
+   - Reduced refined header size.
+   - Distinct highlighted icon colors: Emerald, Amber/Gold, Royal Blue.
+   - Synchronized single-pass typing effect with blinking cursor.
+   - Preserves horizontal alignment across all screens.
    ========================================================================== */
 
 .trust-highlights {
@@ -58,203 +61,294 @@
 .trust-highlights__header {
     display: flex;
     align-items: center;
-    gap: 9px;
-    margin-bottom: 5px;
+    gap: 8px;
+    margin-bottom: 4px;
     min-width: 0;
+    min-height: 24px;
 }
 
+/* ── Highlighted Icon Badges ────────────────────────────────────────────── */
 .trust-highlights__icon-box {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     border-radius: 8px;
-    background: #faf8f5;
-    border: 1px solid rgba(196, 152, 102, 0.25);
-    color: #a77a48;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: all 0.25s ease;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .trust-highlights__icon-box svg {
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
 }
 
-.trust-highlights__item:hover .trust-highlights__icon-box {
-    transform: translateY(-1px);
-    background: #0f172a;
-    border-color: #0f172a;
-    color: #ffffff;
-    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.15);
-}
 
-.trust-highlights__title {
-    font-family: var(--font-sans), Inter, -apple-system, sans-serif;
-    font-size: 13.5px;
-    font-weight: 800;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-    color: #0f172a;
-    margin: 0;
-    line-height: 1.25;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.trust-highlights__desc {
-    font-family: var(--font-sans), Inter, -apple-system, sans-serif;
-    font-size: 12px;
-    color: #64748b;
-    margin: 0;
-    line-height: 1.45;
-    font-weight: 400;
-}
-
-/* ==========================================================================
-   RESPONSIVE: TABLET
-   ========================================================================== */
-
-@media (max-width: 1024px) and (min-width: 641px) {
-    .trust-highlights__card {
-        padding: 14px 12px;
-        border-radius: 16px;
+    /* 1. 100% TRUST: Emerald Green Highlight */
+    .trust-highlights__icon-box--trust {
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #059669;
     }
 
-    .trust-highlights__item {
-        padding: 2px 10px;
+    .trust-highlights__item:hover .trust-highlights__icon-box--trust {
+        transform: translateY(-1.5px) scale(1.06);
+        background: #d1fae5;
+        border-color: #059669;
+        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.28);
     }
 
-    .trust-highlights__header {
-        gap: 7px;
-        margin-bottom: 4px;
+    /* 2. ZERO BROKERAGE: Radiant Amber/Gold Highlight */
+    .trust-highlights__icon-box--brokerage {
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        color: #d97706;
     }
 
-    .trust-highlights__icon-box {
-        width: 26px;
-        height: 26px;
-        border-radius: 7px;
+    .trust-highlights__item:hover .trust-highlights__icon-box--brokerage {
+        transform: translateY(-1.5px) scale(1.06);
+        background: #fef3c7;
+        border-color: #d97706;
+        box-shadow: 0 4px 12px rgba(217, 119, 6, 0.28);
     }
 
-    .trust-highlights__icon-box svg {
-        width: 14px;
-        height: 14px;
+    /* 3. BEST LAUNCH PRICE: Royal Sapphire Blue Highlight */
+    .trust-highlights__icon-box--price {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        color: #2563eb;
     }
 
+    .trust-highlights__item:hover .trust-highlights__icon-box--price {
+        transform: translateY(-1.5px) scale(1.06);
+        background: #dbeafe;
+        border-color: #2563eb;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+    }
+
+    /* ── Refined Smaller Header ─────────────────────────────────────────────── */
     .trust-highlights__title {
-        font-size: 12px;
-        letter-spacing: 0.4px;
-    }
-
-    .trust-highlights__desc {
-        font-size: 11px;
-    }
-}
-
-/* ==========================================================================
-   RESPONSIVE: MOBILE SCREEN (Stays strictly horizontal across 3 columns)
-   Icon and Header remain in ONE line.
-   ========================================================================== */
-
-@media (max-width: 640px) {
-    .trust-highlights {
-        margin: 12px 0 8px 0;
-    }
-
-    .trust-highlights__card {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        align-items: stretch;
-        padding: 12px 6px;
-        border-radius: 14px;
-        box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
-    }
-
-    .trust-highlights__item {
-        display: flex;
-        flex-direction: column;
+        font-family: var(--font-sans), Inter, -apple-system, sans-serif;
+        font-size: 11.5px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: #0f172a;
+        margin: 0;
+        line-height: 1.25;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-flex;
         align-items: center;
-        text-align: center;
-        padding: 2px 4px;
+    }
+
+    /* ── Typewriter Effect & Blinking Cursor ─────────────────────────────────── */
+    .trust-highlights__typing-wrapper {
+        display: inline-flex;
+        align-items: center;
         min-width: 0;
     }
 
-    .trust-highlights__item:not(:last-child)::after {
-        top: 10%;
-        height: 80%;
-        background: #edf2f7;
+    .trust-highlights__typing-text {
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    /* Icon and header in one line on mobile */
-    .trust-highlights__header {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 5px;
-        margin-bottom: 4px;
-        max-width: 100%;
+    .trust-highlights__cursor {
+        display: inline-block;
+        color: #a77a48;
+        font-weight: 400;
+        font-size: 11.5px;
+        margin-left: 1.5px;
+        animation: trustCursorBlink 0.95s infinite;
+        user-select: none;
+        line-height: 1;
+        transition: opacity 0.5s ease;
     }
 
-    .trust-highlights__icon-box {
-        width: 22px;
-        height: 22px;
-        border-radius: 6px;
+    @keyframes trustCursorBlink {
+        0%,
+        49% {
+            opacity: 1;
+        }
+
+        50%,
+        100% {
+            opacity: 0;
+        }
     }
 
-    .trust-highlights__icon-box svg {
-        width: 12px;
-        height: 12px;
-    }
-
-    .trust-highlights__title {
-        font-size: 10px;
-        font-weight: 800;
-        letter-spacing: 0.2px;
+    .trust-highlights__desc {
+        font-family: var(--font-sans), Inter, -apple-system, sans-serif;
+        font-size: 12px;
+        color: #64748b;
         margin: 0;
-        line-height: 1.2;
+        line-height: 1.45;
+        font-weight: 400;
     }
 
-    .trust-highlights__desc {
-        font-size: 8px;
-        line-height: 1.35;
-        text-align: center;
-    }
-}
+    /* ==========================================================================
+   RESPONSIVE: TABLET
+   ========================================================================== */
 
-@media (max-width: 380px) {
-    .trust-highlights__card {
-        padding: 10px 4px;
+    @media (max-width: 1024px) and (min-width: 641px) {
+        .trust-highlights__card {
+            padding: 14px 12px;
+            border-radius: 16px;
+        }
+
+        .trust-highlights__item {
+            padding: 2px 10px;
+        }
+
+        .trust-highlights__header {
+            gap: 6px;
+            margin-bottom: 3px;
+            min-height: 22px;
+        }
+
+        .trust-highlights__icon-box {
+            width: 25px;
+            height: 25px;
+            border-radius: 7px;
+        }
+
+        .trust-highlights__icon-box svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .trust-highlights__title {
+            font-size: 10.5px;
+            letter-spacing: 0.35px;
+        }
+
+        .trust-highlights__cursor {
+            font-size: 10.5px;
+        }
+
+        .trust-highlights__desc {
+            font-size: 11px;
+        }
     }
 
-    .trust-highlights__item {
-        padding: 2px 2px;
+    /* ==========================================================================
+   RESPONSIVE: MOBILE SCREEN (Stays strictly horizontal across 3 columns)
+   ========================================================================== */
+
+    @media (max-width: 640px) {
+        .trust-highlights {
+            margin: 12px 0 8px 0;
+        }
+
+        .trust-highlights__card {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            align-items: stretch;
+            padding: 12px 6px;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
+        }
+
+        .trust-highlights__item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 2px 4px;
+            min-width: 0;
+        }
+
+        .trust-highlights__item:not(:last-child)::after {
+            top: 10%;
+            height: 80%;
+            background: #edf2f7;
+        }
+
+        /* Icon and header in one line on mobile */
+        .trust-highlights__header {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 3px;
+            max-width: 100%;
+            min-height: 18px;
+        }
+
+        .trust-highlights__icon-box {
+            width: 19px;
+            height: 19px;
+            border-radius: 5px;
+        }
+
+        .trust-highlights__icon-box svg {
+            width: 10.5px;
+            height: 10.5px;
+        }
+
+        .trust-highlights__title {
+            font-size: 8.8px;
+            font-weight: 700;
+            letter-spacing: 0.15px;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .trust-highlights__cursor {
+            font-size: 8.8px;
+            margin-left: 1px;
+        }
+
+        .trust-highlights__desc {
+            font-size: 8.5px;
+            line-height: 1.35;
+            text-align: center;
+        }
     }
 
-    .trust-highlights__header {
-        gap: 4px;
-        margin-bottom: 3px;
-    }
+    @media (max-width: 380px) {
+        .trust-highlights__card {
+            padding: 10px 3px;
+        }
 
-    .trust-highlights__icon-box {
-        width: 18px;
-        height: 18px;
-        border-radius: 5px;
-    }
+        .trust-highlights__item {
+            padding: 2px 2px;
+        }
 
-    .trust-highlights__icon-box svg {
-        width: 10px;
-        height: 10px;
-    }
+        .trust-highlights__header {
+            gap: 3px;
+            margin-bottom: 2px;
+            min-height: 16px;
+        }
 
-    .trust-highlights__title {
-        font-size: 8.5px;
-        letter-spacing: 0.1px;
-    }
+        .trust-highlights__icon-box {
+            width: 17px;
+            height: 17px;
+            border-radius: 4px;
+        }
 
-    .trust-highlights__desc {
-        font-size: 8px;
-        line-height: 1.25;
+        .trust-highlights__icon-box svg {
+            width: 9.5px;
+            height: 9.5px;
+        }
+
+        .trust-highlights__title {
+            font-size: 7.8px;
+            letter-spacing: 0.1px;
+        }
+
+        .trust-highlights__cursor {
+            font-size: 7.8px;
+        }
+
+        .trust-highlights__desc {
+            font-size: 7.5px;
+            line-height: 1.25;
+        }
     }
-}

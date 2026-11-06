@@ -181,9 +181,8 @@ export default function FeaturedProjects() {
                             type="button"
                             role="tab"
                             aria-selected={selectedDeveloper === tag}
-                            className={`featured-projects__tag-pill ${
-                                selectedDeveloper === tag ? "featured-projects__tag-pill--active" : ""
-                            }`}
+                            className={`featured-projects__tag-pill ${selectedDeveloper === tag ? "featured-projects__tag-pill--active" : ""
+                                }`}
                             onClick={() => {
                                 setSelectedDeveloper(tag);
                                 setActiveSlideIndex(0);
@@ -239,9 +238,8 @@ export default function FeaturedProjects() {
                     </button>
 
                     <div
-                        className={`featured-projects__grid ${
-                            isGrabbing ? "featured-projects__grid--grabbing" : ""
-                        }`}
+                        className={`featured-projects__grid ${isGrabbing ? "featured-projects__grid--grabbing" : ""
+                            }`}
                         ref={carouselRef}
                         onScroll={handleScroll}
                         onMouseDown={handleMouseDown}
@@ -297,9 +295,8 @@ export default function FeaturedProjects() {
                             <button
                                 key={dotIdx}
                                 type="button"
-                                className={`featured-projects__dot ${
-                                    dotIdx === activeSlideIndex ? "featured-projects__dot--active" : ""
-                                }`}
+                                className={`featured-projects__dot ${dotIdx === activeSlideIndex ? "featured-projects__dot--active" : ""
+                                    }`}
                                 onClick={() => scrollToSlide(dotIdx)}
                                 aria-label={`Go to slide ${dotIdx + 1}`}
                             />
