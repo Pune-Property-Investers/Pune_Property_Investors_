@@ -549,14 +549,14 @@
     /* Fit to border: Left, bottom, and top are 0 so side photo container fits flush to outer card border */
     padding: 0 clamp(10px, 1.6vw, 22px) 0 0;
     display: grid;
-    /* Consistently 2 columns across all screens (Gallery on left, Specs on right) */
-    grid-template-columns: clamp(110px, 22vw, 230px) minmax(0, 1fr);
+    /* Consistently 2 columns across all screens (Enlarged prominent gallery on left, Specs on right) */
+    grid-template-columns: clamp(140px, 27vw, 290px) minmax(0, 1fr);
     gap: clamp(8px, 1.4vw, 20px);
     align-items: stretch;
     box-sizing: border-box;
-    height: clamp(125px, 14vw, 165px);
-    min-height: clamp(125px, 14vw, 165px);
-    max-height: clamp(125px, 14vw, 165px);
+    height: clamp(152px, 17vw, 205px);
+    min-height: clamp(152px, 17vw, 205px);
+    max-height: clamp(152px, 17vw, 205px);
     flex-shrink: 0;
 }
 
@@ -1060,11 +1060,11 @@
     /* Retains 2-column layout on mobile with locked uniform height and fit to border */
     .pune-project-bottom-bar {
         padding: 0 6px 0 0;
-        grid-template-columns: 105px 1fr;
+        grid-template-columns: 130px 1fr;
         gap: 6px;
-        height: 108px;
-        min-height: 108px;
-        max-height: 108px;
+        height: 130px;
+        min-height: 130px;
+        max-height: 130px;
     }
 
     .pune-project-bottom-bar__left,
@@ -1107,11 +1107,11 @@
 
     .pune-project-bottom-bar {
         padding: 0 4px 0 0;
-        grid-template-columns: 92px 1fr;
+        grid-template-columns: 114px 1fr;
         gap: 5px;
-        height: 98px;
-        min-height: 98px;
-        max-height: 98px;
+        height: 116px;
+        min-height: 116px;
+        max-height: 116px;
     }
 
     .pune-project-bottom-bar__left,
