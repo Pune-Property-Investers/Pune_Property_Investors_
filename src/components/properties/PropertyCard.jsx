@@ -70,6 +70,7 @@ function PropertyCard({ property }) {
                         alt={`${property.name} site view`}
                         className="property-card__img"
                         loading="lazy"
+                        draggable={false}
                         onError={() => setImgSrc(FALLBACK_IMAGE)}
                     />
 

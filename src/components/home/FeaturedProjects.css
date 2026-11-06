@@ -174,18 +174,96 @@
 }
 
 /* --------------------------------------------------------------------------
-   Cards Grid & Carousel Track
+   Cards Grid & Carousel Track — 3 Cards per row on Desktop with Slider
    -------------------------------------------------------------------------- */
 
-.featured-projects__grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 22px;
-    align-items: stretch;
+.featured-projects__slider-wrap {
+    position: relative;
+    width: 100%;
 }
 
+.featured-projects__side-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
+    transition: all 0.22s ease;
+}
+
+.featured-projects__side-arrow:hover {
+    background: #0f172a;
+    border-color: #0f172a;
+    color: #ffffff;
+    transform: translateY(-50%) scale(1.08);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.22);
+}
+
+.featured-projects__side-arrow:active {
+    transform: translateY(-50%) scale(0.94);
+}
+
+.featured-projects__side-arrow--prev {
+    left: -20px;
+}
+
+.featured-projects__side-arrow--next {
+    right: -20px;
+}
+
+.featured-projects__grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 20px;
+    align-items: stretch;
+    padding: 12px 6px 20px;
+    margin: -12px -6px 0;
+    scroll-behavior: smooth;
+    cursor: grab;
+    user-select: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.featured-projects__grid:active,
+.featured-projects__grid--grabbing {
+    cursor: grabbing;
+}
+
+.featured-projects__grid:focus {
+    outline: none;
+}
+
+.featured-projects__grid::-webkit-scrollbar {
+    display: none;
+}
+
+.featured-projects__grid img {
+    -webkit-user-drag: none;
+    user-drag: none;
+}
+
+/* On Desktop: Exactly 3 cards visible in row */
 .featured-projects__item {
-    min-width: 0;
+    flex: 0 0 calc((100% - 40px) / 3);
+    min-width: calc((100% - 40px) / 3);
+    max-width: calc((100% - 40px) / 3);
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+    display: flex;
+    flex-direction: column;
     opacity: 0;
     transform: translateY(24px);
     transition:
@@ -197,6 +275,11 @@
 .featured-projects--visible .featured-projects__item {
     opacity: 1;
     transform: translateY(0);
+}
+
+.featured-projects__item > * {
+    width: 100%;
+    height: 100%;
 }
 
 /* --------------------------------------------------------------------------
@@ -332,13 +415,26 @@
    -------------------------------------------------------------------------- */
 
 @media (max-width: 1024px) {
-    .featured-projects__grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 18px;
+    .featured-projects__side-arrow--prev {
+        left: -10px;
+    }
+
+    .featured-projects__side-arrow--next {
+        right: -10px;
+    }
+
+    .featured-projects__item {
+        flex: 0 0 calc((100% - 20px) / 2);
+        min-width: calc((100% - 20px) / 2);
+        max-width: calc((100% - 20px) / 2);
     }
 }
 
 @media (max-width: 768px) {
+    .featured-projects__side-arrow {
+        display: none;
+    }
+
     .featured-projects {
         padding: 22px 0 30px;
     }
@@ -371,25 +467,16 @@
         font-size: 12.5px;
     }
 
-    /* Mobile Side-Scroll Snap Track (Card peeking right side as in screenshot) */
+    /* Mobile Side-Scroll Snap Track (Card peeking right side) */
     .featured-projects__grid {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
         gap: 14px;
-        padding-bottom: 10px;
-        scroll-behavior: smooth;
-    }
-
-    .featured-projects__grid::-webkit-scrollbar {
-        display: none;
+        padding: 6px 2px 14px;
+        margin: -6px -2px 0;
     }
 
     .featured-projects__item {
-        flex: 0 0 87%;
-        min-width: 275px;
+        flex: 0 0 86%;
+        min-width: 270px;
         max-width: 325px;
         scroll-snap-align: center;
         opacity: 1;

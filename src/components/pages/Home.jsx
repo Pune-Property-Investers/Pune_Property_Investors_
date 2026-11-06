@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Header from "../layouts/Header";
 import HeroSection from "../home/HeroSection";
+import TrustHighlights from "../home/TrustHighlights";
 import FeaturedProperties from "../home/FeaturedProperties";
 import Footer from "../layouts/Footer";
 import BrowseLocations from "../home/BrowseLocations";
@@ -33,18 +34,21 @@ function Home() {
                 {/* Main content and right advertisement sidebar */}
                 <div className="home-page__content-layout">
                     <div className="home-page__main-content">
+                        {/* 100% Trust, Zero Brokerage, Best Launch Price Highlights */}
+                        <TrustHighlights />
+
                         {/* 1. Projects in Pune showcase with YouTube Video Tours in Play */}
                         <FeaturedProperties
                             filters={{ projectType: activeTab }}
                         />
 
-                        <BrowseLocations />
                         <NewLaunchProjects />
+                        <BrowseLocations />
 
                         {/* 3. Upcoming Projects & Pre-Launch Milestones */}
+                        <FeaturedProjects />
                         <UpcomingProjects />
 
-                        <FeaturedProjects />
                         <FeaturedProp />
                     </div>
 

@@ -24,6 +24,7 @@
 
 /* Section & Component Styles (Active) */
 @import "../components/home/HeroSection.css";
+@import "../components/home/TrustHighlights.css";
 @import "../components/home/PropertySearch.css";
 @import "../components/home/FeaturedProperties.css";
 @import "../components/home/FeaturedProjects.css";

@@ -1,0 +1,260 @@
+/* ==========================================================================
+   TRUST HIGHLIGHTS BAR (TOP OF FEATURED PROPERTIES)
+   Horizontal banner displaying:
+   - 100% TRUST (Complete Transparency. Confident Decisions.)
+   - ZERO BROKERAGE (No Brokerage. No Hidden Charges.)
+   - BEST LAUNCH PRICE (Exclusive Launch Offers. Maximum Savings.)
+   Icon and Header (Title) are aligned on ONE line.
+   Maintained horizontally across Desktop, Tablet, and Mobile.
+   ========================================================================== */
+
+.trust-highlights {
+    width: 100%;
+    margin: 18px 0 10px 0;
+    box-sizing: border-box;
+}
+
+.trust-highlights__card {
+    background: #ffffff;
+    border: 1px solid #edf2f7;
+    border-radius: 18px;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: flex-start;
+    padding: 16px 20px;
+    position: relative;
+    box-sizing: border-box;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.trust-highlights__card:hover {
+    box-shadow: 0 6px 24px rgba(15, 23, 42, 0.07);
+    border-color: #e2e8f0;
+}
+
+.trust-highlights__item {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 2px 18px;
+    position: relative;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+/* Vertical divider between horizontal items */
+.trust-highlights__item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 15%;
+    height: 70%;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, #e2e8f0 30%, #e2e8f0 70%, transparent);
+}
+
+/* ── Icon and Header in One Line ────────────────────────────────────────── */
+.trust-highlights__header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 5px;
+    min-width: 0;
+}
+
+.trust-highlights__icon-box {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #faf8f5;
+    border: 1px solid rgba(196, 152, 102, 0.25);
+    color: #a77a48;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.25s ease;
+}
+
+.trust-highlights__icon-box svg {
+    width: 16px;
+    height: 16px;
+}
+
+.trust-highlights__item:hover .trust-highlights__icon-box {
+    transform: translateY(-1px);
+    background: #0f172a;
+    border-color: #0f172a;
+    color: #ffffff;
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.15);
+}
+
+.trust-highlights__title {
+    font-family: var(--font-sans), Inter, -apple-system, sans-serif;
+    font-size: 13.5px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #0f172a;
+    margin: 0;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.trust-highlights__desc {
+    font-family: var(--font-sans), Inter, -apple-system, sans-serif;
+    font-size: 12px;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.45;
+    font-weight: 400;
+}
+
+/* ==========================================================================
+   RESPONSIVE: TABLET
+   ========================================================================== */
+
+@media (max-width: 1024px) and (min-width: 641px) {
+    .trust-highlights__card {
+        padding: 14px 12px;
+        border-radius: 16px;
+    }
+
+    .trust-highlights__item {
+        padding: 2px 10px;
+    }
+
+    .trust-highlights__header {
+        gap: 7px;
+        margin-bottom: 4px;
+    }
+
+    .trust-highlights__icon-box {
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+    }
+
+    .trust-highlights__icon-box svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .trust-highlights__title {
+        font-size: 12px;
+        letter-spacing: 0.4px;
+    }
+
+    .trust-highlights__desc {
+        font-size: 11px;
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE: MOBILE SCREEN (Stays strictly horizontal across 3 columns)
+   Icon and Header remain in ONE line.
+   ========================================================================== */
+
+@media (max-width: 640px) {
+    .trust-highlights {
+        margin: 12px 0 8px 0;
+    }
+
+    .trust-highlights__card {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: stretch;
+        padding: 12px 6px;
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    .trust-highlights__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 2px 4px;
+        min-width: 0;
+    }
+
+    .trust-highlights__item:not(:last-child)::after {
+        top: 10%;
+        height: 80%;
+        background: #edf2f7;
+    }
+
+    /* Icon and header in one line on mobile */
+    .trust-highlights__header {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        margin-bottom: 4px;
+        max-width: 100%;
+    }
+
+    .trust-highlights__icon-box {
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+    }
+
+    .trust-highlights__icon-box svg {
+        width: 12px;
+        height: 12px;
+    }
+
+    .trust-highlights__title {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.2px;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .trust-highlights__desc {
+        font-size: 8px;
+        line-height: 1.35;
+        text-align: center;
+    }
+}
+
+@media (max-width: 380px) {
+    .trust-highlights__card {
+        padding: 10px 4px;
+    }
+
+    .trust-highlights__item {
+        padding: 2px 2px;
+    }
+
+    .trust-highlights__header {
+        gap: 4px;
+        margin-bottom: 3px;
+    }
+
+    .trust-highlights__icon-box {
+        width: 18px;
+        height: 18px;
+        border-radius: 5px;
+    }
+
+    .trust-highlights__icon-box svg {
+        width: 10px;
+        height: 10px;
+    }
+
+    .trust-highlights__title {
+        font-size: 8.5px;
+        letter-spacing: 0.1px;
+    }
+
+    .trust-highlights__desc {
+        font-size: 8px;
+        line-height: 1.25;
+    }
+}

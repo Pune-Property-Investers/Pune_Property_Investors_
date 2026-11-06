@@ -24,21 +24,50 @@ export default function FeaturedProjects() {
     const [isVisible, setIsVisible] = useState(false);
     const [selectedDeveloper, setSelectedDeveloper] = useState("All Developers");
     const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+    const [isGrabbing, setIsGrabbing] = useState(false);
+
+    // Mouse drag support for desktop slider
+    const isMouseDownRef = useRef(false);
+    const startXRef = useRef(0);
+    const scrollLeftRef = useRef(0);
+    const hasDraggedRef = useRef(false);
 
     const filteredProjects = selectedDeveloper === "All Developers"
         ? projects
         : projects.filter((p) => p.developer === selectedDeveloper);
 
+    const getScrollStep = () => {
+        if (!carouselRef.current) return 320;
+        const container = carouselRef.current;
+        const firstCard = container.firstElementChild;
+        if (!firstCard) return 320;
+        const cardWidth = firstCard.getBoundingClientRect().width;
+        const styles = window.getComputedStyle(container);
+        const gap = parseFloat(styles.gap || styles.columnGap) || 20;
+        return cardWidth + gap;
+    };
+
     const scrollCarousel = (direction) => {
         if (!carouselRef.current) return;
         const container = carouselRef.current;
-        const cardWidth = container.firstElementChild?.clientWidth || 290;
-        const scrollAmount = cardWidth + 18;
+        const step = getScrollStep();
 
         if (direction === "prev") {
-            container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+            if (container.scrollLeft <= 10) {
+                container.scrollTo({
+                    left: container.scrollWidth - container.clientWidth,
+                    behavior: "smooth",
+                });
+            } else {
+                container.scrollBy({ left: -step, behavior: "smooth" });
+            }
         } else {
-            container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+            const maxScroll = container.scrollWidth - container.clientWidth;
+            if (container.scrollLeft >= maxScroll - 10) {
+                container.scrollTo({ left: 0, behavior: "smooth" });
+            } else {
+                container.scrollBy({ left: step, behavior: "smooth" });
+            }
         }
     };
 
@@ -47,7 +76,8 @@ export default function FeaturedProjects() {
         const container = carouselRef.current;
         const cards = container.children;
         if (cards[index]) {
-            cards[index].scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+            const targetLeft = cards[index].offsetLeft - container.offsetLeft;
+            container.scrollTo({ left: targetLeft, behavior: "smooth" });
         }
         setActiveSlideIndex(index);
     };
@@ -55,10 +85,52 @@ export default function FeaturedProjects() {
     const handleScroll = () => {
         if (!carouselRef.current) return;
         const container = carouselRef.current;
-        const cardWidth = container.firstElementChild?.clientWidth || 290;
-        const newIndex = Math.round(container.scrollLeft / (cardWidth + 18));
-        if (newIndex >= 0 && newIndex < filteredProjects.length) {
-            setActiveSlideIndex(newIndex);
+        const step = getScrollStep();
+        if (step <= 0) return;
+
+        const isAtEnd = container.scrollLeft + container.clientWidth >= container.scrollWidth - 15;
+        if (isAtEnd) {
+            setActiveSlideIndex(filteredProjects.length - 1);
+        } else {
+            const newIndex = Math.round(container.scrollLeft / step);
+            if (newIndex >= 0 && newIndex < filteredProjects.length) {
+                setActiveSlideIndex(newIndex);
+            }
+        }
+    };
+
+    const handleMouseDown = (e) => {
+        if (e.button !== 0 || !carouselRef.current) return;
+        isMouseDownRef.current = true;
+        hasDraggedRef.current = false;
+        setIsGrabbing(true);
+        startXRef.current = e.pageX - carouselRef.current.offsetLeft;
+        scrollLeftRef.current = carouselRef.current.scrollLeft;
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isMouseDownRef.current || !carouselRef.current) return;
+        const x = e.pageX - carouselRef.current.offsetLeft;
+        const walk = x - startXRef.current;
+        if (Math.abs(walk) > 5) {
+            hasDraggedRef.current = true;
+        }
+        carouselRef.current.scrollLeft = scrollLeftRef.current - walk;
+    };
+
+    const handleMouseUpOrLeave = () => {
+        if (isMouseDownRef.current) {
+            isMouseDownRef.current = false;
+            setIsGrabbing(false);
+            handleScroll();
+        }
+    };
+
+    const handleClickCapture = (e) => {
+        if (hasDraggedRef.current) {
+            e.preventDefault();
+            e.stopPropagation();
+            hasDraggedRef.current = false;
         }
     };
 
@@ -154,25 +226,59 @@ export default function FeaturedProjects() {
                     </div>
                 </div>
 
-                {/* Side-Scroll / Grid Cards Track */}
-                <div
-                    className="featured-projects__grid"
-                    ref={carouselRef}
-                    onScroll={handleScroll}
-                    role="region"
-                    aria-label="Featured landmark developments"
-                >
-                    {filteredProjects.map((project, index) => (
-                        <div
-                            className="featured-projects__item"
-                            key={project.id ?? project.name}
-                            style={{
-                                "--card-index": index,
-                            }}
-                        >
-                            <PropertyCard property={project} />
-                        </div>
-                    ))}
+                {/* Desktop & Mobile Slider Track with Interactive Controls */}
+                <div className="featured-projects__slider-wrap">
+                    <button
+                        type="button"
+                        className="featured-projects__side-arrow featured-projects__side-arrow--prev"
+                        onClick={() => scrollCarousel("prev")}
+                        aria-label="Previous development"
+                        title="Previous"
+                    >
+                        <ChevronLeft size={20} />
+                    </button>
+
+                    <div
+                        className={`featured-projects__grid ${
+                            isGrabbing ? "featured-projects__grid--grabbing" : ""
+                        }`}
+                        ref={carouselRef}
+                        onScroll={handleScroll}
+                        onMouseDown={handleMouseDown}
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={handleMouseUpOrLeave}
+                        onMouseLeave={handleMouseUpOrLeave}
+                        onClickCapture={handleClickCapture}
+                        role="region"
+                        aria-label="Featured landmark developments"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                            if (e.key === "ArrowLeft") scrollCarousel("prev");
+                            if (e.key === "ArrowRight") scrollCarousel("next");
+                        }}
+                    >
+                        {filteredProjects.map((project, index) => (
+                            <div
+                                className="featured-projects__item"
+                                key={project.id ?? project.name}
+                                style={{
+                                    "--card-index": index,
+                                }}
+                            >
+                                <PropertyCard property={project} />
+                            </div>
+                        ))}
+                    </div>
+
+                    <button
+                        type="button"
+                        className="featured-projects__side-arrow featured-projects__side-arrow--next"
+                        onClick={() => scrollCarousel("next")}
+                        aria-label="Next development"
+                        title="Next"
+                    >
+                        <ChevronRight size={20} />
+                    </button>
                 </div>
 
                 {/* Bottom Navigation Controls & Pagination Dots */}
