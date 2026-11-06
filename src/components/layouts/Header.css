@@ -306,6 +306,13 @@
     }
 }
 
+/* Hide circular hamburger button on mobile view */
+@media (max-width: 768px) {
+    .header-mobile-hamburger {
+        display: none !important;
+    }
+}
+
 /* ==========================================================================
    MOBILE TOGGLE BUTTON
    ========================================================================== */
