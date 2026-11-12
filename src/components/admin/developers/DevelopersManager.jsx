@@ -8,6 +8,7 @@ import { useToast } from "../../../context/ToastContext";
 import DataTable from "../common/DataTable";
 import AdminModal from "../common/AdminModal";
 import ConfirmModal from "../common/ConfirmModal";
+import SectionSyncBar from "../common/SectionSyncBar";
 import ImageUploader, { resolveAssetUrl } from "../content/ImageUploader";
 
 const EMPTY_DEVELOPER = {
@@ -35,22 +36,23 @@ export default function DevelopersManager() {
     const [deleteTarget, setDeleteTarget] = useState(null);
     const [deleting, setDeleting] = useState(false);
 
-    useEffect(() => {
-        async function load() {
-            setLoading(true);
-            try {
-                const [devList, projList] = await Promise.all([
-                    developerService.list(),
-                    projectService.list(),
-                ]);
-                setDevelopers(Array.isArray(devList) ? devList : []);
-                setProjects(Array.isArray(projList) ? projList : []);
-            } catch (err) {
-                showToast(err.message || "Failed to load developers", "error");
-            } finally {
-                setLoading(false);
-            }
+    const load = async () => {
+        setLoading(true);
+        try {
+            const [devList, projList] = await Promise.all([
+                developerService.list(),
+                projectService.list(),
+            ]);
+            setDevelopers(Array.isArray(devList) ? devList : []);
+            setProjects(Array.isArray(projList) ? projList : []);
+        } catch (err) {
+            showToast(err.message || "Failed to load developers", "error");
+        } finally {
+            setLoading(false);
         }
+    };
+
+    useEffect(() => {
         load();
     }, []);
 
@@ -214,6 +216,7 @@ export default function DevelopersManager() {
                     </p>
                 </div>
                 <div className="admin-page-actions">
+                    <SectionSyncBar sectionKey="developers" label="Developers" onRetrieved={load} />
                     <button type="button" className="admin-btn admin-btn--gold" onClick={openCreate}>
                         <Plus size={16} /> Add Developer
                     </button>

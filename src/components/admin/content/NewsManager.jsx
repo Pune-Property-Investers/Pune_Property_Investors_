@@ -7,6 +7,7 @@ import { useToast } from "../../../context/ToastContext";
 import DataTable from "../common/DataTable";
 import StatusBadge from "../common/StatusBadge";
 import ConfirmModal from "../common/ConfirmModal";
+import SectionSyncBar from "../common/SectionSyncBar";
 import ContentEditor from "./ContentEditor";
 import ImageUploader, { resolveAssetUrl } from "./ImageUploader";
 import RichTextEditor from "./RichTextEditor";
@@ -39,18 +40,19 @@ export default function NewsManager() {
     const [deleteTarget, setDeleteTarget] = useState(null);
     const [deleting, setDeleting] = useState(false);
 
-    useEffect(() => {
-        async function load() {
-            setLoading(true);
-            try {
-                const data = await articleService.listNews();
-                setNewsItems(Array.isArray(data) ? data : []);
-            } catch (err) {
-                showToast(err.message || "Failed to load news", "error");
-            } finally {
-                setLoading(false);
-            }
+    async function load() {
+        setLoading(true);
+        try {
+            const data = await articleService.listNews();
+            setNewsItems(Array.isArray(data) ? data : []);
+        } catch (err) {
+            showToast(err.message || "Failed to load news", "error");
+        } finally {
+            setLoading(false);
         }
+    }
+
+    useEffect(() => {
         load();
     }, []);
 
@@ -310,6 +312,7 @@ export default function NewsManager() {
                     </p>
                 </div>
                 <div className="admin-page-actions">
+                    <SectionSyncBar sectionKey="news" label="News" onRetrieved={load} />
                     <button type="button" className="admin-btn admin-btn--gold" onClick={openNew}>
                         <Plus size={16} /> Add News Story
                     </button>

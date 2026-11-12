@@ -12,6 +12,7 @@ import ImageUploader from "./ImageUploader";
 import VideoUploader from "./VideoUploader";
 import RichTextEditor from "./RichTextEditor";
 import SEOEditor from "./SEOEditor";
+import SectionSyncBar from "../common/SectionSyncBar";
 
 const EDITOR_TABS = [
     { key: "sections", label: "Sections & Order", icon: Layers },
@@ -52,20 +53,21 @@ export default function HomepageEditor() {
 
     useUnsavedChanges(isDirty);
 
-    useEffect(() => {
-        async function loadHomepage() {
-            setLoading(true);
-            try {
-                const res = await contentService.getHomepage();
-                hydrate(res.draft, res.published);
-                const firstSec = res.draft?.sections?.[0]?.id;
-                if (firstSec) setActiveSectionId(firstSec);
-            } catch (err) {
-                showToast(err.message || "Failed to load homepage CMS data", "error");
-            } finally {
-                setLoading(false);
-            }
+    async function loadHomepage() {
+        setLoading(true);
+        try {
+            const res = await contentService.getHomepage();
+            hydrate(res.draft, res.published);
+            const firstSec = res.draft?.sections?.[0]?.id;
+            if (firstSec) setActiveSectionId(firstSec);
+        } catch (err) {
+            showToast(err.message || "Failed to load homepage CMS data", "error");
+        } finally {
+            setLoading(false);
         }
+    }
+
+    useEffect(() => {
         loadHomepage();
     }, []);
 
@@ -185,6 +187,28 @@ export default function HomepageEditor() {
                 }
             }}
         >
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    flexWrap: "wrap",
+                    gap: 8,
+                    marginBottom: 12,
+                    paddingBottom: 10,
+                    borderBottom: "1px solid #e2e8f0",
+                }}
+            >
+                <span style={{ fontSize: 12, color: "#64748b", fontWeight: 500 }}>
+                    Scoped sync ({isAboutMode ? "About Us page only" : "Homepage only"}):
+                </span>
+                <SectionSyncBar
+                    sectionKey={isAboutMode ? "about" : "homepage"}
+                    label={isAboutMode ? "About Us" : "Homepage"}
+                    onRetrieved={loadHomepage}
+                />
+            </div>
+
             <div className="admin-tabs" style={{ marginBottom: 14 }}>
                 {EDITOR_TABS.map((tab) => {
                     const Icon = tab.icon;

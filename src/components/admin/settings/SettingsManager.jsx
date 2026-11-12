@@ -8,6 +8,7 @@ import { resetMockStore } from "../../../services/mockStore";
 import { useAdminAuth } from "../../../context/AdminAuthContext";
 import { useToast } from "../../../context/ToastContext";
 import ConfirmModal from "../common/ConfirmModal";
+import SectionSyncBar from "../common/SectionSyncBar";
 
 const SETTINGS_TABS = [
     { key: "website", label: "Website Settings", icon: Building },
@@ -33,23 +34,24 @@ export default function SettingsManager() {
     });
     const [resetModalOpen, setResetModalOpen] = useState(false);
 
-    useEffect(() => {
-        async function load() {
-            setLoading(true);
-            try {
-                const data = await settingsService.getSettings();
-                setWebsite(data.website || {});
-                setSeo(data.seo || {});
-                setProfile({
-                    ...(data.profile || {}),
-                    ...(user ? { name: user.name || data.profile?.name, email: user.email || data.profile?.email } : {}),
-                });
-            } catch (err) {
-                showToast(err.message || "Failed to load settings", "error");
-            } finally {
-                setLoading(false);
-            }
+    async function load() {
+        setLoading(true);
+        try {
+            const data = await settingsService.getSettings();
+            setWebsite(data.website || {});
+            setSeo(data.seo || {});
+            setProfile({
+                ...(data.profile || {}),
+                ...(user ? { name: user.name || data.profile?.name, email: user.email || data.profile?.email } : {}),
+            });
+        } catch (err) {
+            showToast(err.message || "Failed to load settings", "error");
+        } finally {
+            setLoading(false);
         }
+    }
+
+    useEffect(() => {
         load();
     }, []);
 
@@ -122,6 +124,7 @@ export default function SettingsManager() {
                     </p>
                 </div>
                 <div className="admin-page-actions">
+                    <SectionSyncBar sectionKey="settings" label="Settings" onRetrieved={load} />
                     <button
                         type="button"
                         className="admin-btn admin-btn--outline"

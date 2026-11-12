@@ -380,7 +380,7 @@ const DEFAULT_SETTINGS = {
     },
 };
 
-function createInitialStore() {
+export function createInitialStore() {
     return {
         properties: propertyListingsData.map((p) => ({
             ...p,

@@ -7,6 +7,7 @@ import { useToast } from "../../../context/ToastContext";
 import DataTable from "../common/DataTable";
 import AdminModal from "../common/AdminModal";
 import ConfirmModal from "../common/ConfirmModal";
+import SectionSyncBar from "../common/SectionSyncBar";
 import ImageUploader, { resolveAssetUrl } from "../content/ImageUploader";
 
 const EMPTY_LOCATION = {
@@ -44,18 +45,19 @@ export default function LocationsManager() {
     const [deleteTarget, setDeleteTarget] = useState(null);
     const [deleting, setDeleting] = useState(false);
 
-    useEffect(() => {
-        async function load() {
-            setLoading(true);
-            try {
-                const list = await locationService.list();
-                setLocations(Array.isArray(list) ? list : []);
-            } catch (err) {
-                showToast(err.message || "Failed to load locations", "error");
-            } finally {
-                setLoading(false);
-            }
+    const load = async () => {
+        setLoading(true);
+        try {
+            const list = await locationService.list();
+            setLocations(Array.isArray(list) ? list : []);
+        } catch (err) {
+            showToast(err.message || "Failed to load locations", "error");
+        } finally {
+            setLoading(false);
         }
+    };
+
+    useEffect(() => {
         load();
     }, []);
 
@@ -223,6 +225,7 @@ export default function LocationsManager() {
                     </p>
                 </div>
                 <div className="admin-page-actions">
+                    <SectionSyncBar sectionKey="locations" label="Locations" onRetrieved={load} />
                     <button type="button" className="admin-btn admin-btn--gold" onClick={openCreate}>
                         <Plus size={16} /> Add Location
                     </button>

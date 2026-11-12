@@ -8,6 +8,7 @@ import DataTable from "../common/DataTable";
 import StatusBadge from "../common/StatusBadge";
 import AdminModal from "../common/AdminModal";
 import ConfirmModal from "../common/ConfirmModal";
+import SectionSyncBar from "../common/SectionSyncBar";
 
 const EMPTY_JOB = {
     title: "",
@@ -39,22 +40,23 @@ export default function CareersManager() {
     const [deleteTarget, setDeleteTarget] = useState(null);
     const [deleting, setDeleting] = useState(false);
 
-    useEffect(() => {
-        async function load() {
-            setLoading(true);
-            try {
-                const [jobList, appList] = await Promise.all([
-                    careerService.listJobs(),
-                    careerService.listApplications(),
-                ]);
-                setJobs(Array.isArray(jobList) ? jobList : []);
-                setApplications(Array.isArray(appList) ? appList : []);
-            } catch (err) {
-                showToast(err.message || "Failed to load careers data", "error");
-            } finally {
-                setLoading(false);
-            }
+    async function load() {
+        setLoading(true);
+        try {
+            const [jobList, appList] = await Promise.all([
+                careerService.listJobs(),
+                careerService.listApplications(),
+            ]);
+            setJobs(Array.isArray(jobList) ? jobList : []);
+            setApplications(Array.isArray(appList) ? appList : []);
+        } catch (err) {
+            showToast(err.message || "Failed to load careers data", "error");
+        } finally {
+            setLoading(false);
         }
+    }
+
+    useEffect(() => {
         load();
     }, []);
 
@@ -259,6 +261,7 @@ export default function CareersManager() {
                     </p>
                 </div>
                 <div className="admin-page-actions">
+                    <SectionSyncBar sectionKey="careers" label="Careers" onRetrieved={load} />
                     <button type="button" className="admin-btn admin-btn--gold" onClick={openNewJob}>
                         <Plus size={16} /> Post Job Opening
                     </button>

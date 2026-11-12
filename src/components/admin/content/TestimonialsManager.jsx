@@ -6,6 +6,7 @@ import { contentService } from "../../../services/content.service";
 import { useToast } from "../../../context/ToastContext";
 import DataTable from "../common/DataTable";
 import ConfirmModal from "../common/ConfirmModal";
+import SectionSyncBar from "../common/SectionSyncBar";
 import ImageUploader, { resolveAssetUrl } from "./ImageUploader";
 import LivePagePreview from "../preview/LivePagePreview";
 
@@ -28,18 +29,19 @@ export default function TestimonialsManager() {
     const [saving, setSaving] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState(null);
 
-    useEffect(() => {
-        async function load() {
-            setLoading(true);
-            try {
-                const list = await contentService.listTestimonials();
-                setItems(Array.isArray(list) ? list : []);
-            } catch (err) {
-                showToast(err.message || "Failed to load testimonials", "error");
-            } finally {
-                setLoading(false);
-            }
+    async function load() {
+        setLoading(true);
+        try {
+            const list = await contentService.listTestimonials();
+            setItems(Array.isArray(list) ? list : []);
+        } catch (err) {
+            showToast(err.message || "Failed to load testimonials", "error");
+        } finally {
+            setLoading(false);
         }
+    }
+
+    useEffect(() => {
         load();
     }, []);
 
@@ -302,6 +304,7 @@ export default function TestimonialsManager() {
                     </p>
                 </div>
                 <div className="admin-page-actions">
+                    <SectionSyncBar sectionKey="testimonials" label="Testimonials" onRetrieved={load} />
                     <button type="button" className="admin-btn admin-btn--gold" onClick={() => setEditing({ ...EMPTY_TESTIMONIAL })}>
                         <Plus size={16} /> Add Testimonial
                     </button>

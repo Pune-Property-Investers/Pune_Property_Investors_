@@ -1,9 +1,12 @@
 import { apiRequest, withMockFallback } from "./api";
-import { getStore, saveStore, addActivity, resetMockStore } from "./mockStore";
+import { getStore, saveStore, addActivity, resetMockStore, createInitialStore } from "./mockStore";
 import {
     publishLiveSnapshot,
     restorePreviousSnapshot,
     clearLiveSnapshot,
+    publishSectionSnapshot,
+    retrieveSectionPreviousSnapshot,
+    clearSectionLiveOverride,
 } from "./liveContent";
 
 export const contentService = {
@@ -122,6 +125,105 @@ export const contentService = {
                 clearLiveSnapshot();
                 addActivity("Reverted all changes and restored original website", "update");
                 return { mode: "original", store: fresh };
+            }
+        );
+    },
+
+    async publishSection(sectionKey) {
+        return withMockFallback(
+            () =>
+                apiRequest(`/content/sections/${sectionKey}/publish`, {
+                    method: "POST",
+                }),
+            () => {
+                const store = getStore();
+                if (sectionKey === "homepage" && store.homepageDraft) {
+                    store.homepagePublished = {
+                        ...(store.homepagePublished || {}),
+                        sections: store.homepageDraft.sections,
+                        seo: store.homepageDraft.seo,
+                        status: "Published",
+                        updatedAt: new Date().toISOString(),
+                    };
+                    saveStore(store);
+                } else if (sectionKey === "about" && store.homepageDraft?.about) {
+                    store.homepagePublished = {
+                        ...(store.homepagePublished || store.homepageDraft),
+                        about: store.homepageDraft.about,
+                        updatedAt: new Date().toISOString(),
+                    };
+                    saveStore(store);
+                }
+                const snapshot = publishSectionSnapshot(sectionKey, store);
+                addActivity(`Published "${sectionKey}" changes to live website`, "publish");
+                return snapshot;
+            }
+        );
+    },
+
+    async retrieveSection(sectionKey, mode = "original") {
+        return withMockFallback(
+            () =>
+                apiRequest(`/content/sections/${sectionKey}/retrieve`, {
+                    method: "POST",
+                    body: JSON.stringify({ mode }),
+                }),
+            () => {
+                const store = getStore();
+
+                if (mode === "previous") {
+                    const prev = retrieveSectionPreviousSnapshot(sectionKey);
+                    if (prev) {
+                        if (sectionKey === "homepage" && prev.restoredValue) {
+                            store.homepageDraft = { ...(store.homepageDraft || {}), ...prev.restoredValue };
+                            store.homepagePublished = { ...(store.homepagePublished || {}), ...prev.restoredValue };
+                        } else if (sectionKey === "about" && prev.restoredValue) {
+                            store.homepageDraft = { ...(store.homepageDraft || {}), about: prev.restoredValue };
+                            store.homepagePublished = { ...(store.homepagePublished || {}), about: prev.restoredValue };
+                        } else if (sectionKey === "careers") {
+                            store.jobs = prev.restoredValue;
+                        } else if (sectionKey in store) {
+                            store[sectionKey] = prev.restoredValue;
+                        }
+                        saveStore(store);
+                        addActivity(`Retrieved previous "${sectionKey}" version`, "update");
+                        return { mode: "previous", sectionKey };
+                    }
+                }
+
+                const initial = createInitialStore();
+                if (sectionKey === "homepage") {
+                    store.homepageDraft = {
+                        ...(store.homepageDraft || {}),
+                        sections: initial.homepagePublished.sections,
+                        seo: initial.homepagePublished.seo,
+                        status: "Published",
+                    };
+                    store.homepagePublished = {
+                        ...(store.homepagePublished || {}),
+                        sections: initial.homepagePublished.sections,
+                        seo: initial.homepagePublished.seo,
+                        status: "Published",
+                    };
+                } else if (sectionKey === "about") {
+                    store.homepageDraft = {
+                        ...(store.homepageDraft || {}),
+                        about: initial.homepagePublished.about,
+                    };
+                    store.homepagePublished = {
+                        ...(store.homepagePublished || {}),
+                        about: initial.homepagePublished.about,
+                    };
+                } else if (sectionKey === "careers") {
+                    store.jobs = initial.jobs;
+                } else if (sectionKey in initial) {
+                    store[sectionKey] = initial[sectionKey];
+                }
+
+                saveStore(store);
+                clearSectionLiveOverride(sectionKey);
+                addActivity(`Retrieved original "${sectionKey}" defaults`, "update");
+                return { mode: "original", sectionKey };
             }
         );
     },

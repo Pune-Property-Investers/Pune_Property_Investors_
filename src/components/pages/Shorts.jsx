@@ -18,10 +18,17 @@ import {
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { propertyShorts, extractYouTubeId } from "../../data/shortsData";
+import { usePublishedCms } from "../../services/liveContent";
 import Header from "../layouts/Header";
 import "./Shorts.css";
 
 export default function Shorts() {
+    const published = usePublishedCms();
+    const publishedShorts = Array.isArray(published?.shorts)
+        ? published.shorts.filter((s) => s.visible !== false)
+        : [];
+    const activeShorts = publishedShorts.length > 0 ? publishedShorts : propertyShorts;
+
     const containerRef = useRef(null);
 
     const [activeIndex, setActiveIndex] = useState(0);
@@ -40,7 +47,7 @@ export default function Shorts() {
         const scrollTop = containerRef.current.scrollTop;
         const height = containerRef.current.clientHeight;
         const index = Math.round(scrollTop / height);
-        if (index !== activeIndex && index >= 0 && index < propertyShorts.length) {
+        if (index !== activeIndex && index >= 0 && index < activeShorts.length) {
             setActiveIndex(index);
         }
     };
@@ -151,7 +158,7 @@ export default function Shorts() {
                 onScroll={handleScroll}
                 aria-label="PPI Shorts Video Feed"
             >
-                {propertyShorts.map((short, index) => {
+                {activeShorts.map((short, index) => {
                     const videoId = extractYouTubeId(short.youtubeUrl);
                     const isActive = activeIndex === index;
                     const isLiked = likedShorts[short.id];

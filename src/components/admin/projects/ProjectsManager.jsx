@@ -10,6 +10,7 @@ import DataTable from "../common/DataTable";
 import StatusBadge from "../common/StatusBadge";
 import AdminModal from "../common/AdminModal";
 import ConfirmModal from "../common/ConfirmModal";
+import SectionSyncBar from "../common/SectionSyncBar";
 import ImageUploader, { resolveAssetUrl } from "../content/ImageUploader";
 import RichTextEditor from "../content/RichTextEditor";
 import LivePagePreview from "../preview/LivePagePreview";
@@ -67,24 +68,25 @@ export default function ProjectsManager() {
     const [deleteTarget, setDeleteTarget] = useState(null);
     const [deleting, setDeleting] = useState(false);
 
-    useEffect(() => {
-        async function loadAll() {
-            setLoading(true);
-            try {
-                const [projList, devList, locList] = await Promise.all([
-                    projectService.list(),
-                    developerService.list(),
-                    locationService.list(),
-                ]);
-                setItems(Array.isArray(projList) ? projList : []);
-                setDevelopers(Array.isArray(devList) ? devList : []);
-                setLocations(Array.isArray(locList) ? locList : []);
-            } catch (err) {
-                showToast(err.message || "Failed to load projects", "error");
-            } finally {
-                setLoading(false);
-            }
+    const loadAll = async () => {
+        setLoading(true);
+        try {
+            const [projList, devList, locList] = await Promise.all([
+                projectService.list(),
+                developerService.list(),
+                locationService.list(),
+            ]);
+            setItems(Array.isArray(projList) ? projList : []);
+            setDevelopers(Array.isArray(devList) ? devList : []);
+            setLocations(Array.isArray(locList) ? locList : []);
+        } catch (err) {
+            showToast(err.message || "Failed to load projects", "error");
+        } finally {
+            setLoading(false);
         }
+    };
+
+    useEffect(() => {
         loadAll();
     }, []);
 
@@ -333,6 +335,7 @@ export default function ProjectsManager() {
                     </p>
                 </div>
                 <div className="admin-page-actions">
+                    <SectionSyncBar sectionKey="projects" label="Projects" onRetrieved={loadAll} />
                     <button type="button" className="admin-btn admin-btn--gold" onClick={openCreateModal}>
                         <Plus size={16} /> Add Project
                     </button>
