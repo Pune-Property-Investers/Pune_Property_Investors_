@@ -1,0 +1,73 @@
+/* ========================================
+   SCROLL TO TOP — FLOATING BUTTON
+======================================== */
+
+.scroll-to-top {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 900;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(217, 180, 119, 0.45);
+    border-radius: 50%;
+    background: #201923;
+    color: #e2c18c;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(12px);
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease,
+        transform 0.25s ease,
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.scroll-to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.scroll-to-top:hover {
+    transform: translateY(-3px);
+    border-color: #d9b477;
+    background: #d9b477;
+    color: #201923;
+}
+
+.scroll-to-top:focus-visible {
+    outline: 2px solid #d9b477;
+    outline-offset: 4px;
+}
+
+@media (max-width: 600px) {
+    .scroll-to-top {
+        right: 16px;
+        bottom: 16px;
+        width: 42px;
+        height: 42px;
+        font-size: 15px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-to-top {
+        transition: none;
+    }
+
+    .scroll-to-top:hover {
+        transform: none;
+    }
+}
+
