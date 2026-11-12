@@ -18,7 +18,7 @@ import {
 import "./NewLaunchProjects.css";
 
 /* 8 Distinct New Launch Projects with full photography and specifications */
-const newLaunchProjects = [
+export const newLaunchProjects = [
     {
         id: 1,
         title: "Gated Villa NA Plot with Clubhouse Access",
@@ -149,7 +149,11 @@ const newLaunchProjects = [
     },
 ];
 
-export default function NewLaunchProjects() {
+export default function NewLaunchProjects({ previewData }) {
+    const activeProjects =
+        Array.isArray(previewData?.items) && previewData.items.length > 0
+            ? previewData.items
+            : newLaunchProjects;
     const [activeIndex, setActiveIndex] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
     const [imgIndices, setImgIndices] = useState({});
@@ -158,7 +162,7 @@ export default function NewLaunchProjects() {
     const [touchStartX, setTouchStartX] = useState(0);
     const [touchEndX, setTouchEndX] = useState(0);
 
-    const totalProjects = newLaunchProjects.length;
+    const totalProjects = activeProjects.length;
 
     const handlePrev = useCallback(() => {
         setActiveIndex((prev) => (prev - 1 + totalProjects) % totalProjects);
@@ -183,8 +187,8 @@ export default function NewLaunchProjects() {
     useEffect(() => {
         if (isPaused) return;
 
-        const currentProject = newLaunchProjects[activeIndex];
-        if (!currentProject || currentProject.images.length <= 1) return;
+        const currentProject = activeProjects[activeIndex];
+        if (!currentProject || !currentProject.images || currentProject.images.length <= 1) return;
 
         const imgTimer = setInterval(() => {
             setImgIndices((prev) => ({
@@ -264,18 +268,24 @@ export default function NewLaunchProjects() {
                     <div className="new-launch__intro">
                         <span className="new-launch__eyebrow">
                             <span className="new-launch__eyebrow-line" />
-                            DISCOVER WHAT&apos;S NEXT
+                            {previewData?.eyebrow || "DISCOVER WHAT'S NEXT"}
                         </span>
 
                         <h2>
-                            New launches.
-                            <br />
-                            <span>New possibilities.</span>
+                            {previewData?.heading ? (
+                                previewData.heading
+                            ) : (
+                                <>
+                                    New launches.
+                                    <br />
+                                    <span>New possibilities.</span>
+                                </>
+                            )}
                         </h2>
 
                         <p className="new-launch__desc-desktop">
-                            Explore exciting luxury residential opportunities across Pune.
-                            Find a home that fits your lifestyle and your future plans.
+                            {previewData?.subtitle ||
+                                "Explore exciting luxury residential opportunities across Pune. Find a home that fits your lifestyle and your future plans."}
                         </p>
 
                         {/* Mobile Header Subtitle & Date Link matching reference design */}
@@ -335,7 +345,7 @@ export default function NewLaunchProjects() {
                         className="new-launch-slideshow-track"
                         style={{ transform: `translateX(-${activeIndex * 100}%)` }}
                     >
-                        {newLaunchProjects.map((project, pIdx) => {
+                        {activeProjects.map((project, pIdx) => {
                             const projectImgIdx = imgIndices[project.id] || 0;
                             const isFav = favoriteItems[project.id] ?? (project.id === 1);
                             const isCompared = comparedItems[project.id] ?? false;
@@ -481,7 +491,7 @@ export default function NewLaunchProjects() {
                 {/* External 8 Pagination Dots & Slide Counter below Container */}
                 <div className="new-launch-bottom-controls">
                     <div className="new-launch-dots" role="tablist" aria-label="New launch project pagination">
-                        {newLaunchProjects.map((_, dotIdx) => (
+                        {activeProjects.map((_, dotIdx) => (
                             <button
                                 key={dotIdx}
                                 type="button"

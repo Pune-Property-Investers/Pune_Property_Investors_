@@ -46,11 +46,11 @@ function renderPublishedSection(section, activeTab, setActiveTab, published) {
         case "trust-highlights":
             return <TrustHighlights key={section.id} previewData={data} />;
         case "featured-properties":
-            return <FeaturedProperties key={section.id} filters={{ projectType: activeTab }} />;
+            return <FeaturedProperties key={section.id} filters={{ projectType: activeTab }} previewData={data} />;
         case "new-launches":
-            return <NewLaunchProjects key={section.id} />;
+            return <NewLaunchProjects key={section.id} previewData={data} />;
         case "browse-locations":
-            return <BrowseLocations key={section.id} customLocations={published?.locations} />;
+            return <BrowseLocations key={section.id} customLocations={published?.locations} previewData={data} />;
         case "featured-projects":
             return (
                 <FeaturedProjects
@@ -62,11 +62,11 @@ function renderPublishedSection(section, activeTab, setActiveTab, published) {
         case "upcoming-projects":
             return <UpcomingProjects key={section.id} previewData={data} />;
         case "featured-prop":
-            return <FeaturedProp key={section.id} />;
+            return <FeaturedProp key={section.id} previewData={data} />;
         case "workflow":
-            return <Workflow key={section.id} />;
+            return <Workflow key={section.id} previewData={data} />;
         case "developer-logos":
-            return <DeveloperLogos key={section.id} />;
+            return <DeveloperLogos key={section.id} previewData={data} />;
         case "testimonials":
             return (
                 <Testimonials
@@ -78,7 +78,7 @@ function renderPublishedSection(section, activeTab, setActiveTab, published) {
         case "home-contact":
             return <HomeContact key={section.id} previewData={data} />;
         case "trust-stats":
-            return <TrustStats key={section.id} />;
+            return <TrustStats key={section.id} previewData={data} />;
         default:
             return null;
     }

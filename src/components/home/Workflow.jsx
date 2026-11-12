@@ -14,7 +14,7 @@ import {
 
 import "./Workflow.css";
 
-const workflowSteps = [
+export const workflowSteps = [
     {
         title: "Select Property",
         description: "Explore properties that match your needs.",
@@ -52,7 +52,14 @@ const workflowSteps = [
     },
 ];
 
-export default function Workflow() {
+export default function Workflow({ previewData }) {
+    const activeSteps =
+        Array.isArray(previewData?.steps) && previewData.steps.length > 0
+            ? previewData.steps.map((s, idx) => ({
+                  ...s,
+                  icon: workflowSteps[idx % workflowSteps.length].icon,
+              }))
+            : workflowSteps;
     const sectionRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
 
@@ -88,21 +95,21 @@ export default function Workflow() {
             <div className="workflow-container">
                 <div className="workflow-heading">
                     <span className="workflow-eyebrow">
-                        SIMPLE. TRANSPARENT. PERSONALIZED.
+                        {previewData?.eyebrow || "SIMPLE. TRANSPARENT. PERSONALIZED."}
                     </span>
 
                     <h2>
-                        Our <span>Workflow</span>
+                        {previewData?.heading ? previewData.heading : <>Our <span>Workflow</span></>}
                     </h2>
 
                     <p>
-                        From finding your ideal property to getting the keys,
-                        we guide you through every step.
+                        {previewData?.subtitle || "From finding your ideal property to getting the keys, we guide you through every step."}
+
                     </p>
                 </div>
 
                 <div className="workflow-grid">
-                    {workflowSteps.map((step, index) => {
+                    {activeSteps.map((step, index) => {
                         const Icon = step.icon;
 
                         return (

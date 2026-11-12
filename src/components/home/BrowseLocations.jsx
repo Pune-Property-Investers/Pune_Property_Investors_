@@ -181,7 +181,7 @@ function LocalitySpotlightCard({ location, position = "top" }) {
     );
 }
 
-export default function BrowseLocations({ customLocations }) {
+export default function BrowseLocations({ customLocations, previewData }) {
     const [isPaused, setIsPaused] = useState(false);
 
     const activeLocations =
@@ -296,15 +296,16 @@ export default function BrowseLocations({ customLocations }) {
                 <div className="browse-locations__heading">
                     <div className="browse-locations__heading-text">
                         <span className="browse-locations__eyebrow">
-                            FIND YOUR NEIGHBOURHOOD
+                            {previewData?.eyebrow || "FIND YOUR NEIGHBOURHOOD"}
                         </span>
 
                         <h2 className="browse-locations__title">
-                            Explore Properties by Locality
+                            {previewData?.heading || "Explore Properties by Locality"}
                         </h2>
 
                         <p className="browse-locations__desc">
-                            Explore prominent residential and commercial destinations. Listing counts strictly reflect current demonstration dataset.
+                            {previewData?.subtitle ||
+                                "Explore prominent residential and commercial destinations. Listing counts strictly reflect current demonstration dataset."}
                         </p>
 
                         <Link

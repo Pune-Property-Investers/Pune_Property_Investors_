@@ -21,7 +21,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import "./FeaturedProp.css";
 
 // 8 Curated Luxury Pune Properties
-const featuredListings = [
+export const featuredListings = [
     {
         id: 1,
         name: "Mantra Magnus",
@@ -169,7 +169,11 @@ function BuildingEmblem({ size = 28, className = "" }) {
     );
 }
 
-export default function FeaturedProperties() {
+export default function FeaturedProperties({ previewData }) {
+    const activeListings =
+        Array.isArray(previewData?.items) && previewData.items.length > 0
+            ? previewData.items
+            : featuredListings;
     const [selectedId, setSelectedId] = useState(1);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [inquiryModalProject, setInquiryModalProject] = useState(null);
@@ -183,22 +187,11 @@ export default function FeaturedProperties() {
     });
 
     const activeProject =
-        featuredListings.find((p) => p.id === selectedId) || featuredListings[0];
+        activeListings.find((p) => p.id === selectedId) || activeListings[0];
 
     // Split listings into 2 distinct columns for vertical marquee
-    const col1Listings = [
-        featuredListings[0], // Mantra Magnus
-        featuredListings[2], // Kumar Primus
-        featuredListings[4], // The Ark Voyage
-        featuredListings[6], // Kolte Patil
-    ];
-
-    const col2Listings = [
-        featuredListings[1], // Godrej Elements
-        featuredListings[3], // VTP HiLife
-        featuredListings[5], // Tribeca Highstreet
-        featuredListings[7], // Pride World City
-    ];
+    const col1Listings = activeListings.filter((_, idx) => idx % 2 === 0);
+    const col2Listings = activeListings.filter((_, idx) => idx % 2 === 1);
 
     // Double for continuous infinite seamless scrolling loop
     const col1Double = [...col1Listings, ...col1Listings];
@@ -214,9 +207,9 @@ export default function FeaturedProperties() {
     const handlePrev = () => {
         setIsTransitioning(true);
         setSelectedId((prev) => {
-            const currentIdx = featuredListings.findIndex((p) => p.id === prev);
-            const prevIdx = (currentIdx - 1 + featuredListings.length) % featuredListings.length;
-            return featuredListings[prevIdx].id;
+            const currentIdx = activeListings.findIndex((p) => p.id === prev);
+            const prevIdx = (currentIdx - 1 + activeListings.length) % activeListings.length;
+            return activeListings[prevIdx].id;
         });
         setTimeout(() => setIsTransitioning(false), 280);
     };
@@ -224,9 +217,9 @@ export default function FeaturedProperties() {
     const handleNext = () => {
         setIsTransitioning(true);
         setSelectedId((prev) => {
-            const currentIdx = featuredListings.findIndex((p) => p.id === prev);
-            const nextIdx = (currentIdx + 1) % featuredListings.length;
-            return featuredListings[nextIdx].id;
+            const currentIdx = activeListings.findIndex((p) => p.id === prev);
+            const nextIdx = (currentIdx + 1) % activeListings.length;
+            return activeListings[nextIdx].id;
         });
         setTimeout(() => setIsTransitioning(false), 280);
     };
@@ -311,9 +304,12 @@ export default function FeaturedProperties() {
                         <span className="featured-props-emblem-line" />
                     </div>
 
-                    <h2 className="featured-props-title">Featured Properties</h2>
+                    <h2 className="featured-props-title">
+                        {previewData?.heading || "Featured Properties"}
+                    </h2>
                     <p className="featured-props-subtitle">
-                        Handcrafted luxury residences & prime investment landmarks across Pune
+                        {previewData?.subtitle ||
+                            "Handcrafted luxury residences & prime investment landmarks across Pune"}
                     </p>
                 </div>
 

@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Layers, Sliders, FileText, Globe, Plus, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { Layers, Sliders, FileText, Globe, Plus, Trash2, RotateCcw, ExternalLink } from "lucide-react";
 import { contentService } from "../../../services/content.service";
+import { createInitialStore } from "../../../services/mockStore";
 import { useToast } from "../../../context/ToastContext";
 import { useDraftEditor } from "../../../hooks/useDraftEditor";
 import { useUnsavedChanges } from "../../../hooks/useUnsavedChanges";
@@ -13,6 +15,17 @@ import VideoUploader from "./VideoUploader";
 import RichTextEditor from "./RichTextEditor";
 import SEOEditor from "./SEOEditor";
 import SectionSyncBar from "../common/SectionSyncBar";
+import HomepageSectionItemsEditor from "./HomepageSectionItemsEditor";
+
+const SECTION_MANAGER_LINKS = {
+    "featured-properties": { href: "/admin/properties", text: "Manage Properties Inventory" },
+    "new-launches": { href: "/admin/projects", text: "Manage New Launch Projects" },
+    "browse-locations": { href: "/admin/locations", text: "Manage Localities & Rates" },
+    "featured-projects": { href: "/admin/projects", text: "Manage Featured Projects" },
+    "developer-logos": { href: "/admin/developers", text: "Manage Developer Partners" },
+    testimonials: { href: "/admin/testimonials", text: "Manage Client Testimonials" },
+    advertisements: { href: "/admin/advertisements", text: "Manage Sidebar Advertisements" },
+};
 
 const EDITOR_TABS = [
     { key: "sections", label: "Sections & Order", icon: Layers },
@@ -21,11 +34,12 @@ const EDITOR_TABS = [
     { key: "seo", label: "SEO", icon: Globe },
 ];
 
-export default function HomepageEditor() {
+export default function HomepageEditor({ forcedSectionId = null }) {
     const { showToast } = useToast();
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("content");
-    const [activeSectionId, setActiveSectionId] = useState("hero");
+    const [activeSectionId, setActiveSectionId] = useState(forcedSectionId || "hero");
+    const [previewSelectedOnly, setPreviewSelectedOnly] = useState(true);
 
     const {
         draft,
@@ -58,7 +72,13 @@ export default function HomepageEditor() {
         try {
             const res = await contentService.getHomepage();
             hydrate(res.draft, res.published);
-            const firstSec = res.draft?.sections?.[0]?.id;
+            const urlSection =
+                forcedSectionId ||
+                (typeof window !== "undefined"
+                    ? new URLSearchParams(window.location.search).get("section")
+                    : null);
+            const hasUrlSection = urlSection && res.draft?.sections?.some((s) => s.id === urlSection);
+            const firstSec = hasUrlSection ? urlSection : res.draft?.sections?.[0]?.id;
             if (firstSec) setActiveSectionId(firstSec);
         } catch (err) {
             showToast(err.message || "Failed to load homepage CMS data", "error");
@@ -69,6 +89,19 @@ export default function HomepageEditor() {
 
     useEffect(() => {
         loadHomepage();
+        const handleSectionEvent = (e) => {
+            const nextId =
+                e?.detail ||
+                (typeof window !== "undefined"
+                    ? new URLSearchParams(window.location.search).get("section")
+                    : null);
+            if (nextId) {
+                setActiveSectionId(nextId);
+                setActiveTab("content");
+            }
+        };
+        window.addEventListener("ppi-home-section-change", handleSectionEvent);
+        return () => window.removeEventListener("ppi-home-section-change", handleSectionEvent);
     }, []);
 
     if (loading || !draft) {
@@ -150,16 +183,47 @@ export default function HomepageEditor() {
         }));
     };
 
+    const resetSingleSection = (sectionId) => {
+        const defaults = createInitialStore()?.homepage?.draft?.sections || [];
+        const defaultSection = defaults.find((s) => s.id === sectionId);
+        if (!defaultSection) return;
+        updateDraft((prev) => ({
+            ...prev,
+            sections: (prev.sections || []).map((sec) =>
+                sec.id === sectionId
+                    ? { ...sec, enabled: defaultSection.enabled, data: { ...defaultSection.data } }
+                    : sec
+            ),
+        }));
+        showToast(`Reset "${defaultSection.label}" to default options`, "success");
+    };
+
     const isAboutMode = activeTab === "about";
     const previewMode = isAboutMode ? "about" : "homepage";
-    const previewPayload = isAboutMode ? draft.about || {} : draft;
+    const previewPayload = isAboutMode
+        ? draft.about || {}
+        : {
+              ...draft,
+              focusedSectionId:
+                  activeTab === "content" && previewSelectedOnly ? activeSection?.id : null,
+          };
 
     const sectionData = activeSection?.data || {};
 
     return (
         <ContentEditor
-            title={isAboutMode ? "About Us Live Page Editor" : "Homepage Visual CMS & Live Preview"}
-            subtitle="Edit copy, media, section order, and visibility while watching real public components update live."
+            title={
+                forcedSectionId && activeSection
+                    ? `${activeSection.label} — Component Editor`
+                    : isAboutMode
+                      ? "About Us Live Page Editor"
+                      : "Homepage Visual CMS & Live Preview"
+            }
+            subtitle={
+                forcedSectionId
+                    ? "Edit this homepage component's content, media, and options with isolated live preview."
+                    : "Edit copy, media, section order, and visibility while watching real public components update live."
+            }
             previewMode={previewMode}
             previewPayload={previewPayload}
             isDirty={isDirty}
@@ -209,22 +273,24 @@ export default function HomepageEditor() {
                 />
             </div>
 
-            <div className="admin-tabs" style={{ marginBottom: 14 }}>
-                {EDITOR_TABS.map((tab) => {
-                    const Icon = tab.icon;
-                    return (
-                        <button
-                            key={tab.key}
-                            type="button"
-                            className={`admin-tab ${activeTab === tab.key ? "admin-tab--active" : ""}`}
-                            onClick={() => setActiveTab(tab.key)}
-                            style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 10px", fontSize: 12.5 }}
-                        >
-                            <Icon size={14} /> {tab.label}
-                        </button>
-                    );
-                })}
-            </div>
+            {!forcedSectionId && (
+                <div className="admin-tabs" style={{ marginBottom: 14 }}>
+                    {EDITOR_TABS.map((tab) => {
+                        const Icon = tab.icon;
+                        return (
+                            <button
+                                key={tab.key}
+                                type="button"
+                                className={`admin-tab ${activeTab === tab.key ? "admin-tab--active" : ""}`}
+                                onClick={() => setActiveTab(tab.key)}
+                                style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 10px", fontSize: 12.5 }}
+                            >
+                                <Icon size={14} /> {tab.label}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
 
             {activeTab === "sections" && (
                 <div>
@@ -246,23 +312,25 @@ export default function HomepageEditor() {
 
             {activeTab === "content" && activeSection && (
                 <div>
-                    <div className="admin-field">
-                        <label className="admin-label">Editing Section</label>
-                        <select
-                            className="admin-select"
-                            value={activeSection.id}
-                            onChange={(e) => setActiveSectionId(e.target.value)}
-                        >
-                            {sections
-                                .slice()
-                                .sort((a, b) => (a.order || 0) - (b.order || 0))
-                                .map((sec) => (
-                                    <option key={sec.id} value={sec.id}>
-                                        {sec.order}. {sec.label} ({sec.enabled ? "Visible" : "Hidden"})
-                                    </option>
-                                ))}
-                        </select>
-                    </div>
+                    {!forcedSectionId && (
+                        <div className="admin-field">
+                            <label className="admin-label">Editing Section</label>
+                            <select
+                                className="admin-select"
+                                value={activeSection.id}
+                                onChange={(e) => setActiveSectionId(e.target.value)}
+                            >
+                                {sections
+                                    .slice()
+                                    .sort((a, b) => (a.order || 0) - (b.order || 0))
+                                    .map((sec) => (
+                                        <option key={sec.id} value={sec.id}>
+                                            {sec.order}. {sec.label} ({sec.enabled ? "Visible" : "Hidden"})
+                                        </option>
+                                    ))}
+                            </select>
+                        </div>
+                    )}
 
                     <div
                         style={{
@@ -274,14 +342,36 @@ export default function HomepageEditor() {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between",
+                            flexWrap: "wrap",
+                            gap: 8,
                         }}
                     >
-                        <span style={{ fontSize: 13, fontWeight: 600 }}>Section Visible on Website</span>
-                        <input
-                            type="checkbox"
-                            checked={Boolean(activeSection.enabled)}
-                            onChange={() => handleToggleVisibility(activeSection.id)}
-                        />
+                        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+                            <input
+                                type="checkbox"
+                                checked={Boolean(activeSection.enabled)}
+                                onChange={() => handleToggleVisibility(activeSection.id)}
+                            />
+                            Show &ldquo;{activeSection.label}&rdquo; on Homepage
+                        </label>
+                        <button
+                            type="button"
+                            className={`admin-btn admin-btn--sm ${
+                                previewSelectedOnly ? "admin-btn--primary" : "admin-btn--outline"
+                            }`}
+                            onClick={() => setPreviewSelectedOnly((v) => !v)}
+                            title="Toggle between previewing only this component or the full homepage"
+                        >
+                            {previewSelectedOnly ? "Previewing: This Component Only" : "Previewing: Full Homepage"}
+                        </button>
+                        <button
+                            type="button"
+                            className="admin-btn admin-btn--outline admin-btn--sm"
+                            onClick={() => resetSingleSection(activeSection.id)}
+                            title="Restore this section's fields to default"
+                        >
+                            <RotateCcw size={13} /> Reset Section
+                        </button>
                     </div>
 
                     {activeSection.type === "hero" && (
@@ -466,6 +556,81 @@ export default function HomepageEditor() {
                                     onChange={(val) => updateSectionData("youtubeUrl", val)}
                                 />
                             )}
+                            {"projectName" in sectionData && (
+                                <div className="admin-form-grid">
+                                    <div className="admin-field">
+                                        <label className="admin-label">Featured Project Name</label>
+                                        <input
+                                            className="admin-input"
+                                            value={sectionData.projectName || ""}
+                                            onChange={(e) => updateSectionData("projectName", e.target.value)}
+                                        />
+                                    </div>
+                                    {"developer" in sectionData && (
+                                        <div className="admin-field">
+                                            <label className="admin-label">Developer</label>
+                                            <input
+                                                className="admin-input"
+                                                value={sectionData.developer || ""}
+                                                onChange={(e) => updateSectionData("developer", e.target.value)}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                            {"location" in sectionData && (
+                                <div className="admin-field">
+                                    <label className="admin-label">Location</label>
+                                    <input
+                                        className="admin-input"
+                                        value={sectionData.location || ""}
+                                        onChange={(e) => updateSectionData("location", e.target.value)}
+                                    />
+                                </div>
+                            )}
+                            {"showSidebar" in sectionData && (
+                                <div className="admin-field">
+                                    <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={sectionData.showSidebar !== false}
+                                            onChange={(e) => updateSectionData("showSidebar", e.target.checked)}
+                                        />
+                                        Enable Right Advertisement Sidebar on Homepage
+                                    </label>
+                                </div>
+                            )}
+                            {SECTION_MANAGER_LINKS[activeSection.type] && (
+                                <div
+                                    style={{
+                                        marginTop: 10,
+                                        padding: "10px 12px",
+                                        borderRadius: 8,
+                                        background: "#f8fafc",
+                                        border: "1px solid #e2e8f0",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <span style={{ fontSize: 12.5, color: "#475569" }}>
+                                        Want to edit the items inside this section?
+                                    </span>
+                                    <Link
+                                        href={SECTION_MANAGER_LINKS[activeSection.type].href}
+                                        className="admin-btn admin-btn--outline admin-btn--sm"
+                                    >
+                                        <ExternalLink size={13} /> {SECTION_MANAGER_LINKS[activeSection.type].text}
+                                    </Link>
+                                </div>
+                            )}
+
+                            <HomepageSectionItemsEditor
+                                sectionType={activeSection.type}
+                                sectionData={sectionData}
+                                updateSectionData={updateSectionData}
+                            />
                             {"ctaText" in sectionData && (
                                 <div className="admin-form-grid">
                                     <div className="admin-field">

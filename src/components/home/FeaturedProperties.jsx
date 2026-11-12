@@ -367,7 +367,20 @@ function SiteImageSlideshow({ images = [], projectName = "Project" }) {
 /* --------------------------------------------------------------------------
    Main FeaturedProperties Component - Multi-Container Sideways Project Slideshow
    -------------------------------------------------------------------------- */
-export default function FeaturedProperties() {
+function extractYtId(url, fallbackId) {
+    if (url) {
+        const m = String(url).match(/(?:v=|\/embed\/|youtu\.be\/|\/shorts\/)([a-zA-Z0-9_-]{11})/);
+        if (m) return m[1];
+    }
+    return fallbackId || "";
+}
+
+export default function FeaturedProperties({ previewData }) {
+    const activeProjects =
+        Array.isArray(previewData?.items) && previewData.items.length > 0
+            ? previewData.items
+            : featuredPuneProjects;
+    const showAllStacked = Boolean(previewData?.showAllStacked);
     const [activeIndex, setActiveIndex] = useState(0);
     const [isMuted, setIsMuted] = useState(true);
     const [isFullSize, setIsFullSize] = useState(true);
@@ -377,7 +390,7 @@ export default function FeaturedProperties() {
     const [isDragging, setIsDragging] = useState(false);
     const stageContainerRef = useRef(null);
 
-    const totalSlides = featuredPuneProjects.length;
+    const totalSlides = activeProjects.length;
 
     const handlePrevProject = () => {
         setActiveIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
@@ -493,17 +506,24 @@ export default function FeaturedProperties() {
                     <div className="pune-projects-eyebrow-wrap">
                         <span className="pune-projects-eyebrow-line" />
                         <span className="pune-projects-eyebrow">
-                            <Sparkles size={13} /> CURATED ASSET CLASSES
+                            <Sparkles size={13} /> {previewData?.eyebrow || "CURATED ASSET CLASSES"}
                         </span>
                         <span className="pune-projects-eyebrow-line" />
                     </div>
 
                     <h2 className="pune-projects-title">
-                        Properties in <span>Pune</span>
+                        {previewData?.heading ? (
+                            previewData.heading
+                        ) : (
+                            <>
+                                Properties in <span>Pune</span>
+                            </>
+                        )}
                     </h2>
 
                     <p className="pune-projects-subtitle">
-                        From high-rise riverfront apartments to private gated villas and high-yield commercial spaces across Pune.
+                        {previewData?.subtitle ||
+                            "From high-rise riverfront apartments to private gated villas and high-yield commercial spaces across Pune."}
                     </p>
                 </div>
 
@@ -520,11 +540,16 @@ export default function FeaturedProperties() {
                 >
                     <div
                         className="pune-projects-slider-track"
-                        style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+                        style={
+                            showAllStacked
+                                ? { display: "flex", flexDirection: "column", gap: 28, transform: "none" }
+                                : { transform: `translateX(-${activeIndex * 100}%)` }
+                        }
                     >
-                        {featuredPuneProjects.map((project, pIdx) => {
-                            const isCurrent = pIdx === activeIndex;
+                        {activeProjects.map((project, pIdx) => {
+                            const isCurrent = showAllStacked ? true : pIdx === activeIndex;
                             const isLiked = !!likedProjects[project.id];
+                            const resolvedYtId = extractYtId(project.youtubeUrl, project.youtubeId);
 
                             return (
                                 <div key={project.id} className="pune-project-slide">
@@ -607,9 +632,9 @@ export default function FeaturedProperties() {
                                             <div className="pune-project-stage__video-frame">
                                                 {isCurrent ? (
                                                     <iframe
-                                                        src={`https://www.youtube-nocookie.com/embed/${project.youtubeId}?autoplay=1&mute=${
+                                                        src={`https://www.youtube-nocookie.com/embed/${resolvedYtId}?autoplay=1&mute=${
                                                             isMuted ? 1 : 0
-                                                        }&loop=1&playlist=${project.youtubeId}&controls=1&modestbranding=1&rel=0&playsinline=1${
+                                                        }&loop=1&playlist=${resolvedYtId}&controls=1&modestbranding=1&rel=0&playsinline=1${
                                                             project.startSeconds ? `&start=${project.startSeconds}` : ""
                                                         }`}
                                                         title={project.name}
@@ -839,19 +864,21 @@ export default function FeaturedProperties() {
                 </div>
 
                 {/* Bottom Pagination Dots (Active Gold Pill + Grey Dots for the 6 projects) */}
-                <div className="pune-showcase-pagination" aria-label="Slide indicators">
-                    {featuredPuneProjects.map((_, idx) => (
-                        <button
-                            key={idx}
-                            type="button"
-                            onClick={() => setActiveIndex(idx)}
-                            className={`pune-showcase-dot ${
-                                idx === activeIndex ? "pune-showcase-dot--active" : ""
-                            }`}
-                            aria-label={`Jump to slide ${idx + 1}`}
-                        />
-                    ))}
-                </div>
+                {!showAllStacked && (
+                    <div className="pune-showcase-pagination" aria-label="Slide indicators">
+                        {activeProjects.map((_, idx) => (
+                            <button
+                                key={idx}
+                                type="button"
+                                onClick={() => setActiveIndex(idx)}
+                                className={`pune-showcase-dot ${
+                                    idx === activeIndex ? "pune-showcase-dot--active" : ""
+                                }`}
+                                aria-label={`Jump to slide ${idx + 1}`}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </section>
     );
