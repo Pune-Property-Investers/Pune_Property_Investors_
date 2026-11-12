@@ -380,6 +380,7 @@ export default function FeaturedProperties({ previewData }) {
         Array.isArray(previewData?.items) && previewData.items.length > 0
             ? previewData.items
             : featuredPuneProjects;
+    const showAllStacked = Boolean(previewData?.showAllStacked);
     const [activeIndex, setActiveIndex] = useState(0);
     const [isMuted, setIsMuted] = useState(true);
     const [isFullSize, setIsFullSize] = useState(true);
@@ -539,10 +540,14 @@ export default function FeaturedProperties({ previewData }) {
                 >
                     <div
                         className="pune-projects-slider-track"
-                        style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+                        style={
+                            showAllStacked
+                                ? { display: "flex", flexDirection: "column", gap: 28, transform: "none" }
+                                : { transform: `translateX(-${activeIndex * 100}%)` }
+                        }
                     >
                         {activeProjects.map((project, pIdx) => {
-                            const isCurrent = pIdx === activeIndex;
+                            const isCurrent = showAllStacked ? true : pIdx === activeIndex;
                             const isLiked = !!likedProjects[project.id];
                             const resolvedYtId = extractYtId(project.youtubeUrl, project.youtubeId);
 
@@ -859,19 +864,21 @@ export default function FeaturedProperties({ previewData }) {
                 </div>
 
                 {/* Bottom Pagination Dots (Active Gold Pill + Grey Dots for the 6 projects) */}
-                <div className="pune-showcase-pagination" aria-label="Slide indicators">
-                    {activeProjects.map((_, idx) => (
-                        <button
-                            key={idx}
-                            type="button"
-                            onClick={() => setActiveIndex(idx)}
-                            className={`pune-showcase-dot ${
-                                idx === activeIndex ? "pune-showcase-dot--active" : ""
-                            }`}
-                            aria-label={`Jump to slide ${idx + 1}`}
-                        />
-                    ))}
-                </div>
+                {!showAllStacked && (
+                    <div className="pune-showcase-pagination" aria-label="Slide indicators">
+                        {activeProjects.map((_, idx) => (
+                            <button
+                                key={idx}
+                                type="button"
+                                onClick={() => setActiveIndex(idx)}
+                                className={`pune-showcase-dot ${
+                                    idx === activeIndex ? "pune-showcase-dot--active" : ""
+                                }`}
+                                aria-label={`Jump to slide ${idx + 1}`}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </section>
     );

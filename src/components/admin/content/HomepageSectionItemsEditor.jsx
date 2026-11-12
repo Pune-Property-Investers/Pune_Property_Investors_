@@ -127,13 +127,42 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
 
         return (
             <div style={{ marginTop: 14 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        flexWrap: "wrap",
+                        gap: 8,
+                        marginBottom: 10,
+                    }}
+                >
                     <span style={{ fontSize: 13, fontWeight: 700, color: "#0f172a" }}>
-                        Video Tour Slides &amp; Below-Left Gallery ({items.length})
+                        Video Tour Containers &amp; Below-Left Gallery ({items.length})
                     </span>
-                    <button type="button" className="admin-btn admin-btn--outline admin-btn--sm" onClick={addSlide}>
-                        <Plus size={13} /> Add Video Slide
-                    </button>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <label
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 6,
+                                fontSize: 12,
+                                fontWeight: 600,
+                                color: "#334155",
+                                cursor: "pointer",
+                            }}
+                        >
+                            <input
+                                type="checkbox"
+                                checked={Boolean(sectionData.showAllStacked)}
+                                onChange={(e) => updateSectionData("showAllStacked", e.target.checked)}
+                            />
+                            Show All Stacked
+                        </label>
+                        <button type="button" className="admin-btn admin-btn--primary admin-btn--sm" onClick={addSlide}>
+                            <Plus size={13} /> Add More Container
+                        </button>
+                    </div>
                 </div>
 
                 {items.map((slide, idx) => {
@@ -354,6 +383,14 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
                         </AccordionCard>
                     );
                 })}
+                <button
+                    type="button"
+                    className="admin-btn admin-btn--outline admin-btn--sm"
+                    style={{ width: "100%", justifyContent: "center", marginTop: 6 }}
+                    onClick={addSlide}
+                >
+                    <Plus size={13} /> Add More Container Like This
+                </button>
             </div>
         );
     }
