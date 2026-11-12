@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import ScrollToTopButton from "../common/ScrollToTopButton";
 import {
     FaFacebookF,
     FaInstagram,
@@ -18,6 +19,7 @@ const quickLinks = [
     { label: "New Projects", path: "/projects" },
     { label: "Blog", path: "/blog" },
     { label: "Contact Us", path: "/contact" },
+    { label: "Admin", path: "/admin" },
 ];
 
 const propertyLinks = [
@@ -194,6 +196,8 @@ function Footer() {
                     </div>
                 </div>
             </div>
+
+            <ScrollToTopButton />
         </footer>
     );
 }
