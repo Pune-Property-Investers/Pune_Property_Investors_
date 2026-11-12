@@ -133,7 +133,7 @@ export const projects = [
         status: "Ready to Move",
         possession: "Ready",
         reraId: "P52100020145",
-        image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=85",
         badge: "Featured",
         description:
             "German-engineered luxury high-rises commanding views of NDA green reserve with Italian marble finish.",

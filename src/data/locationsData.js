@@ -63,7 +63,7 @@ const locationsData = [
         description: "Cultural Heritage Meets...",
         avgRate: "₹12,500 / sq.ft",
         listingsCount: "1 Property",
-        image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
         searchLocation: "Kothrud",
     },
     {
