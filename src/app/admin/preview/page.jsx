@@ -42,27 +42,27 @@ function renderSectionByType(section, activeTab, setActiveTab) {
         case "trust-highlights":
             return <TrustHighlights key={section.id} previewData={data} />;
         case "featured-properties":
-            return <FeaturedProperties key={section.id} filters={{ projectType: activeTab }} />;
+            return <FeaturedProperties key={section.id} filters={{ projectType: activeTab }} previewData={data} />;
         case "new-launches":
-            return <NewLaunchProjects key={section.id} />;
+            return <NewLaunchProjects key={section.id} previewData={data} />;
         case "browse-locations":
-            return <BrowseLocations key={section.id} />;
+            return <BrowseLocations key={section.id} previewData={data} />;
         case "featured-projects":
             return <FeaturedProjects key={section.id} previewData={data} />;
         case "upcoming-projects":
             return <UpcomingProjects key={section.id} previewData={data} />;
         case "featured-prop":
-            return <FeaturedProp key={section.id} />;
+            return <FeaturedProp key={section.id} previewData={data} />;
         case "workflow":
-            return <Workflow key={section.id} />;
+            return <Workflow key={section.id} previewData={data} />;
         case "developer-logos":
-            return <DeveloperLogos key={section.id} />;
+            return <DeveloperLogos key={section.id} previewData={data} />;
         case "testimonials":
             return <Testimonials key={section.id} previewData={data} />;
         case "home-contact":
             return <HomeContact key={section.id} previewData={data} />;
         case "trust-stats":
-            return <TrustStats key={section.id} />;
+            return <TrustStats key={section.id} previewData={data} />;
         default:
             return null;
     }
@@ -74,10 +74,6 @@ function HomepagePreview({ payload }) {
         ? [...payload.sections].sort((a, b) => (a.order || 0) - (b.order || 0))
         : [];
 
-    const adSection = sections.find((s) => s.type === "advertisements");
-    const showSidebar = adSection ? adSection.enabled : true;
-
-    const fullWidthTop = sections.filter((s) => s.type === "hero");
     const mainColumnTypes = new Set([
         "trust-highlights",
         "featured-properties",
@@ -87,6 +83,53 @@ function HomepagePreview({ payload }) {
         "upcoming-projects",
         "featured-prop",
     ]);
+
+    const focusedSection = payload?.focusedSectionId
+        ? sections.find((s) => s.id === payload.focusedSectionId)
+        : null;
+
+    if (focusedSection) {
+        const forcedVisible = { ...focusedSection, enabled: true };
+        return (
+            <main className="home-page">
+                {!focusedSection.enabled && (
+                    <div
+                        style={{
+                            background: "#fef3c7",
+                            color: "#92400e",
+                            fontSize: 12,
+                            fontWeight: 600,
+                            padding: "6px 14px",
+                            textAlign: "center",
+                            borderBottom: "1px solid #fde68a",
+                        }}
+                    >
+                        Currently hidden on live website — toggle &ldquo;Show on Homepage&rdquo; to publish it.
+                    </div>
+                )}
+                {focusedSection.type === "advertisements" ? (
+                    <div className="home-page__content-layout" style={{ padding: "24px 16px" }}>
+                        <aside className="home-page__sidebar" style={{ margin: "0 auto" }}>
+                            <AdvertisementSidebar />
+                        </aside>
+                    </div>
+                ) : mainColumnTypes.has(focusedSection.type) ? (
+                    <div className="home-page__content-layout" style={{ padding: "16px" }}>
+                        <div className="home-page__main-content" style={{ width: "100%" }}>
+                            {renderSectionByType(forcedVisible, activeTab, setActiveTab)}
+                        </div>
+                    </div>
+                ) : (
+                    renderSectionByType(forcedVisible, activeTab, setActiveTab)
+                )}
+            </main>
+        );
+    }
+
+    const adSection = sections.find((s) => s.type === "advertisements");
+    const showSidebar = adSection ? adSection.enabled : true;
+
+    const fullWidthTop = sections.filter((s) => s.type === "hero");
     const mainColumn = sections.filter((s) => mainColumnTypes.has(s.type));
     const fullWidthBottom = sections.filter(
         (s) => s.type !== "hero" && s.type !== "advertisements" && !mainColumnTypes.has(s.type)

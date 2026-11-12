@@ -11,7 +11,7 @@ import {
 
 import "./TrustStats.css";
 
-const stats = [
+export const stats = [
     { target: 200, suffix: " +", label: "Team Size", icon: Users },
     { target: 20000, suffix: " +", label: "Happy Clients", icon: UserRoundCheck },
     { target: 10000, suffix: " +", label: "Site Visits", icon: CarFront },
@@ -61,7 +61,15 @@ function AnimatedNumber({ target, suffix, started }) {
     );
 }
 
-export default function TrustStats() {
+export default function TrustStats({ previewData }) {
+    const activeStats =
+        Array.isArray(previewData?.stats) && previewData.stats.length > 0
+            ? previewData.stats.map((s, idx) => ({
+                  ...s,
+                  target: Number(s.target) || 0,
+                  icon: stats[idx % stats.length].icon,
+              }))
+            : stats;
     const sectionRef = useRef(null);
     const [started, setStarted] = useState(false);
 
@@ -109,18 +117,18 @@ export default function TrustStats() {
             <div className="trust-stats__inner">
                 <div className="trust-stats__heading-wrap">
                     <span className="trust-stats__eyebrow">
-                        OUR ACHIEVEMENTS
+                        {previewData?.eyebrow || "OUR ACHIEVEMENTS"}
                     </span>
 
                     <h2 className="trust-stats__heading">
-                        Trusted by Professionals Across Pune
+                        {previewData?.heading || "Trusted by Professionals Across Pune"}
                     </h2>
 
                     <span className="trust-stats__heading-line" />
                 </div>
 
                 <div className="trust-stats__grid">
-                    {stats.map((stat, index) => {
+                    {activeStats.map((stat, index) => {
                         const Icon = stat.icon;
 
                         return (
