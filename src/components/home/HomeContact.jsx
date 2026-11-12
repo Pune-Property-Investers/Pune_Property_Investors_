@@ -20,7 +20,7 @@ import "./HomeContact.css";
 const WHATSAPP_NUMBER = "917398174444";
 const PHONE_NUMBER = "+917398174444";
 
-export default function HomeContact() {
+export default function HomeContact({ previewData }) {
     const [formData, setFormData] = useState({
         name: "",
         phone: "",
@@ -80,18 +80,18 @@ export default function HomeContact() {
                         <span className="home-contact-eyebrow-line" />
                         <span className="home-contact-eyebrow">
                             <Compass size={14} className="text-gold" />
-                            GET IN TOUCH
+                            {previewData?.eyebrow ?? "GET IN TOUCH"}
                         </span>
                         <span className="home-contact-eyebrow-line" />
                     </div>
 
                     <h2 className="home-contact-title">
-                        Connect With Our Pune Real Estate Advisors
+                        {previewData?.heading ?? "Connect With Our Pune Real Estate Advisors"}
                     </h2>
 
                     <p className="home-contact-subtitle">
-                        Looking for inaugural price sheets, verified layouts, or private site visits across Pune?
-                        Speak directly with our senior property advisors 7 days a week.
+                        {previewData?.subtitle ??
+                            "Looking for inaugural price sheets, verified layouts, or private site visits across Pune? Speak directly with our senior property advisors 7 days a week."}
                     </p>
                 </div>
 

@@ -86,13 +86,24 @@ const trustStats = [
     { icon: ShieldCheck, strong: "Since 2015", text: "in Pune" },
 ];
 
-function HeroSection({ activeTab = "projects", onTabChange }) {
+function HeroSection({ activeTab = "projects", onTabChange, previewData }) {
     const router = useRouter();
 
     const [location, setLocation] = useState("All Locations");
     const [propertyType, setPropertyType] = useState("Residential");
     const [bhk, setBhk] = useState("Any");
     const [budget, setBudget] = useState("Any Budget");
+
+    const heroEyebrow = previewData?.eyebrow ?? "YOUR PROPERTY PARTNER IN PUNE";
+    const heroHeading1 = previewData?.headingLine1 ?? "Find Your Dream Home.";
+    const heroHeading2 = previewData?.headingLine2 ?? "Invest in Your Future";
+    const heroSubtitle = previewData?.subtitle ?? "";
+    const heroVideoUrl = previewData?.videoUrl || GUMLET_VIDEO_URL;
+    const heroBgImage = previewData?.backgroundImage || "";
+    const showCategoryTabs = previewData?.showCategoryTabs !== false;
+    const showSearchCard = previewData?.showSearchCard !== false;
+    const ctaText = previewData?.primaryCtaText || "";
+    const ctaUrl = previewData?.primaryCtaUrl || "/buy";
 
     // Category tab handling
     const handleTabChange = (tabKey) => {
@@ -144,34 +155,49 @@ function HeroSection({ activeTab = "projects", onTabChange }) {
             ========================================= */}
 
             <div className="hero-oyo-video-wrapper">
+                {heroBgImage ? (
+                    <img
+                        src={heroBgImage}
+                        alt={heroHeading1}
+                        className="hero-oyo-video"
+                        style={{
+                            position: "absolute",
+                            inset: 0,
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            border: "none",
+                            pointerEvents: "none",
+                        }}
+                    />
+                ) : (
+                    <iframe
+                        src={heroVideoUrl}
+                        title="Pune Property Investor Background Video"
+                        className="hero-oyo-video"
+                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                        referrerPolicy="origin"
+                        loading="eager"
+                        style={{
+                            position: "absolute",
 
-                <iframe
-                    src={GUMLET_VIDEO_URL}
-                    title="Pune Property Investor Background Video"
-                    className="hero-oyo-video"
-                    allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-                    referrerPolicy="origin"
-                    loading="eager"
-                    style={{
-                        position: "absolute",
+                            // Align video from the TOP
+                            top: "0",
+                            left: "50%",
+                            transform: "translateX(-50%)",
 
-                        // Align video from the TOP
-                        top: "0",
-                        left: "50%",
-                        transform: "translateX(-50%)",
+                            // Full-screen 16:9 cover sizing
+                            width: "max(100vw, 177.78vh)",
+                            height: "max(100vh, 56.25vw)",
 
-                        // Full-screen 16:9 cover sizing
-                        width: "max(100vw, 177.78vh)",
-                        height: "max(100vh, 56.25vw)",
+                            minWidth: "100%",
+                            minHeight: "100%",
 
-                        minWidth: "100%",
-                        minHeight: "100%",
-
-                        border: "none",
-                        pointerEvents: "none",
-                    }}
-                />
-
+                            border: "none",
+                            pointerEvents: "none",
+                        }}
+                    />
+                )}
             </div>
 
             {/* Dark Vignette Overlay */}
@@ -185,224 +211,123 @@ function HeroSection({ activeTab = "projects", onTabChange }) {
 
                 {/* Eyebrow */}
                 <span className="hero-oyo-eyebrow">
-                    YOUR PROPERTY PARTNER IN PUNE
+                    {heroEyebrow}
                 </span>
 
                 {/* Main Heading */}
                 <h1 className="hero-oyo-title">
-                    <span>Find Your Dream Home.</span>
+                    <span>{heroHeading1}</span>
 
                     <span className="hero-oyo-title-sub">
-                        Invest in Your Future
+                        {heroHeading2}
                     </span>
                 </h1>
 
-                {/* Category Tabs */}
-                <div
-                    className="hero-oyo-tabs"
-                    role="tablist"
-                    aria-label="Project category tabs"
-                >
-                    {searchTabs.map((tab) => (
+                {heroSubtitle && (
+                    <p
+                        style={{
+                            color: "rgba(255,255,255,0.88)",
+                            fontSize: "15px",
+                            maxWidth: "600px",
+                            margin: "4px auto 14px",
+                            textAlign: "center",
+                        }}
+                    >
+                        {heroSubtitle}
+                    </p>
+                )}
+
+                {previewData && ctaText && (
+                    <div style={{ marginBottom: "14px" }}>
                         <Link
-                            key={tab.key}
-                            href={tab.href}
-                            role="tab"
-                            aria-selected={activeTab === tab.key}
-                            className={`hero-oyo-tab ${activeTab === tab.key
-                                ? "hero-oyo-tab--active"
-                                : ""
-                                }`}
-                            onClick={() => handleTabChange(tab.key)}
+                            href={ctaUrl}
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "8px",
+                                padding: "10px 22px",
+                                borderRadius: "9999px",
+                                background: "#a77a48",
+                                color: "#ffffff",
+                                fontWeight: 600,
+                                fontSize: "14px",
+                                textDecoration: "none",
+                            }}
                         >
-                            {tab.label}
+                            {ctaText}
                         </Link>
-                    ))}
-                </div>
+                    </div>
+                )}
+
+                {/* Category Tabs */}
+                {showCategoryTabs && (
+                    <div
+                        className="hero-oyo-tabs"
+                        role="tablist"
+                        aria-label="Project category tabs"
+                    >
+                        {searchTabs.map((tab) => (
+                            <Link
+                                key={tab.key}
+                                href={tab.href}
+                                role="tab"
+                                aria-selected={activeTab === tab.key}
+                                className={`hero-oyo-tab ${activeTab === tab.key
+                                    ? "hero-oyo-tab--active"
+                                    : ""
+                                    }`}
+                                onClick={() => handleTabChange(tab.key)}
+                            >
+                                {tab.label}
+                            </Link>
+                        ))}
+                    </div>
+                )}
 
                 {/* =========================================
                     PROPERTY SEARCH CARD
                 ========================================= */}
 
-                <form
-                    className="hero-search-card"
-                    onSubmit={handleSearch}
-                >
+                {showSearchCard && (
+                    <form
+                        className="hero-search-card"
+                        onSubmit={handleSearch}
+                    >
 
-                    {/* Location */}
-                    <div className="hero-search-card__field">
-
-                        <label
-                            htmlFor="search-location"
-                            className="hero-search-card__label"
-                        >
-                            LOCATION IN PUNE
-                        </label>
-
-                        <div className="hero-search-card__input-row">
-
-                            <MapPin
-                                className="hero-search-card__icon"
-                                size={16}
-                            />
-
-                            <select
-                                id="search-location"
-                                value={location}
-                                onChange={(e) =>
-                                    setLocation(e.target.value)
-                                }
-                                className="hero-search-card__select"
-                            >
-                                <option value="All Locations">
-                                    e.g. Baner, Wakad, Kharadi...
-                                </option>
-
-                                {locations
-                                    .filter((l) => l !== "All Locations")
-                                    .map((item) => (
-                                        <option key={item} value={item}>
-                                            {item}, Pune
-                                        </option>
-                                    ))}
-                            </select>
-
-                            <ChevronDown
-                                className="hero-search-card__chevron"
-                                size={14}
-                            />
-
-                        </div>
-                    </div>
-
-                    {/* Property Type */}
-                    <div className="hero-search-card__field">
-
-                        <label
-                            htmlFor="search-type"
-                            className="hero-search-card__label"
-                        >
-                            PROPERTY TYPE
-                        </label>
-
-                        <div className="hero-search-card__input-row">
-
-                            <Building2
-                                className="hero-search-card__icon"
-                                size={16}
-                            />
-
-                            <select
-                                id="search-type"
-                                value={propertyType}
-                                onChange={(e) =>
-                                    setPropertyType(e.target.value)
-                                }
-                                className="hero-search-card__select"
-                            >
-                                <option value="Residential">
-                                    All Types
-                                </option>
-
-                                {propertyTypes.map((item) => (
-                                    <option
-                                        key={item.value}
-                                        value={item.value}
-                                    >
-                                        {item.label}
-                                    </option>
-                                ))}
-                            </select>
-
-                            <ChevronDown
-                                className="hero-search-card__chevron"
-                                size={14}
-                            />
-
-                        </div>
-                    </div>
-
-                    {/* Budget */}
-                    <div className="hero-search-card__field">
-
-                        <label
-                            htmlFor="search-budget"
-                            className="hero-search-card__label"
-                        >
-                            BUDGET
-                        </label>
-
-                        <div className="hero-search-card__input-row">
-
-                            <IndianRupee
-                                className="hero-search-card__icon"
-                                size={15}
-                            />
-
-                            <select
-                                id="search-budget"
-                                value={budget}
-                                onChange={(e) =>
-                                    setBudget(e.target.value)
-                                }
-                                className="hero-search-card__select"
-                            >
-                                {budgetOptions.map((item) => (
-                                    <option
-                                        key={item.value}
-                                        value={item.value}
-                                    >
-                                        {item.label}
-                                    </option>
-                                ))}
-                            </select>
-
-                            <ChevronDown
-                                className="hero-search-card__chevron"
-                                size={14}
-                            />
-
-                        </div>
-                    </div>
-
-                    {/* Bedrooms and Search Button */}
-                    <div className="hero-search-card__bottom-row">
-
-                        {/* Bedrooms */}
-                        <div className="hero-search-card__field hero-search-card__field--half">
+                        {/* Location */}
+                        <div className="hero-search-card__field">
 
                             <label
-                                htmlFor="search-bhk"
+                                htmlFor="search-location"
                                 className="hero-search-card__label"
                             >
-                                BEDROOMS
+                                LOCATION IN PUNE
                             </label>
 
                             <div className="hero-search-card__input-row">
 
-                                <Bed
+                                <MapPin
                                     className="hero-search-card__icon"
                                     size={16}
                                 />
 
                                 <select
-                                    id="search-bhk"
-                                    value={bhk}
+                                    id="search-location"
+                                    value={location}
                                     onChange={(e) =>
-                                        setBhk(e.target.value)
+                                        setLocation(e.target.value)
                                     }
                                     className="hero-search-card__select"
                                 >
-                                    <option value="Any">BHK</option>
+                                    <option value="All Locations">
+                                        e.g. Baner, Wakad, Kharadi...
+                                    </option>
 
-                                    {bhkOptions
-                                        .filter((b) => b.value !== "Any")
+                                    {locations
+                                        .filter((l) => l !== "All Locations")
                                         .map((item) => (
-                                            <option
-                                                key={item.value}
-                                                value={item.value}
-                                            >
-                                                {item.label}
+                                            <option key={item} value={item}>
+                                                {item}, Pune
                                             </option>
                                         ))}
                                 </select>
@@ -415,22 +340,163 @@ function HeroSection({ activeTab = "projects", onTabChange }) {
                             </div>
                         </div>
 
-                        {/* Search Button */}
-                        <button
-                            type="submit"
-                            className="hero-search-card__submit-btn"
-                            aria-label="Search properties"
-                        >
-                            <Search
-                                size={18}
-                                strokeWidth={2.4}
-                            />
+                        {/* Property Type */}
+                        <div className="hero-search-card__field">
 
-                            <span>Search</span>
-                        </button>
+                            <label
+                                htmlFor="search-type"
+                                className="hero-search-card__label"
+                            >
+                                PROPERTY TYPE
+                            </label>
 
-                    </div>
-                </form>
+                            <div className="hero-search-card__input-row">
+
+                                <Building2
+                                    className="hero-search-card__icon"
+                                    size={16}
+                                />
+
+                                <select
+                                    id="search-type"
+                                    value={propertyType}
+                                    onChange={(e) =>
+                                        setPropertyType(e.target.value)
+                                    }
+                                    className="hero-search-card__select"
+                                >
+                                    <option value="Residential">
+                                        All Types
+                                    </option>
+
+                                    {propertyTypes.map((item) => (
+                                        <option
+                                            key={item.value}
+                                            value={item.value}
+                                        >
+                                            {item.label}
+                                        </option>
+                                    ))}
+                                </select>
+
+                                <ChevronDown
+                                    className="hero-search-card__chevron"
+                                    size={14}
+                                />
+
+                            </div>
+                        </div>
+
+                        {/* Budget */}
+                        <div className="hero-search-card__field">
+
+                            <label
+                                htmlFor="search-budget"
+                                className="hero-search-card__label"
+                            >
+                                BUDGET
+                            </label>
+
+                            <div className="hero-search-card__input-row">
+
+                                <IndianRupee
+                                    className="hero-search-card__icon"
+                                    size={15}
+                                />
+
+                                <select
+                                    id="search-budget"
+                                    value={budget}
+                                    onChange={(e) =>
+                                        setBudget(e.target.value)
+                                    }
+                                    className="hero-search-card__select"
+                                >
+                                    {budgetOptions.map((item) => (
+                                        <option
+                                            key={item.value}
+                                            value={item.value}
+                                        >
+                                            {item.label}
+                                        </option>
+                                    ))}
+                                </select>
+
+                                <ChevronDown
+                                    className="hero-search-card__chevron"
+                                    size={14}
+                                />
+
+                            </div>
+                        </div>
+
+                        {/* Bedrooms and Search Button */}
+                        <div className="hero-search-card__bottom-row">
+
+                            {/* Bedrooms */}
+                            <div className="hero-search-card__field hero-search-card__field--half">
+
+                                <label
+                                    htmlFor="search-bhk"
+                                    className="hero-search-card__label"
+                                >
+                                    BEDROOMS
+                                </label>
+
+                                <div className="hero-search-card__input-row">
+
+                                    <Bed
+                                        className="hero-search-card__icon"
+                                        size={16}
+                                    />
+
+                                    <select
+                                        id="search-bhk"
+                                        value={bhk}
+                                        onChange={(e) =>
+                                            setBhk(e.target.value)
+                                        }
+                                        className="hero-search-card__select"
+                                    >
+                                        <option value="Any">BHK</option>
+
+                                        {bhkOptions
+                                            .filter((b) => b.value !== "Any")
+                                            .map((item) => (
+                                                <option
+                                                    key={item.value}
+                                                    value={item.value}
+                                                >
+                                                    {item.label}
+                                                </option>
+                                            ))}
+                                    </select>
+
+                                    <ChevronDown
+                                        className="hero-search-card__chevron"
+                                        size={14}
+                                    />
+
+                                </div>
+                            </div>
+
+                            {/* Search Button */}
+                            <button
+                                type="submit"
+                                className="hero-search-card__submit-btn"
+                                aria-label="Search properties"
+                            >
+                                <Search
+                                    size={18}
+                                    strokeWidth={2.4}
+                                />
+
+                                <span>Search</span>
+                            </button>
+
+                        </div>
+                    </form>
+                )}
             </div>
 
             {/* =========================================

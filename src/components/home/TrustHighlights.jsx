@@ -132,9 +132,16 @@ return (
 );
 }
 
-export default function TrustHighlights() {
+export default function TrustHighlights({ previewData }) {
     const sectionRef = useRef(null);
     const [isStarted, setIsStarted] = useState(false);
+
+    const resolvedItems = Array.isArray(previewData?.items) && previewData.items.length > 0
+        ? previewData.items.map((item, idx) => ({
+            ...TRUST_ITEMS[idx % TRUST_ITEMS.length],
+            ...item,
+        }))
+        : TRUST_ITEMS;
 
     useEffect(() => {
         const el = sectionRef.current;
@@ -169,7 +176,7 @@ export default function TrustHighlights() {
             aria-label="Trust and Benefits"
         >
             <div className="trust-highlights__card">
-                {TRUST_ITEMS.map((item) => {
+                {resolvedItems.map((item) => {
                     const IconComponent = item.icon;
                     return (
                         <div key={item.id} className="trust-highlights__item">

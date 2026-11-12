@@ -5,7 +5,8 @@ import { Star, Quote } from "lucide-react";
 import { testimonials } from "../../data/testimonials.js";
 import "./Testimonials.css";
 
-export default function Testimonials() {
+export default function Testimonials({ previewData, customTestimonials }) {
+    const items = Array.isArray(customTestimonials) ? customTestimonials.filter((t) => t.visible !== false) : testimonials;
     const sectionRef = useRef(null);
 
     useEffect(() => {
@@ -46,14 +47,14 @@ export default function Testimonials() {
                         className="testimonials__eyebrow testimonials-animate"
                         style={{ "--card-index": 0 }}
                     >
-                        CLIENT EXPERIENCES
+                        {previewData?.eyebrow ?? "CLIENT EXPERIENCES"}
                     </span>
 
                     <h2
                         className="testimonials-animate"
                         style={{ "--card-index": 1 }}
                     >
-                        What Our Customers Say
+                        {previewData?.heading ?? "What Our Customers Say"}
                     </h2>
 
                     <p
@@ -67,7 +68,7 @@ export default function Testimonials() {
 
                 {/* TESTIMONIAL CARDS */}
                 <div className="testimonials__grid">
-                    {testimonials.map((testimonial, index) => (
+                    {items.map((testimonial, index) => (
                         <article
                             className="testimonial-card testimonials-animate"
                             key={testimonial.id}

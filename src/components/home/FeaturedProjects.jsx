@@ -8,7 +8,7 @@ import { projects } from "../../data/projects";
 import { client, PROJECTS_QUERY } from "@/sanity";
 import "./FeaturedProjects.css";
 
-export default function FeaturedProjects() {
+export default function FeaturedProjects({ previewData, customProjects }) {
     const sectionRef = useRef(null);
     const carouselRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
@@ -79,7 +79,7 @@ export default function FeaturedProjects() {
     const scrollLeftRef = useRef(0);
     const hasDraggedRef = useRef(false);
 
-    const filteredProjects = projectList;
+    const filteredProjects = Array.isArray(customProjects) && customProjects.length > 0 ? customProjects : projectList;
 
     const getScrollStep = () => {
         if (!carouselRef.current) return 320;
@@ -207,14 +207,14 @@ export default function FeaturedProjects() {
                 {/* Top Section Editorial Header */}
                 <div className="featured-projects__heading">
                     <span className="featured-projects__eyebrow">
-                        OUR PORTFOLIO
+                        {previewData?.eyebrow ?? "OUR PORTFOLIO"}
                     </span>
 
-                    <h2>Explore Our Featured Projects</h2>
+                    <h2>{previewData?.heading ?? "Explore Our Featured Projects"}</h2>
 
                     <p>
-                        Discover thoughtfully selected properties across Pune
-                        that match your lifestyle and investment goals.
+                        {previewData?.subtitle ??
+                            "Discover thoughtfully selected properties across Pune that match your lifestyle and investment goals."}
                     </p>
                 </div>
 

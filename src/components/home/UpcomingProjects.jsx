@@ -27,7 +27,7 @@ const youtubeUrl = "https://www.youtube.com/watch?v=yTzvQko2gYo&t=14s";
 const videoId = "yTzvQko2gYo";
 const startSeconds = 14;
 
-export default function UpcomingProjects() {
+export default function UpcomingProjects({ previewData }) {
     const [isMuted, setIsMuted] = useState(true);
     const [isPlaying, setIsPlaying] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
@@ -35,6 +35,10 @@ export default function UpcomingProjects() {
     const [phone, setPhone] = useState("");
     const [bhk, setBhk] = useState("3 BHK");
     const [submitted, setSubmitted] = useState(false);
+
+    const activeYoutubeUrl = previewData?.youtubeUrl || youtubeUrl;
+    const matchId = activeYoutubeUrl.match(/(?:v=|\/embed\/|youtu\.be\/|\/shorts\/)([a-zA-Z0-9_-]{11})/);
+    const activeVideoId = matchId ? matchId[1] : videoId;
 
     const handleRegisterSubmit = (e) => {
         e.preventDefault();
@@ -72,25 +76,30 @@ export default function UpcomingProjects() {
                         <div className="upcoming-eyebrow-wrap">
                             <span className="upcoming-eyebrow-line" />
                             <span className="upcoming-eyebrow">
-                                <Sparkles size={13} /> EXCLUSIVE PRE-LAUNCH PREVIEW 2026–2027
+                                <Sparkles size={13} /> {previewData?.eyebrow ?? "EXCLUSIVE PRE-LAUNCH PREVIEW 2026–2027"}
                             </span>
                         </div>
 
                         <h2 className="upcoming-title">
-                            Upcoming <span>Project Showcase</span>
+                            {previewData?.heading ? (
+                                previewData.heading
+                            ) : (
+                                <>
+                                    Upcoming <span>Project Showcase</span>
+                                </>
+                            )}
                         </h2>
 
                         <p className="upcoming-subtitle">
-                            Experience the grand launch and exclusive first look of Pune’s next iconic
-                            landmark in New Kharadi. Lock in inaugural pre-registration privileges before
-                            public release.
+                            {previewData?.subtitle ??
+                                "Experience the grand launch and exclusive first look of Pune’s next iconic landmark in New Kharadi. Lock in inaugural pre-registration privileges before public release."}
                         </p>
                     </div>
 
                     {/* YouTube Channel & Direct Link CTA */}
                     <div className="upcoming-header-actions">
                         <a
-                            href={youtubeUrl}
+                            href={activeYoutubeUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="upcoming-yt-btn"
@@ -109,9 +118,9 @@ export default function UpcomingProjects() {
                         {/* Video Player */}
                         {isPlaying ? (
                             <iframe
-                                src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=${
+                                src={`https://www.youtube-nocookie.com/embed/${activeVideoId}?autoplay=1&mute=${
                                     isMuted ? 1 : 0
-                                }&loop=1&playlist=${videoId}&controls=1&modestbranding=1&rel=0&playsinline=1&start=${startSeconds}`}
+                                }&loop=1&playlist=${activeVideoId}&controls=1&modestbranding=1&rel=0&playsinline=1&start=${startSeconds}`}
                                 title="Grand Launch Event of VTP Aurelia | New Kharadi"
                                 className="upcoming-theater__iframe"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
