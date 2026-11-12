@@ -10,6 +10,7 @@ import {
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import PageHeroBanner from "../common/PageHeroBanner";
+import { usePublishedCms } from "../../services/liveContent";
 import "./News.css";
 
 const newsArticles = [
@@ -96,9 +97,15 @@ const categories = [
 ];
 
 export default function News() {
+    const published = usePublishedCms();
+    const publishedNews = Array.isArray(published?.news)
+        ? published.news.filter((n) => n.status !== "Draft")
+        : [];
+    const activeNews = publishedNews.length > 0 ? publishedNews : newsArticles;
+
     const [selectedCategory, setSelectedCategory] = useState("All");
 
-    const filteredArticles = newsArticles.filter((article) => {
+    const filteredArticles = activeNews.filter((article) => {
         if (selectedCategory === "All") return true;
         return article.category === selectedCategory;
     });

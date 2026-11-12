@@ -6,6 +6,7 @@ import { contentService } from "../../../services/content.service";
 import { useToast } from "../../../context/ToastContext";
 import DataTable from "../common/DataTable";
 import ConfirmModal from "../common/ConfirmModal";
+import SectionSyncBar from "../common/SectionSyncBar";
 import VideoUploader from "./VideoUploader";
 import ImageUploader, { resolveAssetUrl } from "./ImageUploader";
 import LivePagePreview from "../preview/LivePagePreview";
@@ -29,18 +30,19 @@ export default function ShortsManager() {
     const [saving, setSaving] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState(null);
 
-    useEffect(() => {
-        async function load() {
-            setLoading(true);
-            try {
-                const list = await contentService.listShorts();
-                setShorts(Array.isArray(list) ? list : []);
-            } catch (err) {
-                showToast(err.message || "Failed to load shorts", "error");
-            } finally {
-                setLoading(false);
-            }
+    async function load() {
+        setLoading(true);
+        try {
+            const list = await contentService.listShorts();
+            setShorts(Array.isArray(list) ? list : []);
+        } catch (err) {
+            showToast(err.message || "Failed to load shorts", "error");
+        } finally {
+            setLoading(false);
         }
+    }
+
+    useEffect(() => {
         load();
     }, []);
 
@@ -304,6 +306,7 @@ export default function ShortsManager() {
                     </p>
                 </div>
                 <div className="admin-page-actions">
+                    <SectionSyncBar sectionKey="shorts" label="Shorts" onRetrieved={load} />
                     <button type="button" className="admin-btn admin-btn--gold" onClick={() => setEditing({ ...EMPTY_SHORT })}>
                         <Plus size={16} /> Add Short Video
                     </button>

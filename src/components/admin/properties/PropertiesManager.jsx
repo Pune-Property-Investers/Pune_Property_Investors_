@@ -8,6 +8,7 @@ import DataTable from "../common/DataTable";
 import StatusBadge from "../common/StatusBadge";
 import AdminModal from "../common/AdminModal";
 import ConfirmModal from "../common/ConfirmModal";
+import SectionSyncBar from "../common/SectionSyncBar";
 import ImageUploader, { resolveAssetUrl } from "../content/ImageUploader";
 import RichTextEditor from "../content/RichTextEditor";
 import LivePagePreview from "../preview/LivePagePreview";
@@ -327,6 +328,7 @@ export default function PropertiesManager() {
                     </p>
                 </div>
                 <div className="admin-page-actions">
+                    <SectionSyncBar sectionKey="properties" label="Properties" onRetrieved={loadProperties} />
                     <button type="button" className="admin-btn admin-btn--gold" onClick={openCreateModal}>
                         <Plus size={16} /> Add Property
                     </button>

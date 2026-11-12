@@ -22,6 +22,7 @@ import PropertyListingCard from "../properties/PropertyListingCard";
 import AdvertisementSidebar from "../common/AdvertisementSidebar";
 
 import propertyListingsData from "../../data/propertyListingsData.js";
+import { usePublishedCms } from "../../services/liveContent";
 import "./BuyProperties.css";
 
 const DEFAULT_FILTERS = {
@@ -62,6 +63,12 @@ const HERO_SLIDES = [
 ];
 
 function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
+    const published = usePublishedCms();
+    const sourceProperties =
+        Array.isArray(published?.properties) && published.properties.length > 0
+            ? published.properties
+            : propertyListingsData;
+
     const searchParams = useSearchParams();
     const initialLocation = searchParams?.get("location") || "all";
     const initialBhk = searchParams?.get("bhk") || "all";
@@ -147,7 +154,7 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
 
     // Filter and sort the property listings.
     const filteredProperties = useMemo(() => {
-        let properties = [...propertyListingsData];
+        let properties = [...sourceProperties];
 
         // Location filter.
         if (filters.location && filters.location !== "all") {
@@ -270,7 +277,7 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
         }
 
         return properties;
-    }, [filters, searchQuery]);
+    }, [filters, searchQuery, sourceProperties]);
 
     return (
         <div className="buy-properties-page">

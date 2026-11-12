@@ -6,6 +6,7 @@ import { contentService } from "../../../services/content.service";
 import { useToast } from "../../../context/ToastContext";
 import DataTable from "../common/DataTable";
 import ConfirmModal from "../common/ConfirmModal";
+import SectionSyncBar from "../common/SectionSyncBar";
 import ImageUploader, { resolveAssetUrl } from "./ImageUploader";
 import VideoUploader from "./VideoUploader";
 import LivePagePreview from "../preview/LivePagePreview";
@@ -31,18 +32,19 @@ export default function AdsManager() {
     const [saving, setSaving] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState(null);
 
-    useEffect(() => {
-        async function load() {
-            setLoading(true);
-            try {
-                const list = await contentService.listAds();
-                setAds(Array.isArray(list) ? list : []);
-            } catch (err) {
-                showToast(err.message || "Failed to load advertisements", "error");
-            } finally {
-                setLoading(false);
-            }
+    async function load() {
+        setLoading(true);
+        try {
+            const list = await contentService.listAds();
+            setAds(Array.isArray(list) ? list : []);
+        } catch (err) {
+            showToast(err.message || "Failed to load advertisements", "error");
+        } finally {
+            setLoading(false);
         }
+    }
+
+    useEffect(() => {
         load();
     }, []);
 
@@ -295,6 +297,7 @@ export default function AdsManager() {
                     </p>
                 </div>
                 <div className="admin-page-actions">
+                    <SectionSyncBar sectionKey="advertisements" label="Advertisements" onRetrieved={load} />
                     <button type="button" className="admin-btn admin-btn--gold" onClick={() => setEditing({ ...EMPTY_AD })}>
                         <Plus size={16} /> Add Advertisement
                     </button>

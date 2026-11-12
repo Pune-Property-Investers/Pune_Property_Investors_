@@ -11,6 +11,7 @@ import {
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import PageHeroBanner from "../common/PageHeroBanner";
+import { usePublishedCms } from "../../services/liveContent";
 import "./Blog.css";
 
 const blogPosts = [
@@ -109,14 +110,20 @@ const categories = [
 ];
 
 export default function Blog() {
+    const published = usePublishedCms();
+    const publishedArticles = Array.isArray(published?.articles)
+        ? published.articles.filter((a) => a.status !== "Draft")
+        : [];
+    const activePosts = publishedArticles.length > 0 ? publishedArticles : blogPosts;
+
     const [selectedCategory, setSelectedCategory] = useState("All");
 
-    const filteredPosts = blogPosts.filter((post) => {
+    const filteredPosts = activePosts.filter((post) => {
         if (selectedCategory === "All") return true;
         return post.category === selectedCategory;
     });
 
-    const featuredPost = blogPosts.find((p) => p.featured) || blogPosts[0];
+    const featuredPost = activePosts.find((p) => p.featured) || activePosts[0];
 
     return (
         <div className="blog-page">
