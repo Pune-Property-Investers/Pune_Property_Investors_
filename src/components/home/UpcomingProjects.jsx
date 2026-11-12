@@ -21,6 +21,7 @@ import {
     PhoneCall,
 } from "lucide-react";
 import { FaYoutube, FaWhatsapp } from "react-icons/fa";
+import { leadService } from "../../services/lead.service";
 import "./UpcomingProjects.css";
 
 const youtubeUrl = "https://www.youtube.com/watch?v=yTzvQko2gYo&t=14s";
@@ -40,8 +41,22 @@ export default function UpcomingProjects({ previewData }) {
     const matchId = activeYoutubeUrl.match(/(?:v=|\/embed\/|youtu\.be\/|\/shorts\/)([a-zA-Z0-9_-]{11})/);
     const activeVideoId = matchId ? matchId[1] : videoId;
 
-    const handleRegisterSubmit = (e) => {
+    const handleRegisterSubmit = async (e) => {
         e.preventDefault();
+        try {
+            await leadService.create({
+                type: "property",
+                name,
+                phone,
+                propertyTitle: "VTP Aurelia (New Kharadi)",
+                locality: "New Kharadi",
+                budget: bhk,
+                message:
+                    "Pre-launch EOI privileges, inaugural price sheet, and early unit layouts.",
+            });
+        } catch {
+            // Continue to WhatsApp handoff even if lead logging fails
+        }
         const msg = [
             `*Upcoming Project Pre-Registration*`,
             `*Project:* VTP Aurelia (New Kharadi)`,

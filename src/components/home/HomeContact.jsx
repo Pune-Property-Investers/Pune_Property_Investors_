@@ -15,6 +15,7 @@ import {
     Compass,
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
+import { leadService } from "../../services/lead.service";
 import "./HomeContact.css";
 
 const WHATSAPP_NUMBER = "917398174444";
@@ -37,9 +38,26 @@ export default function HomeContact({ previewData }) {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitted(true);
+
+        try {
+            await leadService.create({
+                type: "contact",
+                name: formData.name,
+                phone: formData.phone,
+                email: formData.email,
+                propertyTitle: "Home Page Advisory",
+                locality: formData.locality,
+                budget: formData.budgetBhk,
+                message:
+                    formData.message ||
+                    "Looking for property recommendations & site visit.",
+            });
+        } catch {
+            // Continue to WhatsApp handoff even if lead logging fails
+        }
 
         const msg = [
             `*New Home Page Property Inquiry*`,

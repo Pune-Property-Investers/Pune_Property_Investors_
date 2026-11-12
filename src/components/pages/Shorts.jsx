@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
+import { leadService } from "../../services/lead.service";
 import {
     ThumbsUp,
     ThumbsDown,
@@ -107,8 +108,21 @@ export default function Shorts() {
         setEnquiryModalOpen(true);
     };
 
-    const handleModalSubmit = (e) => {
+    const handleModalSubmit = async (e) => {
         e.preventDefault();
+        try {
+            await leadService.create({
+                type: "property",
+                name: enquiryForm.name,
+                phone: enquiryForm.phone,
+                propertyTitle: selectedShort?.title || "PPI Shorts Enquiry",
+                locality: selectedShort?.location || "Pune",
+                budget: selectedShort?.price || "",
+                message: `Configurations: ${selectedShort?.configurations || "N/A"} — Send official brochure & schedule site visit.`,
+            });
+        } catch {
+            // Continue to WhatsApp handoff even if lead logging fails
+        }
         const msg = [
             `*PPI Shorts VIP Enquiry*`,
             `*Project:* ${selectedShort?.title}`,

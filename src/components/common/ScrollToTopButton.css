@@ -51,10 +51,10 @@
     outline-offset: 4px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .scroll-to-top {
         right: 16px;
-        bottom: 16px;
+        bottom: calc(76px + env(safe-area-inset-bottom));
         width: 42px;
         height: 42px;
         font-size: 15px;

@@ -12,6 +12,7 @@ import {
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import PageHeroBanner from "../common/PageHeroBanner";
+import { leadService } from "../../services/lead.service";
 import "./Contact.css";
 
 const WHATSAPP_NUMBER = "917398174444";
@@ -31,8 +32,23 @@ export default function ContactPage() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        try {
+            await leadService.create({
+                type: "contact",
+                name: formData.name,
+                phone: formData.phone,
+                email: formData.email,
+                propertyTitle: "Contact Page Enquiry",
+                locality: formData.locality,
+                message:
+                    formData.message ||
+                    "I would like to speak to a Pune Property Advisor.",
+            });
+        } catch {
+            // Continue to WhatsApp handoff even if lead logging fails
+        }
         const text = [
             `*New Property Inquiry via Contact Page*`,
             `Name: ${formData.name}`,

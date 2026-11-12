@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Phone, MessageCircle, Send, ShieldCheck } from "lucide-react";
+import { leadService } from "../../services/lead.service";
 import "./PropertyEnquiry.css";
 
 function PropertyEnquiry({ property }) {
@@ -29,8 +30,22 @@ function PropertyEnquiry({ property }) {
         setSubmitted(false);
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+
+        try {
+            await leadService.create({
+                type: "property",
+                name: formData.name,
+                phone: formData.phone,
+                propertyTitle,
+                locality: property?.locality || property?.location || "Pune",
+                budget: property?.price || "",
+                message: formData.message || "Please share more details.",
+            });
+        } catch {
+            // Continue to WhatsApp handoff even if lead logging fails
+        }
 
         const message = [
             `Hello, I am interested in ${propertyTitle}.`,

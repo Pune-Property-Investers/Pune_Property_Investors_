@@ -14,39 +14,13 @@ import {
 } from "lucide-react";
 
 import advertisementData from "../../data/advertisementData.js";
+import { usePublishedCms } from "../../services/liveContent";
+import { extractYouTubeVideoId } from "../../lib/youtube";
 
 const WHATSAPP_NUMBER = "917398174444";
 
 function getYouTubeVideoId(ad) {
-    if (ad.videoId) {
-        return ad.videoId;
-    }
-
-    if (!ad.videoUrl) {
-        return "";
-    }
-
-    try {
-        const url = new URL(ad.videoUrl);
-
-        if (url.hostname.includes("youtu.be")) {
-            return url.pathname.replace("/", "");
-        }
-
-        if (url.hostname.includes("youtube.com")) {
-            if (url.pathname === "/watch") {
-                return url.searchParams.get("v") || "";
-            }
-
-            const match = url.pathname.match(/\/(?:embed|shorts)\/([^/?]+)/);
-
-            return match?.[1] || "";
-        }
-    } catch {
-        return "";
-    }
-
-    return "";
+    return extractYouTubeVideoId(ad?.videoUrl) || extractYouTubeVideoId(ad?.videoId) || "";
 }
 
 function AdvertisementVideo({ ad, videoId }) {
@@ -141,14 +115,14 @@ function ImageAdvertisement({ ad }) {
 
                 {ad.description && <p>{ad.description}</p>}
 
-                {ad.link && (
-                    <Link href={ad.link} className="partner-spotlight-card__button">
+                {(ad.link || ad.buttonUrl) && (
+                    <Link href={ad.link || ad.buttonUrl} className="partner-spotlight-card__button">
                         {ad.buttonText || "Explore Property"}
                         <ArrowUpRight size={17} />
                     </Link>
                 )}
 
-                {!ad.link && ad.externalUrl && (
+                {!(ad.link || ad.buttonUrl) && ad.externalUrl && (
                     <a
                         href={ad.externalUrl}
                         target="_blank"
@@ -250,8 +224,14 @@ function ContactAdvertisement() {
 }
 
 export default function AdvertisementSidebar({ customAds }) {
-    const sourceAds = Array.isArray(customAds) && customAds.length > 0 ? customAds : advertisementData;
-    const visibleAds = sourceAds.filter(
+    const published = usePublishedCms();
+    const resolvedAds =
+        Array.isArray(customAds) && customAds.length > 0
+            ? customAds
+            : Array.isArray(published?.advertisements) && published.advertisements.length > 0
+              ? published.advertisements
+              : advertisementData;
+    const visibleAds = resolvedAds.filter(
         (ad) => ad.type !== "sell" && ad.visible !== false
     );
 
@@ -269,7 +249,7 @@ export default function AdvertisementSidebar({ customAds }) {
                 {visibleAds.map((ad, index) => {
                     const key = ad.id ?? `${ad.type || "ad"}-${index}`;
 
-                    if (ad.type === "video") {
+                    if (ad.type === "video" || getYouTubeVideoId(ad)) {
                         return <VideoAdvertisement key={key} ad={ad} />;
                     }
 

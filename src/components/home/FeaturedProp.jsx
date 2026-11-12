@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { leadService } from "../../services/lead.service";
 import {
     ChevronLeft,
     ChevronRight,
@@ -242,9 +243,23 @@ export default function FeaturedProperties() {
         setFormData({ name: "", phone: "", email: "" });
     };
 
-    const handleSubmitInquiry = (e) => {
+    const handleSubmitInquiry = async (e) => {
         e.preventDefault();
         setModalSubmitted(true);
+        try {
+            await leadService.create({
+                type: "property",
+                name: formData.name,
+                phone: formData.phone,
+                email: formData.email,
+                propertyTitle: inquiryModalProject?.name || "Featured Property",
+                locality: inquiryModalProject?.location || "Pune",
+                budget: inquiryModalProject?.price || "",
+                message: "Featured property brochure & pricing enquiry.",
+            });
+        } catch {
+            // Continue to WhatsApp handoff even if lead logging fails
+        }
         const msg = `Hi PPI Infra, I am interested in ${inquiryModalProject.name} (${inquiryModalProject.location}) starting at ${inquiryModalProject.price}. My name is ${formData.name}, phone: ${formData.phone}.`;
         const waUrl = `https://wa.me/917398174444?text=${encodeURIComponent(msg)}`;
         setTimeout(() => {

@@ -9,6 +9,7 @@ import ConfirmModal from "../common/ConfirmModal";
 import ImageUploader, { resolveAssetUrl } from "./ImageUploader";
 import VideoUploader from "./VideoUploader";
 import LivePagePreview from "../preview/LivePagePreview";
+import { extractYouTubeVideoId } from "../../../lib/youtube";
 
 const EMPTY_AD = {
     eyebrow: "FEATURED LAUNCH",
@@ -63,6 +64,39 @@ export default function AdsManager() {
         persistList(next, "Advertisement visibility updated");
     };
 
+    const startEditing = (row) => {
+        const videoUrl =
+            row.videoUrl || (row.videoId ? `https://www.youtube.com/watch?v=${row.videoId}` : "");
+        setEditing({
+            ...EMPTY_AD,
+            ...row,
+            videoUrl,
+            buttonUrl: row.buttonUrl || row.link || EMPTY_AD.buttonUrl,
+        });
+    };
+
+    const handleVideoUrlChange = (val) => {
+        const nextVideoId = extractYouTubeVideoId(val);
+        setEditing((p) => {
+            const isAutoYtThumb =
+                !p.image || p.image.startsWith("https://img.youtube.com/vi/");
+            const nextImage = nextVideoId
+                ? isAutoYtThumb
+                    ? `https://img.youtube.com/vi/${nextVideoId}/hqdefault.jpg`
+                    : p.image
+                : isAutoYtThumb
+                    ? ""
+                    : p.image;
+            return {
+                ...p,
+                videoUrl: val,
+                videoId: nextVideoId,
+                type: val?.trim() ? "video" : "image",
+                image: nextImage,
+            };
+        });
+    };
+
     const handleSave = async (e) => {
         e?.preventDefault();
         if (!editing?.title?.trim()) {
@@ -71,14 +105,26 @@ export default function AdsManager() {
         }
         setSaving(true);
         try {
+            const nextVideoId = extractYouTubeVideoId(editing.videoUrl);
+            const normalizedEditing = {
+                ...editing,
+                videoId: nextVideoId,
+                type: editing.videoUrl?.trim() ? "video" : "image",
+                link: editing.buttonUrl || editing.link || "",
+            };
             let nextList;
-            if (editing.id) {
-                nextList = ads.map((a) => (String(a.id) === String(editing.id) ? editing : a));
+            if (normalizedEditing.id) {
+                nextList = ads.map((a) =>
+                    String(a.id) === String(normalizedEditing.id) ? normalizedEditing : a
+                );
             } else {
                 const nextId = ads.reduce((m, a) => Math.max(m, Number(a.id) || 0), 0) + 1;
-                nextList = [{ ...editing, id: nextId }, ...ads];
+                nextList = [{ ...normalizedEditing, id: nextId }, ...ads];
             }
-            await persistList(nextList, editing.id ? "Advertisement updated" : "Advertisement created");
+            await persistList(
+                nextList,
+                normalizedEditing.id ? "Advertisement updated" : "Advertisement created"
+            );
             setEditing(null);
         } finally {
             setSaving(false);
@@ -156,16 +202,10 @@ export default function AdsManager() {
                                 />
                             </div>
 
-                            <ImageUploader
-                                label="Banner Image"
-                                value={editing.image || ""}
-                                onChange={(val) => setEditing((p) => ({ ...p, image: val }))}
-                            />
-
                             <VideoUploader
-                                label="Optional Video Reel URL"
+                                label="Video URL"
                                 value={editing.videoUrl || ""}
-                                onChange={(val) => setEditing((p) => ({ ...p, videoUrl: val }))}
+                                onChange={handleVideoUrlChange}
                             />
 
                             <div className="admin-form-grid">
@@ -269,7 +309,7 @@ export default function AdsManager() {
                     <button
                         type="button"
                         className="admin-btn admin-btn--outline admin-btn--sm"
-                        onClick={() => setEditing({ ...EMPTY_AD, ...row })}
+                        onClick={() => startEditing(row)}
                     >
                         <Pencil size={13} /> Edit &amp; Preview
                     </button>

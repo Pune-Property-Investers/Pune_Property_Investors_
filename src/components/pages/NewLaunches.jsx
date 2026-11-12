@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
+import { leadService } from "../../services/lead.service";
 import {
     MapPin,
     Bed,
@@ -196,8 +197,23 @@ export default function NewLaunches() {
         setEnquiryModalOpen(true);
     };
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
+        try {
+            await leadService.create({
+                type: "property",
+                name: enquiryForm.name,
+                phone: enquiryForm.phone,
+                propertyTitle: selectedProject?.name || "Exclusive Pune Launch",
+                locality: selectedProject?.location || "Pune",
+                budget: enquiryForm.bhk,
+                message:
+                    enquiryForm.message ||
+                    "New Launch VIP Pre-Launch Allotment enquiry.",
+            });
+        } catch {
+            // Continue to WhatsApp handoff even if lead logging fails
+        }
         const msg = [
             `*New Launch VIP Pre-Launch Allotment*`,
             `*Project:* ${selectedProject?.name || "Exclusive Pune Launch"}`,

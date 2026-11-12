@@ -183,6 +183,7 @@ export const contentService = {
                 const store = getStore();
                 store.advertisements = advertisements;
                 saveStore(store);
+                publishLiveSnapshot(store);
                 addActivity("Updated Sidebar & Banner Advertisements", "update");
                 return store.advertisements;
             }
