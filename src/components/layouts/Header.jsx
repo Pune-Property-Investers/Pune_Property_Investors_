@@ -99,6 +99,8 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 function Header() {
     const pathname = usePathname();
+    const normalizedPath =
+        pathname === "/" ? "/" : (pathname || "/").replace(/\/+$/, "");
     const [menuOpen, setMenuOpen] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(null);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -471,7 +473,7 @@ function Header() {
             {/* Mobile Bottom Navigation Bar (Appears when scrolling down from head section with header) */}
             <nav
                 className={`mobile-bottom-nav ${
-                    isScrolled || pathname === "/shorts"
+                    isScrolled || normalizedPath === "/shorts"
                         ? "mobile-bottom-nav--visible"
                         : ""
                 }`}
@@ -482,7 +484,7 @@ function Header() {
                     href="/"
                     onClick={handleHomeClick}
                     className={`mobile-bottom-nav__item ${
-                        pathname === "/" && !menuOpen
+                        normalizedPath === "/" && !menuOpen
                             ? "mobile-bottom-nav__item--active"
                             : ""
                     }`}
@@ -499,9 +501,9 @@ function Header() {
                     href="/search"
                     onClick={closeMenu}
                     className={`mobile-bottom-nav__item ${
-                        (pathname === "/search" ||
-                            pathname === "/buy" ||
-                            pathname?.startsWith("/properties")) &&
+                        (normalizedPath === "/search" ||
+                            normalizedPath === "/buy" ||
+                            normalizedPath.startsWith("/properties")) &&
                         !menuOpen
                             ? "mobile-bottom-nav__item--active"
                             : ""
@@ -519,7 +521,7 @@ function Header() {
                     href="/shorts"
                     onClick={closeMenu}
                     className={`mobile-bottom-nav__item ${
-                        pathname === "/shorts" && !menuOpen
+                        normalizedPath === "/shorts" && !menuOpen
                             ? "mobile-bottom-nav__item--active mobile-bottom-nav__item--shorts"
                             : ""
                     }`}
@@ -529,7 +531,7 @@ function Header() {
                         <Film size={20} className="mobile-bottom-nav__icon" />
                     </div>
                     <span className="mobile-bottom-nav__label">PPI Shorts</span>
-                    {pathname === "/shorts" && !menuOpen && (
+                    {normalizedPath === "/shorts" && !menuOpen && (
                         <span className="mobile-bottom-nav__dot" />
                     )}
                 </Link>
