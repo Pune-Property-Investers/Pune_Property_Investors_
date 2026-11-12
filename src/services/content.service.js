@@ -1,5 +1,10 @@
 import { apiRequest, withMockFallback } from "./api";
-import { getStore, saveStore, addActivity } from "./mockStore";
+import { getStore, saveStore, addActivity, resetMockStore } from "./mockStore";
+import {
+    publishLiveSnapshot,
+    restorePreviousSnapshot,
+    clearLiveSnapshot,
+} from "./liveContent";
 
 export const contentService = {
     // Homepage Draft & Published CMS
@@ -54,8 +59,69 @@ export const contentService = {
                 store.homepageDraft = publishedData;
                 store.homepagePublished = publishedData;
                 saveStore(store);
+                publishLiveSnapshot(store);
                 addActivity("Published Homepage sections to live site", "publish");
                 return publishedData;
+            }
+        );
+    },
+
+    async publishAllToLiveSite() {
+        const store = getStore();
+        const draftPayload = store.homepageDraft || store.homepagePublished;
+        return withMockFallback(
+            () =>
+                apiRequest("/content/homepage/publish", {
+                    method: "POST",
+                    body: JSON.stringify(draftPayload),
+                }),
+            () => {
+                const publishedData = {
+                    ...draftPayload,
+                    status: "Published",
+                    updatedAt: new Date().toISOString(),
+                };
+                store.homepageDraft = publishedData;
+                store.homepagePublished = publishedData;
+                saveStore(store);
+                const snapshot = publishLiveSnapshot(store);
+                addActivity("Published all admin changes to live public website", "publish");
+                return snapshot;
+            }
+        );
+    },
+
+    async revertChanges(mode = "original") {
+        return withMockFallback(
+            () =>
+                apiRequest("/content/homepage/revert", {
+                    method: "POST",
+                    body: JSON.stringify({ mode }),
+                }),
+            () => {
+                if (mode === "previous") {
+                    const prevSnapshot = restorePreviousSnapshot();
+                    if (prevSnapshot) {
+                        const store = getStore();
+                        if (prevSnapshot.homepage) {
+                            store.homepageDraft = prevSnapshot.homepage;
+                            store.homepagePublished = prevSnapshot.homepage;
+                        }
+                        if (Array.isArray(prevSnapshot.properties)) store.properties = prevSnapshot.properties;
+                        if (Array.isArray(prevSnapshot.projects)) store.projects = prevSnapshot.projects;
+                        if (Array.isArray(prevSnapshot.locations)) store.locations = prevSnapshot.locations;
+                        if (Array.isArray(prevSnapshot.testimonials)) store.testimonials = prevSnapshot.testimonials;
+                        if (Array.isArray(prevSnapshot.advertisements)) store.advertisements = prevSnapshot.advertisements;
+                        saveStore(store);
+                        addActivity("Reverted live website to previous published version", "update");
+                        return { mode: "previous", snapshot: prevSnapshot };
+                    }
+                }
+
+                const fresh = resetMockStore();
+                clearLiveSnapshot();
+                addActivity("Reverted all changes and restored original website", "update");
+                return { mode: "original", store: fresh };
             }
         );
     },

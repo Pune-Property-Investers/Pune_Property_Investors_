@@ -11,15 +11,28 @@ import {
     Settings,
     ChevronDown,
     User,
+    Rocket,
+    RotateCcw,
 } from "lucide-react";
 import { useAdminAuth } from "../../../context/AdminAuthContext";
+import { useToast } from "../../../context/ToastContext";
+import { contentService } from "../../../services/content.service";
+import { readPreviousSnapshot } from "../../../services/liveContent";
+import AdminModal from "../common/AdminModal";
+import ConfirmModal from "../common/ConfirmModal";
 import { SIDEBAR_GROUPS } from "./AdminSidebar";
 
 export default function AdminTopbar({ onOpenMobileMenu, notifications = [] }) {
     const { user, logout } = useAdminAuth();
+    const { showToast } = useToast();
     const [searchQuery, setSearchQuery] = useState("");
     const [notifOpen, setNotifOpen] = useState(false);
     const [profileOpen, setProfileOpen] = useState(false);
+    const [publishConfirmOpen, setPublishConfirmOpen] = useState(false);
+    const [publishingAll, setPublishingAll] = useState(false);
+    const [revertModalOpen, setRevertModalOpen] = useState(false);
+    const [reverting, setReverting] = useState(false);
+    const [hasPreviousVersion, setHasPreviousVersion] = useState(false);
     const wrapRef = useRef(null);
 
     useEffect(() => {
@@ -95,6 +108,31 @@ export default function AdminTopbar({ onOpenMobileMenu, notifications = [] }) {
             </div>
 
             <div className="admin-topbar__right">
+                <button
+                    type="button"
+                    className="admin-btn admin-btn--outline admin-btn--sm"
+                    onClick={() => {
+                        setHasPreviousVersion(Boolean(readPreviousSnapshot()));
+                        setRevertModalOpen(true);
+                    }}
+                    disabled={publishingAll || reverting}
+                    title="Revert published changes and restore previous or original website state"
+                >
+                    <RotateCcw size={14} />
+                    <span>{reverting ? "Reverting..." : "Revert Changes"}</span>
+                </button>
+
+                <button
+                    type="button"
+                    className="admin-btn admin-btn--gold admin-btn--sm"
+                    onClick={() => setPublishConfirmOpen(true)}
+                    disabled={publishingAll}
+                    title="Publish all current CMS, inventory, and content changes to the live website"
+                >
+                    <Rocket size={14} />
+                    <span>{publishingAll ? "Publishing..." : "Publish to Live Site"}</span>
+                </button>
+
                 <Link
                     href="/"
                     target="_blank"
@@ -210,6 +248,95 @@ export default function AdminTopbar({ onOpenMobileMenu, notifications = [] }) {
                     )}
                 </div>
             </div>
+
+            <ConfirmModal
+                open={publishConfirmOpen}
+                onClose={() => setPublishConfirmOpen(false)}
+                onConfirm={async () => {
+                    setPublishingAll(true);
+                    try {
+                        await contentService.publishAllToLiveSite();
+                        showToast("All changes are now live on the main website!", "success");
+                        setPublishConfirmOpen(false);
+                    } catch (err) {
+                        showToast(err?.message || "Failed to publish changes", "error");
+                    } finally {
+                        setPublishingAll(false);
+                    }
+                }}
+                loading={publishingAll}
+                title="Publish Changes to Live Website"
+                message="Push all homepage sections, About Us edits, projects, properties, testimonials, shorts, and advertisements directly to the public website?"
+                confirmText="Publish Now"
+                confirmTone="gold"
+            />
+
+            <AdminModal
+                open={revertModalOpen}
+                onClose={() => !reverting && setRevertModalOpen(false)}
+                title="Revert Website Changes"
+                size="sm"
+                footer={
+                    <>
+                        <button
+                            type="button"
+                            className="admin-btn admin-btn--outline"
+                            onClick={() => setRevertModalOpen(false)}
+                            disabled={reverting}
+                        >
+                            Cancel
+                        </button>
+                        {hasPreviousVersion && (
+                            <button
+                                type="button"
+                                className="admin-btn admin-btn--primary"
+                                disabled={reverting}
+                                onClick={async () => {
+                                    setReverting(true);
+                                    try {
+                                        await contentService.revertChanges("previous");
+                                        showToast("Reverted live website to the previous published version.", "success");
+                                        setRevertModalOpen(false);
+                                        if (typeof window !== "undefined") window.location.reload();
+                                    } catch (err) {
+                                        showToast(err?.message || "Failed to revert changes", "error");
+                                    } finally {
+                                        setReverting(false);
+                                    }
+                                }}
+                            >
+                                <RotateCcw size={14} /> Previous Publish
+                            </button>
+                        )}
+                        <button
+                            type="button"
+                            className="admin-btn admin-btn--danger"
+                            disabled={reverting}
+                            onClick={async () => {
+                                setReverting(true);
+                                try {
+                                    await contentService.revertChanges("original");
+                                    showToast("All changes reverted to the original website.", "success");
+                                    setRevertModalOpen(false);
+                                    if (typeof window !== "undefined") window.location.reload();
+                                } catch (err) {
+                                    showToast(err?.message || "Failed to revert to original", "error");
+                                } finally {
+                                    setReverting(false);
+                                }
+                            }}
+                        >
+                            <RotateCcw size={14} /> Restore Original
+                        </button>
+                    </>
+                }
+            >
+                <p style={{ margin: 0, fontSize: 14, color: "#475569", lineHeight: 1.6 }}>
+                    {hasPreviousVersion
+                        ? "Roll back the last publish to the previous live version, or clear all CMS overrides to restore the original default Pune Property Investors website."
+                        : "Discard current admin edits and clear published overrides to restore the original default Pune Property Investors website."}
+                </p>
+            </AdminModal>
         </header>
     );
 }

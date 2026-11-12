@@ -15,9 +15,13 @@ import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import PageHeroBanner from "../common/PageHeroBanner";
 import AboutSection from "../home/AboutSection";
+import { usePublishedCms } from "../../services/liveContent";
 import "./About.css";
 
 export default function AboutPage() {
+    const published = usePublishedCms();
+    const aboutData = published?.homepage?.about || null;
+
     return (
         <div className="about-page">
             <Header />
@@ -25,15 +29,21 @@ export default function AboutPage() {
             <main>
                 {/* Hero Header Section */}
                 <PageHeroBanner
-                    title="Guiding Your Journey With"
-                    titleAccent="Trust & Expertise."
-                    eyebrow="ABOUT PUNE PROPERTY INVESTOR"
-                    description="Pune Property Investors is your dedicated advisory partner helping homebuyers, NRI investors, and commercial clients make verified, high-yielding property decisions across Pune's fastest growing corridors."
+                    title={aboutData?.title || "Guiding Your Journey With"}
+                    titleAccent={aboutData?.titleAccent || "Trust & Expertise."}
+                    eyebrow={aboutData?.eyebrow || "ABOUT PUNE PROPERTY INVESTOR"}
+                    description={
+                        aboutData?.description ||
+                        "Pune Property Investors is your dedicated advisory partner helping homebuyers, NRI investors, and commercial clients make verified, high-yielding property decisions across Pune's fastest growing corridors."
+                    }
                     breadcrumbs={[
                         { label: "Home", href: "/" },
                         { label: "About Us" },
                     ]}
-                    backgroundImage="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85"
+                    backgroundImage={
+                        aboutData?.backgroundImage ||
+                        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85"
+                    }
                 />
 
                 <div className="about-page__content">
@@ -98,15 +108,22 @@ export default function AboutPage() {
                                     OUR MISSION
                                 </span>
                                 <h2 className="about-mission-heading">
-                                    Empowering Homebuyers With Market Transparency
+                                    {aboutData?.storyTitle || "Empowering Homebuyers With Market Transparency"}
                                 </h2>
-                                <p className="about-mission-desc">
-                                    Headquartered in Kharadi, Pune, Pune Property
-                                    Investors was founded with a singular focus:
-                                    bringing complete honesty, professional advisory,
-                                    and data-backed market analysis to Pune's
-                                    thriving real estate landscape.
-                                </p>
+                                {aboutData?.storyContent ? (
+                                    <div
+                                        className="about-mission-desc"
+                                        dangerouslySetInnerHTML={{ __html: aboutData.storyContent }}
+                                    />
+                                ) : (
+                                    <p className="about-mission-desc">
+                                        Headquartered in Kharadi, Pune, Pune Property
+                                        Investors was founded with a singular focus:
+                                        bringing complete honesty, professional advisory,
+                                        and data-backed market analysis to Pune's
+                                        thriving real estate landscape.
+                                    </p>
+                                )}
                                 <ul className="about-checklist">
                                     <li className="about-checklist-item">
                                         <CheckCircle2 size={18} />
@@ -125,10 +142,10 @@ export default function AboutPage() {
                                     </li>
                                 </ul>
                                 <Link
-                                    href="/buy"
+                                    href={aboutData?.ctaUrl || "/buy"}
                                     className="primary-button about-browse-btn"
                                 >
-                                    Browse Available Properties
+                                    {aboutData?.ctaText || "Browse Available Properties"}
                                     <ArrowRight size={17} />
                                 </Link>
                             </div>
