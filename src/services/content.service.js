@@ -292,6 +292,40 @@ export const contentService = {
         );
     },
 
+    // Festival Offer Popup
+    async getFestivalPopup() {
+        return withMockFallback(
+            () => apiRequest("/content/festival-popup"),
+            () => ({ ...getStore().festivalPopup })
+        );
+    },
+
+    async saveFestivalPopup(festivalPopup) {
+        return withMockFallback(
+            () =>
+                apiRequest("/content/festival-popup", {
+                    method: "PUT",
+                    body: JSON.stringify(festivalPopup),
+                }),
+            () => {
+                const store = getStore();
+                store.festivalPopup = {
+                    ...festivalPopup,
+                    updatedAt: new Date().toISOString(),
+                };
+                saveStore(store);
+                publishLiveSnapshot(store);
+                addActivity(
+                    store.festivalPopup.enabled
+                        ? `Enabled Festival Offer Popup (${store.festivalPopup.position || "center"})`
+                        : "Turned off Festival Offer Popup",
+                    "update"
+                );
+                return store.festivalPopup;
+            }
+        );
+    },
+
     async getDashboardOverview() {
         return withMockFallback(
             () => apiRequest("/dashboard/overview"),

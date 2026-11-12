@@ -15,6 +15,7 @@ import {
     Film,
     MessageSquareQuote,
     Megaphone,
+    Sparkles,
     Image as ImageIcon,
     Briefcase,
     Settings,
@@ -71,6 +72,7 @@ export const SIDEBAR_GROUPS = [
             { label: "Shorts / Videos", href: "/admin/shorts", icon: Film },
             { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquareQuote },
             { label: "Advertisements", href: "/admin/advertisements", icon: Megaphone },
+            { label: "Festival Popup", href: "/admin/festival-popup", icon: Sparkles },
         ],
     },
     {

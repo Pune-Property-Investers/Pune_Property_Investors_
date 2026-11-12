@@ -17,6 +17,7 @@ const LABELS = {
     shorts: "Shorts / Videos",
     testimonials: "Testimonials",
     advertisements: "Advertisements",
+    "festival-popup": "Festival Offer Popup",
     media: "Media Library",
     homepage: "Homepage & About Editor",
     settings: "Settings",

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import ScrollToTopButton from "../common/ScrollToTopButton";
+import FestivalOfferPopup from "../common/FestivalOfferPopup";
 import {
     FaFacebookF,
     FaInstagram,
@@ -198,6 +199,7 @@ function Footer() {
             </div>
 
             <ScrollToTopButton />
+            <FestivalOfferPopup />
         </footer>
     );
 }

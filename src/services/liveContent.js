@@ -71,6 +71,8 @@ export function extractSectionSlice(sectionKey, store) {
             return Array.isArray(store.jobs) ? store.jobs.filter((j) => j.status === "Open") : [];
         case "settings":
             return store.settings || null;
+        case "festivalPopup":
+            return store.festivalPopup || null;
         default:
             return null;
     }
@@ -94,6 +96,7 @@ export function buildPublishedSnapshot(store) {
         advertisements: extractSectionSlice("advertisements", store),
         jobs: extractSectionSlice("careers", store),
         settings: extractSectionSlice("settings", store),
+        festivalPopup: extractSectionSlice("festivalPopup", store),
     };
 }
 
