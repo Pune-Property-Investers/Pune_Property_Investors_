@@ -249,9 +249,10 @@ function ContactAdvertisement() {
     );
 }
 
-export default function AdvertisementSidebar() {
-    const visibleAds = advertisementData.filter(
-        (ad) => ad.type !== "sell"
+export default function AdvertisementSidebar({ customAds }) {
+    const sourceAds = Array.isArray(customAds) && customAds.length > 0 ? customAds : advertisementData;
+    const visibleAds = sourceAds.filter(
+        (ad) => ad.type !== "sell" && ad.visible !== false
     );
 
     return (

@@ -181,12 +181,15 @@ function LocalitySpotlightCard({ location, position = "top" }) {
     );
 }
 
-export default function BrowseLocations() {
+export default function BrowseLocations({ customLocations }) {
     const [isPaused, setIsPaused] = useState(false);
 
+    const activeLocations =
+        Array.isArray(customLocations) && customLocations.length > 0 ? customLocations : locationsData;
+
     // Split locations into Left Column (even index) & Right Column (odd index)
-    const leftColumn = locationsData.filter((_, idx) => idx % 2 === 0);
-    const rightColumn = locationsData.filter((_, idx) => idx % 2 === 1);
+    const leftColumn = activeLocations.filter((_, idx) => idx % 2 === 0);
+    const rightColumn = activeLocations.filter((_, idx) => idx % 2 === 1);
 
     // Duplicate arrays for seamless infinite marquee loop
     const leftColDouble = [...leftColumn, ...leftColumn];
@@ -316,7 +319,7 @@ export default function BrowseLocations() {
 
                 {/* Desktop Grid (Standard multi-column) */}
                 <div className="browse-locations__grid browse-locations__grid--desktop">
-                    {locationsData.map((location) => (
+                    {activeLocations.map((location) => (
                         <LocalityCard
                             key={location.id}
                             location={location}
