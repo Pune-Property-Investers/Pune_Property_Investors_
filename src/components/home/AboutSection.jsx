@@ -53,7 +53,7 @@ export default function AboutSection() {
                     </p>
 
                     <p className="about-ppi-body">
-                        Pune Property Investors aims to help clients discover property opportunities in Pune based on their needs, preferences, and budget.
+                        Headquartered in Kharadi with branch offices in Narhe and Dighi, Pune Property Investors helps clients discover verified residential and commercial opportunities across all growth corridors of Pune.
                     </p>
 
                     <ul className="about-ppi-checklist">
@@ -71,7 +71,7 @@ export default function AboutSection() {
                         </li>
                         <li className="about-ppi-check-item">
                             <CheckCircle2 size={19} className="about-ppi-check-icon" strokeWidth={2} />
-                            <span>Clear communication at every step</span>
+                            <span>Offices across Pune: Kharadi (Headquarters), Narhe &amp; Dighi</span>
                         </li>
                     </ul>
 

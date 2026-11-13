@@ -35,9 +35,70 @@ import {
     Heart,
     Camera,
     BookOpen,
+    IndianRupee,
+    Search,
 } from "lucide-react";
 import { newLaunchProjects } from "../../data/newLaunchProjectsData";
 import "./NewLaunches.css";
+
+const PUNE_LOCATIONS = [
+    "All Locations",
+    "Wakad",
+    "Baner",
+    "Hinjewadi",
+    "Kharadi",
+    "Hadapsar",
+    "Kothrud",
+    "Viman Nagar",
+    "Ravet",
+    "Dhanori",
+    "Wagholi",
+    "Charholi",
+    "Mundhwa",
+    "NIBM",
+    "Keshav Nagar",
+    "Pimple Saudagar",
+    "Punawale",
+    "Tathawade",
+    "Undri",
+    "Mohammed Wadi",
+    "Balewadi",
+];
+
+const PROPERTY_TYPES_SEARCH = [
+    { label: "All Residential", value: "Residential" },
+    { label: "Apartment / Flat", value: "Apartment" },
+    { label: "Villa / Independent House", value: "Villa" },
+    { label: "Plot / Land", value: "Plot" },
+    { label: "Commercial", value: "Commercial" },
+];
+
+const BHK_OPTIONS_SEARCH = [
+    { label: "Any BHK", value: "Any" },
+    { label: "1 BHK", value: "1" },
+    { label: "2 BHK", value: "2" },
+    { label: "3 BHK", value: "3" },
+    { label: "4 BHK", value: "4" },
+    { label: "5+ BHK", value: "5+" },
+];
+
+const BUDGET_OPTIONS_SEARCH = [
+    { label: "Any Budget", value: "Any Budget", min: "", max: "" },
+    { label: "Under ₹30 Lakh", value: "Under 30 Lakhs", min: "", max: "3000000" },
+    { label: "₹30–50 Lakh", value: "30-50 Lakhs", min: "3000000", max: "5000000" },
+    { label: "₹50–80 Lakh", value: "50-80 Lakhs", min: "5000000", max: "8000000" },
+    { label: "₹80 Lakh–₹1.5 Cr", value: "80 Lakhs-1.5 Crore", min: "8000000", max: "15000000" },
+    { label: "Above ₹1.5 Cr", value: "Above 1.5 Crore", min: "15000000", max: "" },
+];
+
+const SEARCH_TABS_MOBILE = [
+    { key: "projects", label: "Projects", href: "/projects" },
+    { key: "new-launches", label: "New Launches", href: "/new-launches" },
+    { key: "residential", label: "Residential", href: "/buy?type=Residential" },
+    { key: "commercial", label: "Commercial", href: "/commercial" },
+    { key: "plot-land", label: "Plot / Land", href: "/plots" },
+    { key: "upcoming", label: "Upcoming", href: "/buy?status=Upcoming" },
+];
 
 const HERO_SLIDES = [
     {
@@ -155,6 +216,23 @@ export default function NewLaunches() {
     // Mobile Slider
     const mobileSliderRef = useRef(null);
     const [activeMobileIdx, setActiveMobileIdx] = useState(0);
+
+    // Mobile search card state (matching Home Screen and Buy Properties head section)
+    const [mobileLocation, setMobileLocation] = useState("All Locations");
+    const [mobileType, setMobileType] = useState("Residential");
+    const [mobileBhk, setMobileBhk] = useState("Any");
+    const [mobileBudget, setMobileBudget] = useState("Any Budget");
+
+    const handleMobileHeroSearch = (e) => {
+        e.preventDefault();
+        if (mobileLocation !== "All Locations") {
+            setSelectedLocality(mobileLocation);
+        }
+        const target = document.querySelector(".nl-stage-section");
+        if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    };
 
     // Auto-advance Hero Banner Slideshow
     useEffect(() => {
@@ -428,10 +506,10 @@ export default function NewLaunches() {
             <Header />
 
             {/* ==============================================================
-                1. LUXURY HERO BANNER WITH DYNAMIC SLIDESHOW & HIGH VISIBILITY
+                1. LUXURY HERO BANNER (Identical Style to Buy Properties)
                ============================================================== */}
             <section className="nl-hero" aria-label="New Launches Hero">
-                {/* Photo Slideshow Container */}
+                {/* Photo Slideshow Container with Vertical Wipe Transition */}
                 <div className="nl-hero__slides" aria-hidden="true">
                     {HERO_SLIDES.map((slide, idx) => (
                         <div
@@ -442,79 +520,207 @@ export default function NewLaunches() {
                     ))}
                 </div>
 
-                {/* Dual-layer Gradient Overlay for high photo visibility */}
+                {/* High-Visibility Gradient Overlay with Open Middle 65% + Spotlight */}
                 <div className="nl-hero__overlay" aria-hidden="true" />
 
                 <div className="nl-hero__container">
-                    {/* Breadcrumbs */}
-                    <nav className="nl-hero__breadcrumb" aria-label="Breadcrumbs">
-                        <Link href="/" className="nl-hero__breadcrumb-home">
-                            <Home size={13} />
-                            <span>Home</span>
-                        </Link>
-                        <ChevronRight size={13} className="nl-hero__breadcrumb-sep" />
-                        <span>New Launches</span>
-                    </nav>
-
-                    {/* Eyebrow */}
+                    {/* Eyebrow Badge (Matching Buy Properties Style) */}
                     <div className="nl-hero__eyebrow">
-                        <Sparkles size={13} />
-                        <span>PRE-LAUNCH PRIVILEGES • DIRECT DEVELOPER ALLOTMENTS</span>
+                        <Sparkles size={14} />
+                        <span>CURATED PUNE NEW LAUNCHES</span>
                     </div>
 
                     {/* Headline */}
                     <h1 className="nl-hero__title">
                         Exclusive New Launches
-                        <span> in Pune</span>
+                        <span> in Pune.</span>
                     </h1>
 
+                    {/* Subtitle */}
                     <p className="nl-hero__subtitle">
                         Discover newly announced residential towers, botanical townships, and luxury sky condos
-                        across Pune&apos;s highest-appreciating corridors. Verified MahaRERA projects with zero brokerage
-                        and developer-direct early bird allotments.
+                        across Pune&apos;s prime corridors. Verified MahaRERA projects with direct early bird allotments.
                     </p>
 
-                    {/* Trust Stats Bar */}
-                    <div className="nl-hero__guarantees">
-                        <div className="nl-hero__guarantee-item">
-                            <ShieldCheck size={16} />
-                            <span>100% MahaRERA Verified</span>
+                    {/* Mobile Screen Search Bar: Same as Home Screen (Visible on mobile <= 900px) */}
+                    <div className="nl-hero-mobile-search">
+                        {/* Category Tabs */}
+                        <div
+                            className="hero-oyo-tabs"
+                            role="tablist"
+                            aria-label="Project categories"
+                        >
+                            {SEARCH_TABS_MOBILE.map((tab) => (
+                                <Link
+                                    key={tab.key}
+                                    href={tab.href}
+                                    role="tab"
+                                    className={`hero-oyo-tab ${tab.key === "new-launches" ? "hero-oyo-tab--active" : ""}`}
+                                >
+                                    {tab.label}
+                                </Link>
+                            ))}
                         </div>
-                        <div className="nl-hero__guarantee-item">
-                            <CheckCircle2 size={16} />
-                            <span>0% Brokerage Guarantee</span>
-                        </div>
-                        <div className="nl-hero__guarantee-item">
-                            <Percent size={16} />
-                            <span>Up to 15% Early Savings</span>
-                        </div>
-                        <div className="nl-hero__guarantee-item">
-                            <Car size={16} />
-                            <span>Complimentary VIP Cab Visit</span>
-                        </div>
+
+                        {/* Search Card - Matching Home Screen */}
+                        <form
+                            className="hero-search-card"
+                            onSubmit={handleMobileHeroSearch}
+                        >
+                            {/* Location */}
+                            <div className="hero-search-card__field">
+                                <label
+                                    htmlFor="nl-search-location"
+                                    className="hero-search-card__label"
+                                >
+                                    LOCATION IN PUNE
+                                </label>
+                                <div className="hero-search-card__input-row">
+                                    <MapPin className="hero-search-card__icon" size={16} />
+                                    <select
+                                        id="nl-search-location"
+                                        value={mobileLocation}
+                                        onChange={(e) => setMobileLocation(e.target.value)}
+                                        className="hero-search-card__select"
+                                    >
+                                        <option value="All Locations">
+                                            e.g. Baner, Wakad, Kharadi...
+                                        </option>
+                                        {PUNE_LOCATIONS.filter((l) => l !== "All Locations").map((item) => (
+                                            <option key={item} value={item}>
+                                                {item}, Pune
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown className="hero-search-card__chevron" size={14} />
+                                </div>
+                            </div>
+
+                            {/* Property Type */}
+                            <div className="hero-search-card__field">
+                                <label
+                                    htmlFor="nl-search-type"
+                                    className="hero-search-card__label"
+                                >
+                                    PROPERTY TYPE
+                                </label>
+                                <div className="hero-search-card__input-row">
+                                    <Building2 className="hero-search-card__icon" size={16} />
+                                    <select
+                                        id="nl-search-type"
+                                        value={mobileType}
+                                        onChange={(e) => setMobileType(e.target.value)}
+                                        className="hero-search-card__select"
+                                    >
+                                        <option value="Residential">All Types</option>
+                                        {PROPERTY_TYPES_SEARCH.map((item) => (
+                                            <option key={item.value} value={item.value}>
+                                                {item.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown className="hero-search-card__chevron" size={14} />
+                                </div>
+                            </div>
+
+                            {/* Budget */}
+                            <div className="hero-search-card__field">
+                                <label
+                                    htmlFor="nl-search-budget"
+                                    className="hero-search-card__label"
+                                >
+                                    BUDGET
+                                </label>
+                                <div className="hero-search-card__input-row">
+                                    <IndianRupee className="hero-search-card__icon" size={15} />
+                                    <select
+                                        id="nl-search-budget"
+                                        value={mobileBudget}
+                                        onChange={(e) => setMobileBudget(e.target.value)}
+                                        className="hero-search-card__select"
+                                    >
+                                        {BUDGET_OPTIONS_SEARCH.map((item) => (
+                                            <option key={item.value} value={item.value}>
+                                                {item.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown className="hero-search-card__chevron" size={14} />
+                                </div>
+                            </div>
+
+                            {/* Bedrooms and Search Button */}
+                            <div className="hero-search-card__bottom-row">
+                                <div className="hero-search-card__field hero-search-card__field--half">
+                                    <label
+                                        htmlFor="nl-search-bhk"
+                                        className="hero-search-card__label"
+                                    >
+                                        BEDROOMS
+                                    </label>
+                                    <div className="hero-search-card__input-row">
+                                        <Bed className="hero-search-card__icon" size={16} />
+                                        <select
+                                            id="nl-search-bhk"
+                                            value={mobileBhk}
+                                            onChange={(e) => setMobileBhk(e.target.value)}
+                                            className="hero-search-card__select"
+                                        >
+                                            <option value="Any">BHK</option>
+                                            {BHK_OPTIONS_SEARCH.filter((b) => b.value !== "Any").map((item) => (
+                                                <option key={item.value} value={item.value}>
+                                                    {item.label}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <ChevronDown className="hero-search-card__chevron" size={14} />
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    className="hero-search-card__submit-btn"
+                                    aria-label="Search new launches"
+                                >
+                                    <Search size={18} strokeWidth={2.4} />
+                                    <span>Search</span>
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
-                    {/* Slide Controls & Location Tag */}
+                    {/* Hero Footer: Breadcrumbs on Left, Location Pill & Dots on Right */}
                     <div className="nl-hero__footer">
-                        <div className="nl-hero__location-pill">
-                            <MapPin size={13} />
-                            <span>{HERO_SLIDES[currentHeroSlide].location}</span>
-                            <span className="nl-hero__pill-dot">•</span>
-                            <span className="nl-hero__pill-tag">
-                                {HERO_SLIDES[currentHeroSlide].tag}
-                            </span>
-                        </div>
+                        <nav className="nl-hero__breadcrumb" aria-label="Breadcrumbs">
+                            <Link href="/" className="nl-hero__breadcrumb-home">
+                                <Home size={13} />
+                                <span>Home</span>
+                            </Link>
+                            <ChevronRight size={13} className="nl-hero__breadcrumb-sep" />
+                            <span>New Launches</span>
+                        </nav>
 
-                        <div className="nl-hero__dots" role="tablist" aria-label="Hero Slides">
-                            {HERO_SLIDES.map((_, idx) => (
-                                <button
-                                    key={idx}
-                                    type="button"
-                                    className={`nl-hero__dot ${idx === currentHeroSlide ? "is-active" : ""}`}
-                                    onClick={() => setCurrentHeroSlide(idx)}
-                                    aria-label={`View slide ${idx + 1}`}
-                                />
-                            ))}
+                        <div className="nl-hero__slide-controls">
+                            <div className="nl-hero__location-pill">
+                                <MapPin size={13} />
+                                <span>{HERO_SLIDES[currentHeroSlide].location}</span>
+                                <span className="nl-hero__pill-dot">•</span>
+                                <span className="nl-hero__pill-tag">
+                                    {HERO_SLIDES[currentHeroSlide].tag}
+                                </span>
+                            </div>
+
+                            <div className="nl-hero__dots" role="tablist" aria-label="Hero Slides">
+                                {HERO_SLIDES.map((_, idx) => (
+                                    <button
+                                        key={idx}
+                                        type="button"
+                                        className={`nl-hero__dot ${idx === currentHeroSlide ? "is-active" : ""}`}
+                                        onClick={() => setCurrentHeroSlide(idx)}
+                                        aria-label={`View slide ${idx + 1}`}
+                                    />
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
