@@ -284,9 +284,9 @@ export default function HomeContact({ previewData }) {
                                         <MapPin size={18} />
                                     </div>
                                     <div className="home-contact-info-text">
-                                        <span className="home-contact-info-label">Office Location</span>
+                                        <span className="home-contact-info-label">Office Location (Headquarters)</span>
                                         <span className="home-contact-info-val">
-                                            3rd Floor, Gera Imperium Alpha, Grant Road, Vitthal Nagar, Kharadi, Pune, Maharashtra 411014
+                                            3rd Floor, Gera Imperium Alpha, Grant Road, Vitthal Nagar, Kharadi, Pune, Maharashtra 411014 (Headquarters)
                                         </span>
                                     </div>
                                 </div>

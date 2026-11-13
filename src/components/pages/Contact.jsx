@@ -198,13 +198,35 @@ export default function ContactPage() {
                                     />
                                     <div>
                                         <strong className="contact-office-name">
-                                            Pune Property Investors
+                                            Kharadi (Headquarters)
                                         </strong>
                                         <span className="contact-office-address">
                                             3rd Floor, Gera Imperium Alpha, Grant Road,
                                             Vitthal Nagar, Kharadi, Pune, Maharashtra
                                             411014
                                         </span>
+                                    </div>
+                                </div>
+
+                                <div className="contact-branches-horizontal">
+                                    <div className="contact-branch-item">
+                                        <MapPin
+                                            size={20}
+                                            className="contact-office-icon"
+                                        />
+                                        <strong className="contact-branch-name">
+                                            Narhe / Vadgaon bk Office
+                                        </strong>
+                                    </div>
+
+                                    <div className="contact-branch-item">
+                                        <MapPin
+                                            size={20}
+                                            className="contact-office-icon"
+                                        />
+                                        <strong className="contact-branch-name">
+                                            Dighi Office
+                                        </strong>
                                     </div>
                                 </div>
 

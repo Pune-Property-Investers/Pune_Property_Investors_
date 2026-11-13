@@ -10,6 +10,8 @@ import {
     Mail,
     ArrowRight,
     CheckCircle2,
+    Building2,
+    Navigation,
 } from "lucide-react";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
@@ -17,6 +19,33 @@ import PageHeroBanner from "../common/PageHeroBanner";
 import AboutSection from "../home/AboutSection";
 import { usePublishedCms } from "../../services/liveContent";
 import "./About.css";
+
+const OFFICE_LOCATIONS = [
+    {
+        name: "Kharadi (Headquarters)",
+        type: "",
+        isHeadquarters: true,
+        address: "3rd Floor, Gera Imperium Alpha, Grant Road, Vitthal Nagar, Kharadi, Pune, Maharashtra 411014",
+        zone: "East Pune • Corporate Office",
+        mapUrl: "https://maps.app.goo.gl/49jQdRiP4CCgNMCP7",
+    },
+    {
+        name: "Narhe / Vadgaon bk Office",
+        type: "Branch Office",
+        isHeadquarters: false,
+        address: "Office No:- 09 , Ground Floor , Beside Jagade Patil Developers , Below Pulse Multi-speciality Hospital , Vishwa Arcade , Navale Bridge, Vadgaon bk,  Narhe, Pune . 411041",
+        zone: "South-West Pune • Highway Corridor",
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=Vishwa+Arcade+Navale+Bridge+Vadgaon+bk+Narhe+Pune+411041",
+    },
+    {
+        name: "Dighi Office",
+        type: "Branch Office",
+        isHeadquarters: false,
+        address: "3rd floor, rajnandini tower, above hdfc bank, parande nagar, dighi 411015",
+        zone: "North Pune • PCMC Corridor",
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=Rajnandini+Tower+Parande+Nagar+Dighi+Pune+411015",
+    },
+];
 
 export default function AboutPage() {
     const published = usePublishedCms();
@@ -120,8 +149,10 @@ export default function AboutPage() {
                                         Headquartered in Kharadi, Pune, Pune Property
                                         Investors was founded with a singular focus:
                                         bringing complete honesty, professional advisory,
-                                        and data-backed market analysis to Pune's
-                                        thriving real estate landscape.
+                                        and data-backed market analysis to Pune&apos;s
+                                        thriving real estate landscape. With our headquarters in Kharadi
+                                        and branch offices in Narhe and Dighi, our advisory covers
+                                        all prime residential and commercial corridors of Pune.
                                     </p>
                                 )}
                                 <ul className="about-checklist">
@@ -152,20 +183,46 @@ export default function AboutPage() {
 
                             <div className="about-contact-card">
                                 <h3 className="about-contact-title">
-                                    Get in Touch With Us
+                                    Our Offices &amp; Contact
                                 </h3>
-                                <div className="about-contact-list">
-                                    <div className="about-contact-row">
+
+                                <div className="about-offices-list">
+                                    {/* Headquarters */}
+                                    <div className="about-office-row">
                                         <MapPin
-                                            size={20}
-                                            className="about-contact-icon"
+                                            size={18}
+                                            className="about-contact-icon about-contact-icon--gold"
                                         />
-                                        <span className="about-contact-text">
-                                            3rd Floor, Gera Imperium Alpha, Grant
-                                            Road, Vitthal Nagar, Kharadi, Pune,
-                                            Maharashtra 411014
-                                        </span>
+                                        <div className="about-office-detail">
+                                            <div className="about-office-header-line">
+                                                <strong className="about-office-name">
+                                                    Kharadi (Headquarters)
+                                                </strong>
+                                            </div>
+                                            <span className="about-contact-text">
+                                                3rd Floor, Gera Imperium Alpha, Grant Road, Vitthal Nagar, Kharadi, Pune, Maharashtra 411014
+                                            </span>
+                                        </div>
                                     </div>
+
+                                    {/* Horizontal Branch Offices: Narhe & Dighi */}
+                                    <div className="about-branches-horizontal">
+                                        <div className="about-branch-item">
+                                            <MapPin size={17} className="about-contact-icon" />
+                                            <span className="about-branch-name">
+                                                Narhe / Vadgaon bk Office
+                                            </span>
+                                        </div>
+                                        <div className="about-branch-item">
+                                            <MapPin size={17} className="about-contact-icon" />
+                                            <span className="about-branch-name">
+                                                Dighi Office
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="about-contact-direct-wrap">
                                     <div className="about-contact-row about-contact-row--center">
                                         <Phone
                                             size={18}
@@ -192,6 +249,66 @@ export default function AboutPage() {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </section>
+
+                    {/* Dedicated Office Locations Section */}
+                    <section className="container about-locations-section" aria-label="Our Office Locations">
+                        <div className="about-locations-header">
+                            <span className="about-mission-tag">STRATEGIC PRESENCE</span>
+                            <h2 className="about-locations-heading">Visit Our Offices Across Pune</h2>
+                            <p className="about-locations-sub">
+                                Headquartered in Kharadi with convenient branch offices in Narhe / Vadgaon bk and Dighi, our seasoned consultants are ready to assist you in person.
+                            </p>
+                        </div>
+
+                        <div className="about-locations-grid">
+                            {OFFICE_LOCATIONS.map((loc, idx) => (
+                                <div
+                                    key={idx}
+                                    className={`about-location-card ${loc.isHeadquarters ? "about-location-card--hq" : ""}`}
+                                >
+                                    <div className="about-location-card__top">
+                                        <div className="about-location-card__badge-row">
+                                            <span className={`about-location-card__badge ${loc.isHeadquarters ? "about-location-card__badge--hq" : ""}`}>
+                                                {loc.type} {loc.isHeadquarters ? "(Headquarters)" : ""}
+                                            </span>
+                                            <span className="about-location-card__zone">{loc.zone}</span>
+                                        </div>
+                                        <h3 className="about-location-card__title">
+                                            {loc.name}
+                                        </h3>
+                                    </div>
+
+                                    <div className="about-location-card__body">
+                                        <div className="about-location-card__address-row">
+                                            <MapPin size={18} className="about-location-card__pin" />
+                                            <p className="about-location-card__address">
+                                                {loc.address}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="about-location-card__action">
+                                        <a
+                                            href={loc.mapUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="about-location-card__link"
+                                        >
+                                            <Navigation size={14} />
+                                            <span>Get Directions</span>
+                                        </a>
+                                        <a
+                                            href="tel:+917398174444"
+                                            className="about-location-card__call-link"
+                                        >
+                                            <Phone size={14} />
+                                            <span>Call Office</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </section>
                 </div>

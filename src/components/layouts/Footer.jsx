@@ -158,7 +158,7 @@ function Footer() {
                             className="footer-contact__item"
                         >
                             <FaMapMarkerAlt />
-                            <span> 3rd Floor (also listed as Suite 904 in some directory records), Gera Imperium Alpha, Grant Road, Vitthal Nagar, Kharadi, Pune, Maharashtra 411014, India</span>
+                            <span> 3rd Floor (also listed as Suite 904 in some directory records), Gera Imperium Alpha, Grant Road, Vitthal Nagar, Kharadi, Pune, Maharashtra 411014, India (Headquarters)</span>
                         </a>
 
                         <a

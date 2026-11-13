@@ -134,6 +134,33 @@
     margin-bottom: 0;
 }
 
+.contact-branches-horizontal {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    margin-bottom: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.contact-branch-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.contact-branch-item .contact-office-icon {
+    margin-top: 0;
+}
+
+.contact-branch-name {
+    color: var(--text-primary);
+    font-family: var(--font-serif);
+    font-size: 0.96rem;
+    font-weight: 700;
+}
+
 .contact-office-icon {
     flex-shrink: 0;
     color: var(--primary-color);
