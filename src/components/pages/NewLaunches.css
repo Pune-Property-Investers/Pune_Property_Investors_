@@ -37,9 +37,10 @@
 
 .nl-hero {
     position: relative;
-    width: 100%;
-    min-height: 440px;
-    /* Clear the fixed header (~75-80px) with comfortable breathing room */
+    display: flex;
+    align-items: center;
+    min-height: 400px;
+    /* Clear the fixed header (~75-80px) with generous breathing room */
     padding-top: clamp(125px, 14vw, 155px);
     padding-bottom: clamp(45px, 6vw, 65px);
     padding-left: clamp(20px, 5%, 60px);
@@ -47,6 +48,7 @@
     overflow: hidden;
     isolation: isolate;
     background: #0f1412;
+    box-sizing: border-box;
 }
 
 /* Slideshow Container */
@@ -61,7 +63,7 @@
     position: absolute;
     inset: 0;
     background-size: cover;
-    background-position: center 46%;
+    background-position: center 48%;
     background-repeat: no-repeat;
     opacity: 0;
     transform: scale(1.08);
@@ -78,60 +80,41 @@
     z-index: 1;
 }
 
-/* Balanced Dual-Layer Overlay: Photo shines through clearly, text is crisp */
+/* Balanced Gradient Overlay: Background image is clearly visible, text is crisp */
 .nl-hero__overlay {
     position: absolute;
     inset: 0;
     z-index: -1;
     pointer-events: none;
     background:
+        /* Vertical gradient: transparent mid-section keeps photo rich & vibrant */
         linear-gradient(
             180deg,
-            rgba(10, 14, 13, 0.70) 0%,
-            rgba(10, 14, 13, 0.28) 35%,
-            rgba(10, 14, 13, 0.40) 70%,
-            rgba(10, 14, 13, 0.88) 100%
+            rgba(12, 16, 15, 0.70) 0%,
+            rgba(12, 16, 15, 0.28) 35%,
+            rgba(12, 16, 15, 0.40) 70%,
+            rgba(12, 16, 15, 0.85) 100%
         ),
+        /* Left-to-right vignette: darker on left for text legibility, clear on right */
         linear-gradient(
             90deg,
-            rgba(10, 14, 13, 0.84) 0%,
-            rgba(10, 14, 13, 0.52) 55%,
-            rgba(10, 14, 13, 0.20) 100%
+            rgba(12, 16, 15, 0.84) 0%,
+            rgba(12, 16, 15, 0.52) 55%,
+            rgba(12, 16, 15, 0.20) 100%
         );
 }
 
 .nl-hero__container {
-    width: min(94%, 1440px);
+    width: 100%;
+    max-width: 1440px;
     margin: 0 auto;
     position: relative;
     z-index: 2;
 }
 
-/* Breadcrumbs */
-.nl-hero__breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 20px;
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.75);
-}
-
-.nl-hero__breadcrumb-home {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: rgba(255, 255, 255, 0.85);
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.nl-hero__breadcrumb-home:hover {
-    color: #ffffff;
-}
-
-.nl-hero__breadcrumb-sep {
-    color: rgba(255, 255, 255, 0.4);
+/* Mobile Screen Hero Search: Hidden on desktop, shown on mobile <= 900px */
+.nl-hero-mobile-search {
+    display: none;
 }
 
 /* Eyebrow Pill */
@@ -142,11 +125,11 @@
     margin-bottom: 18px;
     padding: 6px 14px;
     border-radius: 999px;
-    background: rgba(186, 135, 74, 0.24);
-    border: 1px solid rgba(224, 183, 127, 0.45);
+    background: rgba(186, 135, 74, 0.22);
+    border: 1px solid rgba(224, 183, 127, 0.4);
     color: #f3d4a6;
     font-size: 11px;
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: 1.8px;
     text-transform: uppercase;
     backdrop-filter: blur(8px);
@@ -215,16 +198,48 @@
     color: #e5be85;
 }
 
-/* Hero Footer: Location Pill & Dots */
+/* Hero Footer: Breadcrumbs on Left, Location Pill & Dots on Right */
 .nl-hero__footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.nl-hero__breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #d89f5c;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.nl-hero__breadcrumb-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.nl-hero__breadcrumb-home:hover {
+    color: #ffffff;
+}
+
+.nl-hero__breadcrumb-sep {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.nl-hero__slide-controls {
+    display: flex;
+    align-items: center;
     gap: 16px;
-    margin-top: 34px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .nl-hero__location-pill {
@@ -2362,20 +2377,146 @@
     }
 }
 
+/* Tablets & Mobile Screens (<= 900px) */
+@media (max-width: 900px) {
+    .nl-hero {
+        min-height: auto;
+    }
+
+    /* Mobile Screen Search Bar */
+    .nl-hero-mobile-search {
+        display: block;
+        width: 100%;
+        max-width: 440px;
+        margin: 20px auto 14px auto;
+        box-sizing: border-box;
+    }
+
+    .nl-hero-mobile-search .hero-oyo-tabs {
+        width: 100%;
+        max-width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 6px;
+        margin: 0 auto 12px auto;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        background: rgba(12, 10, 8, 0.68);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 9999px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+
+    .nl-hero-mobile-search .hero-oyo-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nl-hero-mobile-search .hero-search-card {
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+        padding: 10px;
+        gap: 6px;
+        border-radius: 16px;
+        background: rgba(14, 11, 9, 0.78);
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+        border: 1px solid rgba(196, 152, 102, 0.35);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+        margin: 0 auto;
+    }
+
+    .nl-hero-mobile-search .hero-search-card__field {
+        width: 100%;
+        flex: none;
+        min-height: auto;
+        padding: 6px 10px 7px;
+        border-radius: 11px;
+    }
+
+    .nl-hero-mobile-search .hero-search-card__label {
+        font-size: 9px;
+    }
+
+    .nl-hero-mobile-search .hero-search-card__select {
+        font-size: 15px;
+    }
+
+    .nl-hero-mobile-search .hero-search-card__bottom-row {
+        display: grid;
+        grid-template-columns: 0.95fr 1.25fr;
+        gap: 8px;
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .nl-hero-mobile-search .hero-search-card__field--half {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 48px;
+        border-radius: 12px;
+        padding: 6px 10px 7px;
+    }
+
+    .nl-hero-mobile-search .hero-search-card__submit-btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 48px;
+        height: 100%;
+        padding: 0 16px;
+        background: linear-gradient(135deg, #ba874a 0%, #a4733b 100%);
+        border: none;
+        border-radius: 14px;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(186, 134, 74, 0.4);
+    }
+
+    .nl-hero__footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        margin-top: 22px;
+        padding-top: 16px;
+    }
+
+    .nl-hero__slide-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .nl-hero__location-pill {
+        font-size: 11px;
+        padding: 5px 11px;
+    }
+}
+
 /* Mobile Devices (< 680px) */
 @media (max-width: 680px) {
     .nl-hero {
-        min-height: 380px;
+        min-height: auto;
         padding-top: clamp(105px, 20vw, 125px);
         padding-bottom: 35px;
     }
 
     .nl-hero__title {
-        font-size: 30px;
+        font-size: clamp(28px, 7.8vw, 36px);
+        line-height: 1.22;
     }
 
     .nl-hero__subtitle {
-        font-size: 13.5px;
+        font-size: 13px;
+        line-height: 1.7;
     }
 
     .nl-hero__guarantees {
