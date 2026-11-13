@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Rocket, RotateCcw } from "lucide-react";
+import { Save, Rocket, RotateCcw } from "lucide-react";
 import { contentService } from "../../../services/content.service";
+import { getStore, saveStore } from "../../../services/mockStore";
 import { hasPreviousSectionSnapshot } from "../../../services/liveContent";
 import { useToast } from "../../../context/ToastContext";
 import AdminModal from "./AdminModal";
@@ -11,16 +12,35 @@ import ConfirmModal from "./ConfirmModal";
 export default function SectionSyncBar({
     sectionKey,
     label,
+    onSave,
     onPublished,
     onRetrieved,
 }) {
     const { showToast } = useToast();
+    const [saving, setSaving] = useState(false);
     const [publishOpen, setPublishOpen] = useState(false);
     const [publishing, setPublishing] = useState(false);
 
     const [retrieveOpen, setRetrieveOpen] = useState(false);
     const [retrieving, setRetrieving] = useState(false);
     const [hasPrev, setHasPrev] = useState(false);
+
+    const handleSave = async () => {
+        setSaving(true);
+        try {
+            if (typeof onSave === "function") {
+                await onSave();
+            } else {
+                const store = getStore();
+                saveStore(store);
+                showToast(`Saved ${label} changes!`, "success");
+            }
+        } catch (err) {
+            showToast(err?.message || `Failed to save ${label}`, "error");
+        } finally {
+            setSaving(false);
+        }
+    };
 
     const handlePublish = async () => {
         setPublishing(true);
@@ -60,11 +80,22 @@ export default function SectionSyncBar({
             <button
                 type="button"
                 className="admin-btn admin-btn--outline"
+                onClick={handleSave}
+                disabled={saving || publishing || retrieving}
+                title={`Save ${label} changes`}
+            >
+                <Save size={15} />
+                <span>{saving ? "Saving..." : "Save"}</span>
+            </button>
+
+            <button
+                type="button"
+                className="admin-btn admin-btn--outline"
                 onClick={() => {
                     setHasPrev(hasPreviousSectionSnapshot(sectionKey));
                     setRetrieveOpen(true);
                 }}
-                disabled={publishing || retrieving}
+                disabled={saving || publishing || retrieving}
                 title={`Retrieve previous or original ${label} state`}
             >
                 <RotateCcw size={15} />
@@ -75,7 +106,7 @@ export default function SectionSyncBar({
                 type="button"
                 className="admin-btn admin-btn--primary"
                 onClick={() => setPublishOpen(true)}
-                disabled={publishing || retrieving}
+                disabled={saving || publishing || retrieving}
                 title={`Publish only ${label} changes to the live website`}
             >
                 <Rocket size={15} />

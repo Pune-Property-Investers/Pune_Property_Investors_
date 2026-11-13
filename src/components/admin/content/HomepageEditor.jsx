@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Layers, Sliders, FileText, Globe, Plus, Trash2, RotateCcw, ExternalLink } from "lucide-react";
+import { Layers, Sliders, FileText, Globe, Plus, Trash2, RotateCcw, ExternalLink, Save } from "lucide-react";
 import { contentService } from "../../../services/content.service";
 import { createInitialStore } from "../../../services/mockStore";
 import { useToast } from "../../../context/ToastContext";
@@ -269,6 +269,7 @@ export default function HomepageEditor({ forcedSectionId = null }) {
                 <SectionSyncBar
                     sectionKey={isAboutMode ? "about" : "homepage"}
                     label={isAboutMode ? "About Us" : "Homepage"}
+                    onSave={saveDraft}
                     onRetrieved={loadHomepage}
                 />
             </div>
@@ -665,6 +666,33 @@ export default function HomepageEditor({ forcedSectionId = null }) {
                             )}
                         </>
                     )}
+
+                    <div
+                        style={{
+                            marginTop: 18,
+                            paddingTop: 14,
+                            borderTop: "1px solid #e2e8f0",
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            gap: 8,
+                        }}
+                    >
+                        <button
+                            type="button"
+                            className="admin-btn admin-btn--primary"
+                            disabled={saving || publishing}
+                            onClick={async () => {
+                                try {
+                                    await saveDraft();
+                                } catch (err) {
+                                    showToast(err.message || "Failed to save changes", "error");
+                                }
+                            }}
+                        >
+                            <Save size={15} />
+                            <span>{saving ? "Saving..." : "Save Component Changes"}</span>
+                        </button>
+                    </div>
                 </div>
             )}
 

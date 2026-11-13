@@ -36,7 +36,7 @@ export default function PublishControls({
                     disabled={saving || publishing}
                 >
                     <Save size={14} />
-                    <span>{saving ? "Saving..." : "Save Draft"}</span>
+                    <span>{saving ? "Saving..." : "Save"}</span>
                 </button>
 
                 {onTogglePreviewOnly && (
