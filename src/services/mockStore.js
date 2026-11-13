@@ -351,6 +351,24 @@ const DEFAULT_MEDIA = [
     { id: 6, name: "Godrej Ivara RERA Brochure", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", type: "document", size: "1.4 MB", uploadedAt: "2026-11-04" },
 ];
 
+const DEFAULT_FESTIVAL_POPUP = {
+    enabled: false,
+    badge: "FESTIVE SPECIAL OFFER",
+    title: "Diwali & New Year Homebuyer Bonanza",
+    subtitle: "Zero Stamp Duty + Assured Gold Coin on Booking",
+    description:
+        "Unlock exclusive developer festive pricing, flexible payment plans, and complimentary VIP site visits across Pune's top projects.",
+    offerCode: "FESTIVE2026",
+    image: "",
+    buttonText: "Claim Festive Offer",
+    buttonUrl: "/contact",
+    position: "center",
+    pages: "all",
+    delaySeconds: 1,
+    showOncePerSession: false,
+    updatedAt: "",
+};
+
 const DEFAULT_SETTINGS = {
     website: {
         siteName: "Pune Property Investors",
@@ -452,6 +470,7 @@ export function createInitialStore() {
             updatedAt: new Date().toISOString(),
         },
         settings: DEFAULT_SETTINGS,
+        festivalPopup: { ...DEFAULT_FESTIVAL_POPUP },
         activities: [
             { id: 1, action: "Updated developer brand logos on Property Cards", actor: "Admin", time: "Just now", type: "update" },
             { id: 2, action: "New enquiry received for Godrej Ivara (Hinjewadi)", actor: "Website Lead", time: "25 mins ago", type: "lead" },
@@ -472,7 +491,11 @@ export function getStore() {
     try {
         const raw = localStorage.getItem(STORE_KEY);
         if (raw) {
-            return JSON.parse(raw);
+            const parsed = JSON.parse(raw);
+            if (!parsed.festivalPopup) {
+                parsed.festivalPopup = { ...DEFAULT_FESTIVAL_POPUP };
+            }
+            return parsed;
         }
     } catch {
         // Fallback to initial seed
@@ -514,4 +537,6 @@ export function resetMockStore() {
     saveStore(fresh);
     return fresh;
 }
+
+export { DEFAULT_FESTIVAL_POPUP };
 

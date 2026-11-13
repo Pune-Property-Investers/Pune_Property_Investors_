@@ -1,0 +1,218 @@
+/* ========================================
+   FESTIVAL OFFER POPUP
+======================================== */
+
+.festival-popup-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(12, 10, 16, 0.72);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.festival-popup {
+    position: fixed;
+    z-index: 1201;
+    width: min(390px, calc(100vw - 32px));
+    overflow: hidden;
+    border: 1px solid rgba(217, 180, 119, 0.45);
+    border-radius: 18px;
+    background: linear-gradient(155deg, #271e2b 0%, #17121b 100%);
+    color: #f8f4ef;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.52);
+    animation: festivalPopupIn 0.25s ease-out;
+}
+
+.festival-popup--center {
+    position: relative;
+    width: min(460px, calc(100vw - 32px));
+}
+
+.festival-popup--bottom-right {
+    right: 24px;
+    bottom: 84px;
+}
+
+.festival-popup--bottom-left {
+    left: 24px;
+    bottom: 24px;
+}
+
+.festival-popup--top-banner {
+    top: 88px;
+    left: 50%;
+    width: min(520px, calc(100vw - 32px));
+    transform: translateX(-50%);
+}
+
+.festival-popup--bottom-banner {
+    bottom: 24px;
+    left: 50%;
+    width: min(520px, calc(100vw - 32px));
+    transform: translateX(-50%);
+}
+
+@keyframes festivalPopupIn {
+    from {
+        opacity: 0;
+        filter: blur(2px);
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+
+.festival-popup__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    background: rgba(20, 16, 24, 0.72);
+    color: #f5f0ed;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.festival-popup__close:hover {
+    border-color: #d9b477;
+    background: #d9b477;
+    color: #201923;
+}
+
+.festival-popup__media {
+    width: 100%;
+    max-height: 185px;
+    overflow: hidden;
+    background: #140f17;
+}
+
+.festival-popup__media img {
+    display: block;
+    width: 100%;
+    height: 185px;
+    object-fit: cover;
+}
+
+.festival-popup__body {
+    padding: 22px 22px 20px;
+}
+
+.festival-popup__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    padding: 4px 10px;
+    border: 1px solid rgba(217, 180, 119, 0.45);
+    border-radius: 999px;
+    background: rgba(217, 180, 119, 0.14);
+    color: #e6c68d;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+.festival-popup__title {
+    margin: 0 0 6px;
+    color: #ffffff;
+    font-family: var(--font-serif);
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.3;
+    padding-right: 28px;
+}
+
+.festival-popup__subtitle {
+    margin: 0 0 10px;
+    color: #e6c68d;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+.festival-popup__desc {
+    margin: 0 0 14px;
+    color: #cfc6d1;
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.festival-popup__code {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+    padding: 6px 12px;
+    border: 1px dashed rgba(217, 180, 119, 0.6);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #e6c68d;
+    font-size: 12.5px;
+}
+
+.festival-popup__code strong {
+    color: #ffffff;
+    letter-spacing: 0.8px;
+}
+
+.festival-popup__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 11px 18px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #e2c18c 0%, #c69752 100%);
+    color: #1f1722;
+    font-size: 13.5px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.festival-popup__cta:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+}
+
+@media (max-width: 768px) {
+    .festival-popup--bottom-right,
+    .festival-popup--bottom-left,
+    .festival-popup--bottom-banner {
+        right: 16px;
+        left: 16px;
+        bottom: calc(80px + env(safe-area-inset-bottom));
+        width: auto;
+        transform: none;
+    }
+
+    .festival-popup--top-banner {
+        top: 76px;
+        right: 16px;
+        left: 16px;
+        width: auto;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .festival-popup {
+        animation: none;
+    }
+}
+

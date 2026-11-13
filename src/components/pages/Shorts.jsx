@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { leadService } from "../../services/lead.service";
 import {
     ThumbsUp,
@@ -21,6 +22,8 @@ import { propertyShorts, extractYouTubeId } from "../../data/shortsData";
 import { usePublishedCms } from "../../services/liveContent";
 import Header from "../layouts/Header";
 import "./Shorts.css";
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export default function Shorts() {
     const published = usePublishedCms();
@@ -151,6 +154,32 @@ export default function Shorts() {
             {/* Header provides the 5-tab mobile bottom navigation */}
             <Header />
 
+            {/* Static Transparent Top Header (Logo on Left + Mute Control on Right) */}
+            <header className="short-top-header">
+                <Link href="/" className="short-logo-brand" aria-label="Pune Property Investors Home">
+                    <Image
+                        src={`${basePath}/images/logo.png`}
+                        alt="Pune Property Investors"
+                        width={36}
+                        height={36}
+                        className="short-brand-logo"
+                    />
+                    <span className="short-brand-text">
+                        <span className="short-brand-name">PUNE PROPERTY</span>
+                        <span className="short-brand-sub">INVESTOR</span>
+                    </span>
+                </Link>
+
+                <button
+                    type="button"
+                    onClick={() => setIsMuted((prev) => !prev)}
+                    className="short-mute-btn"
+                    aria-label={isMuted ? "Unmute audio" : "Mute audio"}
+                >
+                    {isMuted ? <VolumeX size={17} /> : <Volume2 size={17} />}
+                </button>
+            </header>
+
             {/* Shorts Feed Container */}
             <main
                 className="shorts-feed"
@@ -170,55 +199,6 @@ export default function Shorts() {
                             className={`short-slide ${isActive ? "short-slide--active" : ""}`}
                             aria-label={short.title}
                         >
-                            {/* TOP BAR: Clean White Building Logo on Solid Black Top */}
-                            <header className="short-top-header">
-                                <Link href="/" className="short-logo-brand" aria-label="PPI Home">
-                                    <svg
-                                        width="34"
-                                        height="34"
-                                        viewBox="0 0 36 36"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="short-brand-icon"
-                                    >
-                                        <path
-                                            d="M18 3L28 9V32H8V9L18 3Z"
-                                            stroke="#ffffff"
-                                            strokeWidth="2.2"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                        />
-                                        <path
-                                            d="M13 14H15M21 14H23M13 19H15M21 19H23M13 24H15M21 24H23"
-                                            stroke="#ffffff"
-                                            strokeWidth="1.8"
-                                            strokeLinecap="round"
-                                        />
-                                        <path
-                                            d="M16 32V27C16 25.8954 16.8954 25 18 25C19.1046 25 20 25.8954 20 27V32"
-                                            stroke="#ffffff"
-                                            strokeWidth="1.8"
-                                            strokeLinejoin="round"
-                                        />
-                                        <path
-                                            d="M4 32H32"
-                                            stroke="#ffffff"
-                                            strokeWidth="2.2"
-                                            strokeLinecap="round"
-                                        />
-                                    </svg>
-                                </Link>
-
-                                <button
-                                    type="button"
-                                    onClick={() => setIsMuted((prev) => !prev)}
-                                    className="short-mute-btn"
-                                    aria-label={isMuted ? "Unmute audio" : "Mute audio"}
-                                >
-                                    {isMuted ? <VolumeX size={17} /> : <Volume2 size={17} />}
-                                </button>
-                            </header>
-
                             {/* FULL-SIZE VIDEO CONTAINER (Plays edge-to-edge without letterboxing) */}
                             <div className="short-video-stage">
                                 {isActive && videoId ? (

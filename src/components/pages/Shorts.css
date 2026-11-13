@@ -53,28 +53,64 @@
    TOP BAR: SOLID BLACK TOP WITH WHITE EMBLEM LOGO
    ========================================================================== */
 .short-top-header {
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    right: 16px;
-    z-index: 30;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    z-index: 60;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    pointer-events: auto;
+    padding: max(14px, env(safe-area-inset-top)) 14px 10px;
+    background: transparent;
+    pointer-events: none;
 }
 
 .short-logo-brand {
     display: inline-flex;
     align-items: center;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+    border: none;
     text-decoration: none;
+    color: #ffffff;
+    pointer-events: auto;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.75));
+}
+
+.short-mute-btn {
+    pointer-events: auto;
+}
+
+.short-brand-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.short-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.05;
+}
+
+.short-brand-name {
+    font-family: var(--font-serif);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
     color: #ffffff;
 }
 
-.short-brand-icon {
-    width: 32px;
-    height: 32px;
-    stroke: #ffffff;
+.short-brand-sub {
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    color: #d9b477;
 }
 
 .short-mute-btn {
