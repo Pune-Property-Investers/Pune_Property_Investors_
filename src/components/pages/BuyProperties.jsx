@@ -429,11 +429,18 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
     });
     const [searchQuery, setSearchQuery] = useState(initialProject);
         const [currentSlide, setCurrentSlide] = useState(0);
-    const [prevSlide, setPrevSlide] = useState(null);
-    const [direction, setDirection] = useState("next"); // "next" | "prev"
-    const [isTransitioning, setIsTransitioning] = useState(false);
-    const transitionTimeoutRef = useRef(null);
-    const isWheelLockedRef = useRef(false);
+    const [dragProgress, setDragProgress] = useState(0); // -100 to 100 vertical %
+    const [isInteracting, setIsInteracting] = useState(false);
+    const [isSnapping, setIsSnapping] = useState(false);
+
+    const dragProgressRef = useRef(0);
+    dragProgressRef.current = dragProgress;
+
+    const isDraggingRef = useRef(false);
+    const startYRef = useRef(0);
+    const hasDraggedRef = useRef(false);
+    const wheelTimeoutRef = useRef(null);
+    const snapTimeoutRef = useRef(null);
 
     const [isHovered, setIsHovered] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -492,59 +499,106 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
         setPrevSlide(null);
     };
 
-    // Clean up transition timeout on unmount
+    // Cleanup any pending timeouts on unmount
     useEffect(() => {
         return () => {
-            if (transitionTimeoutRef.current) {
-                clearTimeout(transitionTimeoutRef.current);
-            }
+            if (wheelTimeoutRef.current) clearTimeout(wheelTimeoutRef.current);
+            if (snapTimeoutRef.current) clearTimeout(snapTimeoutRef.current);
         };
     }, []);
 
-    // Change slide with vertical slide animation matching the video
-    const goToSlide = (targetIdx, dir) => {
-        if (isTransitioning || targetIdx === currentSlide) return;
+    // Helper: Total slides and safely wrapped indices
+    const totalSlides = activeHeroProperties.length;
+    const safeCurrentIdx = totalSlides > 0 ? ((currentSlide % totalSlides) + totalSlides) % totalSlides : 0;
+    const nextIdx = totalSlides > 0 ? (safeCurrentIdx + 1) % totalSlides : 0;
+    const prevIdx = totalSlides > 0 ? (safeCurrentIdx - 1 + totalSlides) % totalSlides : 0;
 
-        let slideDir = dir;
-        if (!slideDir) {
-            slideDir = targetIdx > currentSlide ? "next" : "prev";
+    const currentProp = activeHeroProperties[safeCurrentIdx];
+    const nextProp = activeHeroProperties[nextIdx];
+    const prevProp = activeHeroProperties[prevIdx];
+
+    // Settle drag/scroll gesture: snaps to next/prev or springs back
+    const settleDrag = () => {
+        const progress = dragProgressRef.current;
+        const THRESHOLD = 16; // 16% drag triggers advance
+
+        if (snapTimeoutRef.current) clearTimeout(snapTimeoutRef.current);
+
+        if (progress <= -THRESHOLD) {
+            // Dragged/scrolled up -> advance to NEXT
+            if (safeCurrentIdx < totalSlides - 1) {
+                setIsSnapping(true);
+                setDragProgress(-100);
+                snapTimeoutRef.current = setTimeout(() => {
+                    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+                    setDragProgress(0);
+                    setIsSnapping(false);
+                }, 480);
+            } else {
+                // At last slide -> spring back with rubber-band recovery
+                setIsSnapping(true);
+                setDragProgress(0);
+                snapTimeoutRef.current = setTimeout(() => setIsSnapping(false), 480);
+            }
+        } else if (progress >= THRESHOLD) {
+            // Dragged/scrolled down -> advance to PREV
+            if (safeCurrentIdx > 0) {
+                setIsSnapping(true);
+                setDragProgress(100);
+                snapTimeoutRef.current = setTimeout(() => {
+                    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+                    setDragProgress(0);
+                    setIsSnapping(false);
+                }, 480);
+            } else {
+                // At first slide -> spring back
+                setIsSnapping(true);
+                setDragProgress(0);
+                snapTimeoutRef.current = setTimeout(() => setIsSnapping(false), 480);
+            }
+        } else {
+            // Insufficient drag -> spring back smoothly
+            setIsSnapping(true);
+            setDragProgress(0);
+            snapTimeoutRef.current = setTimeout(() => setIsSnapping(false), 480);
         }
-
-        setPrevSlide(currentSlide);
-        setCurrentSlide(targetIdx);
-        setDirection(slideDir);
-        setIsTransitioning(true);
-
-        if (transitionTimeoutRef.current) {
-            clearTimeout(transitionTimeoutRef.current);
-        }
-
-        transitionTimeoutRef.current = setTimeout(() => {
-            setIsTransitioning(false);
-            setPrevSlide(null);
-        }, 750);
     };
 
     const handleNextSlide = () => {
-        const nextIdx = (currentSlide + 1) % activeHeroProperties.length;
-        goToSlide(nextIdx, "next");
+        if (isSnapping || isInteracting) return;
+        setIsInteracting(false);
+        setIsSnapping(true);
+        setDragProgress(-100);
+        if (snapTimeoutRef.current) clearTimeout(snapTimeoutRef.current);
+        snapTimeoutRef.current = setTimeout(() => {
+            setCurrentSlide((prev) => (prev + 1) % totalSlides);
+            setDragProgress(0);
+            setIsSnapping(false);
+        }, 480);
     };
 
     const handlePrevSlide = () => {
-        const prevIdx = (currentSlide - 1 + activeHeroProperties.length) % activeHeroProperties.length;
-        goToSlide(prevIdx, "prev");
+        if (isSnapping || isInteracting) return;
+        setIsInteracting(false);
+        setIsSnapping(true);
+        setDragProgress(100);
+        if (snapTimeoutRef.current) clearTimeout(snapTimeoutRef.current);
+        snapTimeoutRef.current = setTimeout(() => {
+            setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+            setDragProgress(0);
+            setIsSnapping(false);
+        }, 480);
     };
 
-    // Auto-advance slideshow (pauses on hover, when drawer is open, or during transition)
+    // Auto-advance slideshow when not hovered or interacting
     useEffect(() => {
-        if (isHovered || isDrawerOpen || isTransitioning) return;
+        if (isHovered || isDrawerOpen || isInteracting || isSnapping) return;
         const interval = setInterval(() => {
-            const nextIdx = (currentSlide + 1) % HERO_FEATURED_PROPERTIES.length;
-            goToSlide(nextIdx, "next");
-        }, 6000);
+            handleNextSlide();
+        }, 6500);
 
         return () => clearInterval(interval);
-    }, [currentSlide, isHovered, isDrawerOpen, isTransitioning]);
+    }, [safeCurrentIdx, isHovered, isDrawerOpen, isInteracting, isSnapping, totalSlides]);
 
     // Keyboard navigation (Arrow keys for slides, Escape to close drawer)
     useEffect(() => {
@@ -560,34 +614,108 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
 
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [currentSlide, isDrawerOpen, isTransitioning]);
+    }, [safeCurrentIdx, isDrawerOpen, isInteracting, isSnapping]);
 
-    // Handle vertical mouse wheel scroll on hero section to slide properties
+    // Interactive Mouse Wheel Scroll: Photo directly follows scroll delta
     const handleHeroWheel = (e) => {
-        if (isDrawerOpen || isTransitioning || isWheelLockedRef.current) return;
+        if (isDrawerOpen || isSnapping) return;
 
-        if (Math.abs(e.deltaY) < 30) return;
+        // At boundaries, release so the page scrolls naturally
+        if (e.deltaY > 0 && safeCurrentIdx >= totalSlides - 1 && dragProgress <= 0) {
+            return;
+        }
+        if (e.deltaY < 0 && safeCurrentIdx <= 0 && dragProgress >= 0) {
+            return;
+        }
 
-        if (e.deltaY > 0) {
-            // Scroll down: slide to next property if not on last slide
-            if (currentSlide < HERO_FEATURED_PROPERTIES.length - 1) {
-                e.preventDefault();
-                isWheelLockedRef.current = true;
-                handleNextSlide();
-                setTimeout(() => {
-                    isWheelLockedRef.current = false;
-                }, 800);
+        if (e.cancelable) e.preventDefault();
+
+        setIsInteracting(true);
+
+        setDragProgress((prev) => {
+            // Fluid delta tracking: 0.16% per delta unit
+            const next = prev - e.deltaY * 0.16;
+            // Add rubber-band resistance at top and bottom boundaries
+            let clamped = next;
+            if (safeCurrentIdx === 0 && next > 0) {
+                clamped = next * 0.35;
+            } else if (safeCurrentIdx === totalSlides - 1 && next < 0) {
+                clamped = next * 0.35;
             }
-        } else if (e.deltaY < 0) {
-            // Scroll up: slide to previous property if not on first slide
-            if (currentSlide > 0) {
-                e.preventDefault();
-                isWheelLockedRef.current = true;
-                handlePrevSlide();
-                setTimeout(() => {
-                    isWheelLockedRef.current = false;
-                }, 800);
+            return Math.max(-100, Math.min(100, clamped));
+        });
+
+        if (wheelTimeoutRef.current) clearTimeout(wheelTimeoutRef.current);
+        wheelTimeoutRef.current = setTimeout(() => {
+            setIsInteracting(false);
+            settleDrag();
+        }, 130);
+    };
+
+    // Interactive Mouse & Touch Drag on the Photo Frame
+    const handlePhotoMouseDown = (e) => {
+        if (isDrawerOpen || isSnapping) return;
+        isDraggingRef.current = true;
+        startYRef.current = e.clientY;
+        hasDraggedRef.current = false;
+        setIsInteracting(true);
+    };
+
+    const handlePhotoTouchStart = (e) => {
+        if (isDrawerOpen || isSnapping) return;
+        isDraggingRef.current = true;
+        startYRef.current = e.touches[0].clientY;
+        hasDraggedRef.current = false;
+        setIsInteracting(true);
+    };
+
+    // Global drag move & release listeners while interacting
+    useEffect(() => {
+        if (!isInteracting) return;
+
+        const handleGlobalPointerMove = (e) => {
+            if (!isDraggingRef.current) return;
+            const currentY = e.clientY ?? (e.touches && e.touches[0]?.clientY);
+            if (currentY === undefined) return;
+            const diff = currentY - startYRef.current;
+            if (Math.abs(diff) > 4) {
+                hasDraggedRef.current = true;
             }
+            // 240px is reference card frame height
+            const percent = (diff / 240) * 100;
+            let clamped = percent;
+            if (safeCurrentIdx === 0 && percent > 0) {
+                clamped = percent * 0.35;
+            } else if (safeCurrentIdx === totalSlides - 1 && percent < 0) {
+                clamped = percent * 0.35;
+            }
+            setDragProgress(Math.max(-100, Math.min(100, clamped)));
+        };
+
+        const handleGlobalPointerUp = () => {
+            if (!isDraggingRef.current) return;
+            isDraggingRef.current = false;
+            setIsInteracting(false);
+            settleDrag();
+        };
+
+        window.addEventListener("mousemove", handleGlobalPointerMove);
+        window.addEventListener("mouseup", handleGlobalPointerUp);
+        window.addEventListener("touchmove", handleGlobalPointerMove, { passive: true });
+        window.addEventListener("touchend", handleGlobalPointerUp);
+
+        return () => {
+            window.removeEventListener("mousemove", handleGlobalPointerMove);
+            window.removeEventListener("mouseup", handleGlobalPointerUp);
+            window.removeEventListener("touchmove", handleGlobalPointerMove);
+            window.removeEventListener("touchend", handleGlobalPointerUp);
+        };
+    }, [isInteracting, safeCurrentIdx, totalSlides]);
+
+    const handlePhotoClick = () => {
+        // Only open property drawer if user clicked, not dragged
+        if (!hasDraggedRef.current) {
+            openPropertyDrawer(currentProp);
         }
     };
 
@@ -808,28 +936,44 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                     aria-label="Featured Properties Editorial Showcase"
                     onWheel={handleHeroWheel}
                 >
-                    {/* Full-bleed Vertical Sliding Background Slides */}
+                    {/* Full-bleed Vertical Sliding Background Slides with Direct Drag & Scroll Follow */}
                     <div className="buy-hero-editorial__bg-layer" aria-hidden="true">
-                        {activeHeroProperties.map((prop, idx) => {
-                            let animClass = "";
-                            if (idx === currentSlide) {
-                                animClass = isTransitioning
-                                    ? (direction === "next" ? "is-slide-in-next" : "is-slide-in-prev")
-                                    : "is-active";
-                            } else if (idx === prevSlide && isTransitioning) {
-                                animClass = direction === "next" ? "is-slide-out-next" : "is-slide-out-prev";
-                            }
+                        {currentProp && (
+                            <div
+                                className="buy-hero-editorial__bg-slide is-active"
+                                style={{
+                                    backgroundImage: `url(${currentProp.image})`,
+                                    transform: `translateY(${dragProgress}%)`,
+                                    transition: isInteracting ? "none" : "transform 0.48s cubic-bezier(0.16, 1, 0.3, 1)",
+                                    zIndex: 1,
+                                }}
+                            />
+                        )}
 
-                            if (idx !== currentSlide && idx !== prevSlide) return null;
+                        {dragProgress < 0 && nextProp && (
+                            <div
+                                className="buy-hero-editorial__bg-slide is-incoming"
+                                style={{
+                                    backgroundImage: `url(${nextProp.image})`,
+                                    transform: `translateY(${100 + dragProgress}%)`,
+                                    transition: isInteracting ? "none" : "transform 0.48s cubic-bezier(0.16, 1, 0.3, 1)",
+                                    zIndex: 2,
+                                }}
+                            />
+                        )}
 
-                            return (
-                                <div
-                                    key={prop.id}
-                                    className={`buy-hero-editorial__bg-slide ${animClass}`}
-                                    style={{ backgroundImage: `url(${prop.image})` }}
-                                />
-                            );
-                        })}
+                        {dragProgress > 0 && prevProp && (
+                            <div
+                                className="buy-hero-editorial__bg-slide is-incoming"
+                                style={{
+                                    backgroundImage: `url(${prevProp.image})`,
+                                    transform: `translateY(${-100 + dragProgress}%)`,
+                                    transition: isInteracting ? "none" : "transform 0.48s cubic-bezier(0.16, 1, 0.3, 1)",
+                                    zIndex: 2,
+                                }}
+                            />
+                        )}
+
                         <div className="buy-hero-editorial__bg-overlay" />
                     </div>
 
@@ -838,7 +982,7 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                         type="button"
                         className="buy-hero-editorial__arrow buy-hero-editorial__arrow--prev"
                         onClick={handlePrevSlide}
-                        aria-label="Previous featured property"
+                        aria-label="Previous property"
                     >
                         <ChevronLeft size={28} />
                     </button>
@@ -847,14 +991,14 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                         type="button"
                         className="buy-hero-editorial__arrow buy-hero-editorial__arrow--next"
                         onClick={handleNextSlide}
-                        aria-label="Next featured property"
+                        aria-label="Next property"
                     >
                         <ChevronRight size={28} />
                     </button>
 
                     {/* Centered Editorial White Poster Card */}
                     <div className="buy-hero-editorial__stage">
-                                                <article
+                        <article
                             className="buy-hero-poster-card"
                             onMouseEnter={() => setIsHovered(true)}
                             onMouseLeave={() => setIsHovered(false)}
@@ -867,42 +1011,65 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                                 </h1>
                             </div>
 
-                            {/* Inset Photo Window: Exact Same Image as Background, Sliding in Lockstep */}
+                            {/* Inset Photo Window: Follows Drag of Mouse & Scroll in Direct Lockstep */}
                             <div
-                                className="buy-hero-poster-card__photo-frame"
-                                onClick={() => openPropertyDrawer(activeHeroProperties[currentSlide % activeHeroProperties.length])}
+                                className={`buy-hero-poster-card__photo-frame ${isInteracting ? "is-dragging" : ""}`}
+                                onMouseDown={handlePhotoMouseDown}
+                                onTouchStart={handlePhotoTouchStart}
+                                onClick={handlePhotoClick}
                                 role="button"
                                 tabIndex={0}
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter" || e.key === " ") {
                                         e.preventDefault();
-                                        openPropertyDrawer(HERO_FEATURED_PROPERTIES[currentSlide]);
+                                        openPropertyDrawer(currentProp);
                                     }
                                 }}
-                                aria-label={`Explore details for ${activeHeroProperties[currentSlide % activeHeroProperties.length]?.name}`}
+                                aria-label={`Explore details for ${currentProp?.name || "Property"}`}
+                                title="Click & drag or scroll mouse wheel to change photo"
                             >
                                 <div className="buy-hero-poster-card__photo-viewport">
-                                    {activeHeroProperties.map((prop, idx) => {
-                                        let animClass = "";
-                                        if (idx === currentSlide) {
-                                            animClass = isTransitioning
-                                                ? (direction === "next" ? "is-photo-in-next" : "is-photo-in-prev")
-                                                : "is-active";
-                                        } else if (idx === prevSlide && isTransitioning) {
-                                            animClass = direction === "next" ? "is-photo-out-next" : "is-photo-out-prev";
-                                        }
+                                    {currentProp && (
+                                        <img
+                                            src={currentProp.image}
+                                            alt={currentProp.name}
+                                            className="buy-hero-poster-card__photo is-active"
+                                            style={{
+                                                transform: `translateY(${dragProgress}%)`,
+                                                transition: isInteracting ? "none" : "transform 0.48s cubic-bezier(0.16, 1, 0.3, 1)",
+                                                zIndex: 1,
+                                            }}
+                                            draggable={false}
+                                        />
+                                    )}
 
-                                        if (idx !== currentSlide && idx !== prevSlide) return null;
+                                    {dragProgress < 0 && nextProp && (
+                                        <img
+                                            src={nextProp.image}
+                                            alt={nextProp.name}
+                                            className="buy-hero-poster-card__photo is-incoming"
+                                            style={{
+                                                transform: `translateY(${100 + dragProgress}%)`,
+                                                transition: isInteracting ? "none" : "transform 0.48s cubic-bezier(0.16, 1, 0.3, 1)",
+                                                zIndex: 2,
+                                            }}
+                                            draggable={false}
+                                        />
+                                    )}
 
-                                        return (
-                                            <img
-                                                key={prop.id}
-                                                src={prop.image}
-                                                alt={prop.name}
-                                                className={`buy-hero-poster-card__photo ${animClass}`}
-                                            />
-                                        );
-                                    })}
+                                    {dragProgress > 0 && prevProp && (
+                                        <img
+                                            src={prevProp.image}
+                                            alt={prevProp.name}
+                                            className="buy-hero-poster-card__photo is-incoming"
+                                            style={{
+                                                transform: `translateY(${-100 + dragProgress}%)`,
+                                                transition: isInteracting ? "none" : "transform 0.48s cubic-bezier(0.16, 1, 0.3, 1)",
+                                                zIndex: 2,
+                                            }}
+                                            draggable={false}
+                                        />
+                                    )}
                                 </div>
 
                                 <div className="buy-hero-poster-card__explore-pill">
@@ -911,35 +1078,80 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                                 </div>
                             </div>
 
-                            {/* Project Name & Subtitle with Vertical Slide Transition */}
+                            {/* Project Name & Subtitle with Lockstep Motion */}
                             <div className="buy-hero-poster-card__meta">
                                 <div className="buy-hero-poster-card__meta-viewport">
-                                    {activeHeroProperties.map((prop, idx) => {
-                                        let animClass = "";
-                                        if (idx === currentSlide) {
-                                            animClass = isTransitioning
-                                                ? (direction === "next" ? "is-text-in-next" : "is-text-in-prev")
-                                                : "is-active";
-                                        } else if (idx === prevSlide && isTransitioning) {
-                                            animClass = direction === "next" ? "is-text-out-next" : "is-text-out-prev";
-                                        }
+                                    {currentProp && (
+                                        <div
+                                            className="buy-hero-poster-card__meta-content is-active"
+                                            style={{
+                                                opacity: Math.max(0, 1 - Math.abs(dragProgress) * 0.02),
+                                                transform: `translateY(${dragProgress * 0.4}%)`,
+                                                transition: isInteracting ? "none" : "all 0.48s cubic-bezier(0.16, 1, 0.3, 1)",
+                                                zIndex: 1,
+                                            }}
+                                        >
+                                            <h2 className="buy-hero-poster-card__name">{currentProp.name}</h2>
+                                            <p className="buy-hero-poster-card__subtitle">{currentProp.subtitle}</p>
+                                        </div>
+                                    )}
 
-                                        if (idx !== currentSlide && idx !== prevSlide) return null;
+                                    {dragProgress < 0 && nextProp && (
+                                        <div
+                                            className="buy-hero-poster-card__meta-content is-incoming"
+                                            style={{
+                                                opacity: Math.min(1, Math.abs(dragProgress) * 0.02),
+                                                transform: `translateY(${100 + dragProgress * 0.4}%)`,
+                                                transition: isInteracting ? "none" : "all 0.48s cubic-bezier(0.16, 1, 0.3, 1)",
+                                                zIndex: 2,
+                                            }}
+                                        >
+                                            <h2 className="buy-hero-poster-card__name">{nextProp.name}</h2>
+                                            <p className="buy-hero-poster-card__subtitle">{nextProp.subtitle}</p>
+                                        </div>
+                                    )}
 
-                                        return (
-                                            <div
-                                                key={prop.id}
-                                                className={`buy-hero-poster-card__meta-content ${animClass}`}
-                                            >
-                                                <h2 className="buy-hero-poster-card__name">{prop.name}</h2>
-                                                <p className="buy-hero-poster-card__subtitle">{prop.subtitle}</p>
-                                            </div>
-                                        );
-                                    })}
+                                    {dragProgress > 0 && prevProp && (
+                                        <div
+                                            className="buy-hero-poster-card__meta-content is-incoming"
+                                            style={{
+                                                opacity: Math.min(1, Math.abs(dragProgress) * 0.02),
+                                                transform: `translateY(${-100 + dragProgress * 0.4}%)`,
+                                                transition: isInteracting ? "none" : "all 0.48s cubic-bezier(0.16, 1, 0.3, 1)",
+                                                zIndex: 2,
+                                            }}
+                                        >
+                                            <h2 className="buy-hero-poster-card__name">{prevProp.name}</h2>
+                                            <p className="buy-hero-poster-card__subtitle">{prevProp.subtitle}</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
                             {/* Bottom Counter & Slide Controller */}
+                            <div className="buy-hero-poster-card__footer">
+                                <button
+                                    type="button"
+                                    className="buy-hero-poster-card__nav-btn"
+                                    onClick={handlePrevSlide}
+                                    aria-label="Previous property"
+                                >
+                                    <ChevronLeft size={15} />
+                                </button>
+
+                                <span className="buy-hero-poster-card__counter">
+                                    {String(safeCurrentIdx + 1).padStart(2, "0")} / {String(totalSlides).padStart(2, "0")}
+                                </span>
+
+                                <button
+                                    type="button"
+                                    className="buy-hero-poster-card__nav-btn"
+                                    onClick={handleNextSlide}
+                                    aria-label="Next property"
+                                >
+                                    <ChevronRight size={15} />
+                                </button>
+                            </div>
                             <div className="buy-hero-poster-card__footer">
                                 <button
                                     type="button"
