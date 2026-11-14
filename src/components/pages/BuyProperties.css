@@ -1002,6 +1002,7 @@
     position: sticky;
     top: calc(50.4px + 125px);
     z-index: 40;
+    align-self: start;
 }
 
 /* Aside ads section stays sticky directly below the search part with clean space */
@@ -1009,6 +1010,7 @@
     position: sticky;
     top: calc(50.4px + 125px);
     z-index: 40;
+    align-self: start;
 }
 
 /* Drawer backdrop is hidden on desktop */
