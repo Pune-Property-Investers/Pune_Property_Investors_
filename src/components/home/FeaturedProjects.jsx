@@ -18,6 +18,10 @@ export default function FeaturedProjects({ previewData, customProjects }) {
     const filteredProjects = Array.isArray(customProjects) && customProjects.length > 0 ? customProjects : projectList;
 
     // Mouse drag support for desktop slider
+    const isMouseDownRef = useRef(false);
+    const hasDraggedRef = useRef(false);
+    const startXRef = useRef(0);
+    const scrollLeftRef = useRef(0);
 
     const getScrollStep = () => {
         if (!carouselRef.current) return 320;
