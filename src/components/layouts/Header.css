@@ -11,33 +11,26 @@
     width: 100%;
     margin: 0;
     padding: 0;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(14px) saturate(160%);
-    -webkit-backdrop-filter: blur(14px) saturate(160%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    background: #0f1412; /* Non-transparent solid dark */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
     transition: background 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-        border-color 0.35s ease,
-        backdrop-filter 0.35s ease,
-        -webkit-backdrop-filter 0.35s ease;
+        box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .site-header--scrolled {
-    background: rgba(0, 0, 0, 0.72);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background: #090c0b; /* Non-transparent solid dark */
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
 }
 
 .site-header--scrolled .header-container {
-    min-height: 48px;
+    min-height: 50.4px;
 }
 
 .site-header--scrolled .header-brand__image {
-    width: 34px;
-    height: 34px;
+    width: 35.7px;
+    height: 35.7px;
 }
 
 .site-header--open {
@@ -53,14 +46,14 @@
 
 .header-container {
     width: min(94%, 1440px);
-    min-height: 54px;
+    min-height: 56.7px;
     margin: 0 auto;
     padding: 0;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
+    gap: 25px;
 
     background: transparent;
     border: none;
@@ -85,8 +78,8 @@
 
 .header-brand__image {
     display: block;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     object-fit: contain;
     flex-shrink: 0;
     transition: width 0.3s ease, height 0.3s ease;
@@ -104,7 +97,7 @@
 
 .header-brand__name {
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 15.5px;
+    font-size: 16.3px;
     font-weight: 800;
     letter-spacing: 0.5px;
     color: #ffffff;
@@ -117,9 +110,9 @@
 .header-brand__subtitle {
     margin-top: 2px;
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 9px;
+    font-size: 9.5px;
     font-weight: 700;
-    letter-spacing: 3.5px;
+    letter-spacing: 3.7px;
     color: #c49866;
     text-transform: uppercase;
     text-align: center;
@@ -134,7 +127,7 @@
 .header-navigation.desktop-only {
     display: flex;
     align-items: center;
-    gap: 22px;
+    gap: 23px;
 }
 
 .header-nav-item {
@@ -149,11 +142,11 @@
 
 .header-nav-link {
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 14px;
+    font-size: 14.7px;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.95);
     text-decoration: none;
-    padding: 6px 4px;
+    padding: 6.5px 4.5px;
     transition: color 0.2s ease;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
 }
@@ -241,13 +234,13 @@
 .header-cta-link {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 7px 18px;
+    gap: 8.5px;
+    padding: 7.5px 19px;
     border-radius: 9999px;
     background: linear-gradient(135deg, #c49866 0%, #a77a48 100%);
     color: #ffffff;
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 13px;
+    font-size: 13.65px;
     font-weight: 600;
     text-decoration: none;
     box-shadow: 0 4px 14px rgba(167, 122, 72, 0.35);
@@ -748,35 +741,35 @@
     }
 
     .header-container {
-        min-height: 50px;
+        min-height: 52.5px;
         padding: 0 16px;
     }
 
     .site-header--scrolled .header-container {
-        min-height: 46px;
+        min-height: 48.3px;
     }
 
     .site-header--scrolled .header-brand__image {
-        width: 32px;
-        height: 32px;
+        width: 33.6px;
+        height: 33.6px;
     }
 }
 
 @media (max-width: 420px) {
     .header-container {
         width: 94%;
-        min-height: 48px;
-        gap: 8px;
+        min-height: 50.4px;
+        gap: 8.5px;
     }
 
     .header-brand {
-        gap: 8px;
+        gap: 8.5px;
         align-items: center;
     }
 
     .header-brand__image {
-        width: 32px;
-        height: 32px;
+        width: 33.6px;
+        height: 33.6px;
     }
 
     .header-brand__text {
@@ -786,15 +779,15 @@
     }
 
     .header-brand__name {
-        font-size: 13.5px;
+        font-size: 14.2px;
         letter-spacing: 0.3px;
         text-align: center;
         width: 100%;
     }
 
     .header-brand__subtitle {
-        font-size: 8px;
-        letter-spacing: 3px;
+        font-size: 8.4px;
+        letter-spacing: 3.1px;
         padding-left: 3px;
         margin-top: 2px;
         text-align: center;

@@ -777,8 +777,28 @@
    ========================================================================== */
 
 .buy-properties-content {
-    padding: clamp(35px, 5vw, 55px) 0 clamp(60px, 8vw, 90px);
+    padding: 0 0 clamp(60px, 8vw, 90px);
     background: var(--buy-bg);
+    position: relative;
+}
+
+/* ==========================================================================
+   STICKY SECTION INTRO & SEARCH BAR
+   Stays static right below fixed header while all properties scroll behind it
+   Non-transparent solid background with separating line removed
+   ========================================================================== */
+
+.buy-properties-sticky-header {
+    position: sticky;
+    top: 50.4px;
+    z-index: 90;
+    width: 100%;
+    background: #fbfaf7; /* Solid non-transparent background */
+    border-bottom: none; /* Separating line removed from search */
+    box-shadow: none; /* No dividing shadow */
+    padding: 12px 0 10px;
+    margin-bottom: 28px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .buy-properties-container {
@@ -793,9 +813,9 @@
 .buy-properties-intro {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
     gap: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 0;
 }
 
 .buy-properties-intro__text {
@@ -805,9 +825,9 @@
 
 .buy-properties-section-label {
     display: inline-block;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     color: var(--buy-gold-dark);
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 800;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -817,29 +837,30 @@
     margin: 0;
     color: var(--buy-dark);
     font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: clamp(26px, 3vw, 36px);
+    font-size: clamp(22px, 2.2vw, 28px);
     font-weight: 700;
-    line-height: 1.25;
+    line-height: 1.2;
 }
 
 .buy-properties-intro__text p {
-    margin: 8px 0 0;
+    margin: 4px 0 0;
     color: var(--buy-muted);
-    font-size: 14px;
-    line-height: 1.7;
+    font-size: 13.5px;
+    line-height: 1.5;
 }
 
-/* Search input */
+/* Search input - width aligned with right aside ads column */
 .buy-properties-search-wrapper {
     flex-shrink: 0;
+    width: 320px;
 }
 
 .buy-properties-search {
     display: flex;
     align-items: center;
     gap: 10px;
-    width: 360px;
-    min-height: 48px;
+    width: 100%;
+    min-height: 46px;
     padding: 0 16px;
     box-sizing: border-box;
     border: 1px solid var(--buy-border);
@@ -965,7 +986,7 @@
 
 .buy-properties-layout {
     display: grid;
-    grid-template-columns: 280px minmax(0, 1fr) 280px;
+    grid-template-columns: 280px minmax(0, 1fr) 320px;
     align-items: start;
     gap: 26px;
 }
@@ -976,10 +997,18 @@
     min-width: 0;
 }
 
-/* Sticky filter sidebar on desktop */
+/* Sticky filter sidebar on desktop - maintains clean space below search tab */
 .buy-properties-filter-column {
     position: sticky;
-    top: 96px;
+    top: calc(50.4px + 125px);
+    z-index: 40;
+}
+
+/* Aside ads section stays sticky directly below the search part with clean space */
+.buy-properties-ad-column {
+    position: sticky;
+    top: calc(50.4px + 125px);
+    z-index: 40;
 }
 
 /* Drawer backdrop is hidden on desktop */
@@ -1216,15 +1245,33 @@
    ========================================================================== */
 
 @media (max-width: 900px) {
+    .buy-properties-sticky-header {
+        top: 48.3px;
+        padding: 12px 0 10px;
+        margin-bottom: 18px;
+        background: #fbfaf7;
+        border-bottom: none;
+        box-shadow: none;
+    }
+
     .buy-properties-intro {
         flex-direction: column;
         align-items: stretch;
-        gap: 20px;
+        gap: 12px;
+    }
+
+    .buy-properties-intro__text p {
+        display: none;
+    }
+
+    .buy-properties-intro__text h2 {
+        font-size: 21px;
     }
 
     .buy-properties-search-wrapper,
     .buy-properties-search {
         width: 100%;
+        min-height: 42px;
     }
 
     .buy-properties-mobile-bar {
