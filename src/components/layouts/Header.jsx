@@ -63,21 +63,10 @@ const navigationItems = [
     {
         label: "Blog",
         href: "/blog",
-        dropdown: [
-            { label: "All Blog Posts", href: "/blog" },
-            { label: "Real Estate Tips", href: "/blog" },
-            { label: "Buying Guide", href: "/blog/buying-guide" },
-            { label: "Investment Insights", href: "/blog/investment" },
-        ],
     },
     {
         label: "Career",
         href: "/career",
-        dropdown: [
-            { label: "Careers Overview", href: "/career" },
-            { label: "Current Openings", href: "/career" },
-            { label: "Join Our Team", href: "/career" },
-        ],
     },
 ];
 
