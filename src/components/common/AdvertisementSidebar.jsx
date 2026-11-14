@@ -210,7 +210,7 @@ function ContactAdvertisement() {
                 <ArrowUpRight size={18} />
             </a>
 
-            <Link href="/contact" className="partner-spotlight-contact__secondary">
+            <Link href="/#home-contact" className="partner-spotlight-contact__secondary">
                 <Phone size={15} />
                 Contact Us
             </Link>

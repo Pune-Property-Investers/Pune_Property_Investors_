@@ -452,7 +452,7 @@ function PropertyDetails({ propertyId, propertySlug }) {
                                     </p>
                                 </div>
 
-                                <Link href="/contact">
+                                <Link href="/#home-contact">
                                     Talk to an Advisor
                                     <ArrowRight size={16} />
                                 </Link>

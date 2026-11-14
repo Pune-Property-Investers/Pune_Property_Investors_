@@ -19,7 +19,7 @@ const quickLinks = [
     { label: "Buy Properties", path: "/buy" },
     { label: "New Projects", path: "/projects" },
     { label: "Blog", path: "/blog" },
-    { label: "Contact Us", path: "/contact" },
+    { label: "Contact Us", path: "/#home-contact" },
     { label: "Admin", path: "/admin" },
 ];
 

@@ -433,7 +433,7 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                                     </div>
 
                                     <Link
-                                        href="/contact"
+                                        href="/#home-contact"
                                         className="buy-properties-enquiry__button"
                                     >
                                         <span>Talk to an Expert</span>

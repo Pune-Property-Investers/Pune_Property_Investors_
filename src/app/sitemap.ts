@@ -15,7 +15,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
         "/commercial",
         "/plots",
         "/about",
-        "/contact",
         "/investment",
         "/blog",
         "/career",

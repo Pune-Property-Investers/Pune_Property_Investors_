@@ -93,7 +93,7 @@ export default function CustomContainersRenderer({ containers }) {
                             )}
                             {item.buttonText && (
                                 <Link
-                                    href={item.buttonUrl || "/contact"}
+                                    href={item.buttonUrl || "/#home-contact"}
                                     style={{
                                         marginTop: 6,
                                         display: "inline-flex",

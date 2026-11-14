@@ -81,7 +81,7 @@ const navigationItems = [
     },
     {
         label: "Contact Us",
-        href: "/contact",
+        href: "/#home-contact",
     },
 ];
 

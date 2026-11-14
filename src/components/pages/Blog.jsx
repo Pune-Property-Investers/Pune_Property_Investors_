@@ -248,7 +248,7 @@ export default function Blog() {
                                     </p>
 
                                     <Link
-                                        href="/contact"
+                                        href="/#home-contact"
                                         className="blog-post-link"
                                     >
                                         Speak with an Advisor

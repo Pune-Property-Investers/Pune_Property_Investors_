@@ -229,7 +229,7 @@ function PropertyListingCard({ property }) {
                         </Link>
 
                         <Link
-                            href="/contact"
+                            href="/#home-contact"
                             className="property-listing-card__contact-button"
                             aria-label={`Enquire about ${displayTitle}`}
                         >

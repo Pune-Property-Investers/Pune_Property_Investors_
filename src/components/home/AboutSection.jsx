@@ -76,7 +76,7 @@ export default function AboutSection() {
                     </ul>
 
                     <div className="about-ppi-action">
-                        <Link href="/contact" className="about-ppi-btn">
+                        <Link href="/#home-contact" className="about-ppi-btn">
                             <span>Talk to Our Team</span>
                             <ArrowRight size={17} className="about-ppi-btn-arrow" />
                         </Link>

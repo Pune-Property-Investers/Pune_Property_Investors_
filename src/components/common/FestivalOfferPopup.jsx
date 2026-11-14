@@ -136,7 +136,7 @@ export default function FestivalOfferPopup() {
 
                 {popup.buttonText && (
                     <Link
-                        href={popup.buttonUrl || "/contact"}
+                        href={popup.buttonUrl || "/#home-contact"}
                         className="festival-popup__cta"
                         onClick={handleDismiss}
                     >
