@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -54,6 +54,39 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
     });
     const [searchQuery, setSearchQuery] = useState(initialProject);
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+    const adColumnRef = useRef(null);
+
+    // Dynamic sticky calculation: allow ad panel to scroll until its last container is reached, then stick
+    useEffect(() => {
+        const updateAdStickyTop = () => {
+            if (!adColumnRef.current) return;
+            const adHeight = adColumnRef.current.offsetHeight;
+            const vh = window.innerHeight;
+            // If ad panel is taller than (vh - 120px), set sticky top so that the panel scrolls
+            // until the bottom of the last container reaches (vh - 24px), then locks in place!
+            // If ad panel fits within viewport, stick at top: 96px (below navigation header).
+            const topOffset = adHeight > vh - 120
+                ? vh - adHeight - 24
+                : 96;
+            adColumnRef.current.style.top = `${topOffset}px`;
+        };
+
+        updateAdStickyTop();
+        window.addEventListener("resize", updateAdStickyTop);
+
+        const observer = typeof ResizeObserver !== "undefined"
+            ? new ResizeObserver(updateAdStickyTop)
+            : null;
+
+        if (observer && adColumnRef.current) {
+            observer.observe(adColumnRef.current);
+        }
+
+        return () => {
+            window.removeEventListener("resize", updateAdStickyTop);
+            if (observer) observer.disconnect();
+        };
+    }, []);
 
     // Lock body scroll when mobile filter drawer is open
     useEffect(() => {
@@ -437,7 +470,7 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                             </div>
 
                             {/* Right: advertisements */}
-                            <aside className="buy-properties-ad-column">
+                            <aside className="buy-properties-ad-column" ref={adColumnRef}>
                                 <AdvertisementSidebar />
                             </aside>
                         </div>

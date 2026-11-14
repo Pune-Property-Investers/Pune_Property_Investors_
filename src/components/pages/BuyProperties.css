@@ -976,10 +976,18 @@
     min-width: 0;
 }
 
-/* Sticky filter sidebar on desktop */
+/* Sticky filter sidebar and advertisement sidebar on desktop */
 .buy-properties-filter-column {
     position: sticky;
     top: 96px;
+    align-self: start;
+}
+
+.buy-properties-ad-column {
+    position: sticky;
+    top: 96px;
+    align-self: start;
+    will-change: top;
 }
 
 /* Drawer backdrop is hidden on desktop */

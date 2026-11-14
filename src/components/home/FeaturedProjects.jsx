@@ -5,7 +5,6 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
 import PropertyCard from "../properties/PropertyCard";
 import { projects } from "../../data/projects";
-import { client, PROJECTS_QUERY } from "@/sanity";
 import "./FeaturedProjects.css";
 
 export default function FeaturedProjects({ previewData, customProjects }) {
@@ -14,72 +13,11 @@ export default function FeaturedProjects({ previewData, customProjects }) {
     const [isVisible, setIsVisible] = useState(false);
     const [activeSlideIndex, setActiveSlideIndex] = useState(0);
     const [isGrabbing, setIsGrabbing] = useState(false);
-    const [projectList, setProjectList] = useState(projects);
 
-    useEffect(() => {
-        let isMounted = true;
-        client
-            .fetch(PROJECTS_QUERY)
-            .then((sanityProjects) => {
-                if (!isMounted || !sanityProjects || sanityProjects.length === 0) return;
-
-                // Merge Sanity projects into project list by name (e.g. Sobha Nesara)
-                const updated = projects.map((localP) => {
-                    const match = sanityProjects.find(
-                        (sp) => sp.name?.toLowerCase().trim() === localP.name?.toLowerCase().trim()
-                    );
-                    if (match && match.image) {
-                        return {
-                            ...localP,
-                            ...match,
-                            image: match.image,
-                        };
-                    }
-                    return localP;
-                });
-
-                // Include any newly created Sanity projects
-                const newFromSanity = sanityProjects
-                    .filter(
-                        (sp) => !projects.some((lp) => lp.name?.toLowerCase().trim() === sp.name?.toLowerCase().trim())
-                    )
-                    .map((sp, idx) => ({
-                        id: sp._id || `sanity-${idx}`,
-                        name: sp.name,
-                        developer: sp.developer || "Verified Developer",
-                        location: sp.location || "Pune",
-                        price: sp.startingPrice || "Price on Request",
-                        priceValue: sp.priceValue || 0,
-                        configuration: sp.configuration || "Luxury Residences",
-                        subtitle: sp.configuration ? `${sp.configuration}, ${sp.location}` : sp.location,
-                        area: sp.area || "Spacious Layouts",
-                        status: sp.status || "Ready to Move",
-                        possession: sp.possession || "Ready",
-                        reraId: sp.reraId || "RERA Approved",
-                        image: sp.image,
-                        badge: sp.badge || (sp.featured ? "Featured" : "New"),
-                        amenities: sp.amenities || [],
-                        description: sp.description || "",
-                    }));
-
-                setProjectList([...updated, ...newFromSanity]);
-            })
-            .catch((err) => {
-                console.warn("Using local fallback projects:", err);
-            });
-
-        return () => {
-            isMounted = false;
-        };
-    }, []);
+    const projectList = Array.isArray(previewData) && previewData.length > 0 ? previewData : projects;
+    const filteredProjects = Array.isArray(customProjects) && customProjects.length > 0 ? customProjects : projectList;
 
     // Mouse drag support for desktop slider
-    const isMouseDownRef = useRef(false);
-    const startXRef = useRef(0);
-    const scrollLeftRef = useRef(0);
-    const hasDraggedRef = useRef(false);
-
-    const filteredProjects = Array.isArray(customProjects) && customProjects.length > 0 ? customProjects : projectList;
 
     const getScrollStep = () => {
         if (!carouselRef.current) return 320;
