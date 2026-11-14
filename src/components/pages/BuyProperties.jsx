@@ -284,55 +284,59 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
 
                 {/* Main listings area */}
                 <section className="buy-properties-content" id="listings">
-                    <div className="buy-properties-container">
-                        {/* Intro and search */}
-                        <div className="buy-properties-intro">
-                            <div className="buy-properties-intro__text">
-                                <span className="buy-properties-section-label">
-                                    EXPLORE PROPERTIES
-                                </span>
+                    {/* Sticky Section Intro & Search Bar (Static below Header while contents scroll from background) */}
+                    <div className="buy-properties-sticky-header">
+                        <div className="buy-properties-container">
+                            <div className="buy-properties-intro">
+                                <div className="buy-properties-intro__text">
+                                    <span className="buy-properties-section-label">
+                                        EXPLORE PROPERTIES
+                                    </span>
 
-                                <h2>
-                                    {pageTitle || "Properties for Sale in Pune"}
-                                </h2>
+                                    <h2>
+                                        {pageTitle || "Properties for Sale in Pune"}
+                                    </h2>
 
-                                <p>
-                                    Discover verified apartments, penthouses, villas, and commercial spaces across Pune.
-                                </p>
-                            </div>
+                                    <p>
+                                        Discover verified apartments, penthouses, villas, and commercial spaces across Pune.
+                                    </p>
+                                </div>
 
-                            <div className="buy-properties-search-wrapper">
-                                <form
-                                    className="buy-properties-search"
-                                    onSubmit={(event) => event.preventDefault()}
-                                    role="search"
-                                >
-                                    <Search size={18} className="buy-properties-search__icon" />
+                                <div className="buy-properties-search-wrapper">
+                                    <form
+                                        className="buy-properties-search"
+                                        onSubmit={(event) => event.preventDefault()}
+                                        role="search"
+                                    >
+                                        <Search size={18} className="buy-properties-search__icon" />
 
-                                    <input
-                                        type="search"
-                                        placeholder="Search location, builder, or project..."
-                                        value={searchQuery}
-                                        onChange={(event) =>
-                                            setSearchQuery(event.target.value)
-                                        }
-                                        aria-label="Search properties by location or project"
-                                    />
+                                        <input
+                                            type="search"
+                                            placeholder="Search location, builder, or project..."
+                                            value={searchQuery}
+                                            onChange={(event) =>
+                                                setSearchQuery(event.target.value)
+                                            }
+                                            aria-label="Search properties by location or project"
+                                        />
 
-                                    {searchQuery && (
-                                        <button
-                                            type="button"
-                                            onClick={() => setSearchQuery("")}
-                                            aria-label="Clear search"
-                                            className="buy-properties-search__clear"
-                                        >
-                                            <X size={15} />
-                                        </button>
-                                    )}
-                                </form>
+                                        {searchQuery && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setSearchQuery("")}
+                                                aria-label="Clear search"
+                                                className="buy-properties-search__clear"
+                                            >
+                                                <X size={15} />
+                                            </button>
+                                        )}
+                                    </form>
+                                </div>
                             </div>
                         </div>
+                    </div>
 
+                    <div className="buy-properties-container">
                         {/* Mobile Filter Trigger Bar (visible under 900px) */}
                         <div className="buy-properties-mobile-bar">
                             <button
@@ -360,9 +364,8 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                         <div className="buy-properties-layout">
                             {/* Left: filters (desktop sticky sidebar / mobile slide drawer) */}
                             <div
-                                className={`buy-properties-filter-column ${
-                                    mobileFiltersOpen ? "is-mobile-open" : ""
-                                }`}
+                                className={`buy-properties-filter-column ${mobileFiltersOpen ? "is-mobile-open" : ""
+                                    }`}
                             >
                                 {/* Mobile Drawer Backdrop */}
                                 <div
