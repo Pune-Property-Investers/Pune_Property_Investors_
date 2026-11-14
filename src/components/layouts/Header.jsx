@@ -71,15 +71,6 @@ const navigationItems = [
         ],
     },
     {
-        label: "News",
-        href: "/news",
-        dropdown: [
-            { label: "All News", href: "/news" },
-            { label: "Pune Property News", href: "/news" },
-            { label: "Market Updates", href: "/news/market-updates" },
-        ],
-    },
-    {
         label: "Career",
         href: "/career",
         dropdown: [
@@ -347,7 +338,7 @@ function Header() {
                 </div>
 
                 <div className="mobile-drawer__content">
-                    {/* Navigation Options from Menu (Home, Properties, About Us, Blog, News, Career, Contact Us) */}
+                    {/* Navigation Options from Menu (Home, Properties, About Us, Blog, Career, Contact Us) */}
                     <nav className="mobile-drawer__nav">
                         {navigationItems.map((item) => {
                             const isDropdownOpen = openDropdown === item.label;

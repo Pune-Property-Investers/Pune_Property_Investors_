@@ -12,7 +12,6 @@ import {
     Users,
     LayoutTemplate,
     FileText,
-    Newspaper,
     Film,
     MessageSquareQuote,
     Megaphone,
@@ -87,7 +86,6 @@ export const SIDEBAR_GROUPS = [
         items: [
             { label: "Homepage & About", href: "/admin/homepage", icon: LayoutTemplate },
             { label: "Blogs & Magazine", href: "/admin/articles", icon: FileText },
-            { label: "News", href: "/admin/news", icon: Newspaper },
             { label: "Shorts / Videos", href: "/admin/shorts", icon: Film },
             { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquareQuote },
             { label: "Advertisements", href: "/admin/advertisements", icon: Megaphone },
