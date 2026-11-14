@@ -13,6 +13,7 @@ import AdvertisementSidebar from "../common/AdvertisementSidebar";
 import TrustStats from "../home/TrustStats";
 import FeaturedProjects from "../home/FeaturedProjects";
 import FeaturedProp from "../home/FeaturedProp";
+import ScrollStoryProperties from "../home/ScrollStoryProperties";
 import Workflow from "../home/Workflow";
 import DeveloperLogos from "../home/DeveloperLogos";
 import Testimonials from "../home/Testimonials";
@@ -26,7 +27,6 @@ const MAIN_COLUMN_TYPES = new Set([
     "browse-locations",
     "featured-projects",
     "upcoming-projects",
-    "featured-prop",
 ]);
 
 function renderPublishedSection(section, activeTab, setActiveTab, published) {
@@ -61,8 +61,9 @@ function renderPublishedSection(section, activeTab, setActiveTab, published) {
             );
         case "upcoming-projects":
             return <UpcomingProjects key={section.id} previewData={data} />;
+        case "scroll-story-properties":
         case "featured-prop":
-            return <FeaturedProp key={section.id} previewData={data} />;
+            return <ScrollStoryProperties key={section.id} previewData={data} />;
         case "workflow":
             return <Workflow key={section.id} previewData={data} />;
         case "developer-logos":
@@ -163,14 +164,15 @@ function Home() {
                         {/* 3. Upcoming Projects & Pre-Launch Milestones */}
                         <FeaturedProjects />
                         <UpcomingProjects />
-
-                        <FeaturedProp />
                     </div>
 
                     <aside className="home-page__sidebar">
                         <AdvertisementSidebar />
                     </aside>
                 </div>
+
+                {/* Full-width Cinematic Scroll Storytelling Properties Experience */}
+                <ScrollStoryProperties />
 
                 <Workflow />
                 <DeveloperLogos />

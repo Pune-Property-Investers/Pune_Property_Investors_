@@ -254,6 +254,36 @@
     outline-offset: 4px;
 }
 
+.footer-branches-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    margin-bottom: 18px;
+    padding-top: 4px;
+}
+
+.footer-branch-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #c4bbc5;
+    font-size: 13px;
+    line-height: 1.5;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-branch-item svg {
+    flex-shrink: 0;
+    color: #d9b477;
+    font-size: 14px;
+}
+
+.footer-branch-item:hover {
+    color: #e4c58f;
+}
+
 /* ========================================
    BOTTOM BAR
 ======================================== */

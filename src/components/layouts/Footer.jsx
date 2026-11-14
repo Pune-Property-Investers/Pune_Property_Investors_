@@ -161,6 +161,27 @@ function Footer() {
                             <span> 3rd Floor (also listed as Suite 904 in some directory records), Gera Imperium Alpha, Grant Road, Vitthal Nagar, Kharadi, Pune, Maharashtra 411014, India (Headquarters)</span>
                         </a>
 
+                        <div className="footer-branches-row">
+                            <a
+                                href="https://www.google.com/maps/search/?api=1&query=Vishwa+Arcade+Navale+Bridge+Vadgaon+bk+Narhe+Pune+411041"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="footer-branch-item"
+                            >
+                                <FaMapMarkerAlt />
+                                <span>Narhe / Vadgaon bk Office</span>
+                            </a>
+                            <a
+                                href="https://www.google.com/maps/search/?api=1&query=Rajnandini+Tower+Parande+Nagar+Dighi+Pune+411015"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="footer-branch-item"
+                            >
+                                <FaMapMarkerAlt />
+                                <span>Dighi Office</span>
+                            </a>
+                        </div>
+
                         <a
                             href="tel:+917398174444"
                             className="footer-contact__item"

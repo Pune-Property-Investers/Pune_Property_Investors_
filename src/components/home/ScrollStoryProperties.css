@@ -1,0 +1,655 @@
+/* ==========================================================================
+   SCROLL-DRIVEN STORYTELLING PROPERTIES SECTION
+   Recreating the reference video interaction, layout, animations & detail drawer
+   ========================================================================== */
+
+.scroll-story-section {
+    position: relative;
+    width: 100%;
+    /* 320vh provides ample smooth scroll distance for the 3 stages */
+    height: 320vh;
+    background: #0b0f14;
+    box-sizing: border-box;
+}
+
+/* Sticky Stage: pinned to the top of viewport while scrolling through the 320vh container */
+.scroll-story-sticky-stage {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   1. FULL-SCREEN BACKGROUND LAYERS (Vertical Wipe & Parallax)
+   ========================================================================== */
+
+.scroll-story-backgrounds {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.scroll-story-bg-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    will-change: transform, opacity;
+    transition: transform 0.1s linear, opacity 0.2s ease-out;
+}
+
+.scroll-story-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+/* Subtle cinematic dark vignette */
+.scroll-story-bg-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.15) 0%,
+        rgba(0, 0, 0, 0.45) 100%
+    );
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   2. MINIMAL STICKY NAVIGATION BAR (Slides in at Stage 5 as in reference)
+   ========================================================================== */
+
+.scroll-story-navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    padding: 16px 36px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+}
+
+.scroll-story-navbar--visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.scroll-story-navbar__container {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.scroll-story-navbar__brand {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    text-decoration: none;
+    color: #111111;
+}
+
+.scroll-story-navbar__brand-text {
+    font-family: var(--font-serif), Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+}
+
+.scroll-story-navbar__brand-sub {
+    font-family: var(--font-sans), sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #a4733b;
+}
+
+.scroll-story-navbar__links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.scroll-story-navbar__link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: #222222;
+    font-family: var(--font-sans), sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.scroll-story-navbar__link-btn:hover {
+    color: #a4733b;
+}
+
+.scroll-story-chevron {
+    color: #777777;
+    margin-top: 1px;
+}
+
+.scroll-story-navbar__right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.scroll-story-navbar__portal-link {
+    font-family: var(--font-sans), sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #111111;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.scroll-story-navbar__portal-link:hover {
+    color: #a4733b;
+}
+
+/* ==========================================================================
+   3. CENTRAL FLOATING WHITE PROPERTY CARD
+   ========================================================================== */
+
+.scroll-story-card-wrapper {
+    position: relative;
+    z-index: 20;
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 0 16px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+}
+
+.scroll-story-card {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 42px 36px 30px;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+    text-align: center;
+    box-sizing: border-box;
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Top Headline: "Featured properties" (properties in italic serif) */
+.scroll-story-card__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.02;
+    margin-bottom: 24px;
+}
+
+.scroll-story-card__headline-featured {
+    font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: clamp(34px, 3.2vw, 44px);
+    font-weight: 700;
+    color: #0d0f12;
+    letter-spacing: -1.2px;
+}
+
+.scroll-story-card__headline-properties {
+    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
+    font-size: clamp(38px, 3.6vw, 50px);
+    font-style: italic;
+    font-weight: 400;
+    color: #0d0f12;
+    letter-spacing: -0.6px;
+    margin-top: 1px;
+}
+
+/* Central Media Frame (with Wipe Animation between images) */
+.scroll-story-card__media-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10.5;
+    overflow: hidden;
+    background: #111419;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.scroll-story-card__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    will-change: transform;
+    transition: transform 0.1s linear;
+}
+
+.scroll-story-card__incoming-wrap {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    will-change: clip-path;
+}
+
+/* Hover "Explore more" pill (as shown in frame_00443) */
+.scroll-story-card__hover-pill {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.92);
+    padding: 9px 20px;
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 9999px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    color: #111111;
+    font-family: var(--font-sans), sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 5;
+    white-space: nowrap;
+}
+
+.scroll-story-card__hover-pill--visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Text Block below image */
+.scroll-story-card__content {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.scroll-story-card__text-block {
+    min-height: 58px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.scroll-story-card__title {
+    font-family: var(--font-sans), sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    color: #111111;
+    margin: 0;
+    letter-spacing: -0.4px;
+}
+
+.scroll-story-card__subtitle {
+    font-family: var(--font-sans), sans-serif;
+    font-size: 13.5px;
+    color: #555555;
+    margin: 6px 0 0;
+    line-height: 1.45;
+}
+
+/* Counter: 01/03, 02/03, 03/03 */
+.scroll-story-card__counter {
+    margin-top: 22px;
+    font-family: var(--font-sans), sans-serif;
+    font-size: 12.5px;
+    color: #777777;
+    letter-spacing: 1.5px;
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   4. FLOATING BOTTOM RIGHT ACTION PILL ("Rent with us")
+   ========================================================================== */
+
+.scroll-story-floating-action {
+    position: absolute;
+    bottom: 28px;
+    right: 36px;
+    z-index: 30;
+}
+
+.scroll-story-rent-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 26px;
+    border-radius: 8px;
+    background: #0c1527;
+    border: none;
+    color: #ffffff;
+    font-family: var(--font-sans), sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(12, 21, 39, 0.45);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.scroll-story-rent-btn:hover {
+    transform: translateY(-2px);
+    background: #15223c;
+}
+
+/* ==========================================================================
+   5. PROPERTY DETAIL SIDE PANEL (Slide-out Drawer from Right)
+   ========================================================================== */
+
+.scroll-story-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.scroll-story-drawer-backdrop.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.scroll-story-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(540px, 94vw);
+    height: 100vh;
+    background: #ffffff;
+    z-index: 9999;
+    box-shadow: -14px 0 50px rgba(0, 0, 0, 0.35);
+    transform: translate3d(100%, 0, 0);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.scroll-story-drawer--open {
+    transform: translate3d(0, 0, 0);
+}
+
+.scroll-story-drawer__inner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.scroll-story-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 32px 18px;
+    border-bottom: 1px solid #eeeeee;
+    flex-shrink: 0;
+}
+
+.scroll-story-drawer__header-tag {
+    font-family: var(--font-sans), sans-serif;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #555555;
+}
+
+.scroll-story-drawer__close-btn {
+    background: transparent;
+    border: none;
+    color: #333333;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.scroll-story-drawer__close-btn:hover {
+    transform: scale(1.15);
+    color: #000000;
+}
+
+.scroll-story-drawer__scroll-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 32px 40px;
+}
+
+.scroll-story-drawer__title {
+    font-family: var(--font-sans), sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: #111111;
+    margin: 0 0 20px;
+    letter-spacing: -0.6px;
+    line-height: 1.15;
+}
+
+.scroll-story-drawer__image-box {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #111419;
+    margin-bottom: 28px;
+}
+
+.scroll-story-drawer__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.scroll-story-drawer__spec-section {
+    margin-bottom: 24px;
+}
+
+.scroll-story-drawer__label {
+    display: block;
+    font-family: var(--font-sans), sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #777777;
+    margin-bottom: 6px;
+}
+
+.scroll-story-drawer__address-val {
+    font-family: var(--font-sans), sans-serif;
+    font-size: 16px;
+    color: #111111;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.scroll-story-drawer__specs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 24px;
+    padding: 20px 0;
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+    margin-bottom: 30px;
+}
+
+.scroll-story-drawer__val {
+    display: block;
+    font-family: var(--font-sans), sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111111;
+    margin-top: 2px;
+}
+
+.scroll-story-drawer__val--gold {
+    color: #a4733b;
+    font-weight: 700;
+}
+
+.scroll-story-drawer__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.scroll-story-drawer__explore-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 24px;
+    border: 1px solid #111111;
+    border-radius: 6px;
+    background: transparent;
+    color: #111111;
+    font-family: var(--font-sans), sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.scroll-story-drawer__explore-btn:hover {
+    background: #111111;
+    color: #ffffff;
+}
+
+.scroll-story-drawer__whatsapp-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
+    color: #ffffff;
+    font-family: var(--font-sans), sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(18, 140, 126, 0.35);
+    transition: transform 0.2s ease;
+}
+
+.scroll-story-drawer__whatsapp-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   6. RESPONSIVE DESIGN (< 900px and < 600px)
+   ========================================================================== */
+
+@media (max-width: 900px) {
+    .scroll-story-navbar {
+        padding: 14px 20px;
+    }
+
+    .scroll-story-navbar__links {
+        display: none;
+    }
+
+    .scroll-story-card-wrapper {
+        max-width: 380px;
+    }
+
+    .scroll-story-card {
+        padding: 34px 26px 24px;
+    }
+
+    .scroll-story-floating-action {
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .scroll-story-card-wrapper {
+        max-width: 330px;
+    }
+
+    .scroll-story-card {
+        padding: 28px 20px 20px;
+    }
+
+    .scroll-story-card__headline-featured {
+        font-size: 28px;
+    }
+
+    .scroll-story-card__headline-properties {
+        font-size: 34px;
+    }
+
+    .scroll-story-card__title {
+        font-size: 18px;
+    }
+
+    .scroll-story-card__subtitle {
+        font-size: 12px;
+    }
+
+    .scroll-story-drawer {
+        width: 100vw;
+    }
+
+    .scroll-story-drawer__header {
+        padding: 18px 20px 14px;
+    }
+
+    .scroll-story-drawer__scroll-body {
+        padding: 20px 20px 30px;
+    }
+
+    .scroll-story-drawer__title {
+        font-size: 26px;
+    }
+
+    .scroll-story-drawer__specs-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+}
+
