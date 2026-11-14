@@ -1,484 +1,768 @@
 /* ==========================================================================
-   HOME CONTACT US SECTION - ARCHITECTURAL LUXURY DESIGN (WHITE THEME)
-   Positioned after WhyChooseUs on Home Page
+   EDITORIAL ARCHITECTURAL CONTACT SHOWCASE
+   Desktop: Luxury villa panoramic frame with floating card
+   Mobile: Samsung Galaxy Z Fold with full-size background & transparent form
    ========================================================================== */
 
-.home-contact-section {
+.editorial-contact-section {
     position: relative;
     width: 100%;
-    padding: 56px 0 68px;
-    background: #ffffff;
+    padding: 28px 0 36px;
+    background: #fbfaf8;
     color: #0f172a;
     font-family: var(--font-sans), "Inter", system-ui, sans-serif;
-    border-top: 1px solid #ebe6dd;
-    box-sizing: border-box;
-    overflow: hidden;
-}
-
-.home-contact-section *,
-.home-contact-section *::before,
-.home-contact-section *::after {
     box-sizing: border-box;
 }
 
-.home-contact-container {
-    max-width: 1220px;
+.editorial-contact-section *,
+.editorial-contact-section *::before,
+.editorial-contact-section *::after {
+    box-sizing: border-box;
+}
+
+.editorial-contact-container {
+    max-width: 1040px;
     margin: 0 auto;
     padding: 0 24px;
-    position: relative;
-    z-index: 2;
 }
 
 /* --------------------------------------------------------------------------
-   Header
+   Desktop Frame: Panoramic Architectural Showcase
    -------------------------------------------------------------------------- */
-.home-contact-header {
-    text-align: center;
-    max-width: 780px;
-    margin: 0 auto 36px;
+.editorial-showcase-frame {
+    position: relative;
+    width: 100%;
+    min-height: clamp(460px, 52vh, 520px);
+    border-radius: 24px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 16px 48px -12px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(220, 215, 206, 0.6);
+    background: #0f1614 linear-gradient(135deg, #1c2723 0%, #0d1412 100%);
+    isolation: isolate;
 }
 
-.home-contact-eyebrow-wrap {
+.fold-antenna-left,
+.fold-antenna-right,
+.fold-camera-dot,
+.fold-spine-crease {
+    display: none;
+}
+
+/* Full-size background image across the entire frame */
+.editorial-showcase-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center 36%;
+    background-repeat: no-repeat;
+    z-index: 1;
+    transform: scale(1.01);
+    transition: transform 6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.editorial-showcase-frame:hover .editorial-showcase-bg {
+    transform: scale(1.03);
+}
+
+.editorial-showcase-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(15, 23, 42, 0.16) 0%,
+        rgba(15, 23, 42, 0.04) 50%,
+        rgba(15, 23, 42, 0.1) 100%
+    );
+    z-index: 2;
+}
+
+/* Desktop Dual Grid */
+.fold-dual-grid {
+    position: relative;
+    z-index: 4;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Desktop Floating Badges */
+.fold-screen-right-content {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.fold-glass-pill-top {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    pointer-events: auto;
+}
+
+.fold-glass-pill-bottom {
+    position: absolute;
+    bottom: 20px;
+    right: 24px;
+    pointer-events: auto;
+}
+
+.editorial-glass-pill {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-
-.home-contact-eyebrow-line {
-    display: inline-block;
-    width: 36px;
-    height: 1.5px;
-    background: linear-gradient(90deg, transparent, #c49866);
-}
-
-.home-contact-eyebrow-line:last-child {
-    background: linear-gradient(90deg, #c49866, transparent);
-}
-
-.home-contact-eyebrow {
+    gap: 7px;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.1);
     font-size: 11px;
+    font-weight: 700;
+    color: #121816;
+    letter-spacing: 0.2px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.editorial-glass-pill:hover {
+    background: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
+}
+
+.editorial-pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ba874a;
+    box-shadow: 0 0 6px rgba(186, 135, 74, 0.9);
+    display: inline-block;
+    animation: goldGlow 2s infinite ease-in-out;
+}
+
+@keyframes goldGlow {
+    0% {
+        transform: scale(0.9);
+        box-shadow: 0 0 0 0 rgba(186, 135, 74, 0.7);
+    }
+    70% {
+        transform: scale(1.15);
+        box-shadow: 0 0 0 5px rgba(186, 135, 74, 0);
+    }
+    100% {
+        transform: scale(0.9);
+        box-shadow: 0 0 0 0 rgba(186, 135, 74, 0);
+    }
+}
+
+.editorial-glass-pill--wa {
+    background: rgba(18, 24, 22, 0.88);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.editorial-glass-pill--wa:hover {
+    background: #25d366;
+    color: #ffffff;
+    border-color: #25d366;
+}
+
+/* --------------------------------------------------------------------------
+   Desktop: Clean Floating White Form Card
+   -------------------------------------------------------------------------- */
+.editorial-form-card {
+    position: relative;
+    z-index: 4;
+    width: clamp(280px, 33%, 345px);
+    margin: 22px 0 22px 28px;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 24px 20px 20px;
+    box-shadow: 0 18px 42px -10px rgba(15, 23, 42, 0.18), 0 2px 4px rgba(15, 23, 42, 0.04);
+    box-sizing: border-box;
+}
+
+.editorial-form-header {
+    margin-bottom: 16px;
+}
+
+.editorial-form-eyebrow {
+    display: block;
+    font-size: 9.5px;
     font-weight: 800;
-    letter-spacing: 2.2px;
+    letter-spacing: 1.8px;
     text-transform: uppercase;
     color: #a77a48;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    margin-bottom: 6px;
 }
 
-.home-contact-title {
+.editorial-form-title {
     font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: clamp(28px, 3.4vw, 42px);
-    font-weight: 700;
-    color: #0f172a;
-    line-height: 1.2;
-    letter-spacing: -0.5px;
-    margin: 0 0 10px;
+    font-size: clamp(20px, 1.8vw, 25px);
+    font-weight: 600;
+    color: #111815;
+    line-height: 1.22;
+    letter-spacing: -0.4px;
+    margin: 0 0 6px;
 }
 
-.home-contact-subtitle {
-    font-size: clamp(13px, 1.3vw, 15px);
-    color: #555555;
-    line-height: 1.6;
+.editorial-form-desc {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.45;
     margin: 0;
 }
 
 /* --------------------------------------------------------------------------
-   Main 2-Column Grid
+   Minimalist Underline Inputs
    -------------------------------------------------------------------------- */
-.home-contact-grid {
-    display: grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: 28px;
-    align-items: stretch;
+.editorial-form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-/* Base Card Styling */
-.home-contact-card {
-    background: #ffffff;
-    border: 1px solid #ebe5dc;
-    border-radius: 20px;
-    padding: 28px 28px 26px;
-    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.05);
+.editorial-input-group {
     position: relative;
-}
-
-.home-contact-card__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 12px;
-    border-radius: 9999px;
-    font-size: 10.5px;
-    font-weight: 800;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    background: rgba(167, 122, 72, 0.1);
-    border: 1px solid rgba(167, 122, 72, 0.28);
-    color: #a77a48;
-    margin-bottom: 12px;
-}
-
-.home-contact-card__badge--gold {
-    background: rgba(196, 152, 102, 0.12);
-    color: #936735;
-}
-
-/* --------------------------------------------------------------------------
-   Left Column: Form
-   -------------------------------------------------------------------------- */
-.home-contact-form-title {
-    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: 24px;
-    font-weight: 700;
-    color: #0f172a;
-    margin: 0 0 6px;
-}
-
-.home-contact-form-desc {
-    font-size: 13px;
-    color: #64748b;
-    line-height: 1.5;
-    margin: 0 0 20px;
-}
-
-.home-contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.home-contact-form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-
-.home-contact-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.home-contact-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: #334155;
-    letter-spacing: 0.2px;
-}
-
-.home-contact-input,
-.home-contact-select,
-.home-contact-textarea {
     width: 100%;
-    background: #fbfaf8;
-    border: 1px solid #dcd7ce;
-    border-radius: 12px;
-    padding: 11px 14px;
-    color: #0f172a;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 13.5px;
-    outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-    box-sizing: border-box;
 }
 
-.home-contact-input::placeholder,
-.home-contact-textarea::placeholder {
-    color: #94a3b8;
-}
-
-.home-contact-input:focus,
-.home-contact-select:focus,
-.home-contact-textarea:focus {
-    border-color: #c49866;
-    background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(196, 152, 102, 0.2);
-}
-
-.home-contact-select {
-    cursor: pointer;
-}
-
-.home-contact-select option {
-    background: #ffffff;
-    color: #0f172a;
-}
-
-.home-contact-textarea {
-    resize: vertical;
-    min-height: 72px;
-}
-
-.home-contact-submit-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 13px 22px;
-    margin-top: 4px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #ba874a 0%, #a4733b 100%);
-    color: #ffffff;
+.editorial-input {
+    width: 100%;
     border: none;
+    border-bottom: 1.5px solid #e2ddd5;
+    background: transparent;
+    padding: 9px 0 7px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #111815;
     font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(164, 115, 59, 0.35);
-    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+    transition: border-bottom-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+    border-radius: 0;
 }
 
-.home-contact-submit-btn:hover {
-    transform: translateY(-1px);
-    filter: brightness(1.05);
-    box-shadow: 0 6px 20px rgba(164, 115, 59, 0.45);
+.editorial-input::placeholder {
+    color: #8c97a5;
+    font-weight: 400;
+    font-size: 13px;
 }
 
-.home-contact-submit-btn:disabled {
-    opacity: 0.75;
-    cursor: not-allowed;
+.editorial-input:focus {
+    border-bottom-color: #ba874a;
 }
 
-/* --------------------------------------------------------------------------
-   Right Column: Details Sidebar
-   -------------------------------------------------------------------------- */
-.home-contact-sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+.editorial-textarea {
+    resize: none;
+    min-height: 38px;
+    line-height: 1.4;
 }
 
-.home-contact-card--details {
-    padding: 24px;
-}
-
-.home-contact-details-title {
-    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: #0f172a;
-    margin: 0 0 16px;
-}
-
-.home-contact-info-list {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.home-contact-info-item {
+/* Consent Checkbox */
+.editorial-consent-row {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: 8px;
+    margin: 10px 0 14px;
+    cursor: pointer;
+    user-select: none;
 }
 
-.home-contact-info-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: rgba(186, 135, 74, 0.1);
-    border: 1px solid rgba(186, 135, 74, 0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #a4733b;
+.editorial-checkbox {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    border: 1.5px solid #c7c1b5;
+    accent-color: #111815;
+    margin-top: 2px;
+    cursor: pointer;
     flex-shrink: 0;
 }
 
-.home-contact-info-text {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.home-contact-info-label {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
+.editorial-consent-text {
+    font-size: 10.5px;
     color: #64748b;
+    line-height: 1.4;
 }
 
-.home-contact-info-val {
+.editorial-policy-link {
+    color: #111815;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+/* Black Pill CTA Button */
+.editorial-actions {
+    display: flex;
+    align-items: center;
+}
+
+.editorial-submit-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 6px 6px 6px 18px;
+    border-radius: 9999px;
+    background: #111815;
+    color: #ffffff;
+    border: none;
+    font-family: var(--font-sans), Inter, sans-serif;
     font-size: 13px;
-    color: #334155;
-    line-height: 1.45;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(17, 24, 21, 0.24);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    outline: none;
 }
 
-.home-contact-info-link {
-    font-size: 14px;
-    font-weight: 700;
+.editorial-submit-pill:hover {
+    background: #ba874a;
+    color: #ffffff;
+    transform: translateY(-1.5px);
+    box-shadow: 0 8px 18px rgba(186, 135, 74, 0.35);
+}
+
+.editorial-submit-pill:active {
+    transform: translateY(0);
+}
+
+.editorial-submit-pill:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.editorial-arrow-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #111815;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+}
+
+.editorial-submit-pill:hover .editorial-arrow-circle {
+    transform: translateX(2px);
+    background: #ffffff;
+    color: #ba874a;
+}
+
+/* --------------------------------------------------------------------------
+   Desktop: Sub-bar Trust & Headquarters Info
+   -------------------------------------------------------------------------- */
+.editorial-bottom-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+    padding: 12px 18px;
+    background: #ffffff;
+    border: 1px solid #ebe5dc;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
+}
+
+.editorial-strip-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    color: #475569;
+    line-height: 1.35;
+}
+
+.editorial-strip-item strong {
+    color: #0f172a;
+}
+
+.editorial-strip-item a {
     color: #a4733b;
     text-decoration: none;
+    font-weight: 700;
     transition: color 0.2s ease;
 }
 
-.home-contact-info-link:hover {
+.editorial-strip-item a:hover {
     color: #0f172a;
     text-decoration: underline;
 }
 
-/* WhatsApp Fast-Track Card */
-.home-contact-card--wa {
-    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
-    border: 1px solid rgba(37, 211, 102, 0.35);
-    padding: 22px 24px;
-    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.08);
-}
-
-.home-contact-wa-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 8px;
-}
-
-.home-contact-wa-icon-wrap {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: #25d366;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
-    flex-shrink: 0;
-}
-
-.home-contact-wa-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: #0f172a;
-    margin: 0 0 2px;
-}
-
-.home-contact-wa-badge {
-    font-size: 10px;
-    font-weight: 700;
-    color: #16a34a;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.home-contact-wa-desc {
-    font-size: 12.5px;
-    color: #475569;
-    line-height: 1.5;
-    margin: 0 0 14px;
-}
-
-.home-contact-wa-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    padding: 11px 16px;
-    border-radius: 12px;
-    background: #25d366;
-    color: #ffffff;
-    font-size: 13.5px;
-    font-weight: 700;
-    text-decoration: none;
-    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
-    transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-.home-contact-wa-btn:hover {
-    transform: translateY(-1px);
-    filter: brightness(1.06);
-}
-
-/* Trust Signals Row */
-.home-contact-trust-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-}
-
-.home-contact-trust-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 9px 10px;
-    border-radius: 10px;
-    background: #faf8f5;
-    border: 1px solid #ebe6dd;
-    font-size: 11px;
-    font-weight: 600;
-    color: #334155;
-    line-height: 1.3;
-}
-
-.home-contact-trust-item .text-gold {
-    color: #a4733b;
+.editorial-strip-item .text-gold {
+    color: #ba874a;
     flex-shrink: 0;
 }
 
 /* --------------------------------------------------------------------------
-   Responsive Breakpoints
+   Tablet View (769px - 1024px)
    -------------------------------------------------------------------------- */
-@media (max-width: 992px) {
-    .home-contact-grid {
-        grid-template-columns: 1fr;
-        gap: 22px;
+@media (max-width: 1024px) and (min-width: 769px) {
+    .editorial-contact-container {
+        max-width: 880px;
+        padding: 0 20px;
     }
 
-    .home-contact-card {
-        padding: 24px 20px;
+    .editorial-showcase-frame {
+        min-height: 460px;
+    }
+
+    .editorial-form-card {
+        width: clamp(270px, 38%, 330px);
+        margin: 18px 0 18px 22px;
+        padding: 22px 18px 18px;
+    }
+
+    .editorial-bottom-strip {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
     }
 }
 
-@media (max-width: 600px) {
-    .home-contact-section {
-        padding: 38px 0 46px;
+/* --------------------------------------------------------------------------
+   MOBILE VIEW: SAMSUNG GALAXY Z FOLD WITH FULL-SIZE IMAGE & TRANSPARENT FORM
+   Full Background Image across entire fold device + Transparent Visible Form
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .editorial-contact-section {
+        padding: 12px 0 20px;
     }
 
-    .home-contact-container {
-        padding: 0 14px;
+    .editorial-contact-container {
+        max-width: 420px;
+        margin: 0 auto;
+        padding: 0 12px;
     }
 
-    .home-contact-header {
-        margin-bottom: 24px;
+    /* Outer Chassis: Samsung Galaxy Z Fold (Open Book Mode) */
+    .editorial-showcase-frame.samsung-fold-device {
+        min-height: 380px;
+        display: block;
+        position: relative;
+        border: 4px solid #1c2220;
+        border-radius: 22px;
+        overflow: hidden;
+        padding: 0;
+        background: #0d1210;
+        box-shadow:
+            0 0 0 1px #333d39,
+            0 16px 45px rgba(0, 0, 0, 0.32),
+            inset 0 0 10px rgba(0, 0, 0, 0.5);
     }
 
-    .home-contact-title {
-        font-size: clamp(23px, 6.2vw, 28px);
+    /* FULL-SIZE BACKGROUND IMAGE ACROSS THE ENTIRE FOLD DEVICE */
+    .editorial-showcase-bg.fold-full-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center 36%;
+        background-repeat: no-repeat;
+        z-index: 1;
+        display: block;
     }
 
-    .home-contact-subtitle {
-        font-size: 12px;
+    .editorial-showcase-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            90deg,
+            rgba(15, 23, 42, 0.58) 0%,
+            rgba(15, 23, 42, 0.22) 58%,
+            rgba(15, 23, 42, 0.08) 100%
+        );
+        z-index: 2;
     }
 
-    .home-contact-card {
-        padding: 20px 16px;
-        border-radius: 16px;
+    /* Hardware Accents */
+    .fold-camera-dot {
+        display: block;
+        position: absolute;
+        top: 8px;
+        right: 25%;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #000000;
+        box-shadow: inset 0 0 1px #444, 0 0 0 1px rgba(255, 255, 255, 0.2);
+        z-index: 20;
+        pointer-events: none;
     }
 
-    .home-contact-form-row {
-        grid-template-columns: 1fr;
-        gap: 12px;
+    .fold-antenna-left {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 20px;
+        width: 2px;
+        height: 4px;
+        background: #333d39;
+        z-index: 20;
     }
 
-    .home-contact-input,
-    .home-contact-select,
-    .home-contact-textarea {
-        font-size: 16px; /* Prevents auto-zoom on iOS Safari */
-        padding: 12px 14px;
+    .fold-antenna-right {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 20px;
+        width: 2px;
+        height: 4px;
+        background: #333d39;
+        z-index: 20;
     }
 
-    .home-contact-trust-row {
-        grid-template-columns: 1fr;
-        gap: 6px;
+    /* Inner Dual-Screen Grid on Mobile - Seamless Open View (NO middle partition line) */
+    .fold-dual-grid {
+        position: relative;
+        z-index: 4;
+        width: 100%;
+        min-height: 380px;
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        align-items: stretch;
     }
 
-    .home-contact-trust-item {
-        padding: 8px 12px;
+    /* SCREEN 1: Left Display - COMPLETELY TRANSPARENT VISIBLE CONTACT FORM */
+    .editorial-form-card.fold-screen-left {
+        position: relative;
+        z-index: 4;
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        border-radius: 0;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: none !important;
+        padding: 14px 10px 12px 12px;
+        box-shadow: none !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .editorial-form-header {
+        margin-bottom: 4px;
+    }
+
+    .editorial-form-eyebrow {
+        font-size: 7.5px;
+        letter-spacing: 1.2px;
+        margin-bottom: 2px;
+        color: #e5c388;
+        font-weight: 800;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+    }
+
+    .editorial-form-title {
+        font-size: 13.5px;
+        font-weight: 700;
+        line-height: 1.15;
+        margin: 0 0 2px;
+        color: #ffffff;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+    }
+
+    .editorial-form-desc {
+        font-size: 9px;
+        line-height: 1.25;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.92);
+        font-weight: 500;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .editorial-form {
+        gap: 2px;
+    }
+
+    /* Inputs on transparent background: crisp white text & clear baselines */
+    .editorial-input {
+        font-size: 16px;
+        font-weight: 600;
+        color: #ffffff;
+        padding: 3px 0 2px;
+        border-bottom: 1.5px solid rgba(255, 255, 255, 0.65);
+        background: transparent;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+
+    .editorial-input::placeholder {
+        font-size: 10.5px;
+        color: rgba(255, 255, 255, 0.82);
+        font-weight: 500;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+
+    .editorial-input:focus {
+        border-bottom-color: #ba874a;
+    }
+
+    .editorial-textarea {
+        min-height: 20px;
+        padding: 3px 0 2px;
+    }
+
+    .editorial-consent-row {
+        margin: 4px 0 6px;
+        gap: 5px;
+    }
+
+    .editorial-checkbox {
+        width: 11px;
+        height: 11px;
+        margin-top: 1px;
+        accent-color: #ba874a;
+    }
+
+    .editorial-consent-text {
+        font-size: 8px;
+        line-height: 1.2;
+        color: #ffffff;
+        font-weight: 500;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .editorial-policy-link {
+        color: #e5c388;
+        text-decoration: underline;
+    }
+
+    .editorial-actions {
+        width: 100%;
+    }
+
+    .editorial-submit-pill {
+        width: 100%;
+        height: 28px;
+        padding: 0 6px 0 10px;
+        font-size: 10.5px;
+        font-weight: 700;
+        justify-content: space-between;
+        border-radius: 9999px;
+        background: #ffffff;
+        color: #0f172a;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    }
+
+    .editorial-submit-pill:hover {
+        background: #ba874a;
+        color: #ffffff;
+    }
+
+    .editorial-arrow-circle {
+        width: 18px;
+        height: 18px;
+        background: #0f172a;
+        color: #ffffff;
+    }
+
+    /* REMOVE MIDDLE CREASE/PARTITION LINE */
+    .fold-spine-crease {
+        display: none !important;
+    }
+
+    /* SCREEN 2: Right Display - Clear Panoramic Villa View */
+    .fold-screen-right-content {
+        position: relative;
+        inset: auto;
+        z-index: 5;
+        padding: 12px 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        pointer-events: auto;
+    }
+
+    .fold-glass-pill-top {
+        position: static;
+        padding: 4px 8px;
+        font-size: 8px;
+        gap: 4px;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    }
+
+    .fold-glass-pill-bottom {
+        position: static;
+        width: 100%;
+        justify-content: center;
+        padding: 6px 8px;
+        font-size: 9px;
+        gap: 5px;
+        background: #25d366;
+        color: #ffffff;
+        border-color: #25d366;
+        box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
+    }
+
+    /* Contact Details Container Below Fold Device */
+    .editorial-bottom-strip {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        padding: 10px 12px;
+        margin-top: 10px;
+        background: #ffffff;
+        border: 1px solid #ebe5dc;
+        border-radius: 12px;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+    }
+
+    .editorial-strip-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0;
+        background: transparent;
+        border: none;
+        font-size: 10.5px;
+        color: #475569;
+        line-height: 1.35;
+    }
+
+    .editorial-strip-item strong {
+        color: #0f172a;
+    }
+
+    .editorial-strip-item a {
+        color: #ba874a;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .editorial-strip-item .text-gold {
+        color: #ba874a;
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 360px) {
+    .editorial-showcase-frame.samsung-fold-device {
+        min-height: 360px;
+    }
+
+    .editorial-form-card.fold-screen-left {
+        padding: 10px 8px 8px;
+    }
+
+    .editorial-form-title {
         font-size: 11.5px;
+    }
+
+    .editorial-input::placeholder {
+        font-size: 9.5px;
     }
 }

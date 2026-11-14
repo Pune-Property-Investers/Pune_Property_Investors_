@@ -5,14 +5,10 @@ import {
     MapPin,
     Phone,
     Mail,
-    Send,
-    Clock,
-    ShieldCheck,
-    Award,
-    Sparkles,
+    ArrowRight,
     CheckCircle2,
     Building2,
-    Compass,
+    ShieldCheck,
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { leadService } from "../../services/lead.service";
@@ -20,17 +16,18 @@ import "./HomeContact.css";
 
 const WHATSAPP_NUMBER = "917398174444";
 const PHONE_NUMBER = "+917398174444";
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const VILLA_BG_IMAGE = `${BASE_PATH}/images/luxury-villa-bg.jpg`;
 
 export default function HomeContact({ previewData }) {
     const [formData, setFormData] = useState({
         name: "",
-        phone: "",
         email: "",
-        locality: "Kharadi & New Kharadi",
-        budgetBhk: "3 BHK (₹95 Lacs - ₹1.5 Cr)",
+        phone: "",
+        localityBudget: "",
         message: "",
     });
-
+    const [agreed, setAgreed] = useState(true);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleChange = (e) => {
@@ -40,6 +37,8 @@ export default function HomeContact({ previewData }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!agreed) return;
+
         setIsSubmitted(true);
 
         try {
@@ -48,24 +47,23 @@ export default function HomeContact({ previewData }) {
                 name: formData.name,
                 phone: formData.phone,
                 email: formData.email,
-                propertyTitle: "Home Page Advisory",
-                locality: formData.locality,
-                budget: formData.budgetBhk,
+                propertyTitle: "Editorial Showcase Advisory",
+                locality: formData.localityBudget || "Pune (Flexible)",
+                budget: formData.localityBudget || "Standard Bracket",
                 message:
                     formData.message ||
-                    "Looking for property recommendations & site visit.",
+                    "Looking for personalized property portfolio & site visit.",
             });
         } catch {
             // Continue to WhatsApp handoff even if lead logging fails
         }
 
         const msg = [
-            `*New Home Page Property Inquiry*`,
+            `*New Pune Property Journey Inquiry*`,
             `*Name:* ${formData.name}`,
             `*Phone:* ${formData.phone}`,
             `*Email:* ${formData.email || "Not specified"}`,
-            `*Preferred Locality:* ${formData.locality}`,
-            `*Configuration & Budget:* ${formData.budgetBhk}`,
+            `*Locality & Budget:* ${formData.localityBudget || "Flexible / Across Pune"}`,
             `*Requirements:* ${formData.message || "Looking for property recommendations & site visit."}`,
         ].join("\n");
 
@@ -76,10 +74,9 @@ export default function HomeContact({ previewData }) {
             setIsSubmitted(false);
             setFormData({
                 name: "",
-                phone: "",
                 email: "",
-                locality: "Kharadi & New Kharadi",
-                budgetBhk: "3 BHK (₹95 Lacs - ₹1.5 Cr)",
+                phone: "",
+                localityBudget: "",
                 message: "",
             });
         }, 800);
@@ -87,268 +84,161 @@ export default function HomeContact({ previewData }) {
 
     return (
         <section
-            className="home-contact-section"
+            className="editorial-contact-section"
             id="home-contact"
             aria-label="Contact Pune Property Investors"
         >
-            <div className="home-contact-container">
-                {/* Section Header */}
-                <div className="home-contact-header">
-                    <div className="home-contact-eyebrow-wrap">
-                        <span className="home-contact-eyebrow-line" />
-                        <span className="home-contact-eyebrow">
-                            <Compass size={14} className="text-gold" />
-                            {previewData?.eyebrow ?? "GET IN TOUCH"}
-                        </span>
-                        <span className="home-contact-eyebrow-line" />
+            <div className="editorial-contact-container">
+                {/* Outer Architectural Showcase Frame */}
+                <div className="editorial-showcase-frame samsung-fold-device">
+                    {/* Full-size panoramic villa background across entire container */}
+                    <div
+                        className="editorial-showcase-bg fold-full-bg"
+                        style={{ backgroundImage: `url(${VILLA_BG_IMAGE})` }}
+                        role="img"
+                        aria-label="Modern architectural luxury estate"
+                    >
+                        <div className="editorial-showcase-overlay" />
                     </div>
 
-                    <h2 className="home-contact-title">
-                        {previewData?.heading ?? "Connect With Our Pune Real Estate Advisors"}
-                    </h2>
+                    {/* Hardware Accents */}
+                    <div className="fold-antenna-left" aria-hidden="true" />
+                    <div className="fold-antenna-right" aria-hidden="true" />
+                    <div className="fold-camera-dot" aria-hidden="true" />
 
-                    <p className="home-contact-subtitle">
-                        {previewData?.subtitle ??
-                            "Looking for inaugural price sheets, verified layouts, or private site visits across Pune? Speak directly with our senior property advisors 7 days a week."}
-                    </p>
-                </div>
-
-                {/* Main 2-Column Grid */}
-                <div className="home-contact-grid">
-                    {/* LEFT COLUMN: Luxury Inquiry Form */}
-                    <div className="home-contact-card home-contact-card--form">
-                        <div className="home-contact-card__badge">
-                            <Sparkles size={13} />
-                            <span>PRIORITY CONSULTATION</span>
-                        </div>
-
-                        <h3 className="home-contact-form-title">
-                            Send Us an Inquiry
-                        </h3>
-                        <p className="home-contact-form-desc">
-                            Fill in your requirements below and our advisor will connect with tailored property options within 15 minutes.
-                        </p>
-
-                        <form onSubmit={handleSubmit} className="home-contact-form">
-                            {/* Full Name */}
-                            <div className="home-contact-field">
-                                <label htmlFor="home-contact-name" className="home-contact-label">
-                                    Your Full Name *
-                                </label>
-                                <input
-                                    id="home-contact-name"
-                                    type="text"
-                                    name="name"
-                                    required
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    placeholder="e.g. Rajesh Kulkarni"
-                                    className="home-contact-input"
-                                />
+                    {/* Dual Pane Layout (No middle partition) */}
+                    <div className="fold-dual-grid">
+                        {/* LEFT SIDE: Fully Transparent Contact Form (No white background) */}
+                        <div className="editorial-form-card fold-screen-left">
+                            <div className="editorial-form-header">
+                                <span className="editorial-form-eyebrow">
+                                    PUNE PROPERTY INVESTORS
+                                </span>
+                                <h2 className="editorial-form-title">
+                                    {previewData?.heading ??
+                                        "Start your Pune property journey today"}
+                                </h2>
+                                <p className="editorial-form-desc">
+                                    {previewData?.subtitle ??
+                                        "Complete the form and get a personalized list of verified properties within 24 hours."}
+                                </p>
                             </div>
 
-                            {/* Phone & Email Row */}
-                            <div className="home-contact-form-row">
-                                <div className="home-contact-field">
-                                    <label htmlFor="home-contact-phone" className="home-contact-label">
-                                        WhatsApp / Mobile *
-                                    </label>
+                            <form onSubmit={handleSubmit} className="editorial-form">
+                                {/* Your Name */}
+                                <div className="editorial-input-group">
                                     <input
-                                        id="home-contact-phone"
+                                        id="ed-name"
+                                        type="text"
+                                        name="name"
+                                        required
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        placeholder="Your name *"
+                                        className="editorial-input"
+                                    />
+                                </div>
+
+                                {/* Email */}
+                                <div className="editorial-input-group">
+                                    <input
+                                        id="ed-email"
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        placeholder="Email"
+                                        className="editorial-input"
+                                    />
+                                </div>
+
+                                {/* Phone Number */}
+                                <div className="editorial-input-group">
+                                    <input
+                                        id="ed-phone"
                                         type="tel"
                                         name="phone"
                                         required
                                         value={formData.phone}
                                         onChange={handleChange}
-                                        placeholder="+91 98765 43210"
-                                        className="home-contact-input"
+                                        placeholder="Phone number *"
+                                        className="editorial-input"
                                     />
                                 </div>
 
-                                <div className="home-contact-field">
-                                    <label htmlFor="home-contact-email" className="home-contact-label">
-                                        Email Address (Optional)
-                                    </label>
+                                {/* Preferred Locality & Budget */}
+                                <div className="editorial-input-group">
                                     <input
-                                        id="home-contact-email"
-                                        type="email"
-                                        name="email"
-                                        value={formData.email}
+                                        id="ed-locality"
+                                        type="text"
+                                        name="localityBudget"
+                                        value={formData.localityBudget}
                                         onChange={handleChange}
-                                        placeholder="rajesh@example.com"
-                                        className="home-contact-input"
+                                        placeholder="Preferred locality & budget"
+                                        className="editorial-input"
                                     />
                                 </div>
-                            </div>
 
-                            {/* Locality & Budget Row */}
-                            <div className="home-contact-form-row">
-                                <div className="home-contact-field">
-                                    <label htmlFor="home-contact-locality" className="home-contact-label">
-                                        Preferred Pune Locality
-                                    </label>
-                                    <select
-                                        id="home-contact-locality"
-                                        name="locality"
-                                        value={formData.locality}
+                                {/* How Can We Help / Message */}
+                                <div className="editorial-input-group">
+                                    <textarea
+                                        id="ed-message"
+                                        rows={1}
+                                        name="message"
+                                        value={formData.message}
                                         onChange={handleChange}
-                                        className="home-contact-select"
-                                    >
-                                        <option value="Kharadi & New Kharadi">Kharadi & New Kharadi (East)</option>
-                                        <option value="Baner & Balewadi">Baner & Balewadi (West)</option>
-                                        <option value="Wakad & Tathawade">Wakad & Tathawade (West)</option>
-                                        <option value="Hinjewadi Phase 1, 2, 3">Hinjewadi IT Corridor</option>
-                                        <option value="Wagholi & Kesnand">Wagholi & Nagar Road</option>
-                                        <option value="Hadapsar & Magarpatta">Hadapsar & Magarpatta</option>
-                                        <option value="Kalyani Nagar & Koregaon Park">Kalyani Nagar & KP</option>
-                                        <option value="Bavdhan & Kothrud">Bavdhan & Kothrud</option>
-                                        <option value="Other / Entire Pune">Other / Flexible</option>
-                                    </select>
+                                        placeholder="How can we help?"
+                                        className="editorial-input editorial-textarea"
+                                    />
                                 </div>
 
-                                <div className="home-contact-field">
-                                    <label htmlFor="home-contact-budget" className="home-contact-label">
-                                        Configuration & Budget
-                                    </label>
-                                    <select
-                                        id="home-contact-budget"
-                                        name="budgetBhk"
-                                        value={formData.budgetBhk}
-                                        onChange={handleChange}
-                                        className="home-contact-select"
-                                    >
-                                        <option value="1 BHK (Under ₹50 Lacs)">1 BHK (Under ₹50 Lacs)</option>
-                                        <option value="2 BHK (₹55 Lacs - ₹90 Lacs)">2 BHK (₹55 Lacs - ₹90 Lacs)</option>
-                                        <option value="3 BHK (₹95 Lacs - ₹1.5 Cr)">3 BHK (₹95 Lacs - ₹1.5 Cr)</option>
-                                        <option value="Luxury 3 & 4 BHK (₹1.5 Cr - ₹3 Cr)">Luxury 3 & 4 BHK (₹1.5 Cr - ₹3 Cr)</option>
-                                        <option value="Penthouse / Villa (₹3 Cr+)">Penthouse / Villa (₹3 Cr+)</option>
-                                        <option value="Commercial / Plot">Commercial / Land Plot</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            {/* Message */}
-                            <div className="home-contact-field">
-                                <label htmlFor="home-contact-message" className="home-contact-label">
-                                    Specific Requirements or Project In Mind
+                                {/* Privacy Policy Checkbox Agreement */}
+                                <label className="editorial-consent-row">
+                                    <input
+                                        type="checkbox"
+                                        checked={agreed}
+                                        onChange={(e) => setAgreed(e.target.checked)}
+                                        className="editorial-checkbox"
+                                        required
+                                    />
+                                    <span className="editorial-consent-text">
+                                        By submitting, you agree to our{" "}
+                                        <span className="editorial-policy-link">Privacy Policy</span>.
+                                    </span>
                                 </label>
-                                <textarea
-                                    id="home-contact-message"
-                                    rows={3}
-                                    name="message"
-                                    value={formData.message}
-                                    onChange={handleChange}
-                                    placeholder="e.g. Looking for ready possession 3 BHK near IT company with 2 car parks..."
-                                    className="home-contact-textarea"
-                                />
-                            </div>
 
-                            {/* Submit Button */}
-                            <button
-                                type="submit"
-                                className="home-contact-submit-btn"
-                                disabled={isSubmitted}
-                            >
-                                {isSubmitted ? (
-                                    <>
-                                        <CheckCircle2 size={17} />
-                                        <span>Connecting to WhatsApp...</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Send size={16} />
-                                        <span>Send Inquiry via WhatsApp</span>
-                                    </>
-                                )}
-                            </button>
-                        </form>
-                    </div>
-
-                    {/* RIGHT COLUMN: Office Details, Fast-Track WhatsApp & Guarantees */}
-                    <div className="home-contact-sidebar">
-                        {/* Direct Office Address & Details Card */}
-                        <div className="home-contact-card home-contact-card--details">
-                            <div className="home-contact-card__badge home-contact-card__badge--gold">
-                                <Building2 size={13} />
-                                <span>OFFICIAL HEADQUARTERS</span>
-                            </div>
-
-                            <h4 className="home-contact-details-title">
-                                Pune Property Investors
-                            </h4>
-
-                            <div className="home-contact-info-list">
-                                {/* Address */}
-                                <div className="home-contact-info-item">
-                                    <div className="home-contact-info-icon">
-                                        <MapPin size={18} />
-                                    </div>
-                                    <div className="home-contact-info-text">
-                                        <span className="home-contact-info-label">Office Location (Headquarters)</span>
-                                        <span className="home-contact-info-val">
-                                            3rd Floor, Gera Imperium Alpha, Grant Road, Vitthal Nagar, Kharadi, Pune, Maharashtra 411014 (Headquarters)
-                                        </span>
-                                    </div>
+                                {/* Black Pill CTA Button with Circle Arrow */}
+                                <div className="editorial-actions">
+                                    <button
+                                        type="submit"
+                                        className="editorial-submit-pill"
+                                        disabled={isSubmitted || !agreed}
+                                    >
+                                        {isSubmitted ? (
+                                            <>
+                                                <CheckCircle2 size={14} />
+                                                <span>Connecting...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>Send message</span>
+                                                <span className="editorial-arrow-circle">
+                                                    <ArrowRight size={11} />
+                                                </span>
+                                            </>
+                                        )}
+                                    </button>
                                 </div>
-
-                                {/* Advisory Phone */}
-                                <div className="home-contact-info-item">
-                                    <div className="home-contact-info-icon">
-                                        <Phone size={18} />
-                                    </div>
-                                    <div className="home-contact-info-text">
-                                        <span className="home-contact-info-label">Advisory Hotline</span>
-                                        <a href={`tel:${PHONE_NUMBER}`} className="home-contact-info-link">
-                                            +91 73981 74444
-                                        </a>
-                                    </div>
-                                </div>
-
-                                {/* Email */}
-                                <div className="home-contact-info-item">
-                                    <div className="home-contact-info-icon">
-                                        <Mail size={18} />
-                                    </div>
-                                    <div className="home-contact-info-text">
-                                        <span className="home-contact-info-label">Email Support</span>
-                                        <a href="mailto:info@punepropertyinvestor.com" className="home-contact-info-link">
-                                            info@punepropertyinvestor.com
-                                        </a>
-                                    </div>
-                                </div>
-
-                                {/* Working Hours */}
-                                <div className="home-contact-info-item">
-                                    <div className="home-contact-info-icon">
-                                        <Clock size={18} />
-                                    </div>
-                                    <div className="home-contact-info-text">
-                                        <span className="home-contact-info-label">Working Hours</span>
-                                        <span className="home-contact-info-val">
-                                            Monday – Sunday: 9:30 AM – 7:30 PM
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                            </form>
                         </div>
 
-                        {/* WhatsApp Fast-Track Card */}
-                        <div className="home-contact-card home-contact-card--wa">
-                            <div className="home-contact-wa-header">
-                                <div className="home-contact-wa-icon-wrap">
-                                    <FaWhatsapp size={24} />
-                                </div>
-                                <div>
-                                    <h4 className="home-contact-wa-title">
-                                        Fast-Track WhatsApp Advisory
-                                    </h4>
-                                    <span className="home-contact-wa-badge">Instant 2-Minute Reply</span>
-                                </div>
+                        {/* RIGHT SIDE: Open Panoramic Villa View with Badges */}
+                        <div className="fold-screen-right-content">
+                            <div className="editorial-glass-pill fold-glass-pill-top">
+                                <span className="editorial-pulse-dot" />
+                                <Building2 size={11} className="text-gold" />
+                                <span>Gera Imperium Alpha, Kharadi</span>
                             </div>
-
-                            <p className="home-contact-wa-desc">
-                                Prefer an instant conversation? Tap below to chat directly with our senior Pune consultant for real-time floor plans, brochures, and price quotes.
-                            </p>
 
                             <a
                                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
@@ -356,27 +246,41 @@ export default function HomeContact({ previewData }) {
                                 )}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="home-contact-wa-btn"
+                                className="editorial-glass-pill editorial-glass-pill--wa fold-glass-pill-bottom"
                             >
-                                <FaWhatsapp size={18} />
-                                <span>Start Instant WhatsApp Chat</span>
+                                <FaWhatsapp size={14} />
+                                <span>Fast-Track Hotline: +91 73981 74444</span>
                             </a>
                         </div>
+                    </div>
+                </div>
 
-                        {/* 3 Trust Signals */}
-                        <div className="home-contact-trust-row">
-                            <div className="home-contact-trust-item">
-                                <ShieldCheck size={18} className="text-gold" />
-                                <span>100% Free Consultation</span>
-                            </div>
-                            <div className="home-contact-trust-item">
-                                <Award size={18} className="text-gold" />
-                                <span>Zero Brokerage on Direct Booking</span>
-                            </div>
-                            <div className="home-contact-trust-item">
-                                <Sparkles size={18} className="text-gold" />
-                                <span>Lowest Inaugural Price Guarantee</span>
-                            </div>
+                {/* Sub-bar: Minimal Luxury Trust & Headquarters Info */}
+                <div className="editorial-bottom-strip">
+                    <div className="editorial-strip-item">
+                        <MapPin size={14} className="text-gold" />
+                        <div>
+                            <strong>Headquarters:</strong> 3rd Floor, Gera Imperium Alpha, Kharadi, Pune
+                        </div>
+                    </div>
+                    <div className="editorial-strip-item">
+                        <Phone size={14} className="text-gold" />
+                        <div>
+                            <strong>Direct Hotline:</strong>{" "}
+                            <a href={`tel:${PHONE_NUMBER}`}>+91 73981 74444</a>
+                        </div>
+                    </div>
+                    <div className="editorial-strip-item">
+                        <Mail size={14} className="text-gold" />
+                        <div>
+                            <strong>Support:</strong>{" "}
+                            <a href="mailto:info@punepropertyinvestor.com">info@punepropertyinvestor.com</a>
+                        </div>
+                    </div>
+                    <div className="editorial-strip-item">
+                        <ShieldCheck size={14} className="text-gold" />
+                        <div>
+                            <strong>Zero Brokerage</strong> • 100% Free Consultation
                         </div>
                     </div>
                 </div>
@@ -384,4 +288,3 @@ export default function HomeContact({ previewData }) {
         </section>
     );
 }
-
