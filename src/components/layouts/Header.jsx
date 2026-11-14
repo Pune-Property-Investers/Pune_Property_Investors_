@@ -79,10 +79,6 @@ const navigationItems = [
             { label: "Join Our Team", href: "/career" },
         ],
     },
-    {
-        label: "Contact Us",
-        href: "/#home-contact",
-    },
 ];
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -338,7 +334,7 @@ function Header() {
                 </div>
 
                 <div className="mobile-drawer__content">
-                    {/* Navigation Options from Menu (Home, Properties, About Us, Blog, Career, Contact Us) */}
+                    {/* Navigation Options from Menu (Home, Properties, About Us, Blog, Career) */}
                     <nav className="mobile-drawer__nav">
                         {navigationItems.map((item) => {
                             const isDropdownOpen = openDropdown === item.label;
