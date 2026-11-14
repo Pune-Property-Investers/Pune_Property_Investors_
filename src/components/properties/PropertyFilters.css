@@ -159,12 +159,19 @@
 .property-filters__body {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
 }
 
 .property-filters__group {
     display: flex;
     flex-direction: column;
+    gap: 8px;
+}
+
+.property-filters__group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 8px;
 }
 
@@ -183,8 +190,302 @@
     flex-shrink: 0;
 }
 
+.property-filters__clear-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    background: #faf6f0;
+    border: 1px solid #dcc9b4;
+    color: #a4733b;
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 10.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.property-filters__clear-chip:hover {
+    background: #ba874a;
+    border-color: #ba874a;
+    color: #ffffff;
+}
+
 /* --------------------------------------------------------------------------
-   Chips / Pill Buttons (Location & Property Type)
+   Dropdown Trigger & Body (Hidden by default, expands on open)
+   -------------------------------------------------------------------------- */
+.property-filters__dropdown-container {
+    position: relative;
+    width: 100%;
+}
+
+.property-filters__dropdown-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid #dcd7ce;
+    background: #fbfaf8;
+    color: #1e293b;
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.property-filters__dropdown-trigger:hover {
+    border-color: #ba874a;
+    background: #ffffff;
+}
+
+.property-filters__dropdown-trigger.is-open {
+    border-color: #ba874a;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(186, 134, 74, 0.16);
+}
+
+.property-filters__dropdown-trigger.has-value {
+    border-color: #c49866;
+    background: #faf6f0;
+    color: #a4733b;
+}
+
+.property-filters__trigger-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+}
+
+.property-filters__trigger-icon {
+    color: #ba874a;
+    flex-shrink: 0;
+}
+
+.property-filters__trigger-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.property-filters__trigger-chevron {
+    color: #94a3b8;
+    flex-shrink: 0;
+    transition: transform 0.22s ease, color 0.2s ease;
+}
+
+.property-filters__trigger-chevron.is-open {
+    transform: rotate(180deg);
+    color: #ba874a;
+}
+
+.property-filters__dropdown-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 6px;
+    animation: filterDropdownIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes filterDropdownIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Search Input Inside Dropdown
+   -------------------------------------------------------------------------- */
+.property-filters__search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #fbfaf8;
+    border: 1px solid #dcd7ce;
+    border-radius: 9px;
+    padding: 6px 10px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.property-filters__search-input-wrapper:focus-within {
+    border-color: #ba874a;
+    box-shadow: 0 0 0 3px rgba(186, 134, 74, 0.16);
+    background: #ffffff;
+}
+
+.property-filters__search-icon {
+    color: #94a3b8;
+    flex-shrink: 0;
+}
+
+.property-filters__search-input-wrapper:focus-within .property-filters__search-icon {
+    color: #ba874a;
+}
+
+.property-filters__search-input {
+    width: 100%;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #0f172a;
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 11.5px;
+    font-weight: 500;
+}
+
+.property-filters__search-input::placeholder {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.property-filters__search-clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    border: none;
+    color: #475569;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.property-filters__search-clear:hover {
+    background: #cbd5e1;
+    color: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   Scroll-down Options List
+   -------------------------------------------------------------------------- */
+.property-filters__scroll-list {
+    max-height: 145px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 4px;
+    background: #fdfcfb;
+    border: 1px solid #e7e2d8;
+    border-radius: 10px;
+    box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.03);
+    scrollbar-width: thin;
+    scrollbar-color: #dcd7ce transparent;
+}
+
+.property-filters__scroll-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.property-filters__scroll-list::-webkit-scrollbar-thumb {
+    background: #dcd7ce;
+    border-radius: 4px;
+}
+
+.property-filters__list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    padding: 6px 9px;
+    border-radius: 7px;
+    border: none;
+    background: transparent;
+    color: #334155;
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+
+.property-filters__list-item:hover {
+    background: #f4eee3;
+    color: #a4733b;
+}
+
+.property-filters__list-item.is-selected {
+    background: linear-gradient(135deg, #ba874a 0%, #a4733b 100%);
+    color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(186, 134, 74, 0.3);
+}
+
+.property-filters__item-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.property-filters__item-sub {
+    font-size: 10px;
+    color: #94a3b8;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.property-filters__list-item.is-selected .property-filters__item-sub {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.property-filters__item-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9999px;
+    background: #ece7de;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.property-filters__item-badge.is-muted {
+    opacity: 0.5;
+}
+
+.property-filters__list-item.is-selected .property-filters__item-badge {
+    background: rgba(255, 255, 255, 0.28);
+    color: #ffffff;
+}
+
+.property-filters__empty-message {
+    padding: 14px 10px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 11px;
+    font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   Chips / Pill Buttons
    -------------------------------------------------------------------------- */
 .property-filters__chips {
     display: flex;
@@ -222,101 +523,18 @@
 }
 
 /* --------------------------------------------------------------------------
-   BHK Buttons Grid
+   Price Inputs & Row
    -------------------------------------------------------------------------- */
-.property-filters__bhk-buttons {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 5px;
-}
-
-.property-filters__bhk-button {
-    padding: 8px 3px;
-    border-radius: 10px;
-    background: #f7f5f0;
-    border: 1px solid #e5dfd5;
-    color: #334155;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.18s ease;
-    user-select: none;
-    white-space: nowrap;
-}
-
-.property-filters__bhk-button:hover {
-    border-color: #c49866;
-    background: #fbf9f5;
-    color: #a4733b;
-}
-
-.property-filters__bhk-button.is-selected {
-    background: linear-gradient(135deg, #ba874a 0%, #a4733b 100%);
-    border-color: #a4733b;
-    color: #ffffff;
-    box-shadow: 0 3px 10px rgba(186, 134, 74, 0.35);
-}
-
-/* --------------------------------------------------------------------------
-   Price Inputs
-   -------------------------------------------------------------------------- */
-.property-filters__price-inputs {
+.property-filters__price-row {
     display: flex;
     align-items: center;
     gap: 8px;
     width: 100%;
 }
 
-.property-filters__input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    background: #fbfaf8;
-    border: 1px solid #dcd7ce;
-    border-radius: 10px;
-    padding: 2px 8px;
+.property-filters__price-select {
     flex: 1;
     min-width: 0;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.property-filters__input-wrapper:focus-within {
-    border-color: #ba874a;
-    box-shadow: 0 0 0 3px rgba(186, 134, 74, 0.18);
-    background: #ffffff;
-}
-
-.property-filters__currency-tag {
-    font-size: 11px;
-    font-weight: 700;
-    color: #a4733b;
-    margin-right: 4px;
-    flex-shrink: 0;
-}
-
-.property-filters__input-wrapper input {
-    width: 100%;
-    min-width: 0;
-    border: none;
-    outline: none;
-    background: transparent;
-    color: #0f172a;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 7px 0;
-}
-
-.property-filters__input-wrapper input::-webkit-outer-spin-button,
-.property-filters__input-wrapper input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.property-filters__input-wrapper input[type=number] {
-    -moz-appearance: textfield;
 }
 
 .property-filters__price-to {

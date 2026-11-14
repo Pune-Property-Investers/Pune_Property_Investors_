@@ -378,6 +378,9 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                                         onReset={handleResetFilters}
                                         resultCount={filteredProperties.length}
                                         onCloseMobile={() => setMobileFiltersOpen(false)}
+                                        properties={sourceProperties}
+                                        searchQuery={searchQuery}
+                                        onSearchQueryChange={setSearchQuery}
                                     />
                                 </div>
                             </div>
