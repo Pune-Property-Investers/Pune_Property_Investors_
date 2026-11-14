@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import {
     Users,
     UserRoundCheck,
@@ -61,113 +61,167 @@ function AnimatedNumber({ target, suffix, started }) {
     );
 }
 
-export default function TrustStats({ previewData }) {
-    const activeStats =
-        Array.isArray(previewData?.stats) && previewData.stats.length > 0
-            ? previewData.stats.map((s, idx) => ({
-                  ...s,
-                  target: Number(s.target) || 0,
-                  icon: stats[idx % stats.length].icon,
-              }))
-            : stats;
-    const sectionRef = useRef(null);
-    const [started, setStarted] = useState(false);
+    function SpeedometerDottedRing({ active = false, id = 0 }) {
+        const maskId = `speedo-dots-mask-${id}`;
+        return (
+            <svg
+                className="trust-stats__speedo-dots"
+                viewBox="0 0 100 100"
+                aria-hidden="true"
+            >
+            <defs>
+                    <mask id={maskId}>
+                        <circle
+                            cx="50"
+                            cy="50"
+                            r="42"
+                            fill="none"
+                            stroke="#ffffff"
+                            strokeWidth="8"
+                            strokeLinecap="round"
+                            strokeDasharray="264"
+                            className={`trust-stats__speedo-sweep ${active ? "is-active" : ""}`}
+                        />
+                    </mask>
+                </defs>
 
-    useEffect(() => {
-        const section = sectionRef.current;
-        if (!section || started) return;
+                {/* Base faint gold dotted ring */}
+                <circle
+                    cx="50"
+                    cy="50"
+                    r="42"
+                    fill="none"
+                    stroke="#efe8dc"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeDasharray="0.1 5.5"
+                />
 
-        const triggerAnimation = () => {
-            if (section) {
-                const rect = section.getBoundingClientRect();
-                if (rect.top < window.innerHeight && rect.bottom > 0) {
-                    setStarted(true);
-                }
-            }
-        };
-
-        // Check immediately on mount in case section is already in or near viewport
-        triggerAnimation();
-
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setStarted(true);
-                    observer.disconnect();
-                }
-            },
-            { threshold: 0.02, rootMargin: "60px 0px" }
+                    {/* Active gold dots that sweep in like a speedometer accelerating */}
+            <circle
+                    cx="50"
+                    cy="50"
+                    r="42"
+                    fill="none"
+                    stroke="#a77a48"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeDasharray="0.1 5.5"
+                    mask={`url(#${maskId})`}
+                    className="trust-stats__speedo-active-dots"
+                />
+            </svg>
         );
+    }
 
-        observer.observe(section);
-        window.addEventListener("scroll", triggerAnimation, { passive: true });
+    export default function TrustStats({ previewData }) {
+        const activeStats =
+            Array.isArray(previewData?.stats) && previewData.stats.length > 0
+                ? previewData.stats.map((s, idx) => ({
+                    ...s,
+                    target: Number(s.target) || 0,
+                    icon: stats[idx % stats.length].icon,
+                }))
+                : stats;
+        const sectionRef = useRef(null);
+        const [started, setStarted] = useState(false);
 
-        return () => {
-            observer.disconnect();
-            window.removeEventListener("scroll", triggerAnimation);
-        };
-    }, [started]);
+        useEffect(() => {
+            const section = sectionRef.current;
+            if (!section || started) return;
 
-    return (
-        <section
-            ref={sectionRef}
-            className={`trust-stats ${started ? "trust-stats--visible" : ""}`}
-            aria-label="Our achievements"
-        >
-            <div className="trust-stats__inner">
-                <div className="trust-stats__heading-wrap">
-                    <span className="trust-stats__eyebrow">
-                        {previewData?.eyebrow || "OUR ACHIEVEMENTS"}
-                    </span>
+            const triggerAnimation = () => {
+                if (section) {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        setStarted(true);
+                    }
+                }
+            };
 
-                    <h2 className="trust-stats__heading">
-                        {previewData?.heading || "Trusted by Professionals Across Pune"}
-                    </h2>
+            // Check immediately on mount in case section is already in or near viewport
+            triggerAnimation();
 
-                    <span className="trust-stats__heading-line" />
-                </div>
+            const observer = new IntersectionObserver(
+                ([entry]) => {
+                    if (entry.isIntersecting) {
+                        setStarted(true);
+                        observer.disconnect();
+                    }
+                },
+                { threshold: 0.02, rootMargin: "60px 0px" }
+            );
 
-                <div className="trust-stats__grid">
-                    {activeStats.map((stat, index) => {
-                        const Icon = stat.icon;
+            observer.observe(section);
+            window.addEventListener("scroll", triggerAnimation, { passive: true });
 
-                        return (
-                            <article
-                                className="trust-stats__card"
-                                key={stat.label}
-                                style={{ "--stat-index": index }}
-                            >
-                                <div className="trust-stats__icon-ring">
-                                    <div className="trust-stats__icon">
-                                        <Icon
-                                            size={35}
-                                            strokeWidth={1.8}
-                                            aria-hidden="true"
-                                        />
+            return () => {
+                observer.disconnect();
+                window.removeEventListener("scroll", triggerAnimation);
+            };
+        }, [started]);
+
+        return (
+            <section
+                ref={sectionRef}
+                className={`trust-stats ${started ? "trust-stats--visible" : ""}`}
+                aria-label="Our achievements"
+            >
+                <div className="trust-stats__inner">
+                    <div className="trust-stats__heading-wrap">
+                        <span className="trust-stats__eyebrow">
+                            {previewData?.eyebrow || "OUR ACHIEVEMENTS"}
+                        </span>
+
+                        <h2 className="trust-stats__heading">
+                            {previewData?.heading || "Trusted by Professionals Across Pune"}
+                        </h2>
+
+                        <span className="trust-stats__heading-line" />
+                    </div>
+
+                    <div className="trust-stats__grid">
+                        {activeStats.map((stat, index) => {
+                            const Icon = stat.icon;
+
+                            return (
+                                <article
+                                    className="trust-stats__card"
+                                    key={stat.label}
+                                    style={{ "--stat-index": index }}
+                                >
+                                    <div className="trust-stats__icon-ring">
+                                        <SpeedometerDottedRing active={started} id={index} />
+                                        <div className="trust-stats__icon">
+                                            <Icon
+                                                size={26}
+                                                strokeWidth={1.8}
+                                                aria-hidden="true"
+                                            />
+                                        </div>
+                                        <span className="trust-stats__number-badge">
+                                            {String(index + 1).padStart(2, "0")}
+                                        </span>
                                     </div>
-                                    <span className="trust-stats__number-badge">
-                                        {String(index + 1).padStart(2, "0")}
-                                    </span>
-                                </div>
 
-                                <h3 className="trust-stats__value">
-                                    <AnimatedNumber
-                                        target={stat.target}
-                                        suffix={stat.suffix}
-                                        started={started}
-                                    />
-                                </h3>
+                                    <h3 className="trust-stats__value">
+                                        <AnimatedNumber
+                                            target={stat.target}
+                                            suffix={stat.suffix}
+                                            started={started}
+                                        />
+                                    </h3>
 
-                                <p className="trust-stats__label">
-                                    {stat.label}
-                                </p>
+                                    <p className="trust-stats__label">
+                                        {stat.label}
+                                    </p>
 
-                                <span className="trust-stats__accent" />
-                            </article>
-                        );
-                    })}
+                                    <span className="trust-stats__accent" />
+                                </article>
+                            );
+                        })}
+                    </div>
                 </div>
-            </div>
-        </section>
-    );
-}
+            </section>
+        );
+    }
