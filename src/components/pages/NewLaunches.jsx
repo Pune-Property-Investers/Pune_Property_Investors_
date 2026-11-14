@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
@@ -34,6 +34,7 @@ import {
     Scale,
     Heart,
     Camera,
+    BookOpen,
     IndianRupee,
     Search,
 } from "lucide-react";
@@ -192,11 +193,25 @@ export default function NewLaunches() {
     const [isMarqueePaused, setIsMarqueePaused] = useState(false);
     const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
     const [selectedLocality, setSelectedLocality] = useState("all");
-    const [viewMode, setViewMode] = useState("scroller"); // "scroller" | "grid"
+    const [viewMode, setViewMode] = useState("magazine"); // "magazine" | "grid"
     const [mobileViewMode, setMobileViewMode] = useState("carousel"); // "carousel" | "list"
     const [spotlightImgIdx, setSpotlightImgIdx] = useState(0);
     const [isSpotlightFav, setIsSpotlightFav] = useState(false);
     const [isSpotlightCompared, setIsSpotlightCompared] = useState(false);
+
+    // Magazine Dual-Screen Showcase State with Fluid Two-Phase Transitions
+    const [activeMagazineIdx, setActiveMagazineIdx] = useState(0);
+    const [magazinePhotoIdx, setMagazinePhotoIdx] = useState(0);
+    const [transitionPhase, setTransitionPhase] = useState("idle"); // "idle" | "leaving" | "entering"
+    const [transitionDir, setTransitionDir] = useState("up"); // "up" | "down"
+
+    const showcaseRef = useRef(null);
+    const wheelAccumulatorRef = useRef(0);
+    const wheelLockRef = useRef(false);
+    const wheelDecayTimerRef = useRef(null);
+    const transitionTimerRef = useRef(null);
+    const enterTimerRef = useRef(null);
+    const touchStartYRef = useRef(null);
 
     // Mobile Slider
     const mobileSliderRef = useRef(null);
@@ -227,9 +242,11 @@ export default function NewLaunches() {
         return () => clearInterval(interval);
     }, []);
 
-    // Reset spotlight image index on locality filter change
+    // Reset magazine and spotlight indices on locality filter change
     useEffect(() => {
         setSpotlightImgIdx(0);
+        setActiveMagazineIdx(0);
+        setMagazinePhotoIdx(0);
     }, [selectedLocality]);
 
     // Filter projects by locality
@@ -241,6 +258,161 @@ export default function NewLaunches() {
                 p.location?.toLowerCase().includes(selectedLocality.toLowerCase())
         );
     }, [selectedLocality]);
+
+    // Active project for Magazine Dual-Screen Showcase
+    const activeProject = filteredProjects[activeMagazineIdx] || filteredProjects[0];
+    const activeGallery = useMemo(() => {
+        if (!activeProject) return [];
+        if (activeProject.gallery && activeProject.gallery.length > 0) {
+            return activeProject.gallery;
+        }
+        return activeProject.image ? [activeProject.image] : [];
+    }, [activeProject]);
+    const activePhoto = activeGallery[magazinePhotoIdx % activeGallery.length] || activeProject?.image;
+
+    // Ultra-smooth two-phase property transition (leaving -> entering -> settle)
+    const goToMagazineProject = useCallback((newIdx, dir = "up") => {
+        if (newIdx < 0 || newIdx >= filteredProjects.length) return;
+        if (newIdx === activeMagazineIdx && transitionPhase === "idle") return;
+        if (transitionPhase !== "idle") return;
+
+        if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
+        if (enterTimerRef.current) clearTimeout(enterTimerRef.current);
+
+        setTransitionDir(dir);
+        setTransitionPhase("leaving");
+
+        // Phase 1 -> Phase 2: After 170ms graceful exit glide, switch project & start silky enter
+        transitionTimerRef.current = setTimeout(() => {
+            setActiveMagazineIdx(newIdx);
+            setMagazinePhotoIdx(0);
+            setTransitionPhase("entering");
+
+            // Phase 2 -> Settle: After 540ms, return to idle state
+            enterTimerRef.current = setTimeout(() => {
+                setTransitionPhase("idle");
+            }, 540);
+        }, 170);
+    }, [activeMagazineIdx, filteredProjects.length, transitionPhase]);
+
+    const handleNextProject = useCallback(() => {
+        if (activeMagazineIdx < filteredProjects.length - 1) {
+            goToMagazineProject(activeMagazineIdx + 1, "up");
+        } else {
+            goToMagazineProject(0, "up");
+        }
+    }, [activeMagazineIdx, filteredProjects.length, goToMagazineProject]);
+
+    const handlePrevProject = useCallback(() => {
+        if (activeMagazineIdx > 0) {
+            goToMagazineProject(activeMagazineIdx - 1, "down");
+        } else {
+            goToMagazineProject(filteredProjects.length - 1, "down");
+        }
+    }, [activeMagazineIdx, filteredProjects.length, goToMagazineProject]);
+
+    // Silky-smooth Wheel listener for mouse scroll property changing
+    useEffect(() => {
+        const el = showcaseRef.current;
+        if (!el) return;
+
+        const handleWheel = (e) => {
+            if (enquiryModalOpen) return;
+
+            // When currently animating or in cooldown, absorb continuous scroll inertia to prevent erratic jumps
+            if (wheelLockRef.current) {
+                if (e.cancelable) e.preventDefault();
+                return;
+            }
+
+            // Clear previous decay timer
+            if (wheelDecayTimerRef.current) {
+                clearTimeout(wheelDecayTimerRef.current);
+            }
+
+            // Accumulate deltaY for smooth threshold detection
+            wheelAccumulatorRef.current += e.deltaY;
+
+            // Decay accumulator after 160ms if user stops scrolling
+            wheelDecayTimerRef.current = setTimeout(() => {
+                wheelAccumulatorRef.current = 0;
+            }, 160);
+
+            // 50px delta threshold: responsive on physical mouse wheels, silky on precision trackpads
+            const SCROLL_THRESHOLD = 50;
+
+            if (wheelAccumulatorRef.current >= SCROLL_THRESHOLD) {
+                // Scroll down gesture -> next property with scroll-up effect
+                if (activeMagazineIdx < filteredProjects.length - 1) {
+                    if (e.cancelable) e.preventDefault();
+                    wheelLockRef.current = true;
+                    wheelAccumulatorRef.current = 0;
+                    goToMagazineProject(activeMagazineIdx + 1, "up");
+                    setTimeout(() => {
+                        wheelLockRef.current = false;
+                    }, 720);
+                } else {
+                    // At final property, release lock to allow natural page scroll down
+                    wheelAccumulatorRef.current = 0;
+                }
+            } else if (wheelAccumulatorRef.current <= -SCROLL_THRESHOLD) {
+                // Scroll up gesture -> previous property with scroll-down effect
+                if (activeMagazineIdx > 0) {
+                    if (e.cancelable) e.preventDefault();
+                    wheelLockRef.current = true;
+                    wheelAccumulatorRef.current = 0;
+                    goToMagazineProject(activeMagazineIdx - 1, "down");
+                    setTimeout(() => {
+                        wheelLockRef.current = false;
+                    }, 720);
+                } else {
+                    // At first property, release lock to allow natural page scroll up
+                    wheelAccumulatorRef.current = 0;
+                }
+            }
+        };
+
+        el.addEventListener("wheel", handleWheel, { passive: false });
+        return () => {
+            el.removeEventListener("wheel", handleWheel);
+            if (wheelDecayTimerRef.current) clearTimeout(wheelDecayTimerRef.current);
+            if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
+            if (enterTimerRef.current) clearTimeout(enterTimerRef.current);
+        };
+    }, [activeMagazineIdx, filteredProjects.length, enquiryModalOpen, goToMagazineProject]);
+
+    // Keyboard Arrow navigation for properties
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (enquiryModalOpen) return;
+            if (e.key === "ArrowDown" || e.key === "PageDown") {
+                handleNextProject();
+            } else if (e.key === "ArrowUp" || e.key === "PageUp") {
+                handlePrevProject();
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [enquiryModalOpen, handleNextProject, handlePrevProject]);
+
+    // Touch swipe for mobile/tablet screen change
+    const handleTouchStart = (e) => {
+        touchStartYRef.current = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e) => {
+        if (touchStartYRef.current === null) return;
+        const touchEndY = e.changedTouches[0].clientY;
+        const diff = touchStartYRef.current - touchEndY;
+        if (Math.abs(diff) > 40) {
+            if (diff > 0) {
+                handleNextProject();
+            } else {
+                handlePrevProject();
+            }
+        }
+        touchStartYRef.current = null;
+    };
 
     // Active Spotlight Project for Featured Premiere Card (Image 1 replica)
     const activeSpotlight = filteredProjects[0];
@@ -585,16 +757,16 @@ export default function NewLaunches() {
                         ))}
                     </div>
 
-                    {/* Desktop View Switcher (Live Scroller vs Grid) */}
+                    {/* Desktop View Switcher (Editorial Magazine vs Grid) */}
                     <div className="nl-view-switcher">
                         <button
                             type="button"
-                            className={`nl-view-btn ${viewMode === "scroller" ? "is-active" : ""}`}
-                            onClick={() => setViewMode("scroller")}
-                            title="Interactive Live Motion Scroller"
+                            className={`nl-view-btn ${viewMode === "magazine" ? "is-active" : ""}`}
+                            onClick={() => setViewMode("magazine")}
+                            title="Interactive Dual-Screen Editorial Magazine"
                         >
-                            <Play size={14} />
-                            <span>Motion Scroller</span>
+                            <BookOpen size={14} />
+                            <span>Editorial Magazine</span>
                         </button>
                         <button
                             type="button"
@@ -613,546 +785,335 @@ export default function NewLaunches() {
                 3. MAIN SHOWCASE: SPLIT LAYOUT (DESKTOP) & TOUCH CAROUSEL (MOBILE)
                ============================================================== */}
             <main className="nl-stage-section">
-                <div className="nl-stage-container">
-                    {/* LEFT COLUMN: STICKY HERO & SPOTLIGHT (Desktop) */}
-                    <div className="nl-left-sticky">
-                        <div className="nl-sticky-content">
-                            <span className="nl-kicker">
-                                <Sparkles size={13} /> PUNE REAL ESTATE PREMIERES
-                            </span>
+                <div className="nl-stage-container-editorial">
+                    {viewMode === "magazine" ? (
+                        /* DUAL TABLET SCREEN EDITORIAL SHOWCASE WITH VERTICAL SCROLL-UP PROPERTY CHANGING */
+                        <section
+                            className="nl-magazine-section"
+                            ref={showcaseRef}
+                            onTouchStart={handleTouchStart}
+                            onTouchEnd={handleTouchEnd}
+                            aria-label="New Launches Magazine Showcase"
+                        >
+                            {/* Top Control Bar with Vertical Stepper & Count */}
+                            <div className="nl-magazine-topbar">
+                                <div className="nl-magazine-topbar-left">
+                                    <span className="nl-magazine-kicker">
+                                        <Sparkles size={13} /> PUNE REAL ESTATE PREMIERES • DIGITAL MAGAZINE
+                                    </span>
+                                    <h2 className="nl-magazine-main-title">
+                                        Architectural Launch <em>Dossiers</em>
+                                    </h2>
+                                </div>
 
-                            <h2 className="nl-sticky-title">
-                                Why buyers love our <em>New Launches</em>
-                            </h2>
-
-                            <p className="nl-sticky-desc">
-                                A curated portfolio backed by 10+ years of Pune real estate expertise.
-                                Direct developer inventory, verified MahaRERA titles, and zero brokerage.
-                            </p>
-
-                            {/* Trust Badges */}
-                            <div className="nl-trust-badges">
-                                <span><ShieldCheck size={13} /> 100% RERA Verified</span>
-                                <span><CheckCircle2 size={13} /> 0% Brokerage</span>
-                                <span><Building2 size={13} /> Tier-1 Developers</span>
-                            </div>
-
-                            {/* Featured Highlight Visual Card (Image 1 replica for both Mobile & Laptop) */}
-                            {activeSpotlight && (
-                                <div className="nl-featured-spotlight-wrapper">
-                                    <div
-                                        className="nl-featured-spotlight"
-                                        onClick={() => openEnquiry(activeSpotlight)}
-                                        role="button"
-                                        tabIndex={0}
-                                        aria-label={`View featured premiere ${activeSpotlight.name}`}
-                                    >
-                                        {/* Full-Bleed Background Image */}
-                                        <div className="nl-spotlight-bg-wrap">
-                                            <img
-                                                key={currentSpotlightImg}
-                                                src={currentSpotlightImg}
-                                                alt={activeSpotlight.name}
-                                                className="nl-spotlight-full-img"
-                                            />
-                                            <div className="nl-spotlight-scrim" />
-                                        </div>
-
-                                        {/* Top Bar: Badges on left, glass action buttons on right */}
-                                        <div className="nl-spotlight-topbar">
-                                            <div className="nl-spotlight-top-badges">
-                                                <span className="nl-spotlight-gold-badge">
-                                                    <Sparkles size={11} /> FEATURED
-                                                </span>
-                                                <span className="nl-spotlight-pill-badge">
-                                                    {activeSpotlight.propertyType || (activeSpotlight.type ? activeSpotlight.type.replace(" Residences", "").replace(" Apartments", "").replace(" Condos", "") : "Commercial")}
-                                                </span>
-                                                <span className="nl-spotlight-count-badge">
-                                                    <Camera size={12} /> {spotlightImages.length > 0 ? `${(spotlightImgIdx % spotlightImages.length) + 1}/${spotlightImages.length}` : "1/1"}
-                                                </span>
-                                            </div>
-
-                                            <div className="nl-spotlight-top-actions">
-                                                <button
-                                                    type="button"
-                                                    className={`nl-spotlight-glass-circle ${isSpotlightCompared ? "is-active" : ""}`}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setIsSpotlightCompared((prev) => !prev);
-                                                    }}
-                                                    aria-label="Compare property"
-                                                    title={isSpotlightCompared ? "In Comparison" : "Compare"}
-                                                >
-                                                    <Scale size={14} />
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className={`nl-spotlight-glass-circle ${isSpotlightFav ? "is-fav" : ""}`}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setIsSpotlightFav((prev) => !prev);
-                                                    }}
-                                                    aria-label="Save to favorites"
-                                                    title={isSpotlightFav ? "Saved" : "Save to Wishlist"}
-                                                >
-                                                    <Heart
-                                                        size={14}
-                                                        fill={isSpotlightFav ? "#e11d48" : "none"}
-                                                        color={isSpotlightFav ? "#e11d48" : "#ffffff"}
-                                                    />
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        {/* Middle Gallery Arrows (< and >) */}
-                                        {spotlightImages.length > 1 && (
-                                            <>
-                                                <button
-                                                    type="button"
-                                                    className="nl-spotlight-nav-btn nl-spotlight-nav-btn--prev"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setSpotlightImgIdx(
-                                                            (prev) => (prev - 1 + spotlightImages.length) % spotlightImages.length
-                                                        );
-                                                    }}
-                                                    aria-label="Previous photo"
-                                                >
-                                                    <ChevronLeft size={18} />
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className="nl-spotlight-nav-btn nl-spotlight-nav-btn--next"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setSpotlightImgIdx((prev) => (prev + 1) % spotlightImages.length);
-                                                    }}
-                                                    aria-label="Next photo"
-                                                >
-                                                    <ChevronRight size={18} />
-                                                </button>
-                                            </>
-                                        )}
-
-                                        {/* Bottom Content Area */}
-                                        <div className="nl-spotlight-bottom-content">
-                                            {/* Price & Yield Tag */}
-                                            <div className="nl-spotlight-bottom-price-row">
-                                                <div className="nl-spotlight-price-group">
-                                                    <span className="nl-spotlight-main-price">{activeSpotlight.price}</span>
-                                                    <span className="nl-spotlight-sub-rate">
-                                                        {activeSpotlight.emi ? activeSpotlight.emi.replace("EMI from ", "EMI: ") : "₹22,500/sq.ft"}
-                                                    </span>
-                                                </div>
-                                                <span className="nl-spotlight-yield-badge">
-                                                    {activeSpotlight.badge ? activeSpotlight.badge.toUpperCase() : "7.8% YIELD"}
-                                                </span>
-                                            </div>
-
-                                            {/* Project Title */}
-                                            <h3 className="nl-spotlight-headline">{activeSpotlight.name}</h3>
-
-                                            {/* Subtitle / Tagline */}
-                                            <p className="nl-spotlight-tagline">
-                                                {activeSpotlight.developer} • {activeSpotlight.offer || activeSpotlight.description}
-                                            </p>
-
-                                            {/* Specs & View Details CTA (Always single row) */}
-                                            <div className="nl-spotlight-meta-row">
-                                                <div className="nl-spotlight-specs-inline">
-                                                    <span className="nl-spotlight-spec-item">
-                                                        <Maximize2 size={13} /> {activeSpotlight.area}
-                                                    </span>
-                                                    <span className="nl-spotlight-spec-divider">•</span>
-                                                    <span className="nl-spotlight-spec-item">
-                                                        <MapPin size={13} /> {activeSpotlight.location}
-                                                    </span>
-                                                </div>
-
-                                                <button
-                                                    type="button"
-                                                    className="nl-spotlight-cta-pill"
-                                                    onClick={(e) => openEnquiry(activeSpotlight, e)}
-                                                >
-                                                    <span>View Details</span>
-                                                    <ArrowRight size={13} />
-                                                </button>
-                                            </div>
-                                        </div>
+                                <div className="nl-magazine-topbar-right">
+                                    <div className="nl-mag-counter-badge">
+                                        <span className="nl-mag-counter-curr">
+                                            {String(activeMagazineIdx + 1).padStart(2, "0")}
+                                        </span>
+                                        <span className="nl-mag-counter-sep">/</span>
+                                        <span className="nl-mag-counter-total">
+                                            {String(filteredProjects.length).padStart(2, "0")}
+                                        </span>
                                     </div>
 
-                                    {/* External Carousel Dots below card (matches 2nd image exactly) */}
-                                    {spotlightImages.length > 1 && (
-                                        <div className="nl-spotlight-external-dots" role="tablist" aria-label="Photo carousel dots">
-                                            {spotlightImages.map((_, dotIdx) => (
-                                                <button
-                                                    key={dotIdx}
-                                                    type="button"
-                                                    className={`nl-spotlight-ext-dot ${
-                                                        dotIdx === (spotlightImgIdx % spotlightImages.length)
-                                                            ? "is-active"
-                                                            : ""
-                                                    }`}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setSpotlightImgIdx(dotIdx);
-                                                    }}
-                                                    aria-label={`Go to slide ${dotIdx + 1}`}
-                                                />
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            )}
+                                    <div className="nl-mag-scroll-cue" title="Mouse wheel scroll flips properties">
+                                        <span className="nl-mag-mouse-icon" aria-hidden="true">
+                                            <span className="nl-mag-mouse-wheel" />
+                                        </span>
+                                        <span className="nl-mag-mouse-label">Scroll to browse</span>
+                                    </div>
 
-                            {/* Direct Actions (Desktop) */}
-                            <div className="nl-sticky-actions">
-                                <a
-                                    href="https://wa.me/917398174444?text=Hello%20Pune%20Property%20Investors%2C%20please%20share%20all%20new%20launch%20options."
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="nl-wa-cta"
-                                >
-                                    <MessageCircle size={16} />
-                                    <span>WhatsApp VIP Concierge</span>
-                                </a>
-                                <a href="tel:+917398174444" className="nl-call-cta">
-                                    <PhoneCall size={15} />
-                                    <span>+91 73981 74444</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* MOBILE-ONLY: TOUCH CAROUSEL & EXPANDABLE LIST */}
-                    <div className="nl-mobile-showcase-wrapper">
-                        <div className="nl-mobile-showcase-header">
-                            <div>
-                                <span className="nl-mobile-subkicker">
-                                    SHOWING {filteredProjects.length} PREMIERES
-                                </span>
-                                <h3 className="nl-mobile-heading">Upcoming & Active Launches</h3>
-                            </div>
-                            <div className="nl-mobile-toggles">
-                                <div className="nl-mobile-mode-switch">
-                                    <button
-                                        type="button"
-                                        className={`nl-mobile-mode-btn ${mobileViewMode === "carousel" ? "is-active" : ""}`}
-                                        onClick={() => setMobileViewMode("carousel")}
-                                    >
-                                        Swipe
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className={`nl-mobile-mode-btn ${mobileViewMode === "list" ? "is-active" : ""}`}
-                                        onClick={() => setMobileViewMode("list")}
-                                    >
-                                        List
-                                    </button>
-                                </div>
-                                {mobileViewMode === "carousel" && (
-                                    <div className="nl-mobile-nav-btns">
+                                    <div className="nl-mag-nav-group">
                                         <button
                                             type="button"
-                                            className="nl-mobile-nav-btn"
-                                            onClick={() => scrollMobile("prev")}
-                                            aria-label="Previous Project"
+                                            className="nl-mag-nav-btn"
+                                            onClick={handlePrevProject}
+                                            aria-label="Previous Property"
+                                            title="Previous Property (Scroll Up)"
                                         >
-                                            <ChevronLeft size={18} />
+                                            <ChevronLeft size={16} />
                                         </button>
                                         <button
                                             type="button"
-                                            className="nl-mobile-nav-btn"
-                                            onClick={() => scrollMobile("next")}
-                                            aria-label="Next Project"
+                                            className="nl-mag-nav-btn"
+                                            onClick={handleNextProject}
+                                            aria-label="Next Property"
+                                            title="Next Property (Scroll Down)"
                                         >
-                                            <ChevronRight size={18} />
+                                            <ChevronRight size={16} />
                                         </button>
                                     </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Swipeable Snap Track or Vertical List */}
-                        <div
-                            className={`nl-mobile-slider-track ${mobileViewMode === "list" ? "nl-mobile-slider-track--list" : ""}`}
-                            ref={mobileSliderRef}
-                            onScroll={handleMobileScroll}
-                        >
-                            {filteredProjects.map((project) => (
-                                <article
-                                    key={`mobile-${project.id}`}
-                                    className="nl-mobile-card"
-                                    onClick={() => openEnquiry(project)}
-                                >
-                                    {/* Image with Badges */}
-                                    <div className="nl-mobile-card__media">
-                                        <img
-                                            src={project.image}
-                                            alt={project.name}
-                                            className="nl-mobile-card__img"
-                                            loading="lazy"
-                                        />
-                                        <div className="nl-mobile-card__overlay" />
-                                        <span className="nl-mobile-card__dev-pill">
-                                            <Building2 size={11} /> {project.developer}
-                                        </span>
-                                        <span className="nl-mobile-card__rera-pill">
-                                            <ShieldCheck size={11} /> RERA: {project.rera}
-                                        </span>
-                                        <span className="nl-mobile-card__status-pill">
-                                            {project.status}
-                                        </span>
-                                    </div>
-
-                                    {/* Body */}
-                                    <div className="nl-mobile-card__body">
-                                        <div className="nl-mobile-card__header">
-                                            <h4 className="nl-mobile-card__title">{project.name}</h4>
-                                            <p className="nl-mobile-card__loc">
-                                                <MapPin size={12} /> {project.location}
-                                            </p>
-                                        </div>
-
-                                        {/* Specs Row */}
-                                        <div className="nl-mobile-card__specs">
-                                            <span><Bed size={12} /> {project.configuration}</span>
-                                            <span><Maximize2 size={11} /> {project.area}</span>
-                                            <span><Calendar size={11} /> {project.possession}</span>
-                                        </div>
-
-                                        {/* Special Offer Pill */}
-                                        {project.offer && (
-                                            <div className="nl-mobile-card__offer">
-                                                <span>⚡ {project.offer}</span>
-                                            </div>
-                                        )}
-
-                                        {/* Highlights */}
-                                        <div className="nl-mobile-card__highlights">
-                                            {project.highlights?.slice(0, 3).map((h, i) => (
-                                                <span key={i}>• {h}</span>
-                                            ))}
-                                        </div>
-
-                                        {/* Footer */}
-                                        <div className="nl-mobile-card__footer">
-                                            <div className="nl-mobile-card__price-box">
-                                                <span className="nl-mobile-card__price-label">Pre-Launch Price</span>
-                                                <strong className="nl-mobile-card__price">{project.price}</strong>
-                                                <small className="nl-mobile-card__emi">{project.emi}</small>
-                                            </div>
-                                            <button
-                                                type="button"
-                                                className="nl-mobile-card__action-btn"
-                                                onClick={(e) => openEnquiry(project, e)}
-                                            >
-                                                <span>Enquire</span>
-                                                <ArrowRight size={13} />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </article>
-                            ))}
-                        </div>
-
-                        {/* Mobile Pagination Counter & Dots (Carousel mode only) */}
-                        {mobileViewMode === "carousel" && (
-                            <div className="nl-mobile-pagination">
-                                <span className="nl-mobile-counter">
-                                    <strong>{String(activeMobileIdx + 1).padStart(2, "0")}</strong> /{" "}
-                                    {String(filteredProjects.length).padStart(2, "0")}
-                                </span>
-                                <div className="nl-mobile-dots">
-                                    {filteredProjects.map((_, dotIdx) => (
-                                        <span
-                                            key={dotIdx}
-                                            className={`nl-mobile-dot ${
-                                                activeMobileIdx === dotIdx ? "nl-mobile-dot--active" : ""
-                                            }`}
-                                        />
-                                    ))}
                                 </div>
                             </div>
-                        )}
-                    </div>
 
-                    {/* ==============================================================
-                        DESKTOP SHOWCASE (Scroller vs Grid)
-                       ============================================================== */}
-                    {viewMode === "scroller" ? (
-                        /* DUAL VERTICAL MARQUEE (Up & Down Counter-Scroll with Full Details) */
-                        <div
-                            className={`nl-right-marquee-wrapper ${
-                                isMarqueePaused ? "nl-right-marquee-wrapper--paused" : ""
-                            }`}
-                            onMouseEnter={() => setIsMarqueePaused(true)}
-                            onMouseLeave={() => setIsMarqueePaused(false)}
-                        >
-                            {/* Column 1: Smooth Vertical Scroll UP */}
-                            <div className="nl-marquee-col nl-marquee-col--up">
-                                <div className="nl-marquee-track nl-marquee-track--up">
-                                    {col1Duplicated.map((project, idx) => (
-                                        <article
-                                            key={`col1-${project.id}-${idx}`}
-                                            className="nl-project-card"
-                                            onClick={() => openEnquiry(project)}
-                                        >
-                                            {/* Photo banner */}
-                                            <div className="nl-card-photo-wrap">
+                            {/* DUAL TABLETS STAGE (Side by side screens as in reference image) */}
+                            <div className={`nl-tablets-stage nl-trans-${transitionPhase} nl-dir-${transitionDir}`}>
+                                
+                                {/* SCREEN 1: PROPERTY IMAGE SCREEN (Left Tablet) */}
+                                <div className="nl-tablet nl-tablet--visual">
+                                    <div className="nl-tablet-bezel">
+                                        <div className="nl-tablet-camera-notch" />
+                                        
+                                        <div className="nl-tablet-screen nl-visual-screen">
+                                            {/* Luxury Full-Bleed Property Photo */}
+                                            <div className="nl-visual-screen__photo-wrap">
                                                 <img
-                                                    src={project.image}
-                                                    alt={project.name}
-                                                    className="nl-card-photo"
-                                                    loading="lazy"
+                                                    key={`${activeProject?.id}-${activePhoto}`}
+                                                    src={activePhoto}
+                                                    alt={activeProject?.name}
+                                                    className="nl-visual-screen__img"
                                                 />
-                                                <div className="nl-card-photo-overlay" />
-                                                <span className="nl-card-status-badge">
-                                                    {project.status}
-                                                </span>
-                                                <span className="nl-card-rera-badge">
-                                                    <ShieldCheck size={11} /> {project.rera}
+                                                <div className="nl-visual-screen__scrim" />
+                                            </div>
+
+                                            {/* Screen Header: Brand & Location */}
+                                            <div className="nl-visual-screen__topbar">
+                                                <div className="nl-visual-screen__brand">
+                                                    <Building2 size={16} />
+                                                    <span>Pune Property Investors</span>
+                                                </div>
+                                                <span className="nl-visual-screen__cat-tag">
+                                                    {activeProject?.type}
                                                 </span>
                                             </div>
 
-                                            <div className="nl-card-content">
-                                                <div className="nl-card-header">
-                                                    <div className="nl-developer-badge">
-                                                        <Building2 size={13} />
-                                                        <span>{project.developer}</span>
+                                            {/* Top Status & RERA Pills */}
+                                            <div className="nl-visual-screen__badges">
+                                                <span className="nl-vis-pill nl-vis-pill--dev">
+                                                    <Building2 size={12} /> {activeProject?.developer}
+                                                </span>
+                                                <span className="nl-vis-pill nl-vis-pill--rera">
+                                                    <ShieldCheck size={12} /> RERA: {activeProject?.rera}
+                                                </span>
+                                            </div>
+
+                                            {/* Screen Bottom: Editorial Title & Magazine Overlay */}
+                                            <div className="nl-visual-screen__bottom">
+                                                <div className="nl-vis-eyebrow">
+                                                    <FileText size={12} />
+                                                    <span>PDF Report • Digital Dossier • 100% Verified</span>
+                                                </div>
+
+                                                <h3 className="nl-vis-title">
+                                                    {activeProject?.name}
+                                                    <span>{activeProject?.location}</span>
+                                                </h3>
+
+                                                <p className="nl-vis-desc">
+                                                    {activeProject?.description}
+                                                </p>
+
+                                                {/* Gallery Photo Thumbnails Switcher */}
+                                                {activeGallery.length > 1 && (
+                                                    <div className="nl-vis-gallery-bar">
+                                                        <span className="nl-vis-gallery-label">
+                                                            <Camera size={12} /> Gallery ({magazinePhotoIdx + 1}/{activeGallery.length}):
+                                                        </span>
+                                                        <div className="nl-vis-gallery-dots">
+                                                            {activeGallery.map((thumb, tIdx) => (
+                                                                <button
+                                                                    key={tIdx}
+                                                                    type="button"
+                                                                    className={`nl-vis-thumb-btn ${tIdx === magazinePhotoIdx ? "is-active" : ""}`}
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        setMagazinePhotoIdx(tIdx);
+                                                                    }}
+                                                                    aria-label={`View photo ${tIdx + 1}`}
+                                                                >
+                                                                    <img src={thumb} alt="" />
+                                                                </button>
+                                                            ))}
+                                                        </div>
                                                     </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* SCREEN 2: PROPERTY DETAILS & Q&A DOSSIER (Right Tablet) */}
+                                <div className="nl-tablet nl-tablet--details">
+                                    <div className="nl-tablet-bezel">
+                                        <div className="nl-tablet-camera-notch" />
+
+                                        <div className="nl-tablet-screen nl-details-screen">
+                                            
+                                            {/* LEFT SUB-COLUMN: CREAM EDITORIAL Q&A & SPECS */}
+                                            <div className="nl-details-screen__main">
+                                                
+                                                {/* Header matching Q&A reference */}
+                                                <div className="nl-dossier-header">
+                                                    <span className="nl-dossier-qna-watermark">Q&amp;A</span>
+                                                    <h4 className="nl-dossier-title">
+                                                        {activeProject?.name}
+                                                    </h4>
+                                                    <p className="nl-dossier-sub">
+                                                        Verified pre-launch metrics, configurations, and developer privileges.
+                                                    </p>
                                                 </div>
 
-                                                <div className="nl-card-details">
-                                                    <h4 className="nl-card-title">{project.name}</h4>
-                                                    <span className="nl-card-loc">
-                                                        <MapPin size={12} /> {project.location}
-                                                    </span>
-                                                </div>
-
-                                                {/* Specs */}
-                                                <div className="nl-card-specs-row">
-                                                    <span><Bed size={13} /> {project.configuration}</span>
-                                                    <span><Maximize2 size={12} /> {project.area}</span>
-                                                    <span><Calendar size={12} /> {project.possession}</span>
+                                                {/* Key Specifications Grid */}
+                                                <div className="nl-dossier-specs-grid">
+                                                    <div className="nl-dossier-spec-card">
+                                                        <Bed size={15} />
+                                                        <div>
+                                                            <label>Configuration</label>
+                                                            <strong>{activeProject?.configuration}</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div className="nl-dossier-spec-card">
+                                                        <Maximize2 size={15} />
+                                                        <div>
+                                                            <label>Carpet Area</label>
+                                                            <strong>{activeProject?.area}</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div className="nl-dossier-spec-card">
+                                                        <Calendar size={15} />
+                                                        <div>
+                                                            <label>Possession</label>
+                                                            <strong>{activeProject?.possession}</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div className="nl-dossier-spec-card">
+                                                        <Layers size={15} />
+                                                        <div>
+                                                            <label>Structure</label>
+                                                            <strong>{activeProject?.towers}</strong>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                                 {/* Pre-launch Offer Banner */}
-                                                {project.offer && (
-                                                    <div className="nl-card-offer">
-                                                        <span>⚡ {project.offer}</span>
+                                                {activeProject?.offer && (
+                                                    <div className="nl-dossier-offer-pill">
+                                                        <span>⚡ {activeProject.offer}</span>
                                                     </div>
                                                 )}
 
-                                                {/* Curated Highlights */}
-                                                <div className="nl-card-highlights">
-                                                    {project.highlights?.slice(0, 3).map((h, i) => (
-                                                        <span key={i} className="nl-card-tag">{h}</span>
-                                                    ))}
+                                                {/* Q&A Section (Exact replica of user's uploaded reference) */}
+                                                <div className="nl-dossier-qna-list">
+                                                    <div className="nl-dossier-qna-item">
+                                                        <h5>How long until possession for this property?</h5>
+                                                        <p>
+                                                            Possession is scheduled for {activeProject?.possession} under MahaRERA certificate #{activeProject?.rera}.
+                                                        </p>
+                                                    </div>
+
+                                                    <div className="nl-dossier-qna-item">
+                                                        <h5>What pre-launch discounts are available?</h5>
+                                                        <p>
+                                                            Direct developer allotment with price locked 10–18% below general public launch rates, with zero floor rise.
+                                                        </p>
+                                                    </div>
+
+                                                    <div className="nl-dossier-qna-item">
+                                                        <h5>Is there any brokerage or service commission?</h5>
+                                                        <p>
+                                                            Zero brokerage. All buyer consultations, documentation, and VIP chauffeur site visits are 100% complimentary.
+                                                        </p>
+                                                    </div>
                                                 </div>
 
-                                                <div className="nl-card-footer">
-                                                    <div className="nl-card-price-block">
-                                                        <span className="nl-card-price">{project.price}</span>
-                                                        <span className="nl-card-emi">{project.emi}</span>
-                                                    </div>
-                                                    <button
-                                                        type="button"
-                                                        className="nl-card-action-btn"
-                                                        onClick={(e) => openEnquiry(project, e)}
-                                                    >
-                                                        <span>Pre-Launch Price</span>
-                                                        <ArrowRight size={13} />
-                                                    </button>
+                                                {/* Verified Highlights */}
+                                                <div className="nl-dossier-tags">
+                                                    {activeProject?.highlights?.map((h, i) => (
+                                                        <span key={i} className="nl-dossier-tag">
+                                                            <Check size={12} /> {h}
+                                                        </span>
+                                                    ))}
                                                 </div>
                                             </div>
-                                        </article>
-                                    ))}
+
+                                            {/* RIGHT SUB-COLUMN: DARK LUXURY VIP SIDEBAR (Reference Image Dark Column) */}
+                                            <div className="nl-details-screen__sidebar">
+                                                <div className="nl-sidebar-brand-box">
+                                                    <Building2 size={18} />
+                                                    <div>
+                                                        <strong>{activeProject?.developer}</strong>
+                                                        <span>Strategic Partner</span>
+                                                    </div>
+                                                </div>
+
+                                                {/* Dark Column Photo Preview */}
+                                                <div className="nl-sidebar-media-preview">
+                                                    <img src={activeProject?.image} alt={activeProject?.name} />
+                                                    <div className="nl-sidebar-media-overlay">
+                                                        <span>100% RERA VERIFIED</span>
+                                                    </div>
+                                                </div>
+
+                                                {/* Price Card */}
+                                                <div className="nl-sidebar-price-card">
+                                                    <span className="nl-sidebar-price-label">Introductory Price</span>
+                                                    <strong className="nl-sidebar-main-price">{activeProject?.price}</strong>
+                                                    <span className="nl-sidebar-emi">{activeProject?.emi}</span>
+                                                </div>
+
+                                                {/* Contact Information & Concierge */}
+                                                <div className="nl-sidebar-contact-info">
+                                                    <div className="nl-sidebar-info-row">
+                                                        <PhoneCall size={14} />
+                                                        <span>+91 73981 74444</span>
+                                                    </div>
+                                                    <div className="nl-sidebar-info-row">
+                                                        <Car size={14} />
+                                                        <span>Complimentary VIP Cab Visit</span>
+                                                    </div>
+                                                    <div className="nl-sidebar-info-row">
+                                                        <MapPin size={14} />
+                                                        <span>{activeProject?.location}</span>
+                                                    </div>
+                                                </div>
+
+                                                {/* Action Buttons */}
+                                                <div className="nl-sidebar-actions">
+                                                    <button
+                                                        type="button"
+                                                        className="nl-sidebar-primary-btn"
+                                                        onClick={() => openEnquiry(activeProject)}
+                                                    >
+                                                        <span>Get Pre-Launch Price &amp; Floor Plan</span>
+                                                        <ArrowRight size={14} />
+                                                    </button>
+
+                                                    <a
+                                                        href={`https://wa.me/917398174444?text=Hi%20Pune%20Property%20Investors%2C%20please%20share%20VIP%20allotment%20details%20for%20${encodeURIComponent(activeProject?.name || "Exclusive Pune Launch")}.`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="nl-sidebar-wa-btn"
+                                                    >
+                                                        <MessageCircle size={15} />
+                                                        <span>WhatsApp VIP Concierge</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Column 2: Smooth Vertical Scroll DOWN */}
-                            <div className="nl-marquee-col nl-marquee-col--down">
-                                <div className="nl-marquee-track nl-marquee-track--down">
-                                    {col2Duplicated.map((project, idx) => (
-                                        <article
-                                            key={`col2-${project.id}-${idx}`}
-                                            className="nl-project-card"
-                                            onClick={() => openEnquiry(project)}
+                            {/* Project Stepper Strip along Bottom */}
+                            <div className="nl-magazine-bottom-strip">
+                                <span className="nl-strip-label">SELECT PROPERTY:</span>
+                                <div className="nl-strip-items">
+                                    {filteredProjects.map((proj, pIdx) => (
+                                        <button
+                                            key={proj.id}
+                                            type="button"
+                                            className={`nl-strip-item ${pIdx === activeMagazineIdx ? "is-active" : ""}`}
+                                            onClick={() => goToMagazineProject(pIdx, pIdx > activeMagazineIdx ? "up" : "down")}
                                         >
-                                            {/* Photo banner */}
-                                            <div className="nl-card-photo-wrap">
-                                                <img
-                                                    src={project.image}
-                                                    alt={project.name}
-                                                    className="nl-card-photo"
-                                                    loading="lazy"
-                                                />
-                                                <div className="nl-card-photo-overlay" />
-                                                <span className="nl-card-status-badge">
-                                                    {project.status}
-                                                </span>
-                                                <span className="nl-card-rera-badge">
-                                                    <ShieldCheck size={11} /> {project.rera}
-                                                </span>
-                                            </div>
-
-                                            <div className="nl-card-content">
-                                                <div className="nl-card-header">
-                                                    <div className="nl-developer-badge">
-                                                        <Building2 size={13} />
-                                                        <span>{project.developer}</span>
-                                                    </div>
-                                                </div>
-
-                                                <div className="nl-card-details">
-                                                    <h4 className="nl-card-title">{project.name}</h4>
-                                                    <span className="nl-card-loc">
-                                                        <MapPin size={12} /> {project.location}
-                                                    </span>
-                                                </div>
-
-                                                {/* Specs */}
-                                                <div className="nl-card-specs-row">
-                                                    <span><Bed size={13} /> {project.configuration}</span>
-                                                    <span><Maximize2 size={12} /> {project.area}</span>
-                                                    <span><Calendar size={12} /> {project.possession}</span>
-                                                </div>
-
-                                                {/* Pre-launch Offer Banner */}
-                                                {project.offer && (
-                                                    <div className="nl-card-offer">
-                                                        <span>⚡ {project.offer}</span>
-                                                    </div>
-                                                )}
-
-                                                {/* Curated Highlights */}
-                                                <div className="nl-card-highlights">
-                                                    {project.highlights?.slice(0, 3).map((h, i) => (
-                                                        <span key={i} className="nl-card-tag">{h}</span>
-                                                    ))}
-                                                </div>
-
-                                                <div className="nl-card-footer">
-                                                    <div className="nl-card-price-block">
-                                                        <span className="nl-card-price">{project.price}</span>
-                                                        <span className="nl-card-emi">{project.emi}</span>
-                                                    </div>
-                                                    <button
-                                                        type="button"
-                                                        className="nl-card-action-btn"
-                                                        onClick={(e) => openEnquiry(project, e)}
-                                                    >
-                                                        <span>Pre-Launch Price</span>
-                                                        <ArrowRight size={13} />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </article>
+                                            <span className="nl-strip-item-num">{String(pIdx + 1).padStart(2, "0")}</span>
+                                            <span className="nl-strip-item-name">{proj.name}</span>
+                                            <span className="nl-strip-item-loc">• {proj.areaLocality || proj.location}</span>
+                                        </button>
                                     ))}
                                 </div>
                             </div>
-                        </div>
+                        </section>
                     ) : (
                         /* CURATED GRID VIEW (2 Columns on Laptop/Desktop) */
                         <div className="nl-desktop-grid-wrapper">

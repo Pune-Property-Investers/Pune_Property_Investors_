@@ -34,9 +34,10 @@ const bhkOptions = [
 
 const propertyTypes = [
     { label: "All Types", value: "all" },
-    { label: "Apartment", value: "Apartment" },
+    { label: "New Launches", value: "new-launch" },
+    { label: "Apartments", value: "Apartment" },
     { label: "Commercial", value: "Commercial" },
-    { label: "Plot / Land", value: "Plot" },
+    { label: "Plots & Land", value: "Plot" },
 ];
 
 function PropertyFilters({

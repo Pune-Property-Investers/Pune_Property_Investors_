@@ -51,7 +51,7 @@ const navigationItems = [
         href: "/buy",
         dropdown: [
             { label: "All Properties", href: "/buy" },
-            { label: "New Launches", href: "/new-launches" },
+            { label: "New Launches", href: "/buy?type=new-launch" },
             { label: "Commercial Properties", href: "/commercial" },
             { label: "Plots & Land", href: "/plots" },
         ],
