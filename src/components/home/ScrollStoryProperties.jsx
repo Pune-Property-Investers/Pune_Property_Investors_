@@ -2,18 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import {
-    X,
-    MapPin,
-    Building2,
-    Calendar,
-    Layers,
-    DollarSign,
-    ExternalLink,
-    ChevronDown,
-    ArrowUpRight,
-    Sparkles,
-} from "lucide-react";
+import { X } from "lucide-react";
 import "./ScrollStoryProperties.css";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -95,7 +84,6 @@ export default function ScrollStoryProperties({ previewData = null }) {
     const [progress, setProgress] = useState(0); // 0 to 1 across the container
     const [activeIndex, setActiveIndex] = useState(0);
     const [transitionRatio, setTransitionRatio] = useState(0); // 0 to 1 between activeIndex and next
-    const [showNav, setShowNav] = useState(false);
     const [selectedProperty, setSelectedProperty] = useState(null);
     const [isHoveringImage, setIsHoveringImage] = useState(false);
 
@@ -129,9 +117,6 @@ export default function ScrollStoryProperties({ previewData = null }) {
 
                     setActiveIndex(currIdx);
                     setTransitionRatio(ratio);
-
-                    // Show sticky navbar around stage 2/3 (progress > 0.35)
-                    setShowNav(rawProgress > 0.35);
 
                     ticking = false;
                 });

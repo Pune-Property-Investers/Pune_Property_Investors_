@@ -48,6 +48,7 @@
 @import "../components/property-details/PropertyOverview.css";
 @import "../components/property-details/PropertyGallery.css";
 @import "../components/property-details/PropertyAmenities.css";
+
 @import "../components/property-details/PropertyEnquiry.css";
 @import "../components/common/PageHeroBanner.css";
 @import "../components/common/PlaceholderPage.css";

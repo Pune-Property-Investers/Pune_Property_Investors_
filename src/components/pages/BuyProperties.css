@@ -796,8 +796,8 @@
     background: #fbfaf7; /* Solid non-transparent background */
     border-bottom: none; /* Separating line removed from search */
     box-shadow: none; /* No dividing shadow */
-    padding: 12px 0 10px;
-    margin-bottom: 28px;
+    padding: 10px 0 8px;
+    margin-bottom: 24px;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -814,7 +814,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 30px;
+    gap: 24px;
     margin-bottom: 0;
 }
 
@@ -825,9 +825,9 @@
 
 .buy-properties-section-label {
     display: inline-block;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
     color: var(--buy-gold-dark);
-    font-size: 10.5px;
+    font-size: 10px;
     font-weight: 800;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -837,16 +837,20 @@
     margin: 0;
     color: var(--buy-dark);
     font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: clamp(22px, 2.2vw, 28px);
+    font-size: clamp(20px, 1.8vw, 24px);
     font-weight: 700;
     line-height: 1.2;
 }
 
 .buy-properties-intro__text p {
-    margin: 4px 0 0;
+    margin: 2px 0 0;
     color: var(--buy-muted);
-    font-size: 13.5px;
-    line-height: 1.5;
+    font-size: 13px;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 680px;
 }
 
 /* Search input - width aligned with right aside ads column */
@@ -987,8 +991,8 @@
 .buy-properties-layout {
     display: grid;
     grid-template-columns: 280px minmax(0, 1fr) 320px;
-    align-items: start;
     gap: 26px;
+    position: relative;
 }
 
 .buy-properties-filter-column,
@@ -997,20 +1001,33 @@
     min-width: 0;
 }
 
-/* Sticky filter sidebar on desktop - maintains clean space below search tab */
+/* Sticky filter sidebar on desktop - sticks while scrolling through properties, then scrolls at the end */
 .buy-properties-filter-column {
     position: sticky;
-    top: calc(50.4px + 125px);
+    top: calc(50.4px + 105px);
     z-index: 40;
     align-self: start;
+    max-height: calc(100vh - (50.4px + 120px));
+    overflow-y: auto;
+    scrollbar-width: none;
 }
 
-/* Aside ads section stays sticky directly below the search part with clean space */
+.buy-properties-filter-column::-webkit-scrollbar {
+    display: none;
+}
+
+/* Feature properties listing flows naturally with the page */
+.buy-properties-results {
+    min-width: 0;
+}
+
+/* Aside ads section stays sticky directly below search tab with guaranteed space - no overlapping */
 .buy-properties-ad-column {
     position: sticky;
-    top: calc(50.4px + 125px);
+    top: calc(50.4px + 105px);
     z-index: 40;
     align-self: start;
+    padding-top: 6px;
 }
 
 /* Drawer backdrop is hidden on desktop */

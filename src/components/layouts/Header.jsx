@@ -100,6 +100,7 @@ function Header() {
     const pathname = usePathname();
     const normalizedPath =
         pathname === "/" ? "/" : (pathname || "/").replace(/\/+$/, "");
+    const isHome = normalizedPath === "/";
     const [menuOpen, setMenuOpen] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(null);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -177,9 +178,9 @@ function Header() {
         <>
             {/* Header Main Bar (Fixed, Luxury Scrolled State) */}
             <header
-                className={`site-header ${isScrolled ? "site-header--scrolled" : ""} ${
-                    menuOpen ? "site-header--open" : ""
-                }`}
+                className={`site-header ${isHome ? "site-header--home" : ""} ${
+                    isScrolled ? "site-header--scrolled" : ""
+                } ${menuOpen ? "site-header--open" : ""}`}
             >
                 <div className="header-container">
                     {/* Company Logo and Brand Name */}

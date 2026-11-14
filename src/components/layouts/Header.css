@@ -11,17 +11,64 @@
     width: 100%;
     margin: 0;
     padding: 0;
-    background: #0f1412; /* Non-transparent solid dark */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: #181818; /* Premium matte black */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
     transition: background 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.35s ease,
+        backdrop-filter 0.35s ease,
+        -webkit-backdrop-filter 0.35s ease;
 }
 
-.site-header--scrolled {
-    background: #090c0b; /* Non-transparent solid dark */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+.site-header--scrolled,
+.site-header--home.site-header--scrolled {
+    background: #181818; /* Premium matte black */
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Home screen 100% transparent header when at top */
+.site-header--home {
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.site-header--scrolled .header-brand__subtitle,
+.site-header--home.site-header--scrolled .header-brand__subtitle {
+    color: #c49866;
+    text-shadow: none;
+}
+
+.site-header--scrolled .header-nav-link:hover,
+.site-header--home.site-header--scrolled .header-nav-link:hover,
+.site-header--scrolled .header-dropdown-toggle:hover,
+.site-header--home.site-header--scrolled .header-dropdown-toggle:hover {
+    color: #f1d49e;
+}
+
+.site-header--scrolled .header-cta-link,
+.site-header--home.site-header--scrolled .header-cta-link {
+    background: linear-gradient(135deg, #c49866 0%, #a77a48 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(167, 122, 72, 0.35);
+}
+
+.site-header--scrolled .header-cta-link:hover,
+.site-header--home.site-header--scrolled .header-cta-link:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(167, 122, 72, 0.5);
+}
+
+.site-header--scrolled .header-cta-badge,
+.site-header--home.site-header--scrolled .header-cta-badge {
+    background: #0f172a;
+    color: #ffffff;
 }
 
 .site-header--scrolled .header-container {
