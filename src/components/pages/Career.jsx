@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import {
     Briefcase,
     MapPin,
@@ -15,47 +17,105 @@ import {
     Search,
     Sparkles,
     Filter,
-    Camera,
     PhoneCall,
     ShieldCheck,
     X,
     Building2,
     Calendar,
+    Clock,
+    Check,
+    ChevronRight,
+    HelpCircle,
+    UserCheck,
+    DollarSign,
+    GraduationCap,
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa6";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
-import CareersHero from "../careers/CareersHero";
 import { careerService } from "../../services/career.service";
 import { DEFAULT_JOBS } from "../../services/mockStore";
 import "./Career.css";
 
 const WHATSAPP_NUMBER = "917398174444";
 
+const CAREER_STATS = [
+    { value: "9+", label: "Immediate Openings", sub: "Kharadi, Dighi & Katraj" },
+    { value: "₹50K+", label: "Avg. Monthly Earning", sub: "Fixed CTC + High Incentives" },
+    { value: "6 Months", label: "Appraisal Cycle", sub: "Fast-Track Leadership" },
+    { value: "100%", label: "Direct Builder Mandates", sub: "Godrej, Lodha & Panchshil" },
+];
+
 const PERKS = [
     {
         icon: TrendingUp,
-        title: "Uncapped Earning Potential",
+        badge: "FINANCIAL GROWTH",
+        title: "Uncapped Earning & Milestone Bonuses",
         description:
-            "Industry-leading commission slabs, milestone bonuses, and regular performance incentives on top of competitive fixed salaries.",
+            "Industry-leading commission slabs, quarterly milestone bonuses, and regular performance incentives on top of guaranteed fixed salaries.",
     },
     {
         icon: Award,
-        title: "Executive Mentorship",
+        badge: "LEADERSHIP",
+        title: "Executive Mentorship by Industry Veterans",
         description:
-            "Work directly with senior real estate leaders possessing over 15+ years of transaction leadership across Pune's prime corridors.",
+            "Work directly with senior real estate transaction leaders possessing over 15+ years of closing expertise across Pune's prime luxury corridors.",
     },
     {
         icon: Users,
-        title: "Empowering Culture",
+        badge: "CULTURE",
+        title: "Empowering, Meritocratic Culture",
         description:
-            "Transparent working environment, equal opportunity, fast-track promotions, and collaborative celebrations for team milestones.",
+            "Transparent working environment, equal opportunity, fast-track promotions, strong female leadership representation, and milestone celebrations.",
     },
     {
         icon: HeartHandshake,
-        title: "Tier-1 Builder Mandates",
+        badge: "PRESTIGE",
+        title: "Exclusive Tier-1 Builder Mandates",
         description:
-            "Exclusive project mandates with Pune's premier developers (Godrej, Lodha, Panchshil, VTP, Kohinoor, Mantra) across luxury micro-markets.",
+            "Direct project mandates with Pune's premier developers (Godrej, Lodha, Panchshil, VTP, Kohinoor, Mantra) across luxury micro-markets.",
+    },
+];
+
+const HIRING_STEPS = [
+    {
+        step: "01",
+        title: "Quick Application",
+        desc: "Submit your profile via our 60-second online form or directly connect with our HR team on WhatsApp.",
+    },
+    {
+        step: "02",
+        title: "HR Screening",
+        desc: "A brief telephonic discussion with our HR team to discuss your background, compensation, and branch preference.",
+    },
+    {
+        step: "03",
+        title: "Leadership Interview",
+        desc: "In-person interaction at our Kharadi Headquarters or regional branch with our business heads.",
+    },
+    {
+        step: "04",
+        title: "Offer & Onboarding",
+        desc: "Fast-track offer release, mentorship pairing, and structured institutional sales & operations training.",
+    },
+];
+
+const FAQS = [
+    {
+        q: "Do you hire freshers or only experienced candidates?",
+        a: "We welcome both! While roles like Sr. HR and Relationship Manager require prior real estate/sales experience, positions like Telecaller, Pre-Sales, Digital Marketing, and Housekeeping welcome ambitious freshers. We provide full institutional training.",
+    },
+    {
+        q: "Which office locations will I be working from?",
+        a: "We have immediate vacancies across our Kharadi Corporate Headquarters (Gera Imperium Alpha), Dighi Branch, and Katraj Branch. Location requirements are specified per role, and we consider your commuting convenience.",
+    },
+    {
+        q: "What is the incentive and commission structure?",
+        a: "In addition to a competitive fixed monthly salary, sales and pre-sales roles receive uncapped deal-closing incentives paid promptly on project milestones, with quarterly and annual leadership rewards.",
+    },
+    {
+        q: "How fast is the interview and hiring process?",
+        a: "Our recruitment process is fast-track. Qualified applicants typically complete screening and final interviews within 3 to 5 business days, with immediate joining options available.",
     },
 ];
 
@@ -206,45 +266,92 @@ export default function Career() {
         }
     };
 
-    const handleViewDetails = (job) => {
-        if (job.department) {
-            if (job.department.toLowerCase().includes("admin") || job.department.toLowerCase().includes("operations")) {
-                setSelectedDepartment("Admin");
-            } else if (job.department.toLowerCase().includes("sales") || job.department.toLowerCase().includes("advisory")) {
-                setSelectedDepartment("Sales");
-            } else {
-                setSelectedDepartment("All");
-            }
-        }
-        setSearchQuery(job.title || "");
-        handleExplore();
-    };
-
     return (
-        <div className="career-page">
+        <div className="career-luxury-page">
             <Header transparentAtTop={true} />
 
             <main>
-                {/* Cinematic Laptop Recruitment Showcase */}
-                <CareersHero
-                    jobs={jobs}
-                    onApply={openApplyModal}
-                    onViewDetails={handleViewDetails}
-                    onExplore={handleExplore}
-                />
+                {/* 1. FLAGSHIP EDITORIAL HERO */}
+                <section className="career-hero">
+                    <div className="career-hero__bg-wrap">
+                        <Image
+                            src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2000&q=85"
+                            alt="Pune Property Investors Corporate Office"
+                            fill
+                            priority
+                            sizes="100vw"
+                            className="career-hero__bg-img"
+                        />
+                        <div className="career-hero__overlay" />
+                    </div>
 
-                <div className="container career-page__content">
-                    {/* Why Choose Us */}
-                    <section className="career-why-section">
+                    <div className="container career-hero__content">
+                        <div className="career-hero__breadcrumbs">
+                            <Link href="/">Home</Link>
+                            <span>/</span>
+                            <span className="current">Careers</span>
+                        </div>
+
+                        <div className="career-hero__eyebrow-pill">
+                            <Sparkles size={13} />
+                            <span>WE ARE HIRING • JOIN PUNE&apos;S PREMIER REAL ESTATE ADVISORY</span>
+                        </div>
+
+                        <h1 className="career-hero__title">
+                            Find Your Place. <em>Build Your Future.</em>
+                        </h1>
+
+                        <p className="career-hero__subtitle">
+                            Join our 80+ strong advisory network expanding across Kharadi HQ,
+                            Dighi, and Katraj. We offer unmatched incentive structures,
+                            mentorship by 15+ year veterans, and fast-track leadership opportunities.
+                        </p>
+
+                        <div className="career-hero__actions">
+                            <button
+                                type="button"
+                                onClick={handleExplore}
+                                className="career-hero__btn career-hero__btn--primary"
+                            >
+                                <span>Explore Open Positions</span>
+                                <ArrowRight size={16} />
+                            </button>
+                            <a
+                                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                                    "Hello HR Team, I would like to inquire about career opportunities at Pune Property Investors."
+                                )}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="career-hero__btn career-hero__btn--whatsapp"
+                            >
+                                <FaWhatsapp size={17} />
+                                <span>WhatsApp HR Desk</span>
+                            </a>
+                        </div>
+
+                        {/* Live Recruitment Metrics Card */}
+                        <div className="career-stats-card">
+                            {CAREER_STATS.map((stat) => (
+                                <div key={stat.label} className="career-stat-item">
+                                    <div className="career-stat-value">{stat.value}</div>
+                                    <div className="career-stat-label">{stat.label}</div>
+                                    <div className="career-stat-sub">{stat.sub}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                <div className="container career-body-wrap">
+                    {/* 2. WHY BUILD WITH PPI */}
+                    <section className="career-why-block">
                         <div className="career-section-header">
-                            <span className="career-eyebrow-tag">
-                                WHY PUNE PROPERTY INVESTORS
-                            </span>
-                            <h2 className="career-section-title">
-                                Grow Your Professional Journey With Pune's Trusted Real Estate Firm
+                            <span className="career-section-tag">WHY PUNE PROPERTY INVESTORS</span>
+                            <h2 className="career-section-heading">
+                                A Culture Built for <em>High Achievers.</em>
                             </h2>
-                            <p className="career-section-subtitle">
-                                We provide institutional-grade training, builder partnerships, high incentives, and modern corporate work environments across Pune.
+                            <p className="career-section-sub">
+                                We combine institutional training, builder partnerships, high commission slabs, and modern corporate work environments across Pune.
                             </p>
                         </div>
 
@@ -252,37 +359,102 @@ export default function Career() {
                             {PERKS.map((perk) => {
                                 const IconComponent = perk.icon;
                                 return (
-                                    <div
-                                        key={perk.title}
-                                        className="career-perk-card"
-                                    >
-                                        <div className="career-perk-icon">
+                                    <div key={perk.title} className="career-perk-card">
+                                        <span className="career-perk-badge">{perk.badge}</span>
+                                        <div className="career-perk-icon-box">
                                             <IconComponent size={24} />
                                         </div>
-                                        <h3 className="career-perk-title">
-                                            {perk.title}
-                                        </h3>
-                                        <p className="career-perk-desc">
-                                            {perk.description}
-                                        </p>
+                                        <h3 className="career-perk-title">{perk.title}</h3>
+                                        <p className="career-perk-desc">{perk.description}</p>
                                     </div>
                                 );
                             })}
                         </div>
                     </section>
 
-                    {/* Open Roles Section */}
+                    {/* 3. LIFE & CULTURE AT PPI */}
+                    <section className="career-culture-block">
+                        <div className="career-culture__grid">
+                            <div className="career-culture__media">
+                                <div className="career-culture-img-wrap">
+                                    <Image
+                                        src="/images/ppi-team-office.jpg"
+                                        alt="PPI Corporate Culture at Kharadi Office"
+                                        width={600}
+                                        height={450}
+                                        className="career-culture-img"
+                                    />
+                                    <div className="career-culture-pill">
+                                        <Building2 size={18} className="pill-gold" />
+                                        <div>
+                                            <strong>Gera Imperium Alpha, Kharadi</strong>
+                                            <span>Corporate Headquarters &amp; Training Academy</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="career-culture__content">
+                                <span className="career-section-tag">LIFE AT PPI</span>
+                                <h2 className="career-section-heading">
+                                    More Than a Job. <em>A Launchpad.</em>
+                                </h2>
+                                <p className="career-lead-text">
+                                    At Pune Property Investors, we believe when our people grow, our company thrives. We cultivate an energetic, transparent, and collaborative workplace where dedication is rewarded immediately.
+                                </p>
+                                <ul className="career-culture-list">
+                                    <li>
+                                        <CheckCircle2 size={18} className="check-icon" />
+                                        <span><strong>Continuous Learning:</strong> Weekly masterclasses on real estate legal due diligence, client negotiations, and RERA compliance.</span>
+                                    </li>
+                                    <li>
+                                        <CheckCircle2 size={18} className="check-icon" />
+                                        <span><strong>Meritocracy &amp; Equality:</strong> 100% transparent promotion criteria with fast-track growth into Team Lead and Branch Manager roles.</span>
+                                    </li>
+                                    <li>
+                                        <CheckCircle2 size={18} className="check-icon" />
+                                        <span><strong>Supportive Work Environment:</strong> State-of-the-art office infrastructure, CRM software, verified buyer leads, and on-site cafeteria.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* 4. HIRING PROCESS (4 STEPS) */}
+                    <section className="career-process-block">
+                        <div className="career-section-header">
+                            <span className="career-section-tag">HOW WE HIRE</span>
+                            <h2 className="career-section-heading">
+                                Simple, Transparent <em>4-Step Process.</em>
+                            </h2>
+                            <p className="career-section-sub">
+                                We value your time. Our hiring cycle is streamlined to get you started quickly.
+                            </p>
+                        </div>
+
+                        <div className="career-process-grid">
+                            {HIRING_STEPS.map((step) => (
+                                <div key={step.step} className="career-process-card">
+                                    <div className="career-process-num">{step.step}</div>
+                                    <h4 className="career-process-title">{step.title}</h4>
+                                    <p className="career-process-desc">{step.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* 5. INTERACTIVE VACANCIES MATRIX (#open-roles) */}
                     <section className="career-openings-section" id="open-roles">
                         <div className="career-openings-header">
                             <div>
-                                <span className="career-eyebrow-tag">
+                                <span className="career-section-tag">
                                     CURRENT VACANCIES ({filteredJobs.length})
                                 </span>
-                                <h2 className="career-openings-title">
-                                    Explore Immediate Open Positions
+                                <h2 className="career-section-heading">
+                                    Explore Immediate <em>Open Positions.</em>
                                 </h2>
                                 <p className="career-openings-sub">
-                                    All roles are editable and managed via our live recruitment desk.
+                                    All roles are active and managed directly by our Kharadi recruitment desk.
                                 </p>
                             </div>
 
@@ -291,11 +463,11 @@ export default function Career() {
                                 className="career-email-link"
                             >
                                 <Mail size={16} />
-                                Send CV directly via Email
+                                <span>Send CV via Email</span>
                             </a>
                         </div>
 
-                        {/* Interactive Filter Matrix */}
+                        {/* Filter Matrix */}
                         <div className="career-filters-wrap">
                             {/* Department Tabs */}
                             <div className="career-dept-tabs">
@@ -321,7 +493,7 @@ export default function Career() {
                                 <div className="career-loc-pills">
                                     {[
                                         { id: "All", label: "All Locations" },
-                                        { id: "Kharadi", label: "📍 Kharadi" },
+                                        { id: "Kharadi", label: "📍 Kharadi (HQ)" },
                                         { id: "Dighi", label: "📍 Dighi" },
                                         { id: "Katraj", label: "📍 Katraj" },
                                     ].map((loc) => (
@@ -341,7 +513,7 @@ export default function Career() {
                                     <Search size={16} className="career-search-icon" />
                                     <input
                                         type="text"
-                                        placeholder="Search by role, keyword, or branch..."
+                                        placeholder="Search role, keyword, branch..."
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                         className="career-search-input"
@@ -351,6 +523,7 @@ export default function Career() {
                                             type="button"
                                             onClick={() => setSearchQuery("")}
                                             className="career-search-clear"
+                                            aria-label="Clear search"
                                         >
                                             <X size={14} />
                                         </button>
@@ -364,7 +537,7 @@ export default function Career() {
                             <div className="career-no-roles">
                                 <Briefcase size={44} className="career-no-roles-icon" />
                                 <h3>No openings found matching your filter criteria.</h3>
-                                <p>Try selecting "All Openings" or clear your search keyword.</p>
+                                <p>Try selecting &quot;All Openings&quot; or clear your search keyword.</p>
                                 <button
                                     type="button"
                                     onClick={() => {
@@ -374,414 +547,310 @@ export default function Career() {
                                     }}
                                     className="career-reset-btn"
                                 >
-                                    View All Positions
+                                    Reset Filters
                                 </button>
                             </div>
                         ) : (
-                            <div className="career-roles-grid">
-                                {filteredJobs.map((role) => (
-                                    <article key={role.id} className="career-role-card">
-                                        {/* Card Media Header */}
-                                        <div className="career-role-media-wrap">
-                                            {role.image ? (
-                                                <img
-                                                    src={role.image}
-                                                    alt={role.title}
-                                                    className="career-role-thumb"
-                                                />
-                                            ) : (
-                                                <div className="career-role-thumb-placeholder">
-                                                    <Building2 size={36} />
-                                                </div>
-                                            )}
-                                            <span className="career-role-hiring-badge">
-                                                Actively Hiring
-                                            </span>
-                                        </div>
+                            <div className="career-jobs-grid">
+                                {filteredJobs.map((job) => {
+                                    const isFemaleCriteria =
+                                        (job.genderCriteria || "").toLowerCase().includes("female");
 
-                                        <div className="career-role-body">
-                                            {/* Department & Employment Type */}
-                                            <div className="career-role-top">
-                                                <span className="career-role-dept">
-                                                    {role.department || "Advisory"}
-                                                </span>
-                                                <span className="career-role-type">
-                                                    {role.type || "Full Time"}
+                                    return (
+                                        <div key={job.id} className="career-job-card">
+                                            {/* Job Header */}
+                                            <div className="career-job-card__header">
+                                                <div className="career-job-dept-pill">
+                                                    {job.department || "Open Role"}
+                                                </div>
+                                                <span className="career-job-type">
+                                                    {job.type || "Full-time"}
                                                 </span>
                                             </div>
 
-                                            {/* Role Title */}
-                                            <h3 className="career-role-title">
-                                                {role.title}
-                                            </h3>
+                                            {/* Job Title */}
+                                            <h3 className="career-job-title">{job.title}</h3>
 
-                                            {/* Metadata chips: Location & Experience */}
-                                            <div className="career-role-meta">
-                                                <span className="career-role-meta-item location-chip">
-                                                    <MapPin size={14} />
-                                                    {role.location}
-                                                </span>
-                                                <span className="career-role-meta-item exp-chip">
-                                                    <Briefcase size={14} />
-                                                    {role.experience || "1–3 Years"}
-                                                </span>
+                                            {/* Meta Tags */}
+                                            <div className="career-job-meta-row">
+                                                <div className="career-meta-tag">
+                                                    <MapPin size={13} className="meta-icon" />
+                                                    <span>{job.location}</span>
+                                                </div>
+                                                {job.experience && (
+                                                    <div className="career-meta-tag">
+                                                        <Clock size={13} className="meta-icon" />
+                                                        <span>{job.experience}</span>
+                                                    </div>
+                                                )}
+                                                {job.genderCriteria && (
+                                                    <div
+                                                        className={`career-meta-tag ${isFemaleCriteria ? "career-meta-tag--gender" : ""
+                                                            }`}
+                                                    >
+                                                        <Sparkles size={12} className="meta-icon" />
+                                                        <span>{job.genderCriteria}</span>
+                                                    </div>
+                                                )}
                                             </div>
 
-                                            {/* Gender / Eligibility Criteria Highlight */}
-                                            {role.genderCriteria && (
-                                                <div
-                                                    className={`career-gender-badge ${role.genderCriteria.toLowerCase().includes("female")
-                                                        ? "female-specific"
-                                                        : "open-criteria"
-                                                        }`}
-                                                >
-                                                    <Sparkles size={13} />
-                                                    <span>{role.genderCriteria}</span>
+                                            {/* Salary Banner */}
+                                            {job.salary && (
+                                                <div className="career-job-salary">
+                                                    <DollarSign size={15} />
+                                                    <span>{job.salary}</span>
                                                 </div>
                                             )}
 
-                                            {/* Salary info if provided */}
-                                            {role.salary && (
-                                                <div className="career-salary-tag">
-                                                    <span>Compensation:</span> {role.salary}
+                                            {/* Description Snippet */}
+                                            <p className="career-job-desc">{job.description}</p>
+
+                                            {/* Requirements Note */}
+                                            {job.requirements && (
+                                                <div className="career-job-req">
+                                                    <strong>Ideal Candidate:</strong> {job.requirements}
                                                 </div>
                                             )}
 
-                                            {/* Description */}
-                                            <p className="career-role-desc">
-                                                {role.description}
-                                            </p>
-
-                                            {/* Key Requirements */}
-                                            {role.requirements && (
-                                                <div className="career-role-reqs-box">
-                                                    <strong>Key Criteria:</strong>
-                                                    <p>{role.requirements}</p>
-                                                </div>
-                                            )}
-
-                                            {/* Actions */}
-                                            <div className="career-role-actions-row">
+                                            {/* Card Action Buttons */}
+                                            <div className="career-job-card__actions">
                                                 <a
-                                                    href={getWhatsAppApplyUrl(role)}
+                                                    href={getWhatsAppApplyUrl(job)}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="career-whatsapp-apply-btn"
+                                                    className="career-action-btn career-action-btn--whatsapp"
                                                 >
                                                     <FaWhatsapp size={16} />
-                                                    Apply via WhatsApp
+                                                    <span>WhatsApp HR</span>
                                                 </a>
                                                 <button
                                                     type="button"
-                                                    onClick={() => openApplyModal(role)}
-                                                    className="career-online-apply-btn"
+                                                    onClick={() => openApplyModal(job)}
+                                                    className="career-action-btn career-action-btn--apply"
                                                 >
-                                                    Apply Online
+                                                    <span>Apply Online</span>
                                                     <ArrowRight size={14} />
                                                 </button>
                                             </div>
                                         </div>
-                                    </article>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
+                    </section>
 
-                        {/* Open Application Desk Form */}
-                        <div className="career-form-card">
-                            <div className="career-form-header">
-                                <span className="career-eyebrow-tag">OPEN TALENT POOL</span>
-                                <h3 className="career-form-title">
-                                    Can't Find Your Exact Profile?
-                                </h3>
-                                <p className="career-form-desc">
-                                    Submit your resume directly to our talent acquisition team. When matching positions open at Kharadi, Dighi, or Katraj, we will contact you immediately.
-                                </p>
-                            </div>
+                    {/* 6. CANDIDATE FAQ BLOCK */}
+                    <section className="career-faq-block">
+                        <div className="career-section-header">
+                            <span className="career-section-tag">QUESTIONS &amp; ANSWERS</span>
+                            <h2 className="career-section-heading">
+                                Frequently Asked <em>Candidate Questions.</em>
+                            </h2>
+                        </div>
 
-                            {submittedSuccess && !activeJobForModal ? (
-                                <div className="career-success-box">
-                                    <CheckCircle2 size={38} className="career-success-icon" />
-                                    <h4 className="career-success-title">
-                                        Application Submitted!
-                                    </h4>
-                                    <p className="career-success-desc">
-                                        Thank you for your interest. Our Human Resources recruitment desk has received your profile and will review it shortly.
-                                    </p>
+                        <div className="career-faq-grid">
+                            {FAQS.map((faq) => (
+                                <div key={faq.q} className="career-faq-card">
+                                    <div className="career-faq-q">
+                                        <HelpCircle size={18} className="faq-icon" />
+                                        <h4>{faq.q}</h4>
+                                    </div>
+                                    <p className="career-faq-a">{faq.a}</p>
                                 </div>
-                            ) : (
-                                <form onSubmit={handleSubmitApplication} className="career-form">
-                                    <div className="career-form-row">
-                                        <div>
-                                            <label className="career-label">Your Full Name *</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                value={applicantName}
-                                                onChange={(e) => setApplicantName(e.target.value)}
-                                                placeholder="e.g. Aditi Kulkarni / Rahul Shinde"
-                                                className="career-input"
-                                            />
-                                        </div>
+                            ))}
+                        </div>
+                    </section>
 
-                                        <div>
-                                            <label className="career-label">Phone / WhatsApp Number *</label>
-                                            <input
-                                                type="tel"
-                                                required
-                                                value={applicantPhone}
-                                                onChange={(e) => setApplicantPhone(e.target.value)}
-                                                placeholder="e.g. +91 98765 43210"
-                                                className="career-input"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="career-form-row">
-                                        <div>
-                                            <label className="career-label">Email Address *</label>
-                                            <input
-                                                type="email"
-                                                required
-                                                value={applicantEmail}
-                                                onChange={(e) => setApplicantEmail(e.target.value)}
-                                                placeholder="e.g. aditi@example.com"
-                                                className="career-input"
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label className="career-label">Total Experience</label>
-                                            <input
-                                                type="text"
-                                                value={applicantExp}
-                                                onChange={(e) => setApplicantExp(e.target.value)}
-                                                placeholder="e.g. Fresher / 2.5 Years in Sales"
-                                                className="career-input"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="career-form-row">
-                                        <div>
-                                            <label className="career-label">Preferred Branch</label>
-                                            <select
-                                                value={applicantBranch}
-                                                onChange={(e) => setApplicantBranch(e.target.value)}
-                                                className="career-select"
-                                            >
-                                                <option value="Kharadi">Kharadi Branch (Admin, HR, Marketing, Sales, Support)</option>
-                                                <option value="Dighi">Dighi Branch (Sales & Advisory)</option>
-                                                <option value="Katraj">Katraj Branch (Sales & Advisory)</option>
-                                                <option value="Any Location">Any Location in Pune</option>
-                                            </select>
-                                        </div>
-
-                                        <div>
-                                            <label className="career-label">Gender (for location-specific roles)</label>
-                                            <select
-                                                value={applicantGender}
-                                                onChange={(e) => setApplicantGender(e.target.value)}
-                                                className="career-select"
-                                            >
-                                                <option value="">Select Gender</option>
-                                                <option value="Female">Female</option>
-                                                <option value="Male">Male</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label className="career-label">
-                                            Brief Profile / Key Skills / Portfolio Link
-                                        </label>
-                                        <textarea
-                                            rows={3}
-                                            value={applicantNote}
-                                            onChange={(e) => setApplicantNote(e.target.value)}
-                                            placeholder="Mention your previous companies, real estate projects handled, or portfolio link..."
-                                            className="career-textarea"
-                                        />
-                                    </div>
-
-                                    <button
-                                        type="submit"
-                                        disabled={submitting}
-                                        className="primary-button career-submit-btn"
-                                    >
-                                        {submitting ? "Submitting..." : "Submit Profile to HR Desk"}
-                                        <Send size={16} />
-                                    </button>
-                                </form>
-                            )}
+                    {/* 7. GENERAL HR HELPLINE BANNER */}
+                    <section className="career-helpline-banner">
+                        <div className="helpline-banner__content">
+                            <span className="helpline-banner__tag">GENERAL TALENT POOL</span>
+                            <h2 className="helpline-banner__title">
+                                Don&apos;t See an Exact Match for Your Profile?
+                            </h2>
+                            <p className="helpline-banner__desc">
+                                We are always keen to speak with driven real estate professionals, marketers, and operations leaders.
+                                Send your resume directly to our recruitment team.
+                            </p>
+                            <div className="helpline-banner__actions">
+                                <a
+                                    href="mailto:careers@punepropertyinvestors.com"
+                                    className="helpline-btn helpline-btn--email"
+                                >
+                                    <Mail size={16} />
+                                    <span>Email CV: careers@punepropertyinvestors.com</span>
+                                </a>
+                                <a
+                                    href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                                        "Hello HR Team, I am sending my CV for general career opportunities at PPI."
+                                    )}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="helpline-btn helpline-btn--whatsapp"
+                                >
+                                    <FaWhatsapp size={16} />
+                                    <span>WhatsApp Direct Connect</span>
+                                </a>
+                            </div>
                         </div>
                     </section>
                 </div>
+            </main>
 
-                {/* Modal for Quick Application on Specific Role */}
-                {activeJobForModal && (
-                    <div
-                        className="career-modal-backdrop"
-                        onClick={() => setActiveJobForModal(null)}
-                    >
-                        <div
-                            className="career-modal-dialog"
-                            onClick={(e) => e.stopPropagation()}
+            {/* Quick Application Modal */}
+            {activeJobForModal && (
+                <div
+                    className="career-modal-backdrop"
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) setActiveJobForModal(null);
+                    }}
+                >
+                    <div className="career-modal" role="dialog" aria-modal="true">
+                        <button
+                            type="button"
+                            onClick={() => setActiveJobForModal(null)}
+                            className="career-modal-close"
+                            aria-label="Close modal"
                         >
-                            <button
-                                type="button"
-                                className="career-modal-close"
-                                onClick={() => setActiveJobForModal(null)}
-                            >
-                                <X size={18} />
-                            </button>
+                            <X size={20} />
+                        </button>
 
-                            <div className="career-modal-header">
-                                <span className="career-eyebrow-tag">
-                                    APPLYING FOR POSITION
-                                </span>
-                                <h3 className="career-modal-title">
-                                    {activeJobForModal.title}
-                                </h3>
-                                <div className="career-modal-loc">
-                                    <span>📍 {activeJobForModal.location}</span>
-                                    <span>•</span>
-                                    <span>{activeJobForModal.department}</span>
-                                </div>
-                                {activeJobForModal.genderCriteria && (
-                                    <div className="career-modal-gender-pill">
-                                        <Sparkles size={13} />
-                                        {activeJobForModal.genderCriteria}
-                                    </div>
-                                )}
+                        <div className="career-modal-header">
+                            <div className="career-modal-badge">DIRECT APPLICATION</div>
+                            <h3 className="career-modal-title">
+                                Apply for {activeJobForModal.title}
+                            </h3>
+                            <p className="career-modal-sub">
+                                Branch: {activeJobForModal.location} • {activeJobForModal.department}
+                            </p>
+                        </div>
+
+                        {submittedSuccess ? (
+                            <div className="career-modal-success">
+                                <CheckCircle2 size={48} className="success-icon" />
+                                <h4>Application Submitted Successfully!</h4>
+                                <p>
+                                    Thank you, <strong>{applicantName}</strong>. Our HR team has received your application and will review your profile within 24 to 48 hours.
+                                </p>
                             </div>
-
-                            {submittedSuccess ? (
-                                <div className="career-modal-success">
-                                    <CheckCircle2 size={44} className="career-success-icon" />
-                                    <h4>Application Received!</h4>
-                                    <p>
-                                        Our recruitment team has received your application for{" "}
-                                        <strong>{activeJobForModal.title}</strong>. We will get in touch shortly.
-                                    </p>
+                        ) : (
+                            <form onSubmit={handleSubmitApplication} className="career-modal-form">
+                                <div className="modal-form-group">
+                                    <label htmlFor="applicant-name">Full Name *</label>
+                                    <input
+                                        id="applicant-name"
+                                        type="text"
+                                        required
+                                        placeholder="Enter your full name"
+                                        value={applicantName}
+                                        onChange={(e) => setApplicantName(e.target.value)}
+                                        className="modal-input"
+                                    />
                                 </div>
-                            ) : (
-                                <form onSubmit={handleSubmitApplication} className="career-modal-form">
-                                    <div className="career-form-row">
-                                        <div>
-                                            <label className="career-label">Full Name *</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                value={applicantName}
-                                                onChange={(e) => setApplicantName(e.target.value)}
-                                                placeholder="e.g. Sunita Jagtap"
-                                                className="career-input"
-                                            />
-                                        </div>
 
-                                        <div>
-                                            <label className="career-label">WhatsApp / Phone *</label>
-                                            <input
-                                                type="tel"
-                                                required
-                                                value={applicantPhone}
-                                                onChange={(e) => setApplicantPhone(e.target.value)}
-                                                placeholder="+91 98765 43210"
-                                                className="career-input"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="career-form-row">
-                                        <div>
-                                            <label className="career-label">Email Address *</label>
-                                            <input
-                                                type="email"
-                                                required
-                                                value={applicantEmail}
-                                                onChange={(e) => setApplicantEmail(e.target.value)}
-                                                placeholder="sunita@example.com"
-                                                className="career-input"
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label className="career-label">Relevant Experience</label>
-                                            <input
-                                                type="text"
-                                                value={applicantExp}
-                                                onChange={(e) => setApplicantExp(e.target.value)}
-                                                placeholder="e.g. 2 Years"
-                                                className="career-input"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="career-form-row">
-                                        <div>
-                                            <label className="career-label">Preferred Branch</label>
-                                            <select
-                                                value={applicantBranch}
-                                                onChange={(e) => setApplicantBranch(e.target.value)}
-                                                className="career-select"
-                                            >
-                                                <option value="Kharadi">Kharadi Branch</option>
-                                                <option value="Dighi">Dighi Branch</option>
-                                                <option value="Katraj">Katraj Branch</option>
-                                            </select>
-                                        </div>
-
-                                        <div>
-                                            <label className="career-label">Gender (as per role criteria)</label>
-                                            <select
-                                                value={applicantGender}
-                                                onChange={(e) => setApplicantGender(e.target.value)}
-                                                className="career-select"
-                                            >
-                                                <option value="Female">Female</option>
-                                                <option value="Male">Male</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label className="career-label">Brief Note or Portfolio Link</label>
-                                        <textarea
-                                            rows={2}
-                                            value={applicantNote}
-                                            onChange={(e) => setApplicantNote(e.target.value)}
-                                            placeholder="Previous roles, achievements, or LinkedIn / portfolio URL..."
-                                            className="career-textarea"
+                                <div className="modal-form-row">
+                                    <div className="modal-form-group">
+                                        <label htmlFor="applicant-phone">Mobile Number *</label>
+                                        <input
+                                            id="applicant-phone"
+                                            type="tel"
+                                            required
+                                            placeholder="+91 98765 43210"
+                                            value={applicantPhone}
+                                            onChange={(e) => setApplicantPhone(e.target.value)}
+                                            className="modal-input"
                                         />
                                     </div>
-
-                                    <div className="career-modal-actions">
-                                        <button
-                                            type="submit"
-                                            disabled={submitting}
-                                            className="primary-button career-modal-submit-btn"
-                                        >
-                                            {submitting ? "Submitting..." : "Submit Application"}
-                                            <Send size={15} />
-                                        </button>
-                                        <a
-                                            href={getWhatsAppApplyUrl(activeJobForModal)}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="career-modal-wa-btn"
-                                        >
-                                            <FaWhatsapp size={16} />
-                                            Apply via WhatsApp
-                                        </a>
+                                    <div className="modal-form-group">
+                                        <label htmlFor="applicant-email">Email Address</label>
+                                        <input
+                                            id="applicant-email"
+                                            type="email"
+                                            placeholder="you@example.com"
+                                            value={applicantEmail}
+                                            onChange={(e) => setApplicantEmail(e.target.value)}
+                                            className="modal-input"
+                                        />
                                     </div>
-                                </form>
-                            )}
-                        </div>
+                                </div>
+
+                                <div className="modal-form-row">
+                                    <div className="modal-form-group">
+                                        <label htmlFor="applicant-exp">Experience</label>
+                                        <select
+                                            id="applicant-exp"
+                                            value={applicantExp}
+                                            onChange={(e) => setApplicantExp(e.target.value)}
+                                            className="modal-input"
+                                        >
+                                            <option value="">Select Experience</option>
+                                            <option value="Fresher">Fresher (0 Years)</option>
+                                            <option value="1-2 Years">1 – 2 Years</option>
+                                            <option value="2-4 Years">2 – 4 Years</option>
+                                            <option value="5+ Years">5+ Years</option>
+                                        </select>
+                                    </div>
+                                    <div className="modal-form-group">
+                                        <label htmlFor="applicant-gender">Gender</label>
+                                        <select
+                                            id="applicant-gender"
+                                            value={applicantGender}
+                                            onChange={(e) => setApplicantGender(e.target.value)}
+                                            className="modal-input"
+                                        >
+                                            <option value="">Select Gender</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="modal-form-group">
+                                    <label htmlFor="applicant-branch">Preferred Branch Location</label>
+                                    <select
+                                        id="applicant-branch"
+                                        value={applicantBranch}
+                                        onChange={(e) => setApplicantBranch(e.target.value)}
+                                        className="modal-input"
+                                    >
+                                        <option value="Kharadi">Kharadi Headquarters</option>
+                                        <option value="Dighi">Dighi Branch</option>
+                                        <option value="Katraj">Katraj Branch</option>
+                                    </select>
+                                </div>
+
+                                <div className="modal-form-group">
+                                    <label htmlFor="applicant-note">Brief Introduction / Key Skills</label>
+                                    <textarea
+                                        id="applicant-note"
+                                        rows={3}
+                                        placeholder="Tell us briefly about your background and why you want to join PPI..."
+                                        value={applicantNote}
+                                        onChange={(e) => setApplicantNote(e.target.value)}
+                                        className="modal-input modal-textarea"
+                                    />
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    disabled={submitting}
+                                    className="modal-submit-btn"
+                                >
+                                    {submitting ? (
+                                        <span>Submitting Application...</span>
+                                    ) : (
+                                        <>
+                                            <span>Submit Application to HR</span>
+                                            <Send size={16} />
+                                        </>
+                                    )}
+                                </button>
+                            </form>
+                        )}
                     </div>
-                )}
-            </main>
+                </div>
+            )}
 
             <Footer />
         </div>
