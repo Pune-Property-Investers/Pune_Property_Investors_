@@ -72,11 +72,16 @@ const navigationItems = [
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-function Header() {
+function Header({ transparentAtTop = false }) {
     const pathname = usePathname();
     const normalizedPath =
         pathname === "/" ? "/" : (pathname || "/").replace(/\/+$/, "");
     const isHome = normalizedPath === "/";
+    const isTransparent =
+        isHome ||
+        transparentAtTop ||
+        normalizedPath.startsWith("/blog") ||
+        normalizedPath.startsWith("/career");
     const [menuOpen, setMenuOpen] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(null);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -154,7 +159,7 @@ function Header() {
         <>
             {/* Header Main Bar (Fixed, Luxury Scrolled State) */}
             <header
-                className={`site-header ${isHome ? "site-header--home" : ""} ${
+                className={`site-header ${isTransparent ? "site-header--home" : ""} ${
                     isScrolled ? "site-header--scrolled" : ""
                 } ${menuOpen ? "site-header--open" : ""}`}
             >

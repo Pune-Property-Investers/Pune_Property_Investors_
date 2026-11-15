@@ -331,10 +331,140 @@ const DEFAULT_LEADS = [
     { id: 104, type: "contact", name: "Priya Nair", phone: "+91 98500 77331", email: "priya.nair@example.com", propertyTitle: "General Advisory", locality: "Baner", budget: "₹1.10 Cr", message: "Comparing 2 & 3 BHK projects near Balewadi High Street.", status: "Follow-up", followUpDate: "2026-11-12", notes: "Need RERA floor plan PDF." },
 ];
 
-const DEFAULT_JOBS = [
-    { id: 1, title: "Senior Property Advisor (West Pune)", department: "Advisory & Sales", location: "Baner, Pune", type: "Full-time", experience: "2–5 Years", description: "Lead consultative site visits and luxury closing cycles across Baner, Wakad, and Hinjewadi.", requirements: "Strong Pune micro-market knowledge, MahaRERA orientation, consultative sales experience.", status: "Open" },
-    { id: 2, title: "Digital Performance Marketing Specialist", department: "Marketing", location: "Kharadi, Pune", type: "Full-time", experience: "2–4 Years", description: "Drive qualified homebuyer acquisition through Meta Ads, Google Performance Max campaigns, and hyper-local SEO.", requirements: "Hands-on Google Ads, Meta Business Suite, analytics & funnel optimization.", status: "Open" },
-    { id: 3, title: "NRI Client Relationship Manager", department: "NRI Desk", location: "Kalyani Nagar / Hybrid", type: "Full-time", experience: "3–6 Years", description: "Manage virtual walkthroughs, video tours, and end-to-end documentation for overseas investors.", requirements: "Excellent verbal communication, knowledge of FEMA/NRI property norms.", status: "Open" },
+export const DEFAULT_JOBS = [
+    // =========================================================
+    // ADMIN CATEGORY
+    // =========================================================
+    {
+        id: 1,
+        title: "Digital Marketing Specialist",
+        department: "Admin & Operations",
+        location: "Kharadi, Pune",
+        genderCriteria: "Open to All",
+        type: "Full-time",
+        experience: "2–4 Years",
+        salary: "₹35,000 – ₹55,000 / month + Performance Bonus",
+        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+        description: "Lead digital homebuyer acquisition across Google Performance Max, Meta Ads Manager, hyper-local SEO, and real estate conversion landing pages exclusively for Kharadi prime projects.",
+        requirements: "Hands-on experience running real estate Meta/Google lead campaigns, GA4 analytics, CPL optimization, and creative ad copies.",
+        status: "Open",
+    },
+    {
+        id: 2,
+        title: "HR Recruit (Female)",
+        department: "Admin & Operations",
+        location: "Kharadi, Pune",
+        genderCriteria: "Female Candidates Only",
+        type: "Full-time",
+        experience: "1–3 Years",
+        salary: "₹25,000 – ₹40,000 / month + Hiring Incentives",
+        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
+        description: "Talent acquisition executive responsible for sourcing, telephonic screening, interviewing, and onboarding sales executives, pre-sales coordinators, and office staff for our Kharadi corporate office.",
+        requirements: "Female candidate with prior recruitment experience in real estate or corporate sectors. Excellent spoken Hindi, Marathi, and English with confident interview handling.",
+        status: "Open",
+    },
+    {
+        id: 3,
+        title: "Sr. HR (Female)",
+        department: "Admin & Operations",
+        location: "Kharadi, Pune",
+        genderCriteria: "Female Candidates Only",
+        type: "Full-time",
+        experience: "4–8 Years",
+        salary: "₹45,000 – ₹70,000 / month",
+        image: "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?auto=format&fit=crop&w=800&q=80",
+        description: "Senior Human Resources leader overseeing organizational structure, performance appraisal cycles, attendance policies, corporate culture, HR compliance, and employee retention across Pune branches.",
+        requirements: "Female candidate with minimum 4+ years in core HR leadership, policy formulation, team building, conflict management, and payroll compliance.",
+        status: "Open",
+    },
+    {
+        id: 4,
+        title: "Office Boy (Housekeeping & Support)",
+        department: "Admin & Operations",
+        location: "Kharadi, Pune",
+        genderCriteria: "Open to All",
+        type: "Full-time",
+        experience: "0–2 Years",
+        salary: "₹14,000 – ₹18,000 / month",
+        image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80",
+        description: "Managing corporate office cleanliness, daily pantry stock, serving tea/coffee and refreshments to luxury property buyers and visiting builder partners, and managing physical office errands.",
+        requirements: "Punctual, polite, trustworthy, and hygienic with basic knowledge of corporate office etiquette and hospitality.",
+        status: "Open",
+    },
+    {
+        id: 5,
+        title: "Models for Marketing & Video Shoots",
+        department: "Admin & Operations",
+        location: "Pune (Kharadi & Project Locations)",
+        genderCriteria: "Open (Female & Male Models)",
+        type: "Contract / Project",
+        experience: "Portfolio / Freshers Welcome",
+        salary: "Per Project Shoot / Competitive Retainer",
+        image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
+        description: "On-camera presenters and fashion/lifestyle models for luxury project walkthrough videos, YouTube property reviews, Instagram reels, developer launch events, and marketing photoshoots across Pune.",
+        requirements: "Camera confident, expressive personality, polished styling, clear speech and diction. Prior experience in real estate video hosting or commercial modeling is an added advantage.",
+        status: "Open",
+    },
+    {
+        id: 6,
+        title: "Network Analyst (IT & Systems)",
+        department: "Admin & Operations",
+        location: "Kharadi, Pune",
+        genderCriteria: "Open to All",
+        type: "Full-time",
+        experience: "2–5 Years",
+        salary: "₹30,000 – ₹50,000 / month",
+        image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
+        description: "Manage corporate IT network infrastructure, lead distribution telephony/VoIP routing, CRM network traffic security, local LAN/Wi-Fi reliability, and computer hardware systems across our offices.",
+        requirements: "Experience in network troubleshooting, router/firewall security, IP telephony, CRM data routing, and corporate IT hardware support.",
+        status: "Open",
+    },
+
+    // =========================================================
+    // SALES CATEGORY
+    // =========================================================
+    {
+        id: 7,
+        title: "Relationship Manager",
+        department: "Sales & Advisory",
+        location: "Kharadi & Dighi, Pune",
+        genderCriteria: "Open to All",
+        type: "Full-time",
+        experience: "2–6 Years",
+        salary: "Competitive Fixed + Uncapped High Commissions",
+        image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",
+        description: "High-ticket residential and commercial advisory. Meet prospective property buyers, coordinate developer site visits, advise on pricing/floor plans, and close high-value real estate bookings.",
+        requirements: "Demonstrated success in Pune primary real estate sales (Kharadi or Dighi / Northern corridors preferred). Strong consultative negotiation and client relationship building.",
+        status: "Open",
+    },
+    {
+        id: 8,
+        title: "Pre Sales Executive (Female / Location Specific)",
+        department: "Sales & Advisory",
+        location: "Kharadi & Dighi (Female Only) | Katraj (Male eligible)",
+        genderCriteria: "Females: Kharadi & Dighi | Males: Katraj",
+        type: "Full-time",
+        experience: "1–3 Years",
+        salary: "₹20,000 – ₹32,000 / month + Booking Incentives",
+        image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80",
+        description: "Qualify verified buyer inquiries generated from digital marketing. Understand configuration and budget needs, explain project USPs, and schedule confirmed site visit appointments with Relationship Managers.",
+        requirements: "Female candidates strictly for Kharadi & Dighi branches; male candidates eligible for Katraj branch. Strong communication in Marathi, Hindi & English with CRM logging skills.",
+        status: "Open",
+    },
+    {
+        id: 9,
+        title: "Tele Caller Executive (Female / Location Specific)",
+        department: "Sales & Advisory",
+        location: "Kharadi & Dighi (Female Only) | Katraj (Male eligible)",
+        genderCriteria: "Females: Kharadi & Dighi | Males: Katraj",
+        type: "Full-time",
+        experience: "0–2 Years",
+        salary: "₹18,000 – ₹28,000 / month + Incentives",
+        image: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
+        description: "First touchpoint for incoming property seekers. Engage callers professionally, share brochure information, verify requirement parameters, and nurture leads for project site visits.",
+        requirements: "Female candidates strictly for Kharadi & Dighi branches; male candidates eligible for Katraj branch. Energetic telephone voice, customer patience, and daily calling discipline.",
+        status: "Open",
+    },
 ];
 
 const DEFAULT_APPLICATIONS = [
@@ -494,6 +624,10 @@ export function getStore() {
             const parsed = JSON.parse(raw);
             if (!parsed.festivalPopup) {
                 parsed.festivalPopup = { ...DEFAULT_FESTIVAL_POPUP };
+            }
+            if (!Array.isArray(parsed.jobs) || parsed.jobs.length < 8) {
+                parsed.jobs = [...DEFAULT_JOBS];
+                saveStore(parsed);
             }
             return parsed;
         }

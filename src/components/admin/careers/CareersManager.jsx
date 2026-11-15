@@ -12,10 +12,13 @@ import SectionSyncBar from "../common/SectionSyncBar";
 
 const EMPTY_JOB = {
     title: "",
-    department: "Advisory & Sales",
-    location: "Pune",
+    department: "Admin & Operations",
+    location: "Kharadi, Pune",
+    genderCriteria: "Open to All",
     type: "Full-time",
     experience: "1–3 Years",
+    salary: "",
+    image: "",
     description: "",
     requirements: "",
     status: "Open",
@@ -143,10 +146,58 @@ export default function CareersManager() {
             key: "title",
             label: "Role Title",
             render: (row) => (
-                <div>
-                    <div style={{ fontWeight: 600, color: "#0f172a" }}>{row.title}</div>
-                    <div style={{ fontSize: 12, color: "#64748b" }}>
-                        {row.department} • {row.location}
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    {row.image ? (
+                        <img
+                            src={row.image}
+                            alt={row.title}
+                            style={{
+                                width: 44,
+                                height: 44,
+                                borderRadius: 8,
+                                objectFit: "cover",
+                                flexShrink: 0,
+                                border: "1px solid #e2e8f0",
+                            }}
+                        />
+                    ) : (
+                        <div
+                            style={{
+                                width: 44,
+                                height: 44,
+                                borderRadius: 8,
+                                background: "#f1f5f9",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                color: "#94a3b8",
+                                flexShrink: 0,
+                            }}
+                        >
+                            <Briefcase size={20} />
+                        </div>
+                    )}
+                    <div>
+                        <div style={{ fontWeight: 600, color: "#0f172a" }}>{row.title}</div>
+                        <div style={{ fontSize: 12, color: "#64748b" }}>
+                            {row.department} • {row.location}
+                        </div>
+                        {row.genderCriteria && row.genderCriteria !== "Open to All" && (
+                            <span
+                                style={{
+                                    display: "inline-block",
+                                    marginTop: 4,
+                                    fontSize: 10.5,
+                                    fontWeight: 600,
+                                    padding: "2px 7px",
+                                    borderRadius: 4,
+                                    background: "#fef3c7",
+                                    color: "#92400e",
+                                }}
+                            >
+                                {row.genderCriteria}
+                            </span>
+                        )}
                     </div>
                 </div>
             ),
@@ -337,26 +388,55 @@ export default function CareersManager() {
                                 className="admin-input"
                                 value={jobForm.title}
                                 onChange={(e) => setJobForm((p) => ({ ...p, title: e.target.value }))}
-                                placeholder="e.g. Senior Property Advisor (East Pune)"
+                                placeholder="e.g. Pre Sales Executive (Female)"
                                 required
                             />
                         </div>
+
                         <div className="admin-field">
-                            <label className="admin-label">Department</label>
-                            <input
-                                className="admin-input"
+                            <label className="admin-label">Department / Category</label>
+                            <select
+                                className="admin-select"
                                 value={jobForm.department}
                                 onChange={(e) => setJobForm((p) => ({ ...p, department: e.target.value }))}
-                            />
+                            >
+                                <option value="Admin & Operations">Admin & Operations</option>
+                                <option value="Sales & Advisory">Sales & Advisory</option>
+                                <option value="Marketing & Creative">Marketing & Creative</option>
+                                <option value="Technology & IT">Technology & IT</option>
+                            </select>
                         </div>
+
                         <div className="admin-field">
-                            <label className="admin-label">Location</label>
+                            <label className="admin-label">Location(s)</label>
                             <input
                                 className="admin-input"
                                 value={jobForm.location}
                                 onChange={(e) => setJobForm((p) => ({ ...p, location: e.target.value }))}
+                                placeholder="e.g. Kharadi, Pune or Kharadi & Dighi"
                             />
                         </div>
+
+                        <div className="admin-field">
+                            <label className="admin-label">Gender Criteria / Eligibility</label>
+                            <input
+                                className="admin-input"
+                                value={jobForm.genderCriteria || ""}
+                                onChange={(e) => setJobForm((p) => ({ ...p, genderCriteria: e.target.value }))}
+                                placeholder="e.g. Female Candidates Only / Females: Kharadi & Dighi | Males: Katraj"
+                            />
+                        </div>
+
+                        <div className="admin-field">
+                            <label className="admin-label">Salary / Compensation</label>
+                            <input
+                                className="admin-input"
+                                value={jobForm.salary || ""}
+                                onChange={(e) => setJobForm((p) => ({ ...p, salary: e.target.value }))}
+                                placeholder="e.g. ₹25,000 – ₹40,000 / month + Incentives"
+                            />
+                        </div>
+
                         <div className="admin-field">
                             <label className="admin-label">Employment Type</label>
                             <select
@@ -366,18 +446,20 @@ export default function CareersManager() {
                             >
                                 <option value="Full-time">Full-time</option>
                                 <option value="Part-time">Part-time</option>
-                                <option value="Contract">Contract</option>
+                                <option value="Contract">Contract / Project</option>
                             </select>
                         </div>
+
                         <div className="admin-field">
                             <label className="admin-label">Experience</label>
                             <input
                                 className="admin-input"
                                 value={jobForm.experience}
                                 onChange={(e) => setJobForm((p) => ({ ...p, experience: e.target.value }))}
-                                placeholder="2–5 Years"
+                                placeholder="e.g. 1–3 Years"
                             />
                         </div>
+
                         <div className="admin-field">
                             <label className="admin-label">Status</label>
                             <select
@@ -388,6 +470,32 @@ export default function CareersManager() {
                                 <option value="Open">Open</option>
                                 <option value="Closed">Closed</option>
                             </select>
+                        </div>
+
+                        <div className="admin-field admin-field--full">
+                            <label className="admin-label">Image URL (Role Thumbnail)</label>
+                            <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                                <input
+                                    className="admin-input"
+                                    value={jobForm.image || ""}
+                                    onChange={(e) => setJobForm((p) => ({ ...p, image: e.target.value }))}
+                                    placeholder="https://images.unsplash.com/... or Google Image link"
+                                    style={{ flex: 1 }}
+                                />
+                                {jobForm.image && (
+                                    <img
+                                        src={jobForm.image}
+                                        alt="Preview"
+                                        style={{
+                                            width: 44,
+                                            height: 44,
+                                            borderRadius: 8,
+                                            objectFit: "cover",
+                                            border: "1px solid #e2e8f0",
+                                        }}
+                                    />
+                                )}
+                            </div>
                         </div>
                     </div>
 

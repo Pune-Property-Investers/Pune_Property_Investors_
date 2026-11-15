@@ -28,8 +28,6 @@ import PropertyAmenities from "../property-details/PropertyAmenities";
 import PropertyEnquiry from "../property-details/PropertyEnquiry";
 
 import AdvertisementSidebar from "../common/AdvertisementSidebar";
-import propertyListingsData from "../../data/propertyListingsData.js";
-import trendingProjects from "../../data/trendingProjectsData.js";
 
 const WHATSAPP_NUMBER = "917398174444";
 const ADVISOR_PHONE = "+917398174444";

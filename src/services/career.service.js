@@ -63,6 +63,26 @@ export const careerService = {
         );
     },
 
+    async createApplication(payload) {
+        return withMockFallback(
+            () => apiRequest("/careers/applications", { method: "POST", body: JSON.stringify(payload) }),
+            () => {
+                const store = getStore();
+                const nextId = store.applications.reduce((m, a) => Math.max(m, Number(a.id) || 0), 0) + 1;
+                const created = {
+                    id: nextId,
+                    appliedAt: new Date().toISOString().slice(0, 10),
+                    status: "New",
+                    ...payload,
+                };
+                store.applications = [created, ...store.applications];
+                saveStore(store);
+                addActivity(`New application from ${created.name} for "${created.jobTitle}"`, "lead");
+                return created;
+            }
+        );
+    },
+
     async updateApplication(id, payload) {
         return withMockFallback(
             () => apiRequest(`/careers/applications/${id}`, { method: "PATCH", body: JSON.stringify(payload) }),

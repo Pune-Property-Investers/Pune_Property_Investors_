@@ -6,7 +6,17 @@ type PageProps = {
 };
 
 export function generateStaticParams() {
-    return [{ slug: ["guide"] }, { slug: ["buying-guide"] }, { slug: ["investment"] }];
+    return [
+        { slug: ["guide"] },
+        { slug: ["buying-guide"] },
+        { slug: ["investment"] },
+        { slug: ["homes-designed-around-light-proportion-calm"] },
+        { slug: ["top-high-growth-localities-pune"] },
+        { slug: ["why-timeless-spaces-continue-to-outperform-trends"] },
+        { slug: ["design-that-endures-value-that-grows"] },
+        { slug: ["first-time-homebuyer-checklist-maharashtra"] },
+        { slug: ["pune-metro-line-3-property-value-impact"] },
+    ];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

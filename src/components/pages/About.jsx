@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
-import PageHeroBanner from "../common/PageHeroBanner";
+import AboutHeroStudio from "../about/AboutHeroStudio";
 import AboutSection from "../home/AboutSection";
 import { usePublishedCms } from "../../services/liveContent";
 import "./About.css";
@@ -56,24 +56,8 @@ export default function AboutPage() {
             <Header />
 
             <main>
-                {/* Hero Header Section */}
-                <PageHeroBanner
-                    title={aboutData?.title || "Guiding Your Journey With"}
-                    titleAccent={aboutData?.titleAccent || "Trust & Expertise."}
-                    eyebrow={aboutData?.eyebrow || "ABOUT PUNE PROPERTY INVESTOR"}
-                    description={
-                        aboutData?.description ||
-                        "Pune Property Investors is your dedicated advisory partner helping homebuyers, NRI investors, and commercial clients make verified, high-yielding property decisions across Pune's fastest growing corridors."
-                    }
-                    breadcrumbs={[
-                        { label: "Home", href: "/" },
-                        { label: "About Us" },
-                    ]}
-                    backgroundImage={
-                        aboutData?.backgroundImage ||
-                        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85"
-                    }
-                />
+                {/* Cinematic Architectural Studio Hero */}
+                <AboutHeroStudio />
 
                 <div className="about-page__content">
                     {/* Core Pillars */}
