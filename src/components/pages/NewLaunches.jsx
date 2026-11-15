@@ -503,7 +503,7 @@ export default function NewLaunches() {
 
     return (
         <div className="new-launch-page">
-            <Header />
+            <Header transparentAtTop={true} />
 
             {/* ==============================================================
                 1. LUXURY HERO BANNER (Identical Style to Buy Properties)

@@ -242,7 +242,7 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
 
     return (
         <div className="buy-properties-page">
-            <Header />
+            <Header transparentAtTop={true} />
 
             <main>
 

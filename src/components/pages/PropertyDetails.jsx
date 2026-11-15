@@ -90,7 +90,7 @@ function PropertyDetails({ propertyId, propertySlug }) {
     if (!property) {
         return (
             <>
-                <Header />
+                <Header transparentAtTop={true} />
 
                 <PageHeroBanner
                     title="Property"
@@ -206,7 +206,7 @@ function PropertyDetails({ propertyId, propertySlug }) {
 
     return (
         <>
-            <Header />
+            <Header transparentAtTop={true} />
 
             {/* Premium Full-Width Head Section for View Details */}
             <PropertyHeroHead

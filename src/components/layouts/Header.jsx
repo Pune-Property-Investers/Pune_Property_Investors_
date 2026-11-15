@@ -80,6 +80,13 @@ function Header({ transparentAtTop = false }) {
     const isTransparent =
         isHome ||
         transparentAtTop ||
+        normalizedPath.startsWith("/buy") ||
+        normalizedPath.startsWith("/properties") ||
+        normalizedPath.startsWith("/property") ||
+        normalizedPath.startsWith("/commercial") ||
+        normalizedPath.startsWith("/plots") ||
+        normalizedPath.startsWith("/new-launches") ||
+        normalizedPath.startsWith("/about") ||
         normalizedPath.startsWith("/blog") ||
         normalizedPath.startsWith("/career");
     const [menuOpen, setMenuOpen] = useState(false);
