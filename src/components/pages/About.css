@@ -914,29 +914,223 @@
 
 @media (max-width: 768px) {
     .about-hero {
-        padding: 110px 16px 60px;
+        padding: 100px 16px 50px;
         border-radius: 0 0 24px 24px;
+    }
+
+    .about-hero__title {
+        font-size: clamp(1.75rem, 6.2vw, 2.35rem);
+        line-height: 1.2;
+        margin-bottom: 14px;
+    }
+
+    .about-hero__subtitle {
+        font-size: 0.92rem;
+        line-height: 1.55;
+        margin-bottom: 22px;
+    }
+
+    .about-hero__actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+        margin-bottom: 35px;
+    }
+
+    .about-hero__btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 0.88rem;
     }
 
     .about-stats-card {
         grid-template-columns: 1fr 1fr;
-        padding: 18px 16px;
+        padding: 18px 14px;
+        gap: 12px;
+        border-radius: 16px;
+    }
+
+    .about-stat-item {
+        padding: 0 6px;
+    }
+
+    .about-stat-item:nth-child(2n) {
+        border-right: none;
+    }
+
+    .about-stat-item:nth-child(1),
+    .about-stat-item:nth-child(2) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        padding-bottom: 12px;
+    }
+
+    .about-stat-value {
+        font-size: 1.55rem;
+    }
+
+    .about-stat-label {
+        font-size: 0.78rem;
+    }
+
+    .about-stat-sub {
+        font-size: 0.68rem;
+    }
+
+    .about-body-wrap {
+        padding: 40px 14px 60px;
+    }
+
+    .about-section-header {
+        margin-bottom: 28px;
+    }
+
+    .about-section-heading {
+        font-size: clamp(1.6rem, 5.5vw, 2.1rem);
+        line-height: 1.22;
+    }
+
+    .about-section-sub {
+        font-size: 0.88rem;
+    }
+
+    .about-story-block,
+    .about-pillars-block,
+    .about-builders-block,
+    .about-offices-block {
+        margin-bottom: 60px;
+    }
+
+    .about-story__card {
+        padding: 22px 18px;
+        border-radius: 20px;
+    }
+
+    .about-media-floating-pill {
+        bottom: 12px;
+        left: 12px;
+        right: 12px;
+        padding: 10px 12px;
+        gap: 10px;
+        border-radius: 12px;
+        font-size: 0.76rem;
     }
 
     .about-pillars-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .about-pillar-card {
+        padding: 22px 18px;
+        border-radius: 18px;
+    }
+
+    .about-builders-block {
+        padding: 24px 16px;
+        border-radius: 20px;
+    }
+
+    .about-builders-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .about-builder-card {
+        padding: 14px 12px;
+        border-radius: 12px;
+    }
+
+    .about-builder-name {
+        font-size: 0.88rem;
+    }
+
+    .about-builder-tag {
+        font-size: 0.7rem;
+    }
+
+    .about-office-tabs {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 8px;
+        scrollbar-width: none;
+    }
+
+    .about-office-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .about-office-tab-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 8px 14px;
+        font-size: 0.82rem;
     }
 
     .about-office-showcase-card {
-        padding: 24px 18px;
+        padding: 20px 14px;
+        border-radius: 20px;
+        gap: 22px;
+    }
+
+    .about-office-action-row {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .office-action-btn {
+        width: 100%;
+        justify-content: center;
     }
 
     .about-consultation-banner {
-        padding: 40px 20px;
-        border-radius: 22px;
+        padding: 36px 18px;
+        border-radius: 20px;
     }
 
-    .about-body-wrap {
-        padding: 50px 16px 80px;
+    .consultation-banner__title {
+        font-size: clamp(1.5rem, 5.5vw, 2rem);
+    }
+
+    .consultation-banner__desc {
+        font-size: 0.9rem;
+    }
+
+    .consultation-banner__actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .consult-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-hero {
+        padding: 90px 12px 40px;
+        border-radius: 0 0 20px 20px;
+    }
+
+    .about-stats-card {
+        padding: 16px 12px;
+    }
+
+    .about-stat-value {
+        font-size: 1.4rem;
+    }
+
+    .about-story__content h3 {
+        font-size: 1.35rem;
+    }
+
+    .about-office-meta-item {
+        font-size: 0.84rem;
     }
 }

@@ -1240,30 +1240,168 @@
 
 @media (max-width: 768px) {
     .career-hero {
-        padding: 110px 16px 60px;
+        padding: 100px 16px 50px;
         border-radius: 0 0 24px 24px;
+    }
+
+    .career-hero__title {
+        font-size: clamp(1.75rem, 6.2vw, 2.35rem);
+        line-height: 1.2;
+        margin-bottom: 14px;
+    }
+
+    .career-hero__subtitle {
+        font-size: 0.92rem;
+        line-height: 1.55;
+        margin-bottom: 22px;
+    }
+
+    .career-hero__actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+        margin-bottom: 35px;
+    }
+
+    .career-hero__btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 0.88rem;
     }
 
     .career-stats-card {
         grid-template-columns: 1fr 1fr;
-        padding: 18px 16px;
+        padding: 18px 14px;
+        gap: 12px;
+        border-radius: 16px;
+    }
+
+    .career-stat-item {
+        padding: 0 6px;
+    }
+
+    .career-stat-item:nth-child(2n) {
+        border-right: none;
+    }
+
+    .career-stat-item:nth-child(1),
+    .career-stat-item:nth-child(2) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        padding-bottom: 12px;
+    }
+
+    .career-stat-value {
+        font-size: 1.55rem;
+    }
+
+    .career-stat-label {
+        font-size: 0.78rem;
+    }
+
+    .career-stat-sub {
+        font-size: 0.68rem;
+    }
+
+    .career-body-wrap {
+        padding: 40px 14px 60px;
+    }
+
+    .career-section-header {
+        margin-bottom: 28px;
+    }
+
+    .career-section-heading {
+        font-size: clamp(1.6rem, 5.5vw, 2.1rem);
+        line-height: 1.22;
+    }
+
+    .career-section-sub {
+        font-size: 0.88rem;
+    }
+
+    .career-why-block,
+    .career-culture-block,
+    .career-process-block,
+    .career-faq-block {
+        margin-bottom: 60px;
     }
 
     .career-perks-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .career-perk-card,
+    .career-step-card {
+        padding: 22px 18px;
+        border-radius: 18px;
+    }
+
+    .career-culture__content {
+        padding: 22px 18px;
+        border-radius: 20px;
     }
 
     .career-process-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
     }
 
-    .career-jobs-grid {
-        grid-template-columns: 1fr;
+    .career-filters-wrap {
+        padding: 18px 14px;
+        border-radius: 20px;
+        gap: 14px;
+        margin-bottom: 24px;
+    }
+
+    .career-dept-tabs {
+        display: flex;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 8px;
+        scrollbar-width: none;
+        gap: 8px;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .career-dept-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .career-tab-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 7px 14px;
+        font-size: 0.8rem;
     }
 
     .career-filters-bar {
         flex-direction: column;
         align-items: stretch;
+        gap: 12px;
+    }
+
+    .career-loc-pills {
+        display: flex;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+        gap: 6px;
+    }
+
+    .career-loc-pills::-webkit-scrollbar {
+        display: none;
+    }
+
+    .career-loc-pill {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 6px 12px;
+        font-size: 0.78rem;
     }
 
     .career-search-box {
@@ -1271,16 +1409,103 @@
         min-width: 100%;
     }
 
-    .modal-form-row {
+    .career-jobs-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 60px;
+    }
+
+    .career-job-card {
+        padding: 20px 16px;
+        border-radius: 20px;
+    }
+
+    .career-action-btn {
+        min-height: 44px;
+        padding: 10px 14px;
+        font-size: 0.82rem;
+    }
+
+    .career-faq-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .career-faq-card {
+        padding: 20px 16px;
+        border-radius: 18px;
     }
 
     .career-helpline-banner {
-        padding: 40px 20px;
-        border-radius: 22px;
+        padding: 36px 18px;
+        border-radius: 20px;
     }
 
-    .career-body-wrap {
-        padding: 50px 16px 80px;
+    .helpline-banner__title {
+        font-size: clamp(1.5rem, 5.5vw, 2rem);
+    }
+
+    .helpline-banner__desc {
+        font-size: 0.9rem;
+    }
+
+    .helpline-banner__actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .helpline-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .career-modal-backdrop {
+        padding: 12px;
+    }
+
+    .career-modal {
+        padding: 24px 18px;
+        border-radius: 20px;
+        max-height: 92vh;
+    }
+
+    .career-modal-title {
+        font-size: 1.25rem;
+    }
+
+    .modal-form-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .modal-input {
+        font-size: 16px;
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 440px) {
+    .career-hero {
+        padding: 90px 12px 40px;
+        border-radius: 0 0 20px 20px;
+    }
+
+    .career-stats-card {
+        padding: 16px 12px;
+    }
+
+    .career-stat-value {
+        font-size: 1.4rem;
+    }
+
+    .career-job-card__actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .career-action-btn {
+        width: 100%;
     }
 }
