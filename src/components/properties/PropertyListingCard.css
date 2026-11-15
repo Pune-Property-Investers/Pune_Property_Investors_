@@ -474,18 +474,24 @@
     }
 }
 
-/* SMALL MOBILE */
+/* SMALL & MOBILE SCREENS */
 
-@media (max-width: 400px) {
+@media (max-width: 540px) {
+    .property-listing-card {
+        border-radius: 12px;
+    }
+
     .property-listing-card__image,
     .property-listing-card__image img,
     .property-listing-card__image-placeholder {
-        height: 190px;
-        min-height: 190px;
+        height: 195px;
+        min-height: 195px;
     }
 
     .property-listing-card__heading {
         flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
     }
 
     .property-listing-card__price {
@@ -496,20 +502,36 @@
     .property-listing-card__footer {
         align-items: stretch;
         flex-direction: column;
+        gap: 10px;
     }
 
     .property-listing-card__actions {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         width: 100%;
+        gap: 8px;
     }
 
     .property-listing-card__details-button,
     .property-listing-card__contact-button {
         width: 100%;
-        padding-right: 6px;
-        padding-left: 6px;
+        min-height: 42px;
+        padding: 8px 6px;
         box-sizing: border-box;
+        justify-content: center;
+        font-size: 12.5px;
+    }
+
+    .property-listing-card__badges {
+        top: 8px;
+        left: 8px;
+        right: 44px;
+        gap: 4px;
+    }
+
+    .property-listing-card__badge {
+        font-size: 9.5px;
+        padding: 4px 7px;
     }
 }
 
