@@ -14,7 +14,8 @@
     --buy-bg: #fbfaf7;
 
     min-height: 100vh;
-    overflow-x: hidden;
+    width: 100%;
+    overflow-x: clip;
     max-width: 100vw;
     background: var(--buy-bg);
     color: var(--buy-dark);
@@ -88,6 +89,7 @@
     0% {
         transform: translateY(100%);
     }
+
     100% {
         transform: translateY(0%);
     }
@@ -97,6 +99,7 @@
     0% {
         transform: translateY(0%);
     }
+
     100% {
         transform: translateY(-100%);
     }
@@ -106,6 +109,7 @@
     0% {
         transform: translateY(-100%);
     }
+
     100% {
         transform: translateY(0%);
     }
@@ -115,6 +119,7 @@
     0% {
         transform: translateY(0%);
     }
+
     100% {
         transform: translateY(100%);
     }
@@ -127,18 +132,14 @@
     z-index: 3;
     pointer-events: none;
     background:
-        linear-gradient(
-            180deg,
+        linear-gradient(180deg,
             rgba(12, 16, 15, 0.65) 0%,
             rgba(12, 16, 15, 0.20) 28%,
             rgba(12, 16, 15, 0.25) 70%,
-            rgba(12, 16, 15, 0.85) 100%
-        ),
-        radial-gradient(
-            ellipse at center,
+            rgba(12, 16, 15, 0.85) 100%),
+        radial-gradient(ellipse at center,
             rgba(12, 16, 15, 0.12) 0%,
-            rgba(12, 16, 15, 0.55) 100%
-        );
+            rgba(12, 16, 15, 0.55) 100%);
 }
 
 /* Desktop Side Arrow Navigation */
@@ -241,6 +242,7 @@
         opacity: 0.3;
         transform: translateY(-4px);
     }
+
     100% {
         opacity: 1;
         transform: translateY(0);
@@ -412,6 +414,7 @@
         transform: translateY(100%);
         opacity: 0;
     }
+
     100% {
         transform: translateY(0%);
         opacity: 1;
@@ -423,6 +426,7 @@
         transform: translateY(0%);
         opacity: 1;
     }
+
     100% {
         transform: translateY(-100%);
         opacity: 0;
@@ -434,6 +438,7 @@
         transform: translateY(-100%);
         opacity: 0;
     }
+
     100% {
         transform: translateY(0%);
         opacity: 1;
@@ -445,6 +450,7 @@
         transform: translateY(0%);
         opacity: 1;
     }
+
     100% {
         transform: translateY(100%);
         opacity: 0;
@@ -552,6 +558,7 @@
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -795,9 +802,12 @@
     top: 50.4px;
     z-index: 90;
     width: 100%;
-    background: #fbfaf7; /* Solid non-transparent background */
-    border-bottom: none; /* Separating line removed from search */
-    box-shadow: none; /* No dividing shadow */
+    background: #fbfaf7;
+    /* Solid non-transparent background */
+    border-bottom: none;
+    /* Separating line removed from search */
+    box-shadow: none;
+    /* No dividing shadow */
     padding: 10px 0 8px;
     margin-bottom: 24px;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1425,7 +1435,7 @@
         line-height: 1.22;
     }
 
-    .buy-properties-hero__content > p {
+    .buy-properties-hero__content>p {
         font-size: 13px;
         line-height: 1.7;
     }
