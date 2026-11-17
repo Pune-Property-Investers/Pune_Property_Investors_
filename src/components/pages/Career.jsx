@@ -438,17 +438,6 @@ export default function Career() {
 
                     <div className="container career-hero__content">
                         <div className="career-hero__text-block">
-                            <div className="career-hero__breadcrumbs">
-                                <Link href="/">Home</Link>
-                                <span>/</span>
-                                <span className="current">Careers</span>
-                            </div>
-
-                            <div className="career-hero__eyebrow-pill">
-                                <Sparkles size={13} />
-                                <span>WE ARE HIRING • JOIN PUNE&apos;S PREMIER REAL ESTATE ADVISORY</span>
-                            </div>
-
                             <h1 className="career-hero__title">
                                 <span className="career-hero__title-primary">Find Your Place.</span>{" "}
                                 <em className="career-hero__title-accent">Build Your Future.</em>
