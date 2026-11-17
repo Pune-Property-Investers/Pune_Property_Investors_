@@ -66,20 +66,16 @@
     pointer-events: none;
     background:
         /* Vertical gradient: transparent middle lets architectural photos shine */
-        linear-gradient(
-            180deg,
+        linear-gradient(180deg,
             rgba(12, 16, 23, 0.70) 0%,
             rgba(12, 16, 23, 0.28) 35%,
             rgba(12, 16, 23, 0.40) 70%,
-            rgba(12, 16, 23, 0.86) 100%
-        ),
+            rgba(12, 16, 23, 0.86) 100%),
         /* Left-to-right vignette: readable text on left, bright photo on right */
-        linear-gradient(
-            90deg,
+        linear-gradient(90deg,
             rgba(12, 16, 23, 0.84) 0%,
             rgba(12, 16, 23, 0.52) 55%,
-            rgba(12, 16, 23, 0.20) 100%
-        );
+            rgba(12, 16, 23, 0.20) 100%);
 }
 
 .property-hero-head__container {

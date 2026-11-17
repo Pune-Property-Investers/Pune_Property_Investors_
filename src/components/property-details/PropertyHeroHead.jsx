@@ -82,9 +82,8 @@ export default function PropertyHeroHead({
                 {slides.map((imgUrl, index) => (
                     <div
                         key={index}
-                        className={`property-hero-head__slide ${
-                            index === currentSlide ? "is-active" : ""
-                        }`}
+                        className={`property-hero-head__slide ${index === currentSlide ? "is-active" : ""
+                            }`}
                         style={{ backgroundImage: `url(${imgUrl})` }}
                     />
                 ))}
@@ -189,9 +188,8 @@ export default function PropertyHeroHead({
                                 <button
                                     key={index}
                                     type="button"
-                                    className={`property-hero-head__dot ${
-                                        index === currentSlide ? "is-active" : ""
-                                    }`}
+                                    className={`property-hero-head__dot ${index === currentSlide ? "is-active" : ""
+                                        }`}
                                     onClick={() => setCurrentSlide(index)}
                                     aria-label={`View photo ${index + 1}`}
                                 />

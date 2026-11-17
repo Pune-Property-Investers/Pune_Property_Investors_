@@ -164,6 +164,18 @@
     flex-shrink: 0;
 }
 
+.property-enquiry__btn-icon {
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+.property-enquiry__btn-icon--whatsapp {
+    width: 17px;
+    height: 17px;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
 .property-enquiry__btn--whatsapp {
     background: #252b29;
     color: #ffffff;

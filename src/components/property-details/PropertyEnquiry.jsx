@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Phone, MessageCircle, ShieldCheck } from "lucide-react";
+import { PhoneCall, ShieldCheck } from "lucide-react";
 import { leadService } from "../../services/lead.service";
 import "./PropertyEnquiry.css";
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 function PropertyEnquiry({ property }) {
     const [formData, setFormData] = useState({
@@ -125,7 +127,13 @@ function PropertyEnquiry({ property }) {
                         type="submit"
                         title="Send enquiry on WhatsApp"
                     >
-                        <MessageCircle size={14} />
+                        <img
+                            src={`${basePath}/images/whatsapp-logo.png`}
+                            alt="WhatsApp"
+                            className="property-enquiry__btn-icon property-enquiry__btn-icon--whatsapp"
+                            width={16}
+                            height={16}
+                        />
                         <span>WhatsApp</span>
                     </button>
 
@@ -134,7 +142,11 @@ function PropertyEnquiry({ property }) {
                         className="property-enquiry__btn property-enquiry__btn--call"
                         title="Call property advisor"
                     >
-                        <Phone size={13} />
+                        <PhoneCall
+                            size={14}
+                            className="property-enquiry__btn-icon property-enquiry__btn-icon--call"
+                            strokeWidth={2.2}
+                        />
                         <span>Call Us</span>
                     </a>
                 </div>
