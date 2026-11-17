@@ -908,8 +908,8 @@
     }
 
     .about-stats-card {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
     }
 
     .about-stat-item:nth-child(2) {
@@ -928,10 +928,19 @@
 
 @media (max-width: 768px) {
     .about-hero {
-        padding: 95px 14px 44px;
+        padding: 95px 14px 20px;
         border-radius: 0;
         min-height: 100vh;
         min-height: 100dvh;
+        justify-content: space-between;
+    }
+
+    .about-hero__content {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        justify-content: space-between;
+        width: 100%;
     }
 
     .about-hero__eyebrow-pill {
@@ -972,9 +981,11 @@
     }
 
     .about-stats-card {
-        grid-template-columns: 1fr 1fr;
-        padding: 16px 0;
-        gap: 12px;
+        grid-template-columns: repeat(4, 1fr);
+        padding: 14px 0 10px;
+        gap: 6px;
+        width: 100%;
+        margin-top: auto;
         border-radius: 0;
         background: transparent;
         border: none;
@@ -982,7 +993,9 @@
     }
 
     .about-stat-item {
-        padding: 0 6px;
+        padding: 0 4px;
+        min-width: 0;
+        text-align: center;
     }
 
     .about-stat-item:nth-child(2n) {
@@ -992,11 +1005,29 @@
     .about-stat-item:nth-child(1),
     .about-stat-item:nth-child(2) {
         border-bottom: none;
-        padding-bottom: 8px;
+        padding-bottom: 0;
     }
 
     .about-stat-value {
-        font-size: clamp(1.25rem, 4.8vw, 1.45rem);
+        font-size: clamp(1rem, 3.8vw, 1.35rem);
+        margin-bottom: 2px;
+        line-height: 1.1;
+    }
+
+    .about-stat-label {
+        font-size: clamp(0.62rem, 2.1vw, 0.74rem);
+        line-height: 1.2;
+        margin-bottom: 2px;
+        word-break: normal;
+        overflow-wrap: break-word;
+    }
+
+    .about-stat-sub {
+        font-size: clamp(0.52rem, 1.8vw, 0.62rem);
+        line-height: 1.2;
+        opacity: 0.85;
+        word-break: normal;
+        overflow-wrap: break-word;
     }
 
     .about-stat-label {
@@ -1159,16 +1190,43 @@
 
 @media (max-width: 480px) {
     .about-hero {
-        padding: 88px 12px 36px;
-        border-radius: 0 0 20px 20px;
+        padding: 85px 10px 14px;
+        border-radius: 0;
+        min-height: 100vh;
+        min-height: 100dvh;
+        justify-content: space-between;
+    }
+
+    .about-hero__content {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        justify-content: space-between;
+        width: 100%;
     }
 
     .about-stats-card {
-        padding: 14px 10px;
+        grid-template-columns: repeat(4, 1fr);
+        padding: 10px 0 6px;
+        gap: 4px;
+        width: 100%;
+        margin-top: auto;
+    }
+
+    .about-stat-item {
+        padding: 0 2px;
     }
 
     .about-stat-value {
-        font-size: clamp(1.15rem, 4.5vw, 1.35rem);
+        font-size: clamp(0.92rem, 3.8vw, 1.2rem);
+    }
+
+    .about-stat-label {
+        font-size: clamp(0.56rem, 2vw, 0.66rem);
+    }
+
+    .about-stat-sub {
+        font-size: clamp(0.48rem, 1.7vw, 0.56rem);
     }
 
     .about-story__content h3 {

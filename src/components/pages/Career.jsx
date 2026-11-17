@@ -89,6 +89,53 @@ function AnimatedStatNumber({ target, prefix = "", suffix = "", started }) {
     );
 }
 
+const ROLE_FALLBACK_IMAGES = {
+    marketing: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+    hr: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
+    sales: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",
+    presales: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80",
+    telecaller: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
+    it: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
+    model: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
+    office: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80",
+    default: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80",
+};
+
+function getJobImage(job) {
+    if (job?.image && typeof job.image === "string" && job.image.trim().length > 0) {
+        return job.image.trim();
+    }
+    const title = (job?.title || "").toLowerCase();
+    const dept = (job?.department || "").toLowerCase();
+    if (title.includes("market") || title.includes("digital") || title.includes("seo") || title.includes("ads")) {
+        return ROLE_FALLBACK_IMAGES.marketing;
+    }
+    if (title.includes("hr") || title.includes("recruit") || title.includes("talent")) {
+        return ROLE_FALLBACK_IMAGES.hr;
+    }
+    if (title.includes("tele") || title.includes("caller") || title.includes("calling")) {
+        return ROLE_FALLBACK_IMAGES.telecaller;
+    }
+    if (title.includes("pre sale") || title.includes("presale") || title.includes("counselor")) {
+        return ROLE_FALLBACK_IMAGES.presales;
+    }
+    if (title.includes("sales") || title.includes("relation") || title.includes("advisor") || title.includes("consultant")) {
+        return ROLE_FALLBACK_IMAGES.sales;
+    }
+    if (title.includes("network") || title.includes("it") || title.includes("system") || title.includes("tech")) {
+        return ROLE_FALLBACK_IMAGES.it;
+    }
+    if (title.includes("model") || title.includes("video") || title.includes("shoot") || title.includes("creator")) {
+        return ROLE_FALLBACK_IMAGES.model;
+    }
+    if (title.includes("office") || title.includes("housekeeping") || title.includes("boy") || title.includes("pantry")) {
+        return ROLE_FALLBACK_IMAGES.office;
+    }
+    if (dept.includes("sales")) return ROLE_FALLBACK_IMAGES.sales;
+    if (dept.includes("admin")) return ROLE_FALLBACK_IMAGES.office;
+    return ROLE_FALLBACK_IMAGES.default;
+}
+
 const PERKS = [
     {
         icon: TrendingUp,
@@ -366,26 +413,29 @@ export default function Career() {
                     </div>
 
                     <div className="container career-hero__content">
-                        <div className="career-hero__breadcrumbs">
-                            <Link href="/">Home</Link>
-                            <span>/</span>
-                            <span className="current">Careers</span>
+                        <div className="career-hero__text-block">
+                            <div className="career-hero__breadcrumbs">
+                                <Link href="/">Home</Link>
+                                <span>/</span>
+                                <span className="current">Careers</span>
+                            </div>
+
+                            <div className="career-hero__eyebrow-pill">
+                                <Sparkles size={13} />
+                                <span>WE ARE HIRING • JOIN PUNE&apos;S PREMIER REAL ESTATE ADVISORY</span>
+                            </div>
+
+                            <h1 className="career-hero__title">
+                                <span className="career-hero__title-primary">Find Your Place.</span>{" "}
+                                <em className="career-hero__title-accent">Build Your Future.</em>
+                            </h1>
+
+                            <p className="career-hero__subtitle">
+                                Join our 80+ strong advisory network expanding across Kharadi HQ,
+                                Dighi, and Katraj. We offer unmatched incentive structures,
+                                mentorship by 15+ year veterans, and fast-track leadership opportunities.
+                            </p>
                         </div>
-
-                        <div className="career-hero__eyebrow-pill">
-                            <Sparkles size={13} />
-                            <span>WE ARE HIRING • JOIN PUNE&apos;S PREMIER REAL ESTATE ADVISORY</span>
-                        </div>
-
-                        <h1 className="career-hero__title">
-                            Find Your Place. <em>Build Your Future.</em>
-                        </h1>
-
-                        <p className="career-hero__subtitle">
-                            Join our 80+ strong advisory network expanding across Kharadi HQ,
-                            Dighi, and Katraj. We offer unmatched incentive structures,
-                            mentorship by 15+ year veterans, and fast-track leadership opportunities.
-                        </p>
 
                         {/* Live Recruitment Metrics Card */}
                         <div ref={statsRef} className="career-stats-card">
@@ -623,79 +673,87 @@ export default function Career() {
 
                                     return (
                                         <div key={job.id} className="career-job-card">
-                                            {/* Job Header */}
-                                            <div className="career-job-card__header">
-                                                <div className="career-job-dept-pill">
-                                                    {job.department || "Open Role"}
+                                            {/* Role Image Banner with Overlaid Badges */}
+                                            <div className="career-job-card__media">
+                                                <Image
+                                                    src={getJobImage(job)}
+                                                    alt={job.title}
+                                                    fill
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 380px"
+                                                    className="career-job-card__img"
+                                                />
+                                                <div className="career-job-card__media-overlay" />
+                                                <div className="career-job-card__badges">
+                                                    <span className="career-job-dept-pill">
+                                                        {job.department || "Open Role"}
+                                                    </span>
+                                                    <span className="career-job-type">
+                                                        {job.type || "Full-time"}
+                                                    </span>
                                                 </div>
-                                                <span className="career-job-type">
-                                                    {job.type || "Full-time"}
-                                                </span>
                                             </div>
 
-                                            {/* Job Title */}
-                                            <h3 className="career-job-title">{job.title}</h3>
+                                            {/* Essential Card Body */}
+                                            <div className="career-job-card__body">
+                                                <h3 className="career-job-title" title={job.title}>
+                                                    {job.title}
+                                                </h3>
 
-                                            {/* Meta Tags */}
-                                            <div className="career-job-meta-row">
-                                                <div className="career-meta-tag">
-                                                    <MapPin size={13} className="meta-icon" />
-                                                    <span>{job.location}</span>
-                                                </div>
-                                                {job.experience && (
+                                                {/* Essential Meta Tags */}
+                                                <div className="career-job-meta-row">
                                                     <div className="career-meta-tag">
-                                                        <Clock size={13} className="meta-icon" />
-                                                        <span>{job.experience}</span>
+                                                        <MapPin size={12} className="meta-icon" />
+                                                        <span>{job.location}</span>
+                                                    </div>
+                                                    {job.experience && (
+                                                        <div className="career-meta-tag">
+                                                            <Clock size={12} className="meta-icon" />
+                                                            <span>{job.experience}</span>
+                                                        </div>
+                                                    )}
+                                                    {job.genderCriteria && (
+                                                        <div
+                                                            className={`career-meta-tag ${isFemaleCriteria ? "career-meta-tag--gender" : ""
+                                                                }`}
+                                                        >
+                                                            <Sparkles size={11} className="meta-icon" />
+                                                            <span>{job.genderCriteria}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {/* Salary Banner */}
+                                                {job.salary && (
+                                                    <div className="career-job-salary">
+                                                        <DollarSign size={14} />
+                                                        <span>{job.salary}</span>
                                                     </div>
                                                 )}
-                                                {job.genderCriteria && (
-                                                    <div
-                                                        className={`career-meta-tag ${isFemaleCriteria ? "career-meta-tag--gender" : ""
-                                                            }`}
+
+                                                {/* Concise Essential Description */}
+                                                <p className="career-job-desc">{job.description}</p>
+
+                                                {/* Card Actions: WhatsApp Icon Only + Apply Online */}
+                                                <div className="career-job-card__actions">
+                                                    <a
+                                                        href={getWhatsAppApplyUrl(job)}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="career-action-btn--whatsapp-icon"
+                                                        title="WhatsApp HR"
+                                                        aria-label="WhatsApp HR"
                                                     >
-                                                        <Sparkles size={12} className="meta-icon" />
-                                                        <span>{job.genderCriteria}</span>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            {/* Salary Banner */}
-                                            {job.salary && (
-                                                <div className="career-job-salary">
-                                                    <DollarSign size={15} />
-                                                    <span>{job.salary}</span>
+                                                        <FaWhatsapp size={20} />
+                                                    </a>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => openApplyModal(job)}
+                                                        className="career-action-btn career-action-btn--apply"
+                                                    >
+                                                        <span>Apply Online</span>
+                                                        <ArrowRight size={15} />
+                                                    </button>
                                                 </div>
-                                            )}
-
-                                            {/* Description Snippet */}
-                                            <p className="career-job-desc">{job.description}</p>
-
-                                            {/* Requirements Note */}
-                                            {job.requirements && (
-                                                <div className="career-job-req">
-                                                    <strong>Ideal Candidate:</strong> {job.requirements}
-                                                </div>
-                                            )}
-
-                                            {/* Card Action Buttons */}
-                                            <div className="career-job-card__actions">
-                                                <a
-                                                    href={getWhatsAppApplyUrl(job)}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="career-action-btn career-action-btn--whatsapp"
-                                                >
-                                                    <FaWhatsapp size={16} />
-                                                    <span>WhatsApp HR</span>
-                                                </a>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => openApplyModal(job)}
-                                                    className="career-action-btn career-action-btn--apply"
-                                                >
-                                                    <span>Apply Online</span>
-                                                    <ArrowRight size={14} />
-                                                </button>
                                             </div>
                                         </div>
                                     );
