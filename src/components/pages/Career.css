@@ -1352,7 +1352,7 @@
     }
 
     .career-hero__bg-img {
-        object-position: 68% 8%;
+        object-position: 68% 4%;
     }
 
     .career-hero__overlay {
@@ -1374,7 +1374,7 @@
     }
 
     .career-hero__text-block {
-        margin-top: clamp(120px, 22vh, 190px);
+        margin-top: clamp(180px, 28vh, 250px);
     }
 
     .career-hero__breadcrumbs {
@@ -1382,14 +1382,7 @@
     }
 
     .career-hero__eyebrow-pill {
-        font-size: 0.68rem;
-        padding: 5px 12px;
-        max-width: 100%;
-        white-space: normal;
-        text-align: center;
-        line-height: 1.35;
-        margin-bottom: 12px;
-        gap: 6px;
+        display: none;
     }
 
     .career-hero__title {
@@ -1815,7 +1808,7 @@
     }
 
     .career-hero__bg-img {
-        object-position: 66% 6%;
+        object-position: 66% 4%;
     }
 
     .career-hero__overlay {
@@ -1837,7 +1830,7 @@
     }
 
     .career-hero__text-block {
-        margin-top: clamp(130px, 24vh, 210px);
+        margin-top: clamp(190px, 32vh, 270px);
     }
 
     .career-hero__breadcrumbs {
@@ -1845,9 +1838,7 @@
     }
 
     .career-hero__eyebrow-pill {
-        font-size: 0.64rem;
-        padding: 4px 10px;
-        margin-bottom: 10px;
+        display: none;
     }
 
     .career-hero__title {
