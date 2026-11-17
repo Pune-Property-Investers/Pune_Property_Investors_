@@ -1494,17 +1494,26 @@
 
     .career-why-block,
     .career-culture-block,
-    .career-process-block,
     .career-faq-block {
         margin-bottom: 50px;
     }
 
+    .career-process-block {
+        margin-bottom: 50px;
+        padding: 32px 20px;
+        border-radius: 22px;
+        box-sizing: border-box;
+    }
+
     .career-perks-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .career-perk-card {
+        width: 100%;
         aspect-ratio: 1 / 1;
         min-height: 0;
         padding: 16px 14px;
@@ -1513,6 +1522,7 @@
         flex-direction: column;
         justify-content: space-between;
         box-sizing: border-box;
+        overflow: hidden;
     }
 
     .career-perk-card__top {
@@ -1581,11 +1591,14 @@
     }
 
     .career-process-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .career-process-card {
+        width: 100%;
         aspect-ratio: 1 / 1;
         min-height: 0;
         padding: 16px 14px;
@@ -1594,6 +1607,7 @@
         flex-direction: column;
         justify-content: space-between;
         box-sizing: border-box;
+        overflow: hidden;
     }
 
     .career-process-card__top {
@@ -1973,19 +1987,24 @@
     }
 
     .career-perks-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .career-perk-card {
+        width: 100%;
         aspect-ratio: 1 / 1;
-        min-height: 152px;
-        padding: 14px 12px;
-        border-radius: 16px;
+        min-height: 0;
+        padding: 12px 10px;
+        border-radius: 14px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         box-sizing: border-box;
+        overflow: hidden;
     }
 
     .career-perk-card__top {
@@ -1993,25 +2012,25 @@
         align-items: center;
         justify-content: space-between;
         width: 100%;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
 
     .career-perk-icon-box {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
         margin-bottom: 0;
     }
 
     .career-perk-icon-box svg {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
     }
 
     .career-perk-badge {
-        font-size: 0.56rem;
-        padding: 2.5px 6px;
-        letter-spacing: 0.3px;
+        font-size: 0.52rem;
+        padding: 2px 5px;
+        letter-spacing: 0.2px;
         margin-bottom: 0;
     }
 
@@ -2022,10 +2041,11 @@
     }
 
     .career-perk-title {
-        font-size: 0.88rem;
-        line-height: 1.22;
-        margin: 0 0 3px;
+        font-size: clamp(0.76rem, 2.7vw, 0.84rem);
+        line-height: 1.2;
+        margin: 0 0 2px;
         font-weight: 700;
+        word-break: break-word;
     }
 
     .career-perk-desc {
@@ -2034,33 +2054,47 @@
 
     .career-perk-short {
         display: block;
-        font-size: 0.7rem;
-        line-height: 1.32;
+        font-size: clamp(0.62rem, 2.2vw, 0.68rem);
+        line-height: 1.25;
         color: #64748b;
+        word-break: break-word;
+    }
+
+    .career-process-block {
+        margin-bottom: 35px;
+        padding: 22px 12px;
+        border-radius: 18px;
+        box-sizing: border-box;
+        overflow: hidden;
     }
 
     .career-process-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .career-process-card {
+        width: 100%;
         aspect-ratio: 1 / 1;
-        min-height: 152px;
-        padding: 14px 12px;
-        border-radius: 16px;
+        min-height: 0;
+        padding: 12px 10px;
+        border-radius: 14px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         box-sizing: border-box;
+        overflow: hidden;
     }
 
     .career-process-card__top {
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
 
     .career-process-num {
-        font-size: 1.6rem;
+        font-size: clamp(1.3rem, 5vw, 1.55rem);
         line-height: 1;
         margin: 0;
         font-weight: 800;
@@ -2073,10 +2107,11 @@
     }
 
     .career-process-title {
-        font-size: 0.88rem;
-        line-height: 1.22;
-        margin: 0 0 3px;
+        font-size: clamp(0.76rem, 2.7vw, 0.84rem);
+        line-height: 1.2;
+        margin: 0 0 2px;
         font-weight: 700;
+        word-break: break-word;
     }
 
     .career-process-desc {
@@ -2085,9 +2120,10 @@
 
     .career-process-short {
         display: block;
-        font-size: 0.7rem;
-        line-height: 1.32;
+        font-size: clamp(0.62rem, 2.2vw, 0.68rem);
+        line-height: 1.25;
         color: #64748b;
+        word-break: break-word;
     }
 
     /* Filter Matrix Container for Mobile */
