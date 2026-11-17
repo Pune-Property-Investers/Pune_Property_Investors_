@@ -309,9 +309,9 @@
     inset: 0;
     background: linear-gradient(
         180deg,
-        rgba(15, 23, 42, 0.35) 0%,
-        rgba(15, 23, 42, 0.75) 55%,
-        rgba(15, 23, 42, 0.95) 100%
+        rgba(0, 0, 0, 0.35) 0%,
+        rgba(0, 0, 0, 0.7) 55%,
+        rgba(0, 0, 0, 0.92) 100%
     );
     z-index: 1;
 }
@@ -469,9 +469,9 @@
     inset: 0;
     background: linear-gradient(
         180deg,
-        rgba(15, 23, 42, 0.45) 0%,
-        rgba(15, 23, 42, 0.65) 50%,
-        rgba(15, 23, 42, 0.95) 100%
+        rgba(0, 0, 0, 0.45) 0%,
+        rgba(0, 0, 0, 0.65) 50%,
+        rgba(0, 0, 0, 0.95) 100%
     );
     z-index: 1;
 }

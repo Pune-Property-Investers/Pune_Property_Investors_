@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -31,11 +31,54 @@ import "./About.css";
 const WHATSAPP_NUMBER = "917398174444";
 
 const STATS = [
-    { value: "₹750+ Cr", label: "Advised Transactions", sub: "Across Luxury Corridors" },
-    { value: "1,500+", label: "Happy Families", sub: "Homebuyers & NRI Investors" },
-    { value: "100%", label: "MahaRERA Verified", sub: "Zero-Litigation Mandates" },
-    { value: "15+ Yrs", label: "Executive Leadership", sub: "Pune Real Estate Mastery" },
+    { prefix: "₹", target: 750, suffix: "+ Cr", label: "Advised Transactions", sub: "Across Luxury Corridors" },
+    { target: 1500, suffix: "+", label: "Happy Families", sub: "Homebuyers & NRI Investors" },
+    { target: 100, suffix: "%", label: "MahaRERA Verified", sub: "Zero-Litigation Mandates" },
+    { target: 15, suffix: "+ Yrs", label: "Executive Leadership", sub: "Pune Real Estate Mastery" },
 ];
+
+function AnimatedStatNumber({ target, prefix = "", suffix = "", started }) {
+    const [count, setCount] = useState(0);
+    const hasAnimated = useRef(false);
+
+    useEffect(() => {
+        if (!started || hasAnimated.current) return;
+        hasAnimated.current = true;
+
+        const duration = 2000;
+        let frameId;
+        let startTime;
+
+        const animate = (timestamp) => {
+            if (startTime === undefined) startTime = timestamp;
+
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            // Ease out cubic matching TrustStats counter
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const value = Math.round(target * eased);
+
+            setCount(value);
+
+            if (progress < 1) {
+                frameId = requestAnimationFrame(animate);
+            } else {
+                setCount(target);
+            }
+        };
+
+        frameId = requestAnimationFrame(animate);
+
+        return () => cancelAnimationFrame(frameId);
+    }, [started, target]);
+
+    return (
+        <>
+            {prefix}
+            {count.toLocaleString("en-IN")}
+            {suffix}
+        </>
+    );
+}
 
 const PILLARS = [
     {
@@ -118,6 +161,43 @@ export default function AboutPage() {
     const aboutData = published?.homepage?.about || null;
     const [activeOfficeTab, setActiveOfficeTab] = useState(0);
 
+    const statsRef = useRef(null);
+    const [statsStarted, setStatsStarted] = useState(false);
+
+    useEffect(() => {
+        const el = statsRef.current;
+        if (!el || statsStarted) return;
+
+        const checkVisibility = () => {
+            if (el) {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    setStatsStarted(true);
+                }
+            }
+        };
+
+        checkVisibility();
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setStatsStarted(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.05, rootMargin: "60px 0px" }
+        );
+
+        observer.observe(el);
+        window.addEventListener("scroll", checkVisibility, { passive: true });
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener("scroll", checkVisibility);
+        };
+    }, [statsStarted]);
+
     const getWhatsAppUrl = () => {
         const text = encodeURIComponent(
             "Hello Pune Property Investors team, I would like to schedule a private advisory consultation regarding property investments in Pune."
@@ -184,10 +264,17 @@ export default function AboutPage() {
                         </div>
 
                         {/* Floating Live Metrics Bar */}
-                        <div className="about-stats-card">
+                        <div ref={statsRef} className="about-stats-card">
                             {STATS.map((stat) => (
                                 <div key={stat.label} className="about-stat-item">
-                                    <div className="about-stat-value">{stat.value}</div>
+                                    <div className="about-stat-value">
+                                        <AnimatedStatNumber
+                                            target={stat.target}
+                                            prefix={stat.prefix}
+                                            suffix={stat.suffix}
+                                            started={statsStarted}
+                                        />
+                                    </div>
                                     <div className="about-stat-label">{stat.label}</div>
                                     <div className="about-stat-sub">{stat.sub}</div>
                                 </div>

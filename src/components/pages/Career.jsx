@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -40,11 +40,54 @@ import "./Career.css";
 const WHATSAPP_NUMBER = "917398174444";
 
 const CAREER_STATS = [
-    { value: "9+", label: "Immediate Openings", sub: "Kharadi, Dighi & Katraj" },
-    { value: "₹50K+", label: "Avg. Monthly Earning", sub: "Fixed CTC + High Incentives" },
-    { value: "6 Months", label: "Appraisal Cycle", sub: "Fast-Track Leadership" },
-    { value: "100%", label: "Direct Builder Mandates", sub: "Godrej, Lodha & Panchshil" },
+    { target: 9, suffix: "+", label: "Immediate Openings", sub: "Kharadi, Dighi & Katraj" },
+    { prefix: "₹", target: 50, suffix: "K+", label: "Avg. Monthly Earning", sub: "Fixed CTC + High Incentives" },
+    { target: 6, suffix: " Months", label: "Appraisal Cycle", sub: "Fast-Track Leadership" },
+    { target: 100, suffix: "%", label: "Direct Builder Mandates", sub: "Godrej, Lodha & Panchshil" },
 ];
+
+function AnimatedStatNumber({ target, prefix = "", suffix = "", started }) {
+    const [count, setCount] = useState(0);
+    const hasAnimated = useRef(false);
+
+    useEffect(() => {
+        if (!started || hasAnimated.current) return;
+        hasAnimated.current = true;
+
+        const duration = 2000;
+        let frameId;
+        let startTime;
+
+        const animate = (timestamp) => {
+            if (startTime === undefined) startTime = timestamp;
+
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            // Ease out cubic matching TrustStats counter
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const value = Math.round(target * eased);
+
+            setCount(value);
+
+            if (progress < 1) {
+                frameId = requestAnimationFrame(animate);
+            } else {
+                setCount(target);
+            }
+        };
+
+        frameId = requestAnimationFrame(animate);
+
+        return () => cancelAnimationFrame(frameId);
+    }, [started, target]);
+
+    return (
+        <>
+            {prefix}
+            {count.toLocaleString("en-IN")}
+            {suffix}
+        </>
+    );
+}
 
 const PERKS = [
     {
@@ -122,6 +165,43 @@ const FAQS = [
 export default function Career() {
     const [jobs, setJobs] = useState(DEFAULT_JOBS);
     const [loading, setLoading] = useState(true);
+
+    const statsRef = useRef(null);
+    const [statsStarted, setStatsStarted] = useState(false);
+
+    useEffect(() => {
+        const el = statsRef.current;
+        if (!el || statsStarted) return;
+
+        const checkVisibility = () => {
+            if (el) {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    setStatsStarted(true);
+                }
+            }
+        };
+
+        checkVisibility();
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setStatsStarted(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.05, rootMargin: "60px 0px" }
+        );
+
+        observer.observe(el);
+        window.addEventListener("scroll", checkVisibility, { passive: true });
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener("scroll", checkVisibility);
+        };
+    }, [statsStarted]);
 
     // Filters
     const [selectedDepartment, setSelectedDepartment] = useState("All");
@@ -275,8 +355,8 @@ export default function Career() {
                 <section className="career-hero">
                     <div className="career-hero__bg-wrap">
                         <Image
-                            src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2000&q=85"
-                            alt="Pune Property Investors Corporate Office"
+                            src="/images/career-hero-bg.jpg"
+                            alt="Join Pune Property Investors Advisory Team"
                             fill
                             priority
                             sizes="100vw"
@@ -307,33 +387,18 @@ export default function Career() {
                             mentorship by 15+ year veterans, and fast-track leadership opportunities.
                         </p>
 
-                        <div className="career-hero__actions">
-                            <button
-                                type="button"
-                                onClick={handleExplore}
-                                className="career-hero__btn career-hero__btn--primary"
-                            >
-                                <span>Explore Open Positions</span>
-                                <ArrowRight size={16} />
-                            </button>
-                            <a
-                                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-                                    "Hello HR Team, I would like to inquire about career opportunities at Pune Property Investors."
-                                )}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="career-hero__btn career-hero__btn--whatsapp"
-                            >
-                                <FaWhatsapp size={17} />
-                                <span>WhatsApp HR Desk</span>
-                            </a>
-                        </div>
-
                         {/* Live Recruitment Metrics Card */}
-                        <div className="career-stats-card">
+                        <div ref={statsRef} className="career-stats-card">
                             {CAREER_STATS.map((stat) => (
                                 <div key={stat.label} className="career-stat-item">
-                                    <div className="career-stat-value">{stat.value}</div>
+                                    <div className="career-stat-value">
+                                        <AnimatedStatNumber
+                                            target={stat.target}
+                                            prefix={stat.prefix}
+                                            suffix={stat.suffix}
+                                            started={statsStarted}
+                                        />
+                                    </div>
                                     <div className="career-stat-label">{stat.label}</div>
                                     <div className="career-stat-sub">{stat.sub}</div>
                                 </div>
