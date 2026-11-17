@@ -179,10 +179,10 @@ const DEFAULT_HOMEPAGE_SECTIONS = [
         enabled: true,
         order: 13,
         data: {
-            eyebrow: "GET IN TOUCH",
-            heading: "Connect With Our Pune Real Estate Advisors",
-            subtitle: "Looking for inaugural price sheets, verified layouts, or private site visits across Pune? Speak directly with our senior property advisors 7 days a week.",
-            buttonText: "Send Inquiry & Connect on WhatsApp",
+            eyebrow: "PUNE PROPERTY INVESTORS",
+            heading: "Start your Pune property journey today",
+            subtitle: "Complete the form and get a personalized list of verified properties within 24 hours.",
+            buttonText: "Send message",
         },
     },
     {
