@@ -41,7 +41,7 @@
 .career-hero__bg-img {
     object-fit: cover;
     object-position: 70% 20%;
-    filter: brightness(0.92) contrast(1.02);
+    filter: none;
 }
 
 .career-hero__overlay {
@@ -49,13 +49,13 @@
     inset: 0;
     background:
         linear-gradient(90deg,
-            rgba(0, 0, 0, 0.4) 0%,
-            rgba(0, 0, 0, 0.15) 55%,
-            rgba(0, 0, 0, 0.05) 100%),
+        rgba(0, 0, 0, 0.25) 0%,
+        rgba(0, 0, 0, 0.05) 55%,
+        rgba(0, 0, 0, 0) 100%),
         linear-gradient(180deg,
-            rgba(0, 0, 0, 0.45) 0%,
-            rgba(0, 0, 0, 0.15) 40%,
-            rgba(0, 0, 0, 0.55) 100%);
+    rgba(0, 0, 0, 0.25) 0%,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(0, 0, 0, 0.35) 100%);
     z-index: 2;
 }
 
@@ -1366,11 +1366,11 @@
     .career-hero__overlay {
         background:
             linear-gradient(180deg,
-                rgba(0, 0, 0, 0.4) 0%,
-                rgba(0, 0, 0, 0.08) 22%,
-                rgba(0, 0, 0, 0.22) 36%,
-                rgba(0, 0, 0, 0.65) 60%,
-                rgba(0, 0, 0, 0.9) 100%);
+        rgba(0, 0, 0, 0.2) 0%,
+        rgba(0, 0, 0, 0) 18%,
+        rgba(0, 0, 0, 0) 65%,
+        rgba(0, 0, 0, 0.25) 85%,
+        rgba(0, 0, 0, 0.5) 100%);
     }
 
     .career-hero__content {
@@ -1397,6 +1397,7 @@
         font-size: clamp(1.6rem, 5.8vw, 2.15rem);
         line-height: 1.2;
         margin-bottom: 12px;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.9);
     }
 
     .career-hero__title em,
@@ -1409,6 +1410,7 @@
         font-size: 0.88rem;
         line-height: 1.5;
         margin-bottom: 18px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.9);
     }
 
     .career-hero__actions {
@@ -1917,11 +1919,11 @@
     .career-hero__overlay {
         background:
             linear-gradient(180deg,
-                rgba(0, 0, 0, 0.35) 0%,
-                rgba(0, 0, 0, 0.05) 18%,
-                rgba(0, 0, 0, 0.25) 36%,
-                rgba(0, 0, 0, 0.72) 62%,
-                rgba(0, 0, 0, 0.92) 100%);
+        rgba(0, 0, 0, 0.2) 0%,
+        rgba(0, 0, 0, 0) 18%,
+        rgba(0, 0, 0, 0) 65%,
+        rgba(0, 0, 0, 0.22) 85%,
+        rgba(0, 0, 0, 0.45) 100%);
     }
 
     .career-hero__content {
@@ -1948,6 +1950,7 @@
         font-size: clamp(1.48rem, 5.4vw, 1.85rem);
         line-height: 1.22;
         margin-bottom: 10px;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.9);
     }
 
     .career-hero__title em,
@@ -1960,6 +1963,7 @@
         font-size: 0.82rem;
         line-height: 1.45;
         margin-bottom: 14px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.9);
     }
 
     .career-stats-card {
@@ -1976,14 +1980,17 @@
 
     .career-stat-value {
         font-size: clamp(0.92rem, 3.8vw, 1.2rem);
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
     }
 
     .career-stat-label {
         font-size: clamp(0.56rem, 2vw, 0.66rem);
+        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85);
     }
 
     .career-stat-sub {
         font-size: clamp(0.48rem, 1.7vw, 0.56rem);
+        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85);
     }
 
     .career-perks-grid {
