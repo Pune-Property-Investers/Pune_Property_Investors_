@@ -762,6 +762,11 @@
         padding: 0;
     }
 
+    .careers-hero__title em {
+        display: block;
+        margin-top: 4px;
+    }
+
     .careers-cinematic-stage {
         position: relative;
         width: 100%;
