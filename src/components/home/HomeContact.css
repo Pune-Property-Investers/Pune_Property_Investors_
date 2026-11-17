@@ -32,12 +32,13 @@
 .editorial-showcase-frame {
     position: relative;
     width: 100%;
-    min-height: clamp(460px, 52vh, 520px);
+    min-height: clamp(520px, 60vh, 620px);
     border-radius: 24px;
     overflow: hidden;
     display: flex;
     align-items: center;
-    box-shadow: 0 16px 48px -12px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(220, 215, 206, 0.6);
+    box-shadow: none;
+    border: 1px solid rgba(220, 215, 206, 0.6);
     background: #0f1614 linear-gradient(135deg, #1c2723 0%, #0d1412 100%);
     isolation: isolate;
 }
@@ -190,6 +191,48 @@
 
 .editorial-form-header {
     margin-bottom: 16px;
+}
+
+.editorial-header-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.mobile-loc-badge {
+    display: none;
+}
+
+.editorial-form-white-card {
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.submit-text-desktop {
+    display: inline;
+}
+
+.submit-text-mobile {
+    display: none;
+}
+
+.editorial-mobile-wa-row {
+    display: none;
+}
+
+.editorial-wp-action-btn {
+    display: none;
+}
+
+.field-desktop-only {
+    display: block;
+}
+
+.desktop-only-content {
+    display: block;
 }
 
 .editorial-form-eyebrow {
@@ -430,179 +473,199 @@
 }
 
 /* --------------------------------------------------------------------------
-   MOBILE VIEW: SAMSUNG GALAXY Z FOLD WITH FULL-SIZE IMAGE & TRANSPARENT FORM
-   Full Background Image across entire fold device + Transparent Visible Form
+   MOBILE VIEW: Beautiful Floating White Card over Luxury Villa Background
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
     .editorial-contact-section {
-        padding: 12px 0 20px;
+        padding: 20px 0 32px;
     }
 
     .editorial-contact-container {
-        max-width: 420px;
+        max-width: 480px;
         margin: 0 auto;
         padding: 0 12px;
     }
 
-    /* Outer Chassis: Samsung Galaxy Z Fold (Open Book Mode) */
-    .editorial-showcase-frame.samsung-fold-device {
-        min-height: 380px;
-        display: block;
+    /* Outer Showcase Frame with Villa Background - EXACT SAME ALIGNMENT AS DESKTOP */
+    .editorial-showcase-frame {
         position: relative;
-        border: 4px solid #1c2220;
+        width: 100%;
+        min-height: clamp(520px, 62vh, 600px);
         border-radius: 22px;
         overflow: hidden;
-        padding: 0;
-        background: #0d1210;
-        box-shadow:
-            0 0 0 1px #333d39,
-            0 16px 45px rgba(0, 0, 0, 0.32),
-            inset 0 0 10px rgba(0, 0, 0, 0.5);
+        padding: 0 !important;
+        background: #0f1614;
+        border: 1px solid rgba(220, 215, 206, 0.4);
+        box-shadow: 0 14px 40px -10px rgba(15, 23, 42, 0.16);
+        isolation: isolate;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
     }
 
-    /* FULL-SIZE BACKGROUND IMAGE ACROSS THE ENTIRE FOLD DEVICE */
+    /* Natural Villa Background Image across the entire frame */
     .editorial-showcase-bg.fold-full-bg {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
         background-size: cover;
-        background-position: center 36%;
+        background-position: center 30%;
         background-repeat: no-repeat;
         z-index: 1;
         display: block;
+        transform: none;
     }
 
+    /* Subtle contrast overlay */
     .editorial-showcase-overlay {
         position: absolute;
         inset: 0;
-        background: linear-gradient(
-            90deg,
-            rgba(15, 23, 42, 0.58) 0%,
-            rgba(15, 23, 42, 0.22) 58%,
-            rgba(15, 23, 42, 0.08) 100%
-        );
+        background: rgba(15, 23, 42, 0.22);
         z-index: 2;
+        display: block !important;
     }
 
-    /* Hardware Accents */
-    .fold-camera-dot {
-        display: block;
-        position: absolute;
-        top: 8px;
-        right: 25%;
-        width: 5px;
-        height: 5px;
-        border-radius: 50%;
-        background: #000000;
-        box-shadow: inset 0 0 1px #444, 0 0 0 1px rgba(255, 255, 255, 0.2);
-        z-index: 20;
-        pointer-events: none;
+    .fold-antenna-left,
+    .fold-antenna-right,
+    .fold-camera-dot,
+    .fold-spine-crease {
+        display: none !important;
     }
 
-    .fold-antenna-left {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 20px;
-        width: 2px;
-        height: 4px;
-        background: #333d39;
-        z-index: 20;
-    }
-
-    .fold-antenna-right {
-        display: block;
-        position: absolute;
-        top: 0;
-        right: 20px;
-        width: 2px;
-        height: 4px;
-        background: #333d39;
-        z-index: 20;
-    }
-
-    /* Inner Dual-Screen Grid on Mobile - Seamless Open View (NO middle partition line) */
+    /* Dual Grid - Left-Aligned and Vertically Centered exactly like desktop */
     .fold-dual-grid {
         position: relative;
         z-index: 4;
         width: 100%;
-        min-height: 380px;
-        display: grid;
-        grid-template-columns: 1.15fr 0.85fr;
-        align-items: stretch;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0 !important;
     }
 
-    /* SCREEN 1: Left Display - COMPLETELY TRANSPARENT VISIBLE CONTACT FORM */
-    .editorial-form-card.fold-screen-left {
+    /* Floating Badges in Top-Right and Bottom-Right Corners - EXACTLY LIKE DESKTOP */
+    .fold-screen-right-content {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        pointer-events: none;
+        display: block;
+    }
+
+    .fold-glass-pill-top {
+        position: absolute !important;
+        top: 18px !important;
+        right: 18px !important;
+        pointer-events: auto;
+        display: inline-flex;
+        padding: 6px 12px;
+        font-size: 10px;
+        gap: 6px;
+    }
+
+    .fold-glass-pill-bottom {
+        position: absolute !important;
+        bottom: 18px !important;
+        right: 18px !important;
+        pointer-events: auto;
+        display: inline-flex;
+        padding: 6px 12px;
+        font-size: 10px;
+        gap: 6px;
+    }
+
+    /* Elegant Floating Pure White Form Card - LEFT-ALIGNED EXACTLY LIKE DESKTOP */
+    .editorial-form-card {
         position: relative;
         z-index: 4;
-        width: 100%;
-        max-width: none;
-        margin: 0;
-        border-radius: 0;
-        background: transparent !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        border: none !important;
-        padding: 14px 10px 12px 12px;
-        box-shadow: none !important;
+        width: clamp(280px, 86%, 340px) !important;
+        max-width: 340px !important;
+        margin: 24px 0 24px 18px !important;
+        background: #ffffff !important;
+        border-radius: 18px !important;
+        padding: 24px 20px 20px !important;
+        box-shadow: 0 18px 42px -10px rgba(15, 23, 42, 0.22), 0 2px 6px rgba(15, 23, 42, 0.04) !important;
+        border: 1px solid rgba(255, 255, 255, 0.8) !important;
+        box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        text-align: left;
     }
 
     .editorial-form-header {
-        margin-bottom: 4px;
+        margin-bottom: 14px;
+        padding: 0 !important;
+        background: transparent !important;
     }
 
     .editorial-form-eyebrow {
-        font-size: 7.5px;
-        letter-spacing: 1.2px;
-        margin-bottom: 2px;
-        color: #e5c388;
+        display: block;
+        font-size: 9px;
         font-weight: 800;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+        letter-spacing: 1.8px;
+        text-transform: uppercase;
+        color: #a77a48;
+        margin-bottom: 5px;
+        text-shadow: none !important;
     }
 
     .editorial-form-title {
-        font-size: 13.5px;
-        font-weight: 700;
-        line-height: 1.15;
-        margin: 0 0 2px;
-        color: #ffffff;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+        font-family: var(--font-serif), "Playfair Display", Georgia, serif;
+        font-size: 21px;
+        font-weight: 600;
+        color: #111815;
+        line-height: 1.25;
+        letter-spacing: -0.3px;
+        margin: 0 0 6px 0;
+        text-shadow: none !important;
     }
 
     .editorial-form-desc {
-        font-size: 9px;
-        line-height: 1.25;
+        display: block !important;
+        font-size: 11.5px;
+        color: #64748b;
+        line-height: 1.45;
         margin: 0;
-        color: rgba(255, 255, 255, 0.92);
-        font-weight: 500;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        text-shadow: none !important;
     }
 
     .editorial-form {
-        gap: 2px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
     }
 
-    /* Inputs on transparent background: crisp white text & clear baselines */
+    .editorial-input-group {
+        position: relative;
+        width: 100%;
+    }
+
+    /* Minimal Underline Inputs with Dark Readable Text */
     .editorial-input {
-        font-size: 16px;
-        font-weight: 600;
-        color: #ffffff;
-        padding: 3px 0 2px;
-        border-bottom: 1.5px solid rgba(255, 255, 255, 0.65);
-        background: transparent;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        width: 100%;
+        border: none;
+        border-bottom: 1.5px solid #e2ddd5;
+        background: transparent !important;
+        padding: 8px 0 6px;
+        font-size: 13.5px;
+        font-weight: 500;
+        color: #111815;
+        font-family: var(--font-sans), Inter, sans-serif;
+        outline: none;
+        border-radius: 0;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        transition: border-bottom-color 0.25s ease;
+        box-sizing: border-box;
     }
 
     .editorial-input::placeholder {
-        font-size: 10.5px;
-        color: rgba(255, 255, 255, 0.82);
-        font-weight: 500;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        color: #8c97a5;
+        font-weight: 400;
+        font-size: 13px;
+        text-shadow: none !important;
     }
 
     .editorial-input:focus {
@@ -610,114 +673,119 @@
     }
 
     .editorial-textarea {
-        min-height: 20px;
-        padding: 3px 0 2px;
+        resize: none;
+        min-height: 32px;
+        line-height: 1.35;
     }
 
+    /* Consent Checkbox */
     .editorial-consent-row {
-        margin: 4px 0 6px;
-        gap: 5px;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin: 10px 0 14px;
+        cursor: pointer;
+        user-select: none;
     }
 
     .editorial-checkbox {
-        width: 11px;
-        height: 11px;
-        margin-top: 1px;
-        accent-color: #ba874a;
+        width: 14px;
+        height: 14px;
+        border-radius: 3px;
+        border: 1.5px solid #c7c1b5;
+        accent-color: #111815;
+        margin-top: 2px;
+        cursor: pointer;
+        flex-shrink: 0;
+        box-shadow: none !important;
     }
 
     .editorial-consent-text {
-        font-size: 8px;
-        line-height: 1.2;
-        color: #ffffff;
-        font-weight: 500;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        font-size: 10.5px;
+        color: #64748b;
+        line-height: 1.4;
+        text-shadow: none !important;
     }
 
     .editorial-policy-link {
-        color: #e5c388;
+        color: #111815;
         text-decoration: underline;
+        font-weight: 600;
     }
 
+    /* Action Button - EXACTLY LIKE DESKTOP */
     .editorial-actions {
         width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-top: 4px;
     }
 
     .editorial-submit-pill {
-        width: 100%;
-        height: 28px;
-        padding: 0 6px 0 10px;
-        font-size: 10.5px;
-        font-weight: 700;
-        justify-content: space-between;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 6px 6px 6px 18px;
+        height: 38px;
         border-radius: 9999px;
-        background: #ffffff;
-        color: #0f172a;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        background: #111815;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(17, 24, 21, 0.24);
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .editorial-submit-pill:hover {
+    .editorial-submit-pill:hover,
+    .editorial-submit-pill:active {
         background: #ba874a;
         color: #ffffff;
+        transform: translateY(-1.5px);
+        box-shadow: 0 8px 18px rgba(186, 135, 74, 0.35);
     }
 
     .editorial-arrow-circle {
-        width: 18px;
-        height: 18px;
-        background: #0f172a;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #ffffff;
+        color: #111815;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: none !important;
+        transition: all 0.2s ease;
+    }
+
+    .editorial-arrow-circle svg {
+        width: 11px;
+        height: 11px;
+    }
+
+    .editorial-submit-pill:hover .editorial-arrow-circle {
+        background: #111815;
         color: #ffffff;
     }
 
-    /* REMOVE MIDDLE CREASE/PARTITION LINE */
-    .fold-spine-crease {
+    .editorial-wp-action-btn {
         display: none !important;
     }
 
-    /* SCREEN 2: Right Display - Clear Panoramic Villa View */
-    .fold-screen-right-content {
-        position: relative;
-        inset: auto;
-        z-index: 5;
-        padding: 12px 8px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        pointer-events: auto;
-    }
-
-    .fold-glass-pill-top {
-        position: static;
-        padding: 4px 8px;
-        font-size: 8px;
-        gap: 4px;
-        background: rgba(255, 255, 255, 0.94);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
-    }
-
-    .fold-glass-pill-bottom {
-        position: static;
-        width: 100%;
-        justify-content: center;
-        padding: 6px 8px;
-        font-size: 9px;
-        gap: 5px;
-        background: #25d366;
-        color: #ffffff;
-        border-color: #25d366;
-        box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
-    }
-
-    /* Contact Details Container Below Fold Device */
+    /* Sub-bar: Minimal Luxury Trust & Headquarters Info */
     .editorial-bottom-strip {
         display: flex;
         flex-direction: column;
-        gap: 7px;
-        padding: 10px 12px;
-        margin-top: 10px;
+        gap: 8px;
+        padding: 12px 14px;
+        margin-top: 12px;
         background: #ffffff;
         border: 1px solid #ebe5dc;
-        border-radius: 12px;
+        border-radius: 14px;
         box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
     }
 
@@ -750,19 +818,32 @@
 }
 
 @media (max-width: 360px) {
-    .editorial-showcase-frame.samsung-fold-device {
-        min-height: 360px;
-    }
-
-    .editorial-form-card.fold-screen-left {
-        padding: 10px 8px 8px;
+    .editorial-form-card {
+        width: calc(100% - 24px) !important;
+        margin: 20px 0 20px 12px !important;
+        padding: 18px 14px 16px !important;
     }
 
     .editorial-form-title {
-        font-size: 11.5px;
+        font-size: 19px;
     }
 
-    .editorial-input::placeholder {
-        font-size: 9.5px;
+    .editorial-input {
+        font-size: 12.5px;
+        padding: 7px 0 5px;
+    }
+
+    .fold-glass-pill-top {
+        top: 10px !important;
+        right: 12px !important;
+        font-size: 9px !important;
+        padding: 4px 8px !important;
+    }
+
+    .fold-glass-pill-bottom {
+        bottom: 10px !important;
+        right: 12px !important;
+        font-size: 9px !important;
+        padding: 4px 8px !important;
     }
 }

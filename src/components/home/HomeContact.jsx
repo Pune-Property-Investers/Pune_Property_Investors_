@@ -106,27 +106,26 @@ export default function HomeContact({ previewData }) {
                     <div className="fold-antenna-right" aria-hidden="true" />
                     <div className="fold-camera-dot" aria-hidden="true" />
 
-                    {/* Dual Pane Layout (No middle partition) */}
+                    {/* Dual Pane Layout (Desktop: dual pane; Mobile: clean floating white card over villa background) */}
                     <div className="fold-dual-grid">
-                        {/* LEFT SIDE: Fully Transparent Contact Form (No white background) */}
+                        {/* Floating Elegant White Contact Form Card */}
                         <div className="editorial-form-card fold-screen-left">
                             <div className="editorial-form-header">
                                 <span className="editorial-form-eyebrow">
-                                    PUNE PROPERTY INVESTORS
+                                    {previewData?.eyebrow || "PUNE PROPERTY INVESTORS"}
                                 </span>
                                 <h2 className="editorial-form-title">
-                                    {previewData?.heading ??
-                                        "Start your Pune property journey today"}
+                                    {previewData?.heading || "Start your Pune property journey today"}
                                 </h2>
                                 <p className="editorial-form-desc">
-                                    {previewData?.subtitle ??
+                                    {previewData?.subtitle ||
                                         "Complete the form and get a personalized list of verified properties within 24 hours."}
                                 </p>
                             </div>
 
                             <form onSubmit={handleSubmit} className="editorial-form">
-                                {/* Your Name */}
-                                <div className="editorial-input-group">
+                                {/* 1. Name */}
+                                <div className="editorial-input-group field-name">
                                     <input
                                         id="ed-name"
                                         type="text"
@@ -139,8 +138,8 @@ export default function HomeContact({ previewData }) {
                                     />
                                 </div>
 
-                                {/* Email */}
-                                <div className="editorial-input-group">
+                                {/* 2. Email */}
+                                <div className="editorial-input-group field-email">
                                     <input
                                         id="ed-email"
                                         type="email"
@@ -152,8 +151,8 @@ export default function HomeContact({ previewData }) {
                                     />
                                 </div>
 
-                                {/* Phone Number */}
-                                <div className="editorial-input-group">
+                                {/* 3. Phone number */}
+                                <div className="editorial-input-group field-phone">
                                     <input
                                         id="ed-phone"
                                         type="tel"
@@ -166,8 +165,8 @@ export default function HomeContact({ previewData }) {
                                     />
                                 </div>
 
-                                {/* Preferred Locality & Budget */}
-                                <div className="editorial-input-group">
+                                {/* 4. Preferred Locality & Budget */}
+                                <div className="editorial-input-group field-locality">
                                     <input
                                         id="ed-locality"
                                         type="text"
@@ -179,8 +178,8 @@ export default function HomeContact({ previewData }) {
                                     />
                                 </div>
 
-                                {/* How Can We Help / Message */}
-                                <div className="editorial-input-group">
+                                {/* 5. How Can We Help / Message */}
+                                <div className="editorial-input-group field-message">
                                     <textarea
                                         id="ed-message"
                                         rows={1}
@@ -207,7 +206,7 @@ export default function HomeContact({ previewData }) {
                                     </span>
                                 </label>
 
-                                {/* Black Pill CTA Button with Circle Arrow */}
+                                {/* Submit Button */}
                                 <div className="editorial-actions">
                                     <button
                                         type="submit"
@@ -232,7 +231,7 @@ export default function HomeContact({ previewData }) {
                             </form>
                         </div>
 
-                        {/* RIGHT SIDE: Open Panoramic Villa View with Badges */}
+                        {/* RIGHT SIDE / Floating Badges: Open Panoramic Villa View with Badges */}
                         <div className="fold-screen-right-content">
                             <div className="editorial-glass-pill fold-glass-pill-top">
                                 <span className="editorial-pulse-dot" />
