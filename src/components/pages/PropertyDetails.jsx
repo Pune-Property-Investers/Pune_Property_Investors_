@@ -278,62 +278,6 @@ function PropertyDetails({ propertyId, propertySlug }) {
                                 <PropertyOverview property={property} />
                             </section>
 
-                            {/* Pricing */}
-                            <section className="property-details__section property-details__pricing">
-                                <div className="property-details__section-heading">
-                                    <div>
-                                        <span className="property-details__eyebrow">
-                                            PRICING INFORMATION
-                                        </span>
-
-                                        <h2>Price & property details</h2>
-                                    </div>
-                                </div>
-
-                                <div className="property-details__price-card">
-                                    <div className="property-details__price-card-main">
-                                        <span>Listed price</span>
-
-                                        <strong>{price}</strong>
-
-                                        <p>
-                                            Contact our property advisors
-                                            for current availability and
-                                            pricing.
-                                        </p>
-                                    </div>
-
-                                    <div className="property-details__price-card-divider" />
-
-                                    <div className="property-details__price-card-info">
-                                        <div>
-                                            <span>Configuration</span>
-                                            <strong>{configuration}</strong>
-                                        </div>
-
-                                        <div>
-                                            <span>Area</span>
-                                            <strong>{area}</strong>
-                                        </div>
-
-                                        <div>
-                                            <span>Possession</span>
-                                            <strong>
-                                                {property.possession ||
-                                                    "Contact for details"}
-                                            </strong>
-                                        </div>
-                                    </div>
-
-                                    <a
-                                        href="#property-enquiry"
-                                        className="property-details__outline-cta"
-                                    >
-                                        Request Detailed Pricing
-                                        <ArrowRight size={16} />
-                                    </a>
-                                </div>
-                            </section>
 
                             {/* Amenities */}
                             <section className="property-details__section">
