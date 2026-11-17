@@ -37,6 +37,21 @@ import { careerService } from "../../services/career.service";
 import { DEFAULT_JOBS } from "../../services/mockStore";
 import "./Career.css";
 
+const basePath =
+    process.env.NEXT_PUBLIC_BASE_PATH ||
+    (typeof window !== "undefined" && window.location.pathname.startsWith("/Pune_Property_Investors_")
+        ? "/Pune_Property_Investors_"
+        : "");
+
+const getAssetPath = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:")) {
+        return path;
+    }
+    const clean = path.startsWith("/") ? path : `/${path}`;
+    return `${basePath}${clean}`;
+};
+
 const WHATSAPP_NUMBER = "917398174444";
 
 const CAREER_STATS = [
@@ -103,7 +118,7 @@ const ROLE_FALLBACK_IMAGES = {
 
 function getJobImage(job) {
     if (job?.image && typeof job.image === "string" && job.image.trim().length > 0) {
-        return job.image.trim();
+        return getAssetPath(job.image.trim());
     }
     const title = (job?.title || "").toLowerCase();
     const dept = (job?.department || "").toLowerCase();
@@ -402,7 +417,7 @@ export default function Career() {
                 <section className="career-hero">
                     <div className="career-hero__bg-wrap">
                         <Image
-                            src="/images/career-hero-bg.jpg"
+                            src={getAssetPath("/images/career-hero-bg.jpg")}
                             alt="Join Pune Property Investors Advisory Team"
                             fill
                             priority
@@ -493,7 +508,7 @@ export default function Career() {
                             <div className="career-culture__media">
                                 <div className="career-culture-img-wrap">
                                     <Image
-                                        src="/images/ppi-team-office.jpg"
+                                        src={getAssetPath("/images/ppi-team-office.jpg")}
                                         alt="PPI Corporate Culture at Kharadi Office"
                                         width={600}
                                         height={450}
