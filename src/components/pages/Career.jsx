@@ -52,7 +52,8 @@ const getAssetPath = (path) => {
     return `${basePath}${clean}`;
 };
 
-const WHATSAPP_NUMBER = "917398174444";
+const WHATSAPP_NUMBER = "919970079222";
+const CAREERS_EMAIL = "hr@punepropertyinvestors.com";
 
 const CAREER_STATS = [
     { target: 9, suffix: "+", label: "Immediate Openings", sub: "Kharadi, Dighi & Katraj" },
@@ -589,7 +590,7 @@ export default function Career() {
                             </div>
 
                             <a
-                                href="mailto:careers@punepropertyinvestors.com"
+                                href={`mailto:${CAREERS_EMAIL}`}
                                 className="career-email-link"
                             >
                                 <Mail size={16} />
@@ -812,11 +813,11 @@ export default function Career() {
                             </p>
                             <div className="helpline-banner__actions">
                                 <a
-                                    href="mailto:careers@punepropertyinvestors.com"
+                                    href={`mailto:${CAREERS_EMAIL}`}
                                     className="helpline-btn helpline-btn--email"
                                 >
                                     <Mail size={16} />
-                                    <span>Email CV: careers@punepropertyinvestors.com</span>
+                                    <span>Email CV: {CAREERS_EMAIL}</span>
                                 </a>
                                 <a
                                     href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
