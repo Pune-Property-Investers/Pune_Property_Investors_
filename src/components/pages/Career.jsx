@@ -747,7 +747,7 @@ export default function Career() {
                                                     )}
                                                     {job.genderCriteria && (
                                                         <div
-                                                            className={`career-meta-tag ${isFemaleCriteria ? "career-meta-tag--gender" : ""
+                                                            className={`career-meta-tag career-meta-tag--criteria ${isFemaleCriteria ? "career-meta-tag--gender" : ""
                                                                 }`}
                                                         >
                                                             <Sparkles size={11} className="meta-icon" />
