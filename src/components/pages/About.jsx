@@ -246,37 +246,9 @@ export default function AboutPage() {
                             <span className="current">About Us</span>
                         </div>
 
-                        <div className="about-hero__eyebrow-pill">
-                            <Sparkles size={13} />
-                            <span>EST. 2015 • PUNE PROPERTY INVESTORS • MAHARERA VERIFIED</span>
-                        </div>
-
                         <h1 className="about-hero__title">
                             Architecting Trust in <em>Pune&apos;s Prime Real Estate.</em>
                         </h1>
-
-                        <p className="about-hero__subtitle">
-                            Headquartered in Gera Imperium Alpha, Kharadi with branches across
-                            Narhe and Dighi. We provide data-backed property intelligence,
-                            institutional due diligence, and direct builder mandates across Pune&apos;s
-                            high-growth residential and commercial corridors.
-                        </p>
-
-                        <div className="about-hero__actions">
-                            <Link href="/buy" className="about-hero__btn about-hero__btn--primary">
-                                <span>Explore Curated Properties</span>
-                                <ArrowRight size={16} />
-                            </Link>
-                            <a
-                                href={getWhatsAppUrl()}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="about-hero__btn about-hero__btn--whatsapp"
-                            >
-                                <FaWhatsapp size={17} />
-                                <span>Private Consultation</span>
-                            </a>
-                        </div>
 
                         {/* Floating Live Metrics Bar */}
                         <div ref={statsRef} className="about-stats-card">
