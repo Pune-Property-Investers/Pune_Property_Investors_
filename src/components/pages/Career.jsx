@@ -511,7 +511,7 @@ export default function Career() {
                             <div className="career-culture__media">
                                 <div className="career-culture-img-wrap">
                                     <Image
-                                        src={getAssetPath("/images/ppi-team-office.jpg")}
+                                        src={getAssetPath("/images/ppi-team-office.webp")}
                                         alt="PPI Corporate Culture at Kharadi Office"
                                         width={600}
                                         height={450}

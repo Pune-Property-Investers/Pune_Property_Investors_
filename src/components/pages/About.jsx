@@ -367,7 +367,7 @@ export default function AboutPage() {
                                 <div className="about-media-card">
                                     <div className="about-media-img-wrap">
                                         <Image
-                                            src={getAssetPath("/images/ppi-team-office.jpg")}
+                                            src={getAssetPath("/images/ppi-team-office.webp")}
                                             alt="Pune Property Investors Executive Team at Kharadi Headquarters"
                                             width={600}
                                             height={500}

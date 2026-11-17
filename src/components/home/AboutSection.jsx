@@ -18,7 +18,7 @@ export default function AboutSection() {
 
                     <div className="about-ppi-image-frame">
                         <img
-                            src={`${basePath}/images/ppi-team-office.jpg`}
+                            src={`${basePath}/images/ppi-team-office.webp`}
                             alt="Pune Property Investors Team at Headquarters"
                             className="about-ppi-image"
                             loading="lazy"
