@@ -60,7 +60,7 @@ export const metadata: Metadata = {
             "Find verified residential properties, newly launched projects, and premium apartments across Pune.",
         images: [
             {
-                url: "/images/logo.png",
+                url: `${basePath}/images/logo.png`,
                 width: 800,
                 height: 800,
                 alt: "Pune Property Investors Logo",
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
         title: "Pune Property Investors",
         description:
             "Find verified residential properties, newly launched projects, and premium apartments across Pune.",
-        images: ["/images/logo.png"],
+        images: [`${basePath}/images/logo.png`],
     },
     robots: {
         index: true,

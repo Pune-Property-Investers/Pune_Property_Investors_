@@ -12,7 +12,6 @@ import {
     Search,
     Building2,
     Heart,
-    Scale,
     ChevronRight,
     Home,
     Film,
@@ -419,15 +418,6 @@ function Header({ transparentAtTop = false }) {
                         >
                             <Heart size={18} className="mobile-drawer__util-icon" />
                             <span>Saved Properties</span>
-                        </Link>
-
-                        <Link
-                            href="/buy?filter=compare"
-                            className="mobile-drawer__util-link"
-                            onClick={closeMenu}
-                        >
-                            <Scale size={18} className="mobile-drawer__util-icon mobile-drawer__util-icon--gold" />
-                            <span>Compare Properties</span>
                         </Link>
                     </div>
 

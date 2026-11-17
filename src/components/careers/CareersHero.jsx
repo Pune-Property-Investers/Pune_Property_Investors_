@@ -13,6 +13,21 @@ import {
 import LaptopCareersDisplay from "./LaptopCareersDisplay";
 import "./CareersHero.css";
 
+const basePath =
+    process.env.NEXT_PUBLIC_BASE_PATH ||
+    (typeof window !== "undefined" && window.location.pathname.startsWith("/Pune_Property_Investors_")
+        ? "/Pune_Property_Investors_"
+        : "");
+
+const getAssetPath = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:")) {
+        return path;
+    }
+    const clean = path.startsWith("/") ? path : `/${path}`;
+    return `${basePath}${clean}`;
+};
+
 // Fallback example roles as requested in specification
 const DEFAULT_SPEC_JOBS = [
     {
@@ -175,7 +190,7 @@ export default function CareersHero({
                     {/* Background Photograph Asset */}
                     <div className="careers-laptop-photo-wrap">
                         <Image
-                            src="/images/careers-cinematic-laptop.jpg"
+                            src={getAssetPath("/images/careers-cinematic-laptop.jpg")}
                             alt="Cinematic laptop on natural rock presenting PPI Careers recruitment portal"
                             width={404}
                             height={316}

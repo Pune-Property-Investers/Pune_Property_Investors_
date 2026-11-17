@@ -28,6 +28,21 @@ import Footer from "../layouts/Footer";
 import { usePublishedCms } from "../../services/liveContent";
 import "./About.css";
 
+const basePath =
+    process.env.NEXT_PUBLIC_BASE_PATH ||
+    (typeof window !== "undefined" && window.location.pathname.startsWith("/Pune_Property_Investors_")
+        ? "/Pune_Property_Investors_"
+        : "");
+
+const getAssetPath = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:")) {
+        return path;
+    }
+    const clean = path.startsWith("/") ? path : `/${path}`;
+    return `${basePath}${clean}`;
+};
+
 const WHATSAPP_NUMBER = "917398174444";
 
 const STATS = [
@@ -352,7 +367,7 @@ export default function AboutPage() {
                                 <div className="about-media-card">
                                     <div className="about-media-img-wrap">
                                         <Image
-                                            src="/images/ppi-team-office.jpg"
+                                            src={getAssetPath("/images/ppi-team-office.jpg")}
                                             alt="Pune Property Investors Executive Team at Kharadi Headquarters"
                                             width={600}
                                             height={500}
