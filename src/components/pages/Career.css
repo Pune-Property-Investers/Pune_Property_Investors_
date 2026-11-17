@@ -318,6 +318,20 @@
     border-color: #dfb77e;
 }
 
+.career-perk-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 18px;
+}
+
+.career-perk-card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
 .career-perk-badge {
     align-self: flex-start;
     padding: 3px 9px;
@@ -327,7 +341,7 @@
     font-size: 0.68rem;
     font-weight: 800;
     letter-spacing: 0.8px;
-    margin-bottom: 18px;
+    margin-bottom: 0;
 }
 
 .career-perk-icon-box {
@@ -339,7 +353,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 18px;
+    margin-bottom: 0;
 }
 
 .career-perk-title {
@@ -356,6 +370,10 @@
     color: #64748b;
     line-height: 1.6;
     margin: 0;
+}
+
+.career-perk-short {
+    display: none;
 }
 
 /* =========================================================
@@ -481,7 +499,23 @@
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     position: relative;
+    display: flex;
+    flex-direction: column;
     transition: all 0.25s ease;
+}
+
+.career-process-card__top {
+    margin-bottom: 12px;
+}
+
+.career-process-card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.career-process-short {
+    display: none;
 }
 
 .career-process-card:hover {
@@ -1476,21 +1510,29 @@
         border-radius: 18px;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
-        overflow: hidden;
+        justify-content: space-between;
+        box-sizing: border-box;
+    }
+
+    .career-perk-card__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 8px;
     }
 
     .career-perk-badge {
         font-size: 0.62rem;
         padding: 2px 7px;
-        margin-bottom: 8px;
+        margin-bottom: 0;
     }
 
     .career-perk-icon-box {
         width: 36px;
         height: 36px;
         border-radius: 10px;
-        margin-bottom: 8px;
+        margin-bottom: 0;
     }
 
     .career-perk-icon-box svg {
@@ -1498,24 +1540,28 @@
         height: 18px;
     }
 
+    .career-perk-card__body {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
     .career-perk-title {
         font-size: 0.95rem;
         line-height: 1.25;
-        margin: 0 0 6px;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        margin: 0 0 4px;
+        font-weight: 700;
     }
 
     .career-perk-desc {
-        font-size: 0.78rem;
-        line-height: 1.4;
-        margin: 0;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        display: none;
+    }
+
+    .career-perk-short {
+        display: block;
+        font-size: 0.74rem;
+        line-height: 1.35;
+        color: #64748b;
     }
 
     .career-culture__content {
@@ -1545,34 +1591,43 @@
         border-radius: 18px;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
-        overflow: hidden;
+        justify-content: space-between;
+        box-sizing: border-box;
+    }
+
+    .career-process-card__top {
+        margin-bottom: 6px;
     }
 
     .career-process-num {
-        font-size: 1.6rem;
-        margin-bottom: 6px;
+        font-size: 1.7rem;
         line-height: 1;
+        margin: 0;
+        font-weight: 800;
+    }
+
+    .career-process-card__body {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
     }
 
     .career-process-title {
         font-size: 0.95rem;
         line-height: 1.25;
-        margin: 0 0 6px;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        margin: 0 0 4px;
+        font-weight: 700;
     }
 
     .career-process-desc {
-        font-size: 0.78rem;
-        line-height: 1.4;
-        margin: 0;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        display: none;
+    }
+
+    .career-process-short {
+        display: block;
+        font-size: 0.74rem;
+        line-height: 1.35;
+        color: #64748b;
     }
 
     .career-openings-header {
@@ -1849,47 +1904,59 @@
         border-radius: 16px;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
-        overflow: hidden;
+        justify-content: space-between;
+        box-sizing: border-box;
     }
 
-    .career-perk-badge {
-        font-size: 0.54rem;
-        padding: 2px 5px;
-        letter-spacing: 0.4px;
-        margin-bottom: 6px;
+    .career-perk-card__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 4px;
     }
 
     .career-perk-icon-box {
-        width: 30px;
-        height: 30px;
-        border-radius: 8px;
-        margin-bottom: 6px;
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
+        margin-bottom: 0;
     }
 
     .career-perk-icon-box svg {
-        width: 15px;
-        height: 15px;
+        width: 14px;
+        height: 14px;
+    }
+
+    .career-perk-badge {
+        font-size: 0.52rem;
+        padding: 2px 5px;
+        letter-spacing: 0.3px;
+        margin-bottom: 0;
+    }
+
+    .career-perk-card__body {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
     }
 
     .career-perk-title {
-        font-size: 0.84rem;
+        font-size: 0.82rem;
         line-height: 1.2;
-        margin: 0 0 4px;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        margin: 0 0 3px;
+        font-weight: 700;
     }
 
     .career-perk-desc {
-        font-size: 0.68rem;
-        line-height: 1.32;
-        margin: 0;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        display: none;
+    }
+
+    .career-perk-short {
+        display: block;
+        font-size: 0.66rem;
+        line-height: 1.28;
+        color: #64748b;
     }
 
     .career-process-grid {
@@ -1904,33 +1971,42 @@
         border-radius: 16px;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
-        overflow: hidden;
+        justify-content: space-between;
+        box-sizing: border-box;
+    }
+
+    .career-process-card__top {
+        margin-bottom: 4px;
     }
 
     .career-process-num {
-        font-size: 1.35rem;
-        margin-bottom: 4px;
+        font-size: 1.45rem;
         line-height: 1;
+        margin: 0;
+        font-weight: 800;
+    }
+
+    .career-process-card__body {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
     }
 
     .career-process-title {
-        font-size: 0.84rem;
+        font-size: 0.82rem;
         line-height: 1.2;
-        margin: 0 0 4px;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        margin: 0 0 3px;
+        font-weight: 700;
     }
 
     .career-process-desc {
-        font-size: 0.68rem;
-        line-height: 1.32;
-        margin: 0;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        display: none;
+    }
+
+    .career-process-short {
+        display: block;
+        font-size: 0.66rem;
+        line-height: 1.28;
+        color: #64748b;
     }
 }

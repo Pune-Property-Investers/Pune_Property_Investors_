@@ -155,29 +155,33 @@ function getJobImage(job) {
 const PERKS = [
     {
         icon: TrendingUp,
-        badge: "FINANCIAL GROWTH",
-        title: "Uncapped Earning & Milestone Bonuses",
+        badge: "GROWTH",
+        title: "Uncapped Earnings",
+        shortDesc: "High commission + fixed CTC",
         description:
             "Industry-leading commission slabs, quarterly milestone bonuses, and regular performance incentives on top of guaranteed fixed salaries.",
     },
     {
         icon: Award,
         badge: "LEADERSHIP",
-        title: "Executive Mentorship by Industry Veterans",
+        title: "Executive Mentorship",
+        shortDesc: "15+ yrs closing leadership",
         description:
             "Work directly with senior real estate transaction leaders possessing over 15+ years of closing expertise across Pune's prime luxury corridors.",
     },
     {
         icon: Users,
         badge: "CULTURE",
-        title: "Empowering, Meritocratic Culture",
+        title: "Meritocratic Culture",
+        shortDesc: "Fast promotions & equality",
         description:
             "Transparent working environment, equal opportunity, fast-track promotions, strong female leadership representation, and milestone celebrations.",
     },
     {
         icon: HeartHandshake,
         badge: "PRESTIGE",
-        title: "Exclusive Tier-1 Builder Mandates",
+        title: "Tier-1 Mandates",
+        shortDesc: "Direct Godrej, Lodha & VTP",
         description:
             "Direct project mandates with Pune's premier developers (Godrej, Lodha, Panchshil, VTP, Kohinoor, Mantra) across luxury micro-markets.",
     },
@@ -187,21 +191,25 @@ const HIRING_STEPS = [
     {
         step: "01",
         title: "Quick Application",
+        shortDesc: "60-sec form or WhatsApp",
         desc: "Submit your profile via our 60-second online form or directly connect with our HR team on WhatsApp.",
     },
     {
         step: "02",
         title: "HR Screening",
+        shortDesc: "Brief telephonic chat",
         desc: "A brief telephonic discussion with our HR team to discuss your background, compensation, and branch preference.",
     },
     {
         step: "03",
         title: "Leadership Interview",
+        shortDesc: "In-person Kharadi meet",
         desc: "In-person interaction at our Kharadi Headquarters or regional branch with our business heads.",
     },
     {
         step: "04",
         title: "Offer & Onboarding",
+        shortDesc: "Fast-track offer release",
         desc: "Fast-track offer release, mentorship pairing, and structured institutional sales & operations training.",
     },
 ];
@@ -491,12 +499,17 @@ export default function Career() {
                                 const IconComponent = perk.icon;
                                 return (
                                     <div key={perk.title} className="career-perk-card">
-                                        <span className="career-perk-badge">{perk.badge}</span>
-                                        <div className="career-perk-icon-box">
-                                            <IconComponent size={24} />
+                                        <div className="career-perk-card__top">
+                                            <div className="career-perk-icon-box">
+                                                <IconComponent size={22} />
+                                            </div>
+                                            <span className="career-perk-badge">{perk.badge}</span>
                                         </div>
-                                        <h3 className="career-perk-title">{perk.title}</h3>
-                                        <p className="career-perk-desc">{perk.description}</p>
+                                        <div className="career-perk-card__body">
+                                            <h3 className="career-perk-title">{perk.title}</h3>
+                                            <p className="career-perk-desc">{perk.description}</p>
+                                            <span className="career-perk-short">{perk.shortDesc}</span>
+                                        </div>
                                     </div>
                                 );
                             })}
@@ -566,9 +579,14 @@ export default function Career() {
                         <div className="career-process-grid">
                             {HIRING_STEPS.map((step) => (
                                 <div key={step.step} className="career-process-card">
-                                    <div className="career-process-num">{step.step}</div>
-                                    <h4 className="career-process-title">{step.title}</h4>
-                                    <p className="career-process-desc">{step.desc}</p>
+                                    <div className="career-process-card__top">
+                                        <div className="career-process-num">{step.step}</div>
+                                    </div>
+                                    <div className="career-process-card__body">
+                                        <h4 className="career-process-title">{step.title}</h4>
+                                        <p className="career-process-desc">{step.desc}</p>
+                                        <span className="career-process-short">{step.shortDesc}</span>
+                                    </div>
                                 </div>
                             ))}
                         </div>
