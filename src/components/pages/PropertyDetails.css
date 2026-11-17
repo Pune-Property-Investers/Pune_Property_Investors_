@@ -298,6 +298,11 @@
 .property-details__sidebar--left {
     grid-column: 1;
     grid-row: 1;
+    position: sticky;
+    top: 90px;
+    align-self: start;
+    height: calc(100vh - 115px);
+    max-height: calc(100vh - 115px);
 }
 
 .property-details__main {
@@ -771,6 +776,9 @@
     .property-details__sidebar--left {
         grid-column: 1;
         grid-row: 1;
+        position: static;
+        height: auto;
+        max-height: none;
     }
 
     .property-details__main {
@@ -783,9 +791,12 @@
         grid-row: 2;
     }
 
+    .property-details__sidebar--left,
     .property-details__enquiry-wrapper,
     .property-details__ad-sticky {
         position: static;
+        height: auto;
+        max-height: none;
     }
 
     .property-details__ad-sidebar {
@@ -833,6 +844,9 @@
     .property-details__sidebar--left {
         grid-column: 1;
         grid-row: 1;
+        position: static;
+        height: auto;
+        max-height: none;
     }
 
     .property-details__main {
@@ -952,6 +966,9 @@
     .property-details__sidebar--left {
         grid-column: 1;
         grid-row: 1;
+        position: static;
+        height: auto;
+        max-height: none;
     }
 
     .property-details__main {

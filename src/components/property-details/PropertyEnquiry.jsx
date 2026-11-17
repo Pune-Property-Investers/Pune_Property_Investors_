@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Phone, MessageCircle, Send, ShieldCheck } from "lucide-react";
+import { Phone, MessageCircle, ShieldCheck } from "lucide-react";
 import { leadService } from "../../services/lead.service";
 import "./PropertyEnquiry.css";
 
@@ -65,85 +65,90 @@ function PropertyEnquiry({ property }) {
     return (
         <aside className="property-enquiry" id="property-enquiry">
             <div className="property-enquiry__header">
-                <span className="property-enquiry__eyebrow">Interested?</span>
-                <h2>Enquire About This Property</h2>
-                <p>Share your details and our team can help you with the next steps.</p>
+                <span className="property-enquiry__eyebrow">INTERESTED IN THIS PROPERTY?</span>
+                <h3 className="property-enquiry__title">Get More Information</h3>
+                <p className="property-enquiry__sub">Share your details and our team will contact you.</p>
             </div>
 
             <form className="property-enquiry__form" onSubmit={handleSubmit}>
-                <label htmlFor="enquiry-name">Full Name</label>
-                <input
-                    id="enquiry-name"
-                    name="name"
-                    type="text"
-                    placeholder="Enter your name"
-                    value={formData.name}
-                    onChange={updateField}
-                    autoComplete="name"
-                    required
-                    maxLength={100}
-                />
+                <div className="property-enquiry__fields">
+                    <div className="property-enquiry__field">
+                        <label htmlFor="enquiry-name">Full Name</label>
+                        <input
+                            id="enquiry-name"
+                            name="name"
+                            type="text"
+                            placeholder="Enter your name"
+                            value={formData.name}
+                            onChange={updateField}
+                            autoComplete="name"
+                            required
+                            maxLength={100}
+                        />
+                    </div>
 
-                <label htmlFor="enquiry-phone">Mobile Number</label>
-                <input
-                    id="enquiry-phone"
-                    name="phone"
-                    type="tel"
-                    placeholder="Enter your mobile number"
-                    value={formData.phone}
-                    onChange={updateField}
-                    autoComplete="tel"
-                    inputMode="numeric"
-                    pattern="[0-9+\-\s()]{10,18}"
-                    title="Enter a valid phone number."
-                    required
-                />
+                    <div className="property-enquiry__field">
+                        <label htmlFor="enquiry-phone">Mobile Number</label>
+                        <input
+                            id="enquiry-phone"
+                            name="phone"
+                            type="tel"
+                            placeholder="Enter mobile number"
+                            value={formData.phone}
+                            onChange={updateField}
+                            autoComplete="tel"
+                            inputMode="numeric"
+                            pattern="[0-9+\-\s()]{10,18}"
+                            title="Enter a valid phone number."
+                            required
+                        />
+                    </div>
 
-                <label htmlFor="enquiry-message">Message (Optional)</label>
-                <textarea
-                    id="enquiry-message"
-                    name="message"
-                    placeholder="I would like to know more about this property..."
-                    value={formData.message}
-                    onChange={updateField}
-                    rows={3}
-                    maxLength={1000}
-                />
+                    <div className="property-enquiry__field property-enquiry__field--message">
+                        <label htmlFor="enquiry-message">Message (Optional)</label>
+                        <textarea
+                            id="enquiry-message"
+                            name="message"
+                            placeholder="Interested in this property..."
+                            value={formData.message}
+                            onChange={updateField}
+                            rows={3}
+                            maxLength={500}
+                        />
+                    </div>
+                </div>
 
-                <button className="property-enquiry__submit" type="submit">
-                    <Send size={17} />
-                    Send Enquiry on WhatsApp
-                </button>
+                {/* Horizontal action buttons: WhatsApp & Call */}
+                <div className="property-enquiry__actions">
+                    <button
+                        className="property-enquiry__btn property-enquiry__btn--whatsapp"
+                        type="submit"
+                        title="Send enquiry on WhatsApp"
+                    >
+                        <MessageCircle size={14} />
+                        <span>WhatsApp</span>
+                    </button>
+
+                    <a
+                        href={`tel:+${phoneNumber}`}
+                        className="property-enquiry__btn property-enquiry__btn--call"
+                        title="Call property advisor"
+                    >
+                        <Phone size={13} />
+                        <span>Call Us</span>
+                    </a>
+                </div>
 
                 {submitted && (
                     <p className="property-enquiry__success" role="status">
-                        WhatsApp has been opened with your enquiry. Send the message there
-                        to contact our team.
+                        WhatsApp opened with your enquiry.
                     </p>
                 )}
             </form>
 
-            <div className="property-enquiry__direct">
-                <a href={`tel:+${phoneNumber}`}>
-                    <Phone size={17} />
-                    Call Our Team
-                </a>
-
-                <a
-                    href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-                        `Hello, I would like more information about ${propertyTitle}.`
-                    )}`}
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    <MessageCircle size={17} />
-                    WhatsApp
-                </a>
-            </div>
-
             <p className="property-enquiry__privacy">
-                <ShieldCheck size={15} />
-                Your details will be used to respond to your enquiry.
+                <ShieldCheck size={12} />
+                <span>Your details are kept strictly confidential.</span>
             </p>
         </aside>
     );

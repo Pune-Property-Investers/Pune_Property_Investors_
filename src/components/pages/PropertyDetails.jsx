@@ -258,52 +258,7 @@ function PropertyDetails({ propertyId, propertySlug }) {
                     <div className="property-details__layout">
                         {/* LEFT: Enquiry form */}
                         <aside className="property-details__sidebar property-details__sidebar--left">
-                            <div
-                                className="property-details__enquiry-wrapper"
-                                id="property-enquiry"
-                            >
-                                <div className="property-details__enquiry-heading">
-                                    <span>
-                                        INTERESTED IN THIS PROPERTY?
-                                    </span>
-
-                                    <h2>Get More Information</h2>
-
-                                    <p>
-                                        Share your details and our team will
-                                        contact you.
-                                    </p>
-                                </div>
-
-                                <PropertyEnquiry property={property} />
-
-                                <a
-                                    className="property-details__whatsapp"
-                                    href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <MessageCircle size={18} />
-                                    Enquire on WhatsApp
-                                </a>
-
-                                <a
-                                    className="property-details__call"
-                                    href={`tel:${ADVISOR_PHONE}`}
-                                >
-                                    <Phone size={17} />
-                                    Call Property Advisor
-                                </a>
-
-                                <div className="property-details__privacy">
-                                    <ShieldCheck size={15} />
-
-                                    <span>
-                                        Your information will be handled
-                                        with care.
-                                    </span>
-                                </div>
-                            </div>
+                            <PropertyEnquiry property={property} />
                         </aside>
 
                         {/* CENTER: Property information */}
