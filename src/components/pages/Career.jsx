@@ -621,9 +621,9 @@ export default function Career() {
                             {/* Department Tabs */}
                             <div className="career-dept-tabs">
                                 {[
-                                    { id: "All", label: "All Openings" },
-                                    { id: "Admin", label: "Admin & Operations" },
-                                    { id: "Sales", label: "Sales & Advisory" },
+                                    { id: "All", label: "All Openings", shortLabel: "All Roles" },
+                                    { id: "Admin", label: "Admin & Operations", shortLabel: "Admin & Ops" },
+                                    { id: "Sales", label: "Sales & Advisory", shortLabel: "Sales" },
                                 ].map((tab) => (
                                     <button
                                         key={tab.id}
@@ -632,7 +632,8 @@ export default function Career() {
                                             }`}
                                         onClick={() => setSelectedDepartment(tab.id)}
                                     >
-                                        {tab.label}
+                                        <span className="career-tab-label-full">{tab.label}</span>
+                                        <span className="career-tab-label-short">{tab.shortLabel}</span>
                                     </button>
                                 ))}
                             </div>
