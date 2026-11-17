@@ -28,7 +28,15 @@ const propertyListingsData = [
             "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=85",
         ],
         imageAlt: "Modern apartment living room with large windows",
-        amenities: ["Parking", "Lift", "Security", "Gym"],
+        amenities: [
+            "Parking",
+            "Lift",
+            "Security",
+            "Gym",
+            "Garden",
+            "Playing Area",
+            "Clubhouse",
+        ],
         description: "A sample 2 BHK listing in Kharadi for demonstrating property search and filtering.",
     },
     {

@@ -1,46 +1,74 @@
 import {
-    CheckCircle2,
-    CarFront,
-    Dumbbell,
-    Waves,
-    ShieldCheck,
-    Trees,
-    Zap,
-    Building2,
-    Baby,
-    Wifi,
-} from "lucide-react";
+    FaElevator,
+    FaSquareParking,
+    FaShieldHalved,
+    FaDumbbell,
+    FaPersonSwimming,
+    FaTree,
+    FaBolt,
+    FaWifi,
+    FaChildren,
+    FaRoad,
+    FaCar,
+    FaDroplet,
+    FaTableTennisPaddleBall,
+    FaVideo,
+    FaHouseUser,
+    FaCircleCheck,
+} from "react-icons/fa6";
 import "./PropertyAmenities.css";
 
 const amenityIcons = {
-    parking: CarFront,
-    gym: Dumbbell,
-    swimming: Waves,
-    pool: Waves,
-    security: ShieldCheck,
-    garden: Trees,
-    power: Zap,
-    lift: Building2,
-    children: Baby,
-    wifi: Wifi,
+    lift: FaElevator,
+    elevator: FaElevator,
+    parking: FaSquareParking,
+    car: FaCar,
+    security: FaShieldHalved,
+    guard: FaShieldHalved,
+    cctv: FaVideo,
+    gym: FaDumbbell,
+    fitness: FaDumbbell,
+    workout: FaDumbbell,
+    swimming: FaPersonSwimming,
+    pool: FaPersonSwimming,
+    garden: FaTree,
+    park: FaTree,
+    power: FaBolt,
+    backup: FaBolt,
+    electricity: FaBolt,
+    children: FaChildren,
+    kid: FaChildren,
+    play: FaChildren,
+    wifi: FaWifi,
+    internet: FaWifi,
+    water: FaDroplet,
+    road: FaRoad,
+    sports: FaTableTennisPaddleBall,
+    tennis: FaTableTennisPaddleBall,
+    clubhouse: FaHouseUser,
+    club: FaHouseUser,
+    playing: FaChildren,
+    plyaing: FaChildren,
 };
 
 function getAmenityIcon(amenity) {
     const text = String(amenity).toLowerCase();
     const match = Object.keys(amenityIcons).find((key) => text.includes(key));
-    return match ? amenityIcons[match] : CheckCircle2;
+    return match ? amenityIcons[match] : FaCircleCheck;
 }
 
-function PropertyAmenities({ amenities = [] }) {
+function PropertyAmenities({ amenities = [], showHeader = false }) {
     const items = Array.isArray(amenities) ? amenities.filter(Boolean) : [];
 
     return (
-        <section className="property-amenities">
-            <div className="property-amenities__heading">
-                <span className="property-amenities__eyebrow">Property Features</span>
-                <h2>Amenities & Facilities</h2>
-                <p>Explore the facilities listed for this property.</p>
-            </div>
+        <div className="property-amenities">
+            {showHeader && (
+                <div className="property-amenities__heading">
+                    <span className="property-amenities__eyebrow">Property Features</span>
+                    <h2>Amenities & Facilities</h2>
+                    <p>Explore the facilities listed for this property.</p>
+                </div>
+            )}
 
             {items.length > 0 ? (
                 <div className="property-amenities__grid">
@@ -52,10 +80,10 @@ function PropertyAmenities({ amenities = [] }) {
                                 className="property-amenities__item"
                                 key={`${amenity}-${index}`}
                             >
-                <span className="property-amenities__icon">
-                  <Icon size={20} />
-                </span>
-                                <span>{amenity}</span>
+                                <span className="property-amenities__icon">
+                                    <Icon size={15} />
+                                </span>
+                                <span className="property-amenities__name">{amenity}</span>
                             </div>
                         );
                     })}
@@ -65,7 +93,7 @@ function PropertyAmenities({ amenities = [] }) {
                     Contact us to learn more about the available amenities.
                 </p>
             )}
-        </section>
+        </div>
     );
 }
 

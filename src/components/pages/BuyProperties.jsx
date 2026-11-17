@@ -88,6 +88,15 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
         }
     }, [searchParams]);
 
+    // Normalize category key for ScrollStoryProperties and dynamic title
+    const normalizedCategory = useMemo(() => {
+        const raw = String(filters.propertyType || defaultPropertyType || "all").toLowerCase();
+        if (raw.includes("new")) return "new-launch";
+        if (raw.includes("commercial") || raw.includes("office") || raw.includes("retail")) return "commercial";
+        if (raw.includes("plot") || raw.includes("land")) return "plot";
+        return "all";
+    }, [filters.propertyType, defaultPropertyType]);
+
     // Update an individual filter.
     const handleFilterChange = (key, value) => {
         setFilters((previousFilters) => ({
@@ -169,6 +178,14 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                 ).toLowerCase();
                 const target = String(filters.propertyType).toLowerCase();
 
+                if (target.includes("new")) {
+                    return (
+                        Boolean(property.isNewLaunch) ||
+                        String(property.badge || "").toLowerCase().includes("new") ||
+                        String(property.status || "").toLowerCase().includes("launch")
+                    );
+                }
+
                 if (target === "plot" || target === "land") {
                     return (
                         type.includes("plot") ||
@@ -247,7 +264,7 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
             <main>
 
                 {/* Cinematic Scroll-Driven Storytelling Showcase */}
-                <ScrollStoryProperties />
+                <ScrollStoryProperties category={normalizedCategory} />
 
                 {/* Main listings area */}
                 <section className="buy-properties-content" id="listings">
@@ -261,7 +278,15 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                                     </span>
 
                                     <h2>
-                                        {pageTitle || "Properties for Sale in Pune"}
+                                        {pageTitle || (
+                                            normalizedCategory === "new-launch"
+                                                ? "New Launches in Pune"
+                                                : normalizedCategory === "commercial"
+                                                ? "Commercial Properties in Pune"
+                                                : normalizedCategory === "plot"
+                                                ? "Plots & Land in Pune"
+                                                : "Properties for Sale in Pune"
+                                        )}
                                     </h2>
 
                                     <p>
