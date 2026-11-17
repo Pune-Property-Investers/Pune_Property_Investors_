@@ -256,7 +256,7 @@ function PropertyFilters({
             {/* Filter heading */}
             <div className="property-filters__header">
                 <div className="property-filters__heading">
-                    <SlidersHorizontal size={18} />
+                    <SlidersHorizontal size={15} />
                     <div>
                         <h2>Filters</h2>
                         <p>Search & filter properties</p>
@@ -271,7 +271,7 @@ function PropertyFilters({
                         aria-label="Reset all filters"
                         title="Reset All Filters"
                     >
-                        <RotateCcw size={13} />
+                        <RotateCcw size={12} />
                         <span>Reset</span>
                     </button>
 
@@ -302,7 +302,7 @@ function PropertyFilters({
                 <div className="property-filters__group">
                     <div className="property-filters__group-header">
                         <label className="property-filters__label">
-                            <MapPin size={15} />
+                            <MapPin size={13} />
                             <span>Location in Pune</span>
                         </label>
                         {isLocationSelected && (
@@ -331,13 +331,13 @@ function PropertyFilters({
                             aria-expanded={openSections.location}
                         >
                             <div className="property-filters__trigger-content">
-                                <MapPin size={14} className="property-filters__trigger-icon" />
+                                <MapPin size={13} className="property-filters__trigger-icon" />
                                 <span className="property-filters__trigger-text">
                                     {isLocationSelected ? filters.location : "All Pune"}
                                 </span>
                             </div>
                             <ChevronDown
-                                size={14}
+                                size={13}
                                 className={`property-filters__trigger-chevron ${
                                     openSections.location ? "is-open" : ""
                                 }`}
@@ -437,7 +437,7 @@ function PropertyFilters({
                 <div className="property-filters__group">
                     <div className="property-filters__group-header">
                         <label className="property-filters__label">
-                            <BedDouble size={15} />
+                            <BedDouble size={13} />
                             <span>BHK Configuration</span>
                         </label>
                         {filters.bhk !== "all" && (
@@ -466,13 +466,13 @@ function PropertyFilters({
                             aria-expanded={openSections.bhk}
                         >
                             <div className="property-filters__trigger-content">
-                                <BedDouble size={14} className="property-filters__trigger-icon" />
+                                <BedDouble size={13} className="property-filters__trigger-icon" />
                                 <span className="property-filters__trigger-text">
                                     {selectedBhkLabel}
                                 </span>
                             </div>
                             <ChevronDown
-                                size={14}
+                                size={13}
                                 className={`property-filters__trigger-chevron ${
                                     openSections.bhk ? "is-open" : ""
                                 }`}
@@ -551,7 +551,7 @@ function PropertyFilters({
                     <div className="property-filters__group">
                         <div className="property-filters__group-header">
                             <label className="property-filters__label">
-                                <Building size={15} />
+                                <Building size={13} />
                                 <span>Project or Society</span>
                             </label>
                             {searchQuery && (
@@ -580,13 +580,13 @@ function PropertyFilters({
                                 aria-expanded={openSections.project}
                             >
                                 <div className="property-filters__trigger-content">
-                                    <Building size={14} className="property-filters__trigger-icon" />
+                                    <Building size={13} className="property-filters__trigger-icon" />
                                     <span className="property-filters__trigger-text">
                                         {searchQuery || "All Projects"}
                                     </span>
                                 </div>
                                 <ChevronDown
-                                    size={14}
+                                    size={13}
                                     className={`property-filters__trigger-chevron ${
                                         openSections.project ? "is-open" : ""
                                     }`}
@@ -681,7 +681,7 @@ function PropertyFilters({
                 {/* 4. Budget Range with Scroll-down Selection & Presets */}
                 <div className="property-filters__group">
                     <label className="property-filters__label">
-                        <IndianRupee size={15} />
+                        <IndianRupee size={13} />
                         <span>Budget Range (INR)</span>
                     </label>
 
@@ -753,7 +753,7 @@ function PropertyFilters({
                 <div className="property-filters__group">
                     <div className="property-filters__group-header">
                         <label className="property-filters__label">
-                            <Building2 size={15} />
+                            <Building2 size={13} />
                             <span>Property Type</span>
                         </label>
                         {filters.propertyType !== "all" && (
@@ -782,13 +782,13 @@ function PropertyFilters({
                             aria-expanded={openSections.propertyType}
                         >
                             <div className="property-filters__trigger-content">
-                                <Building2 size={14} className="property-filters__trigger-icon" />
+                                <Building2 size={13} className="property-filters__trigger-icon" />
                                 <span className="property-filters__trigger-text">
                                     {selectedTypeLabel}
                                 </span>
                             </div>
                             <ChevronDown
-                                size={14}
+                                size={13}
                                 className={`property-filters__trigger-chevron ${
                                     openSections.propertyType ? "is-open" : ""
                                 }`}
@@ -862,7 +862,7 @@ function PropertyFilters({
                         className="property-filters__label"
                         htmlFor="property-sort"
                     >
-                        <ArrowDownUp size={15} />
+                        <ArrowDownUp size={13} />
                         <span>Sort Listings</span>
                     </label>
 

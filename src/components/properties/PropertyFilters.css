@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PROPERTY FILTERS - LUXURY ARCHITECTURAL DESIGN
+   PROPERTY FILTERS - COMPACT LUXURY SANS-SERIF DESIGN
    Pune Property Investors
    ========================================================================== */
 
@@ -7,32 +7,23 @@
     width: 100%;
     background: #ffffff;
     border: 1px solid #e7e2d8;
-    border-radius: 18px;
-    padding: 22px 18px;
-    box-shadow: 0 10px 32px rgba(15, 23, 42, 0.05);
+    border-radius: 12px;
+    padding: 14px 13px 12px;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
     box-sizing: border-box;
     align-self: start;
     min-width: 0;
-    max-height: calc(100vh - 110px);
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: #dcd7ce transparent;
+    max-height: none;
+    overflow: visible;
+    font-family: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
 }
 
-.property-filters::-webkit-scrollbar {
-    width: 4px;
-}
-
-.property-filters::-webkit-scrollbar-thumb {
-    background: #dcd7ce;
-    border-radius: 4px;
-}
-
+.property-filters,
 .property-filters *,
 .property-filters *::before,
 .property-filters *::after {
     box-sizing: border-box;
+    font-family: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -42,15 +33,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
-    padding-bottom: 14px;
+    gap: 8px;
+    padding-bottom: 8px;
     border-bottom: 1px solid #efeae2;
 }
 
 .property-filters__heading {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 7px;
     min-width: 0;
 }
 
@@ -62,36 +53,39 @@
 .property-filters__heading h2 {
     margin: 0;
     color: #0f172a;
-    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: 19px;
+    font-family: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 15px;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
 }
 
 .property-filters__heading p {
-    margin: 2px 0 0;
+    margin: 1px 0 0;
     color: #64748b;
-    font-size: 11px;
+    font-size: 10.5px;
+    font-weight: 400;
+    line-height: 1.2;
 }
 
 .property-filters__header-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .property-filters__reset {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 5px 10px;
-    border-radius: 8px;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 6px;
     border: 1px solid #e7e2d8;
     background: #faf8f5;
     color: #a4733b;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 11px;
-    font-weight: 700;
+    font-family: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 10.5px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
@@ -101,15 +95,15 @@
     background: #ba874a;
     border-color: #ba874a;
     color: #ffffff;
-    box-shadow: 0 2px 8px rgba(186, 134, 74, 0.3);
+    box-shadow: 0 2px 6px rgba(186, 134, 74, 0.25);
 }
 
 .property-filters__close-btn {
     display: none;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background: #f1f5f9;
     border: none;
@@ -123,33 +117,34 @@
 .property-filters__count-badge {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin: 14px 0 16px;
-    padding: 8px 12px;
-    border-radius: 10px;
+    gap: 6px;
+    margin: 8px 0 10px;
+    padding: 5px 9px;
+    border-radius: 7px;
     background: #faf6f0;
     border: 1px solid #ebd9c2;
     color: #0f172a;
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: 500;
 }
 
 .property-filters__count-dot {
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: #16a34a;
-    box-shadow: 0 0 6px rgba(22, 163, 74, 0.6);
+    box-shadow: 0 0 5px rgba(22, 163, 74, 0.5);
     flex-shrink: 0;
 }
 
 .property-filters__count-number {
-    font-weight: 800;
+    font-weight: 700;
     color: #a4733b;
-    font-size: 13px;
+    font-size: 11.5px;
 }
 
 .property-filters__count-text {
-    font-weight: 600;
+    font-weight: 500;
     color: #475569;
 }
 
@@ -159,30 +154,30 @@
 .property-filters__body {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 9px;
 }
 
 .property-filters__group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 3px;
 }
 
 .property-filters__group-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .property-filters__label {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    font-size: 12px;
-    font-weight: 700;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
     color: #1e293b;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.1px;
 }
 
 .property-filters__label svg {
@@ -193,15 +188,15 @@
 .property-filters__clear-chip {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 2px 7px;
+    gap: 3px;
+    padding: 1px 6px;
     border-radius: 9999px;
     background: #faf6f0;
     border: 1px solid #dcc9b4;
     color: #a4733b;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 10.5px;
-    font-weight: 700;
+    font-family: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 9.5px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.15s ease;
 }
@@ -213,7 +208,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Dropdown Trigger & Body (Hidden by default, expands on open)
+   Dropdown Trigger & Body
    -------------------------------------------------------------------------- */
 .property-filters__dropdown-container {
     position: relative;
@@ -224,16 +219,17 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     width: 100%;
-    padding: 9px 12px;
-    border-radius: 10px;
+    min-height: 31px;
+    padding: 5px 9px;
+    border-radius: 7px;
     border: 1px solid #dcd7ce;
     background: #fbfaf8;
     color: #1e293b;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 12px;
-    font-weight: 600;
+    font-family: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 11px;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
     text-align: left;
@@ -247,19 +243,20 @@
 .property-filters__dropdown-trigger.is-open {
     border-color: #ba874a;
     background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(186, 134, 74, 0.16);
+    box-shadow: 0 0 0 2px rgba(186, 134, 74, 0.14);
 }
 
 .property-filters__dropdown-trigger.has-value {
     border-color: #c49866;
     background: #faf6f0;
     color: #a4733b;
+    font-weight: 600;
 }
 
 .property-filters__trigger-content {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     min-width: 0;
     flex: 1;
 }
@@ -273,6 +270,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: 11px;
 }
 
 .property-filters__trigger-chevron {
@@ -289,15 +287,15 @@
 .property-filters__dropdown-body {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    margin-top: 6px;
-    animation: filterDropdownIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    gap: 5px;
+    margin-top: 5px;
+    animation: filterDropdownIn 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes filterDropdownIn {
     from {
         opacity: 0;
-        transform: translateY(-4px);
+        transform: translateY(-3px);
     }
     to {
         opacity: 1;
@@ -312,17 +310,17 @@
     position: relative;
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: 6px;
     background: #fbfaf8;
     border: 1px solid #dcd7ce;
-    border-radius: 9px;
-    padding: 6px 10px;
+    border-radius: 7px;
+    padding: 4px 8px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .property-filters__search-input-wrapper:focus-within {
     border-color: #ba874a;
-    box-shadow: 0 0 0 3px rgba(186, 134, 74, 0.16);
+    box-shadow: 0 0 0 2px rgba(186, 134, 74, 0.14);
     background: #ffffff;
 }
 
@@ -342,22 +340,22 @@
     outline: none;
     background: transparent;
     color: #0f172a;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 11.5px;
+    font-family: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 11px;
     font-weight: 500;
 }
 
 .property-filters__search-input::placeholder {
     color: #94a3b8;
-    font-size: 11px;
+    font-size: 10.5px;
 }
 
 .property-filters__search-clear {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 17px;
-    height: 17px;
+    width: 15px;
+    height: 15px;
     border-radius: 50%;
     background: #e2e8f0;
     border: none;
@@ -377,47 +375,47 @@
    Scroll-down Options List
    -------------------------------------------------------------------------- */
 .property-filters__scroll-list {
-    max-height: 145px;
+    max-height: 125px;
     overflow-y: auto;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding: 4px;
+    padding: 3px;
     background: #fdfcfb;
     border: 1px solid #e7e2d8;
-    border-radius: 10px;
+    border-radius: 8px;
     box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.03);
     scrollbar-width: thin;
     scrollbar-color: #dcd7ce transparent;
 }
 
 .property-filters__scroll-list::-webkit-scrollbar {
-    width: 4px;
+    width: 3px;
 }
 
 .property-filters__scroll-list::-webkit-scrollbar-thumb {
     background: #dcd7ce;
-    border-radius: 4px;
+    border-radius: 3px;
 }
 
 .property-filters__list-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: 6px;
     width: 100%;
-    padding: 6px 9px;
-    border-radius: 7px;
+    padding: 4px 7px;
+    border-radius: 5px;
     border: none;
     background: transparent;
     color: #334155;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 11.5px;
-    font-weight: 600;
+    font-family: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 11px;
+    font-weight: 500;
     text-align: left;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.12s ease;
     user-select: none;
 }
 
@@ -429,8 +427,8 @@
 .property-filters__list-item.is-selected {
     background: linear-gradient(135deg, #ba874a 0%, #a4733b 100%);
     color: #ffffff;
-    font-weight: 700;
-    box-shadow: 0 2px 6px rgba(186, 134, 74, 0.3);
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(186, 134, 74, 0.25);
 }
 
 .property-filters__item-text {
@@ -439,12 +437,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: 11px;
 }
 
 .property-filters__item-sub {
-    font-size: 10px;
+    font-size: 9.5px;
     color: #94a3b8;
-    font-weight: 500;
+    font-weight: 400;
     flex-shrink: 0;
 }
 
@@ -456,14 +455,14 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 5px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
     border-radius: 9999px;
     background: #ece7de;
     color: #64748b;
-    font-size: 10px;
-    font-weight: 700;
+    font-size: 9.5px;
+    font-weight: 600;
     flex-shrink: 0;
 }
 
@@ -477,10 +476,10 @@
 }
 
 .property-filters__empty-message {
-    padding: 14px 10px;
+    padding: 10px 8px;
     text-align: center;
     color: #94a3b8;
-    font-size: 11px;
+    font-size: 10.5px;
     font-style: italic;
 }
 
@@ -490,20 +489,20 @@
 .property-filters__chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 4px;
 }
 
 .property-filters__chip {
-    padding: 6px 11px;
+    padding: 3px 8px;
     border-radius: 9999px;
     background: #f7f5f0;
     border: 1px solid #e5dfd5;
     color: #334155;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 11.5px;
-    font-weight: 600;
+    font-family: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 10px;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.18s ease;
+    transition: all 0.16s ease;
     user-select: none;
     white-space: nowrap;
 }
@@ -518,8 +517,8 @@
     background: linear-gradient(135deg, #ba874a 0%, #a4733b 100%);
     border-color: #a4733b;
     color: #ffffff;
-    box-shadow: 0 3px 10px rgba(186, 134, 74, 0.35);
-    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(186, 134, 74, 0.25);
+    font-weight: 600;
 }
 
 /* --------------------------------------------------------------------------
@@ -528,7 +527,7 @@
 .property-filters__price-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     width: 100%;
 }
 
@@ -538,19 +537,19 @@
 }
 
 .property-filters__price-to {
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 10px;
+    font-weight: 500;
     color: #94a3b8;
     flex-shrink: 0;
 }
 
 .property-filters__budget-chips {
-    margin-top: 4px;
+    margin-top: 3px;
 }
 
 .property-filters__budget-chips .property-filters__chip {
-    font-size: 10.5px;
-    padding: 4px 8px;
+    font-size: 10px;
+    padding: 3px 7px;
 }
 
 /* --------------------------------------------------------------------------
@@ -563,14 +562,15 @@
 
 .property-filters__select {
     width: 100%;
+    min-height: 31px;
     background: #fbfaf8;
     border: 1px solid #dcd7ce;
-    border-radius: 10px;
-    padding: 9px 12px;
+    border-radius: 7px;
+    padding: 5px 8px;
     color: #0f172a;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 12.5px;
-    font-weight: 600;
+    font-family: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 11px;
+    font-weight: 500;
     outline: none;
     cursor: pointer;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -578,7 +578,7 @@
 
 .property-filters__select:focus {
     border-color: #ba874a;
-    box-shadow: 0 0 0 3px rgba(186, 134, 74, 0.18);
+    box-shadow: 0 0 0 2px rgba(186, 134, 74, 0.14);
     background: #ffffff;
 }
 
@@ -587,25 +587,25 @@
    -------------------------------------------------------------------------- */
 .property-filters__mobile-apply {
     display: none;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 .property-filters__apply-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     width: 100%;
-    padding: 13px;
-    border-radius: 12px;
+    padding: 10px;
+    border-radius: 9px;
     background: linear-gradient(135deg, #ba874a 0%, #a4733b 100%);
     color: #ffffff;
     border: none;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 14px;
-    font-weight: 700;
+    font-family: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 12.5px;
+    font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(186, 134, 74, 0.4);
+    box-shadow: 0 3px 10px rgba(186, 134, 74, 0.35);
 }
 
 /* --------------------------------------------------------------------------
@@ -615,8 +615,8 @@
     .property-filters {
         max-height: none;
         overflow-y: visible;
-        padding: 18px 16px;
-        border-radius: 16px;
+        padding: 14px 13px;
+        border-radius: 12px;
     }
 
     .property-filters__close-btn {

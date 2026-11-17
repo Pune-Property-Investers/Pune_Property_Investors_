@@ -1013,19 +1013,14 @@
     min-width: 0;
 }
 
-/* Sticky filter sidebar on desktop - sticks while scrolling through properties, then scrolls at the end */
+/* Sticky filter sidebar on desktop - static fit with no internal scrollbars */
 .buy-properties-filter-column {
     position: sticky;
-    top: calc(50.4px + 105px);
+    top: calc(50.4px + 90px);
     z-index: 40;
     align-self: start;
-    max-height: calc(100vh - (50.4px + 120px));
-    overflow-y: auto;
-    scrollbar-width: none;
-}
-
-.buy-properties-filter-column::-webkit-scrollbar {
-    display: none;
+    max-height: none;
+    overflow-y: visible;
 }
 
 /* Feature properties listing flows naturally with the page */
