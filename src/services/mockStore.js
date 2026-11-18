@@ -119,7 +119,7 @@ const DEFAULT_HOMEPAGE_SECTIONS = [
         id: "featured-prop",
         type: "featured-prop",
         label: "Signature Luxury Spotlight",
-        enabled: true,
+        enabled: false,
         order: 8,
         data: {
             eyebrow: "SIGNATURE COLLECTION",
