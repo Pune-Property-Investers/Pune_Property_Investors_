@@ -12,6 +12,7 @@ import {
     Search,
     Building2,
     Heart,
+    Scale,
     ChevronRight,
     Home,
     Film,
@@ -165,9 +166,8 @@ function Header({ transparentAtTop = false }) {
         <>
             {/* Header Main Bar (Fixed, Luxury Scrolled State) */}
             <header
-                className={`site-header ${isTransparent ? "site-header--home" : ""} ${
-                    isScrolled ? "site-header--scrolled" : ""
-                } ${menuOpen ? "site-header--open" : ""}`}
+                className={`site-header ${isTransparent ? "site-header--home" : ""} ${isScrolled ? "site-header--scrolled" : ""
+                    } ${menuOpen ? "site-header--open" : ""}`}
             >
                 <div className="header-container">
                     {/* Company Logo and Brand Name */}
@@ -207,20 +207,18 @@ function Header({ transparentAtTop = false }) {
                             return (
                                 <div
                                     key={item.label}
-                                    className={`header-nav-item ${
-                                        isDropdownOpen
-                                            ? "header-nav-item--open"
-                                            : ""
-                                    }`}
+                                    className={`header-nav-item ${isDropdownOpen
+                                        ? "header-nav-item--open"
+                                        : ""
+                                        }`}
                                 >
                                     <div className="header-nav-item__main">
                                         <Link
                                             href={item.href}
-                                            className={`header-nav-link ${
-                                                item.label === "Home"
-                                                    ? "header-nav-link--home"
-                                                    : ""
-                                            }`}
+                                            className={`header-nav-link ${item.label === "Home"
+                                                ? "header-nav-link--home"
+                                                : ""
+                                                }`}
                                         >
                                             <span>{item.label}</span>
                                         </Link>
@@ -242,11 +240,10 @@ function Header({ transparentAtTop = false }) {
 
                                     {item.dropdown && (
                                         <div
-                                            className={`header-dropdown ${
-                                                isDropdownOpen
-                                                    ? "header-dropdown--visible"
-                                                    : ""
-                                            }`}
+                                            className={`header-dropdown ${isDropdownOpen
+                                                ? "header-dropdown--visible"
+                                                : ""
+                                                }`}
                                         >
                                             {item.dropdown.map((subItem) => (
                                                 <Link
@@ -281,18 +278,16 @@ function Header({ transparentAtTop = false }) {
 
             {/* Backdrop Overlay for Mobile Drawer */}
             <div
-                className={`mobile-drawer-backdrop ${
-                    menuOpen ? "mobile-drawer-backdrop--visible" : ""
-                }`}
+                className={`mobile-drawer-backdrop ${menuOpen ? "mobile-drawer-backdrop--visible" : ""
+                    }`}
                 onClick={closeMenu}
                 aria-hidden="true"
             />
 
             {/* Mobile Navigation Drawer */}
             <aside
-                className={`mobile-drawer ${
-                    menuOpen ? "mobile-drawer--open" : ""
-                }`}
+                className={`mobile-drawer ${menuOpen ? "mobile-drawer--open" : ""
+                    }`}
                 aria-label="Mobile menu"
                 aria-hidden={!menuOpen}
             >
@@ -356,9 +351,8 @@ function Header({ transparentAtTop = false }) {
                             return (
                                 <div
                                     key={item.label}
-                                    className={`mobile-drawer__item ${
-                                        isDropdownOpen ? "mobile-drawer__item--open" : ""
-                                    }`}
+                                    className={`mobile-drawer__item ${isDropdownOpen ? "mobile-drawer__item--open" : ""
+                                        }`}
                                 >
                                     <div className="mobile-drawer__link-row">
                                         <Link
@@ -378,9 +372,8 @@ function Header({ transparentAtTop = false }) {
                                         >
                                             <ChevronDown
                                                 size={18}
-                                                className={`mobile-drawer__chevron ${
-                                                    isDropdownOpen ? "mobile-drawer__chevron--rotated" : ""
-                                                }`}
+                                                className={`mobile-drawer__chevron ${isDropdownOpen ? "mobile-drawer__chevron--rotated" : ""
+                                                    }`}
                                             />
                                         </button>
                                     </div>
@@ -419,6 +412,15 @@ function Header({ transparentAtTop = false }) {
                             <Heart size={18} className="mobile-drawer__util-icon" />
                             <span>Saved Properties</span>
                         </Link>
+
+                        <Link
+                            href="/buy?filter=compare"
+                            className="mobile-drawer__util-link"
+                            onClick={closeMenu}
+                        >
+                            <Scale size={18} className="mobile-drawer__util-icon mobile-drawer__util-icon--gold" />
+                            <span>Compare Properties</span>
+                        </Link>
                     </div>
 
                     {/* Bottom Action Buttons & Caption */}
@@ -450,22 +452,20 @@ function Header({ transparentAtTop = false }) {
 
             {/* Mobile Bottom Navigation Bar (Appears when scrolling down from head section with header) */}
             <nav
-                className={`mobile-bottom-nav ${
-                    isScrolled || normalizedPath === "/shorts"
-                        ? "mobile-bottom-nav--visible"
-                        : ""
-                }`}
+                className={`mobile-bottom-nav ${isScrolled || normalizedPath === "/shorts"
+                    ? "mobile-bottom-nav--visible"
+                    : ""
+                    }`}
                 aria-label="Mobile Bottom Navigation"
             >
                 {/* 1. Home */}
                 <Link
                     href="/"
                     onClick={handleHomeClick}
-                    className={`mobile-bottom-nav__item ${
-                        normalizedPath === "/" && !menuOpen
-                            ? "mobile-bottom-nav__item--active"
-                            : ""
-                    }`}
+                    className={`mobile-bottom-nav__item ${normalizedPath === "/" && !menuOpen
+                        ? "mobile-bottom-nav__item--active"
+                        : ""
+                        }`}
                     aria-label="Home"
                 >
                     <div className="mobile-bottom-nav__icon-wrap">
@@ -478,14 +478,13 @@ function Header({ transparentAtTop = false }) {
                 <Link
                     href="/search"
                     onClick={closeMenu}
-                    className={`mobile-bottom-nav__item ${
-                        (normalizedPath === "/search" ||
-                            normalizedPath === "/buy" ||
-                            normalizedPath.startsWith("/properties")) &&
+                    className={`mobile-bottom-nav__item ${(normalizedPath === "/search" ||
+                        normalizedPath === "/buy" ||
+                        normalizedPath.startsWith("/properties")) &&
                         !menuOpen
-                            ? "mobile-bottom-nav__item--active"
-                            : ""
-                    }`}
+                        ? "mobile-bottom-nav__item--active"
+                        : ""
+                        }`}
                     aria-label="Search"
                 >
                     <div className="mobile-bottom-nav__icon-wrap">
@@ -498,11 +497,10 @@ function Header({ transparentAtTop = false }) {
                 <Link
                     href="/shorts"
                     onClick={closeMenu}
-                    className={`mobile-bottom-nav__item ${
-                        normalizedPath === "/shorts" && !menuOpen
-                            ? "mobile-bottom-nav__item--active mobile-bottom-nav__item--shorts"
-                            : ""
-                    }`}
+                    className={`mobile-bottom-nav__item ${normalizedPath === "/shorts" && !menuOpen
+                        ? "mobile-bottom-nav__item--active mobile-bottom-nav__item--shorts"
+                        : ""
+                        }`}
                     aria-label="PPI Shorts"
                 >
                     <div className="mobile-bottom-nav__icon-wrap">
@@ -532,9 +530,8 @@ function Header({ transparentAtTop = false }) {
                 <button
                     type="button"
                     onClick={() => setMenuOpen((current) => !current)}
-                    className={`mobile-bottom-nav__item ${
-                        menuOpen ? "mobile-bottom-nav__item--active" : ""
-                    }`}
+                    className={`mobile-bottom-nav__item ${menuOpen ? "mobile-bottom-nav__item--active" : ""
+                        }`}
                     aria-label={menuOpen ? "Close menu" : "Open menu"}
                     aria-expanded={menuOpen}
                 >
