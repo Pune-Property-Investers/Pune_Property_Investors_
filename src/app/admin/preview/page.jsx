@@ -20,6 +20,7 @@ import DeveloperLogos from "../../../components/home/DeveloperLogos";
 import Testimonials from "../../../components/home/Testimonials";
 import HomeContact from "../../../components/home/HomeContact";
 import TrustStats from "../../../components/home/TrustStats";
+import CustomContainersRenderer from "../../../components/home/CustomContainersRenderer";
 import PageHeroBanner from "../../../components/common/PageHeroBanner";
 import PropertyCard from "../../../components/properties/PropertyCard";
 import { extractYouTubeId } from "../../../data/shortsData";
@@ -63,6 +64,17 @@ function renderSectionByType(section, activeTab, setActiveTab) {
             return <HomeContact key={section.id} previewData={data} />;
         case "trust-stats":
             return <TrustStats key={section.id} previewData={data} />;
+        case "custom-containers":
+        case "custom-container":
+        case "container":
+            return (
+                <CustomContainersRenderer
+                    key={section.id}
+                    containers={data.containers || data.items}
+                    title={data.heading || data.title}
+                    eyebrow={data.eyebrow}
+                />
+            );
         default:
             return null;
     }

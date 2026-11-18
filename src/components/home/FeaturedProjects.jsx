@@ -14,7 +14,10 @@ export default function FeaturedProjects({ previewData, customProjects }) {
     const [activeSlideIndex, setActiveSlideIndex] = useState(0);
     const [isGrabbing, setIsGrabbing] = useState(false);
 
-    const projectList = Array.isArray(previewData) && previewData.length > 0 ? previewData : projects;
+    const projectList =
+        Array.isArray(previewData?.items) && previewData.items.length > 0
+            ? previewData.items
+            : (Array.isArray(previewData) && previewData.length > 0 ? previewData : projects);
     const filteredProjects = Array.isArray(customProjects) && customProjects.length > 0 ? customProjects : projectList;
 
     // Mouse drag support for desktop slider

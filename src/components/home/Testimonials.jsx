@@ -6,7 +6,10 @@ import { testimonials } from "../../data/testimonials.js";
 import "./Testimonials.css";
 
 export default function Testimonials({ previewData, customTestimonials }) {
-    const items = Array.isArray(customTestimonials) ? customTestimonials.filter((t) => t.visible !== false) : testimonials;
+    const items =
+        Array.isArray(previewData?.items) && previewData.items.length > 0
+            ? previewData.items
+            : (Array.isArray(customTestimonials) ? customTestimonials.filter((t) => t.visible !== false) : testimonials);
     const sectionRef = useRef(null);
 
     useEffect(() => {

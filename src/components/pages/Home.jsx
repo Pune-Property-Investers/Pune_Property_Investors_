@@ -18,6 +18,7 @@ import Workflow from "../home/Workflow";
 import DeveloperLogos from "../home/DeveloperLogos";
 import Testimonials from "../home/Testimonials";
 import HomeContact from "../home/HomeContact";
+import CustomContainersRenderer from "../home/CustomContainersRenderer";
 import { usePublishedCms } from "../../services/liveContent";
 
 const MAIN_COLUMN_TYPES = new Set([
@@ -80,6 +81,17 @@ function renderPublishedSection(section, activeTab, setActiveTab, published) {
             return <HomeContact key={section.id} previewData={data} />;
         case "trust-stats":
             return <TrustStats key={section.id} previewData={data} />;
+        case "custom-containers":
+        case "custom-container":
+        case "container":
+            return (
+                <CustomContainersRenderer
+                    key={section.id}
+                    containers={data.containers || data.items}
+                    title={data.heading || data.title}
+                    eyebrow={data.eyebrow}
+                />
+            );
         default:
             return null;
     }

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUp, ArrowDown, Eye, EyeOff, GripVertical } from "lucide-react";
+import { ArrowUp, ArrowDown, Eye, EyeOff, GripVertical, Plus, Trash2 } from "lucide-react";
 
 export default function SectionManager({
     sections = [],
@@ -8,13 +8,41 @@ export default function SectionManager({
     onSelectSection,
     onToggleVisibility,
     onMoveSection,
+    onAddSection,
+    onDeleteSection,
 }) {
     const sorted = [...sections].sort((a, b) => (a.order || 0) - (b.order || 0));
 
     return (
         <div>
+            {onAddSection && (
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "10px 12px",
+                        background: "#f1f5f9",
+                        border: "1px solid #e2e8f0",
+                        borderRadius: 10,
+                        marginBottom: 12,
+                    }}
+                >
+                    <span style={{ fontSize: 13, fontWeight: 700, color: "#1e293b" }}>
+                        Sections &amp; Containers ({sorted.length})
+                    </span>
+                    <button
+                        type="button"
+                        className="admin-btn admin-btn--primary admin-btn--sm"
+                        onClick={onAddSection}
+                    >
+                        <Plus size={13} /> Add Container / Section
+                    </button>
+                </div>
+            )}
             {sorted.map((section, idx) => {
                 const isActive = section.id === activeSectionId;
+                const isCustom = section.type === "custom-containers" || section.type === "custom-container" || section.id?.startsWith("custom-");
                 return (
                     <div
                         key={section.id}
@@ -38,6 +66,7 @@ export default function SectionManager({
                                 </div>
                                 <div style={{ fontSize: 11, color: "#64748b" }}>
                                     Order #{idx + 1} • {section.enabled ? "Visible" : "Hidden"}
+                                    {isCustom && " • Custom Container"}
                                 </div>
                             </div>
                         </div>
@@ -79,6 +108,21 @@ export default function SectionManager({
                             >
                                 {section.enabled ? <Eye size={13} /> : <EyeOff size={13} />}
                             </button>
+                            {isCustom && onDeleteSection && (
+                                <button
+                                    type="button"
+                                    className="admin-icon-btn"
+                                    style={{
+                                        width: 28,
+                                        height: 28,
+                                        color: "#ef4444",
+                                    }}
+                                    onClick={() => onDeleteSection(section.id)}
+                                    title="Delete Container Section"
+                                >
+                                    <Trash2 size={13} />
+                                </button>
+                            )}
                         </div>
                     </div>
                 );

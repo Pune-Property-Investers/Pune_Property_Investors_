@@ -185,7 +185,9 @@ export default function BrowseLocations({ customLocations, previewData }) {
     const [isPaused, setIsPaused] = useState(false);
 
     const activeLocations =
-        Array.isArray(customLocations) && customLocations.length > 0 ? customLocations : locationsData;
+        Array.isArray(previewData?.items) && previewData.items.length > 0
+            ? previewData.items
+            : (Array.isArray(customLocations) && customLocations.length > 0 ? customLocations : locationsData);
 
     // Split locations into Left Column (even index) & Right Column (odd index)
     const leftColumn = activeLocations.filter((_, idx) => idx % 2 === 0);
