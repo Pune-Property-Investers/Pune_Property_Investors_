@@ -4,13 +4,16 @@ import { useState } from "react";
 import {
     ArrowRight,
     CheckCircle2,
-    Building2,
+    AlertCircle,
+    Loader2,
 } from "lucide-react";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaWhatsapp, FaLinkedinIn, FaEnvelope } from "react-icons/fa6";
 import { leadService } from "../../services/lead.service";
 import "./HomeContact.css";
 
 const WHATSAPP_NUMBER = "917398174444";
+const CONTACT_EMAIL = "info@punepropertyinvestor.com";
+const LINKEDIN_URL = "https://www.linkedin.com/company/puneproperty-investor/home/";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const VILLA_BG_IMAGE = `${BASE_PATH}/images/luxury-villa-bg.jpg`;
 
@@ -19,203 +22,239 @@ export default function HomeContact({ previewData }) {
         name: "",
         email: "",
         phone: "",
-        localityBudget: "",
-        message: "",
+        projectLocation: "",
     });
-    const [agreed, setAgreed] = useState(true);
-    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const [errors, setErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [serverError, setServerError] = useState("");
+
+    const validate = () => {
+        const errs = {};
+        const cleanName = formData.name.trim();
+        const cleanPhone = formData.phone.trim().replace(/\D/g, "");
+        const cleanEmail = formData.email.trim();
+
+        if (!cleanName || cleanName.length < 2) {
+            errs.name = "Please enter your name";
+        }
+
+        if (!cleanPhone || cleanPhone.length < 10) {
+            errs.phone = "Enter valid 10-digit number";
+        }
+
+        if (cleanEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+            errs.email = "Enter valid email address";
+        }
+
+        setErrors(errs);
+        return Object.keys(errs).length === 0;
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+        if (errors[name]) {
+            setErrors((prev) => ({ ...prev, [name]: "" }));
+        }
+        if (serverError) setServerError("");
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!agreed) return;
+        if (isSubmitting) return;
 
-        setIsSubmitted(true);
+        if (!validate()) return;
+
+        setIsSubmitting(true);
+        setServerError("");
 
         try {
             await leadService.create({
                 type: "contact",
-                name: formData.name,
-                phone: formData.phone,
-                email: formData.email,
-                propertyTitle: "Editorial Showcase Advisory",
-                locality: formData.localityBudget || "Pune (Flexible)",
-                budget: formData.localityBudget || "Standard Bracket",
-                message:
-                    formData.message ||
-                    "Looking for personalized property portfolio & site visit.",
+                name: formData.name.trim(),
+                phone: formData.phone.trim(),
+                email: formData.email.trim(),
+                propertyTitle: "Stay Connected With Us Inquiry",
+                locality: formData.projectLocation.trim() || "Pune",
+                budget: "Open Consultation",
+                message: `Project Location: ${formData.projectLocation.trim() || "Pune"}`,
             });
-        } catch {
-            // Continue to WhatsApp handoff even if lead logging fails
+
+            setIsSuccess(true);
+
+            // WhatsApp chat handoff
+            const messageLines = [
+                `*New Inquiry via Website - Stay Connected*`,
+                `*Name:* ${formData.name.trim()}`,
+                `*Phone:* ${formData.phone.trim()}`,
+                `*Email:* ${formData.email.trim() || "Not provided"}`,
+                `*Project Location:* ${formData.projectLocation.trim() || "Pune"}`,
+            ];
+            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                messageLines.join("\n")
+            )}`;
+
+            setTimeout(() => {
+                window.open(waUrl, "_blank", "noopener,noreferrer");
+            }, 800);
+
+            setTimeout(() => {
+                setFormData({
+                    name: "",
+                    email: "",
+                    phone: "",
+                    projectLocation: "",
+                });
+                setIsSuccess(false);
+            }, 4500);
+        } catch (err) {
+            console.error("Failed to submit inquiry:", err);
+            setServerError("Could not submit. Please connect on WhatsApp directly.");
+        } finally {
+            setIsSubmitting(false);
         }
-
-        const msg = [
-            `*New Pune Property Journey Inquiry*`,
-            `*Name:* ${formData.name}`,
-            `*Phone:* ${formData.phone}`,
-            `*Email:* ${formData.email || "Not specified"}`,
-            `*Locality & Budget:* ${formData.localityBudget || "Flexible / Across Pune"}`,
-            `*Requirements:* ${formData.message || "Looking for property recommendations & site visit."}`,
-        ].join("\n");
-
-        const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-
-        setTimeout(() => {
-            window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-            setIsSubmitted(false);
-            setFormData({
-                name: "",
-                email: "",
-                phone: "",
-                localityBudget: "",
-                message: "",
-            });
-        }, 800);
     };
 
     return (
         <section
             className="editorial-contact-section"
             id="home-contact"
-            aria-label="Contact Pune Property Investors"
+            aria-label="Stay Connected With Us"
         >
             <div className="editorial-contact-container">
-                {/* Outer Architectural Showcase Frame */}
-                <div className="editorial-showcase-frame samsung-fold-device">
-                    {/* Full-size panoramic villa background across entire container */}
-                    <div
-                        className="editorial-showcase-bg fold-full-bg"
-                        style={{ backgroundImage: `url(${VILLA_BG_IMAGE})` }}
-                        role="img"
-                        aria-label="Modern architectural luxury estate"
-                    >
-                        <div className="editorial-showcase-overlay" />
-                    </div>
+                {/* Outer Showcase Frame with Background Image */}
+                <div
+                    className="editorial-showcase-frame"
+                    style={{ backgroundImage: `url(${VILLA_BG_IMAGE})` }}
+                >
+                    {/* Subtle Dark Gradient Overlay */}
+                    <div className="editorial-showcase-overlay" aria-hidden="true" />
 
-                    {/* Hardware Accents */}
-                    <div className="fold-antenna-left" aria-hidden="true" />
-                    <div className="fold-antenna-right" aria-hidden="true" />
-                    <div className="fold-camera-dot" aria-hidden="true" />
-
-                    {/* Dual Pane Layout (Desktop: dual pane; Mobile: clean floating white card over villa background) */}
+                    {/* Inner Content Grid */}
                     <div className="fold-dual-grid">
-                        {/* Floating Elegant White Contact Form Card */}
+                        {/* Floating Inner Form Card - Transparent Glass & Compact on Mobile */}
                         <div className="editorial-form-card fold-screen-left">
                             <div className="editorial-form-header">
                                 <span className="editorial-form-eyebrow">
                                     {previewData?.eyebrow || "PUNE PROPERTY INVESTORS"}
                                 </span>
                                 <h2 className="editorial-form-title">
-                                    {previewData?.heading || "Start your Pune property journey today"}
+                                    {previewData?.heading || "Stay Connected With Us"}
                                 </h2>
                                 <p className="editorial-form-desc">
                                     {previewData?.subtitle ||
-                                        "Complete the form and get a personalized list of verified properties within 24 hours."}
+                                        "Connect with our senior property advisors for personalized recommendations in Pune."}
                                 </p>
                             </div>
 
-                            <form onSubmit={handleSubmit} className="editorial-form">
-                                {/* 1. Name */}
-                                <div className="editorial-input-group field-name">
-                                    <input
-                                        id="ed-name"
-                                        type="text"
-                                        name="name"
-                                        required
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                        placeholder="Your name *"
-                                        className="editorial-input"
-                                    />
+                            {/* Success Notification */}
+                            {isSuccess && (
+                                <div className="editorial-contact-alert editorial-contact-alert--success">
+                                    <CheckCircle2 size={15} />
+                                    <span>Thank you! Your inquiry has been received.</span>
+                                </div>
+                            )}
+
+                            {/* Error Notification */}
+                            {serverError && (
+                                <div className="editorial-contact-alert editorial-contact-alert--error">
+                                    <AlertCircle size={15} />
+                                    <span>{serverError}</span>
+                                </div>
+                            )}
+
+                            <form onSubmit={handleSubmit} className="editorial-form" noValidate>
+                                <div className="editorial-form-grid">
+                                    {/* 1. Your Name */}
+                                    <div className={`editorial-input-group ${errors.name ? "has-error" : ""}`}>
+                                        <input
+                                            id="ed-name"
+                                            type="text"
+                                            name="name"
+                                            value={formData.name}
+                                            onChange={handleChange}
+                                            placeholder="Your Name *"
+                                            className="editorial-input"
+                                            required
+                                            disabled={isSubmitting}
+                                        />
+                                        {errors.name && (
+                                            <span className="editorial-field-error">{errors.name}</span>
+                                        )}
+                                    </div>
+
+                                    {/* 2. Email Address */}
+                                    <div className={`editorial-input-group ${errors.email ? "has-error" : ""}`}>
+                                        <input
+                                            id="ed-email"
+                                            type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            placeholder="Email Address"
+                                            className="editorial-input"
+                                            disabled={isSubmitting}
+                                        />
+                                        {errors.email && (
+                                            <span className="editorial-field-error">{errors.email}</span>
+                                        )}
+                                    </div>
+
+                                    {/* 3. Phone Number */}
+                                    <div className={`editorial-input-group ${errors.phone ? "has-error" : ""}`}>
+                                        <input
+                                            id="ed-phone"
+                                            type="tel"
+                                            name="phone"
+                                            value={formData.phone}
+                                            onChange={handleChange}
+                                            placeholder="Phone Number *"
+                                            className="editorial-input"
+                                            required
+                                            disabled={isSubmitting}
+                                        />
+                                        {errors.phone && (
+                                            <span className="editorial-field-error">{errors.phone}</span>
+                                        )}
+                                    </div>
+
+                                    {/* 4. Project Location */}
+                                    <div className="editorial-input-group">
+                                        <input
+                                            id="ed-location"
+                                            type="text"
+                                            name="projectLocation"
+                                            value={formData.projectLocation}
+                                            onChange={handleChange}
+                                            placeholder="Project Location"
+                                            className="editorial-input"
+                                            disabled={isSubmitting}
+                                        />
+                                    </div>
                                 </div>
 
-                                {/* 2. Email */}
-                                <div className="editorial-input-group field-email">
-                                    <input
-                                        id="ed-email"
-                                        type="email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        placeholder="Email"
-                                        className="editorial-input"
-                                    />
-                                </div>
-
-                                {/* 3. Phone number */}
-                                <div className="editorial-input-group field-phone">
-                                    <input
-                                        id="ed-phone"
-                                        type="tel"
-                                        name="phone"
-                                        required
-                                        value={formData.phone}
-                                        onChange={handleChange}
-                                        placeholder="Phone number *"
-                                        className="editorial-input"
-                                    />
-                                </div>
-
-                                {/* 4. Preferred Locality & Budget */}
-                                <div className="editorial-input-group field-locality">
-                                    <input
-                                        id="ed-locality"
-                                        type="text"
-                                        name="localityBudget"
-                                        value={formData.localityBudget}
-                                        onChange={handleChange}
-                                        placeholder="Preferred locality & budget"
-                                        className="editorial-input"
-                                    />
-                                </div>
-
-                                {/* 5. How Can We Help / Message */}
-                                <div className="editorial-input-group field-message">
-                                    <textarea
-                                        id="ed-message"
-                                        rows={1}
-                                        name="message"
-                                        value={formData.message}
-                                        onChange={handleChange}
-                                        placeholder="How can we help?"
-                                        className="editorial-input editorial-textarea"
-                                    />
-                                </div>
-
-                                {/* Privacy Policy Checkbox Agreement */}
-                                <label className="editorial-consent-row">
-                                    <input
-                                        type="checkbox"
-                                        checked={agreed}
-                                        onChange={(e) => setAgreed(e.target.checked)}
-                                        className="editorial-checkbox"
-                                        required
-                                    />
-                                    <span className="editorial-consent-text">
-                                        By submitting, you agree to our{" "}
-                                        <span className="editorial-policy-link">Privacy Policy</span>.
-                                    </span>
-                                </label>
-
-                                {/* Submit Button */}
+                                {/* Submit Button Row */}
                                 <div className="editorial-actions">
                                     <button
                                         type="submit"
                                         className="editorial-submit-pill"
-                                        disabled={isSubmitted || !agreed}
+                                        disabled={isSubmitting || isSuccess}
                                     >
-                                        {isSubmitted ? (
+                                        {isSubmitting ? (
+                                            <>
+                                                <Loader2 size={14} className="editorial-spinner" />
+                                                <span>Submitting...</span>
+                                            </>
+                                        ) : isSuccess ? (
                                             <>
                                                 <CheckCircle2 size={14} />
-                                                <span>Connecting...</span>
+                                                <span>Connected!</span>
                                             </>
                                         ) : (
                                             <>
-                                                <span>Send message</span>
+                                                <span>Submit</span>
                                                 <span className="editorial-arrow-circle">
                                                     <ArrowRight size={11} />
                                                 </span>
@@ -226,24 +265,47 @@ export default function HomeContact({ previewData }) {
                             </form>
                         </div>
 
-                        {/* RIGHT SIDE / Floating Badges: Open Panoramic Villa View with Badges */}
-                        <div className="fold-screen-right-content">
-                            <div className="editorial-glass-pill fold-glass-pill-top">
-                                <span className="editorial-pulse-dot" />
-                                <Building2 size={11} className="text-gold" />
-                                <span>Gera Imperium Alpha, Kharadi</span>
-                            </div>
-
+                        {/* Floating Contact Icons (Bottom-Right Corner) */}
+                        <div
+                            className="editorial-floating-socials"
+                            aria-label="Direct Contact Channels"
+                        >
+                            {/* WhatsApp Icon */}
                             <a
                                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-                                    "Hello Pune Property Investor, I would like to consult with a property advisor regarding properties in Pune."
+                                    "Hello Pune Property Investors, I would like to consult with a property advisor."
                                 )}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="editorial-glass-pill editorial-glass-pill--wa fold-glass-pill-bottom"
+                                className="editorial-social-btn editorial-social-btn--wa"
+                                aria-label="Chat on WhatsApp"
+                                title="Chat on WhatsApp"
                             >
-                                <FaWhatsapp size={14} />
-                                <span>Fast-Track Hotline: +91 73981 74444</span>
+                                <FaWhatsapp size={16} />
+                            </a>
+
+                            {/* Email Icon */}
+                            <a
+                                href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+                                    "Property Inquiry - Stay Connected"
+                                )}`}
+                                className="editorial-social-btn editorial-social-btn--mail"
+                                aria-label="Send an Email"
+                                title="Send an Email"
+                            >
+                                <FaEnvelope size={14} />
+                            </a>
+
+                            {/* LinkedIn Icon */}
+                            <a
+                                href={LINKEDIN_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="editorial-social-btn editorial-social-btn--in"
+                                aria-label="Visit LinkedIn"
+                                title="Visit our LinkedIn"
+                            >
+                                <FaLinkedinIn size={14} />
                             </a>
                         </div>
                     </div>
