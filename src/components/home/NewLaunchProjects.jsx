@@ -20,7 +20,8 @@ import "./NewLaunchProjects.css";
 /* 8 Distinct New Launch Projects with full photography and specifications */
 export const newLaunchProjects = [
     {
-        id: 1,
+        id: 901,
+        slug: "gated-villa-na-plot-hinjewadi",
         title: "Gated Villa NA Plot with Clubhouse Access",
         propertyType: "Plot",
         typeBadge: "NA Plot",
@@ -33,10 +34,11 @@ export const newLaunchProjects = [
             "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=85",
         ],
         isFeatured: true,
-        link: "/buy?project=Villa%20NA%20Plot%20Hinjewadi",
+        link: "/properties/gated-villa-na-plot-hinjewadi",
     },
     {
-        id: 2,
+        id: 902,
+        slug: "mantra-magnus-riverside-residences",
         title: "Mantra Magnus Riverside Residences",
         propertyType: "Apartment",
         typeBadge: "Luxury Suite",
@@ -49,10 +51,11 @@ export const newLaunchProjects = [
             "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=85",
         ],
         isFeatured: true,
-        link: "/buy?project=Mantra%20Magnus",
+        link: "/properties/mantra-magnus-riverside-residences",
     },
     {
-        id: 3,
+        id: 903,
+        slug: "godrej-elements-botanical-condos",
         title: "Godrej Elements Botanical Smart Condos",
         propertyType: "Condo",
         typeBadge: "Eco Luxury",
@@ -65,10 +68,11 @@ export const newLaunchProjects = [
             "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1400&q=85",
         ],
         isFeatured: true,
-        link: "/buy?project=Godrej%20Elements",
+        link: "/properties/godrej-elements-botanical-condos",
     },
     {
-        id: 4,
+        id: 904,
+        slug: "the-aurelia-high-street-mansions",
         title: "The Aurelia High-Street Mansions",
         propertyType: "Sky Villa",
         typeBadge: "Sky Villa",
@@ -81,10 +85,11 @@ export const newLaunchProjects = [
             "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85",
         ],
         isFeatured: true,
-        link: "/buy?project=The%20Aurelia",
+        link: "/properties/the-aurelia-high-street-mansions",
     },
     {
-        id: 5,
+        id: 905,
+        slug: "vtp-hilife-smart-towers",
         title: "VTP HiLife Smart Towers",
         propertyType: "Apartment",
         typeBadge: "Smart Homes",
@@ -97,10 +102,11 @@ export const newLaunchProjects = [
             "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=85",
         ],
         isFeatured: true,
-        link: "/buy?project=VTP%20HiLife",
+        link: "/properties/vtp-hilife-smart-towers",
     },
     {
-        id: 6,
+        id: 906,
+        slug: "tribeca-highstreet-sky-mansions",
         title: "Tribeca Highstreet Sky Mansions",
         propertyType: "Penthouse",
         typeBadge: "Penthouse",
@@ -113,10 +119,11 @@ export const newLaunchProjects = [
             "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=85",
         ],
         isFeatured: true,
-        link: "/buy?project=Tribeca%20Highstreet",
+        link: "/properties/tribeca-highstreet-sky-mansions",
     },
     {
-        id: 7,
+        id: 907,
+        slug: "kumar-primus-river-residences",
         title: "Kumar Primus River Residences",
         propertyType: "Condo",
         typeBadge: "River View",
@@ -129,10 +136,11 @@ export const newLaunchProjects = [
             "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=85",
         ],
         isFeatured: true,
-        link: "/buy?project=Kumar%20Primus",
+        link: "/properties/kumar-primus-river-residences",
     },
     {
-        id: 8,
+        id: 908,
+        slug: "the-ark-voyage-skyline-suites",
         title: "The Ark Voyage Skyline Suites",
         propertyType: "Apartment",
         typeBadge: "Skyline Suite",
@@ -145,7 +153,7 @@ export const newLaunchProjects = [
             "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=85",
         ],
         isFeatured: true,
-        link: "/buy?project=The%20Ark%20Voyage",
+        link: "/properties/the-ark-voyage-skyline-suites",
     },
 ];
 
@@ -462,7 +470,11 @@ export default function NewLaunchProjects({ previewData }) {
                                             </div>
 
                                             <div className="nl-card-type">{project.propertyType}</div>
-                                            <h3 className="nl-card-title">{project.title}</h3>
+                                            <h3 className="nl-card-title">
+                                                <Link href={project.link || `/properties/${project.slug || project.id}`}>
+                                                    {project.title}
+                                                </Link>
+                                            </h3>
 
                                             <div className="nl-card-meta-row">
                                                 <div className="nl-card-specs">
@@ -475,7 +487,10 @@ export default function NewLaunchProjects({ previewData }) {
                                                     </span>
                                                 </div>
 
-                                                <Link href={project.link} className="nl-card-view-details-btn">
+                                                <Link
+                                                    href={project.link || `/properties/${project.slug || project.id}`}
+                                                    className="nl-card-view-details-btn"
+                                                >
                                                     <span>View Details</span>
                                                     <ArrowRight size={13} />
                                                 </Link>

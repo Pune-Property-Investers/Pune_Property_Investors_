@@ -20,6 +20,7 @@ import {
 
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
+import PageHeroBanner from "../common/PageHeroBanner";
 
 import PropertyHeroHead from "../property-details/PropertyHeroHead";
 import PropertyGallery from "../property-details/PropertyGallery";

@@ -70,14 +70,26 @@ export function normalizeTrendingProject(item: any): PropertyItem {
 
 export function findProperty(identifier: string | number | undefined | null): PropertyItem | null {
     if (!identifier) return null;
-    const cleanId = String(identifier).trim().toLowerCase();
+    const rawId = String(identifier).trim();
+    const cleanId = rawId.toLowerCase();
+    const decodedId = decodeURIComponent(cleanId).trim().toLowerCase();
 
-    // 1. Direct match on propertyListingsData id or title slug
+    // 1. Direct match on propertyListingsData id, slug, title slug, or project slug
     const fromListings = (propertyListingsData as any[]).find(
         (item: any) =>
             String(item.id) === cleanId ||
-            (item.slug && item.slug.toLowerCase() === cleanId) ||
-            item.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-") === cleanId
+            String(item.id) === decodedId ||
+            (item.slug && (item.slug.toLowerCase() === cleanId || item.slug.toLowerCase() === decodedId)) ||
+            (item.title && (
+                item.title.toLowerCase().replace(/[^a-z0-9]+/g, "-") === cleanId ||
+                item.title.toLowerCase().replace(/[^a-z0-9]+/g, "-") === decodedId ||
+                item.title.toLowerCase() === cleanId ||
+                item.title.toLowerCase() === decodedId
+            )) ||
+            (item.projectName && (
+                item.projectName.toLowerCase().replace(/[^a-z0-9]+/g, "-") === cleanId ||
+                item.projectName.toLowerCase().replace(/[^a-z0-9]+/g, "-") === decodedId
+            ))
     );
     if (fromListings) return fromListings as PropertyItem;
 
@@ -85,7 +97,8 @@ export function findProperty(identifier: string | number | undefined | null): Pr
     const fromTrending = (trendingProjects as any[]).find(
         (item: any) =>
             String(item.id) === cleanId ||
-            (item.slug && item.slug.toLowerCase() === cleanId)
+            (item.slug && item.slug.toLowerCase() === cleanId) ||
+            item.name?.toLowerCase().replace(/[^a-z0-9]+/g, "-") === cleanId
     );
     if (fromTrending) return normalizeTrendingProject(fromTrending);
 
