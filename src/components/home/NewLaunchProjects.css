@@ -193,7 +193,7 @@
 .new-launch-project-card {
     position: relative;
     width: 100%;
-    height: clamp(580px, 82vh, 670px);
+    height: clamp(550px, 76vh, 640px);
     border-radius: 28px;
     overflow: hidden;
     background: #0f172a;
@@ -656,12 +656,12 @@
     }
 
     .new-launch-project-card {
-        height: clamp(560px, 86vh, 660px);
-        border-radius: 26px;
+        height: clamp(510px, 72vh, 580px);
+        border-radius: 24px;
     }
 
     .new-launch-project-card__bottom {
-        padding: 24px 18px 20px;
+        padding: 22px 18px 20px;
     }
 
     .nl-card-title {
@@ -674,5 +674,26 @@
         align-items: flex-start;
         gap: 12px;
         padding: 16px 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .new-launch-project-card {
+        height: clamp(480px, 70vh, 540px);
+        border-radius: 24px;
+    }
+
+    .new-launch-project-card__topbar {
+        top: 16px;
+        left: 16px;
+        right: 16px;
+    }
+
+    .new-launch-project-card__bottom {
+        padding: 20px 16px 18px;
+    }
+
+    .nl-card-title {
+        margin-bottom: 14px;
     }
 }

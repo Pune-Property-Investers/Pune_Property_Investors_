@@ -248,10 +248,11 @@
     margin-bottom: 14px;
 }
 
-/* Two-line price block: amount on top, unit (Cr) below */
+/* Price block: inline amount and unit with clean baseline alignment */
 .property-card__price {
     display: flex;
-    flex-direction: column;
+    align-items: baseline;
+    gap: 4px;
     line-height: 1.2;
 }
 
@@ -354,35 +355,42 @@
     }
 
     .property-card__media {
-        height: 200px;
+        height: 240px;
         border-radius: 18px 18px 0 0;
     }
 
     .property-card__inner {
-        margin: -16px 8px 8px;
-        border-radius: 14px;
+        margin: -18px 10px 10px;
+        border-radius: 16px;
     }
 
     .property-card__logo-wrap {
-        width: 62px;
-        height: 62px;
+        width: 64px;
+        height: 64px;
     }
 
     .property-card__body {
-        padding: 38px 14px 14px;
+        padding: 42px 16px 16px;
     }
 
     .property-card__title {
-        font-size: 17px;
+        font-size: 18px;
     }
 
     .property-card__sub {
-        font-size: 12px;
-        margin-bottom: 12px;
+        font-size: 13px;
+        margin-bottom: 14px;
+    }
+
+    .property-card__price {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        gap: 4px;
     }
 
     .property-card__price-amount {
-        font-size: 18px;
+        font-size: 18.5px;
     }
 
     .property-card__price-unit {

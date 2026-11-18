@@ -2,20 +2,15 @@
 
 import { useState } from "react";
 import {
-    MapPin,
-    Phone,
-    Mail,
     ArrowRight,
     CheckCircle2,
     Building2,
-    ShieldCheck,
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { leadService } from "../../services/lead.service";
 import "./HomeContact.css";
 
 const WHATSAPP_NUMBER = "917398174444";
-const PHONE_NUMBER = "+917398174444";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const VILLA_BG_IMAGE = `${BASE_PATH}/images/luxury-villa-bg.jpg`;
 
@@ -250,36 +245,6 @@ export default function HomeContact({ previewData }) {
                                 <FaWhatsapp size={14} />
                                 <span>Fast-Track Hotline: +91 73981 74444</span>
                             </a>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Sub-bar: Minimal Luxury Trust & Headquarters Info */}
-                <div className="editorial-bottom-strip">
-                    <div className="editorial-strip-item">
-                        <MapPin size={14} className="text-gold" />
-                        <div>
-                            <strong>Headquarters:</strong> 3rd Floor, Gera Imperium Alpha, Kharadi, Pune
-                        </div>
-                    </div>
-                    <div className="editorial-strip-item">
-                        <Phone size={14} className="text-gold" />
-                        <div>
-                            <strong>Direct Hotline:</strong>{" "}
-                            <a href={`tel:${PHONE_NUMBER}`}>+91 73981 74444</a>
-                        </div>
-                    </div>
-                    <div className="editorial-strip-item">
-                        <Mail size={14} className="text-gold" />
-                        <div>
-                            <strong>Support:</strong>{" "}
-                            <a href="mailto:info@punepropertyinvestor.com">info@punepropertyinvestor.com</a>
-                        </div>
-                    </div>
-                    <div className="editorial-strip-item">
-                        <ShieldCheck size={14} className="text-gold" />
-                        <div>
-                            <strong>Zero Brokerage</strong> • 100% Free Consultation
                         </div>
                     </div>
                 </div>
