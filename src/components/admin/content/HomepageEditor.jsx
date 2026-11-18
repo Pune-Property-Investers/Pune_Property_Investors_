@@ -142,6 +142,50 @@ export default function HomepageEditor({ forcedSectionId = null }) {
         });
     };
 
+    const handleAddContainerSection = () => {
+        const id = `custom-container-${Date.now()}`;
+        const newSection = {
+            id,
+            type: "custom-containers",
+            label: "Custom Container Showcase",
+            enabled: true,
+            order: (sections.length || 0) + 1,
+            data: {
+                eyebrow: "SPOTLIGHT",
+                heading: "Featured Highlights",
+                subtitle: "Custom content and promotional containers.",
+                items: [
+                    {
+                        id: Date.now(),
+                        badge: "Special Offer",
+                        title: "Curated Investment Opportunity",
+                        description: "Handpicked premium properties with verified RERA documentation and early investor pricing.",
+                        buttonText: "Explore Now",
+                        buttonUrl: "/buy",
+                        image: "",
+                        videoUrl: "",
+                    },
+                ],
+            },
+        };
+        updateDraft((prev) => ({
+            ...prev,
+            sections: [...(prev.sections || []), newSection],
+        }));
+        setActiveSectionId(id);
+        setActiveTab("content");
+        showToast("New container section added! You can now customize its cards.", "success");
+    };
+
+    const handleDeleteSection = (id) => {
+        if (!confirm("Are you sure you want to delete this custom container section?")) return;
+        updateDraft((prev) => ({
+            ...prev,
+            sections: (prev.sections || []).filter((s) => s.id !== id),
+        }));
+        showToast("Container section removed", "info");
+    };
+
     const updateSectionData = (key, value) => {
         if (!activeSection) return;
         updateDraft((prev) => ({
@@ -307,6 +351,8 @@ export default function HomepageEditor({ forcedSectionId = null }) {
                         }}
                         onToggleVisibility={handleToggleVisibility}
                         onMoveSection={handleMoveSection}
+                        onAddSection={handleAddContainerSection}
+                        onDeleteSection={handleDeleteSection}
                     />
                 </div>
             )}
@@ -461,9 +507,9 @@ export default function HomepageEditor({ forcedSectionId = null }) {
                     {activeSection.type === "trust-highlights" && (
                         <div>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                                <span style={{ fontSize: 13, fontWeight: 700 }}>Highlight Badges</span>
-                                <button type="button" className="admin-btn admin-btn--outline admin-btn--sm" onClick={addTrustItem}>
-                                    <Plus size={13} /> Add Item
+                                <span style={{ fontSize: 13, fontWeight: 700 }}>Highlight Containers</span>
+                                <button type="button" className="admin-btn admin-btn--primary admin-btn--sm" onClick={addTrustItem}>
+                                    <Plus size={13} /> Add Container
                                 </button>
                             </div>
                             {(sectionData.items || []).map((item, idx) => (
@@ -505,6 +551,14 @@ export default function HomepageEditor({ forcedSectionId = null }) {
                                     </div>
                                 </div>
                             ))}
+                            <button
+                                type="button"
+                                className="admin-btn admin-btn--outline admin-btn--sm"
+                                style={{ width: "100%", justifyContent: "center", marginTop: 4 }}
+                                onClick={addTrustItem}
+                            >
+                                <Plus size={13} /> Add Container
+                            </button>
                         </div>
                     )}
 

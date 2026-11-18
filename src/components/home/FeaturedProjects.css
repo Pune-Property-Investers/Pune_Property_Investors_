@@ -475,9 +475,9 @@
     }
 
     .featured-projects__item {
-        flex: 0 0 86%;
-        min-width: 270px;
-        max-width: 325px;
+        flex: 0 0 90%;
+        min-width: 310px;
+        max-width: 380px;
         scroll-snap-align: center;
         opacity: 1;
         transform: none;
@@ -505,7 +505,8 @@
 
 @media (max-width: 480px) {
     .featured-projects__item {
-        flex: 0 0 88%;
-        min-width: 260px;
+        flex: 0 0 92%;
+        min-width: 300px;
+        max-width: 380px;
     }
 }

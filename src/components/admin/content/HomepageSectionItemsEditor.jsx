@@ -10,6 +10,9 @@ import { featuredListings } from "../../home/FeaturedProp";
 import { workflowSteps } from "../../home/Workflow";
 import { developers as defaultDevelopers } from "../../home/DeveloperLogos";
 import { stats as defaultStats } from "../../home/TrustStats";
+import locationsData from "../../../data/locationsData";
+import { projects as defaultProjects } from "../../../data/projects";
+import { testimonials as defaultTestimonials } from "../../../data/testimonials";
 
 function extractYtId(url) {
     if (!url) return "";
@@ -160,7 +163,7 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
                             Show All Stacked
                         </label>
                         <button type="button" className="admin-btn admin-btn--primary admin-btn--sm" onClick={addSlide}>
-                            <Plus size={13} /> Add More Container
+                            <Plus size={13} /> Add Container
                         </button>
                     </div>
                 </div>
@@ -389,7 +392,7 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
                     style={{ width: "100%", justifyContent: "center", marginTop: 6 }}
                     onClick={addSlide}
                 >
-                    <Plus size={13} /> Add More Container Like This
+                    <Plus size={13} /> Add Container Like This
                 </button>
             </div>
         );
@@ -409,35 +412,37 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
             );
         };
 
+        const addLaunchContainer = () => {
+            const next = [
+                ...items,
+                {
+                    id: Date.now(),
+                    title: "New Launch Residence",
+                    propertyType: "Apartment",
+                    typeBadge: "New Launch",
+                    price: "₹1.20 Cr",
+                    rate: "₹7,500/sq.ft",
+                    area: "1,400 sq.ft",
+                    location: "Pune",
+                    images: [""],
+                    isFeatured: true,
+                    link: "/buy",
+                },
+            ];
+            updateSectionData("items", next);
+            setOpenIdx(next.length - 1);
+        };
+
         return (
             <div style={{ marginTop: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700 }}>New Launch Cards ({items.length})</span>
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>New Launch Containers ({items.length})</span>
                     <button
                         type="button"
-                        className="admin-btn admin-btn--outline admin-btn--sm"
-                        onClick={() => {
-                            const next = [
-                                ...items,
-                                {
-                                    id: Date.now(),
-                                    title: "New Launch Residence",
-                                    propertyType: "Apartment",
-                                    typeBadge: "New Launch",
-                                    price: "₹1.20 Cr",
-                                    rate: "₹7,500/sq.ft",
-                                    area: "1,400 sq.ft",
-                                    location: "Pune",
-                                    images: [""],
-                                    isFeatured: true,
-                                    link: "/buy",
-                                },
-                            ];
-                            updateSectionData("items", next);
-                            setOpenIdx(next.length - 1);
-                        }}
+                        className="admin-btn admin-btn--primary admin-btn--sm"
+                        onClick={addLaunchContainer}
                     >
-                        <Plus size={13} /> Add Launch Card
+                        <Plus size={13} /> Add Container
                     </button>
                 </div>
 
@@ -503,6 +508,14 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
                         />
                     </AccordionCard>
                 ))}
+                <button
+                    type="button"
+                    className="admin-btn admin-btn--outline admin-btn--sm"
+                    style={{ width: "100%", justifyContent: "center", marginTop: 6 }}
+                    onClick={addLaunchContainer}
+                >
+                    <Plus size={13} /> Add Container
+                </button>
             </div>
         );
     }
@@ -521,35 +534,37 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
             );
         };
 
+        const addSpotlightContainer = () => {
+            const next = [
+                ...items,
+                {
+                    id: Date.now(),
+                    name: "Luxury Residence",
+                    location: "Koregaon Park, Pune",
+                    heroLocation: "Koregaon Park, Pune",
+                    config: "3 & 4 BHK",
+                    area: "1,800 Sq. Ft.",
+                    price: "₹2.10 Cr*",
+                    badge: "Signature Living",
+                    image: "",
+                    developer: "PPI Partner",
+                    tagline: "Bespoke luxury residences.",
+                },
+            ];
+            updateSectionData("items", next);
+            setOpenIdx(next.length - 1);
+        };
+
         return (
             <div style={{ marginTop: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700 }}>Luxury Spotlight Properties ({items.length})</span>
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>Luxury Spotlight Containers ({items.length})</span>
                     <button
                         type="button"
-                        className="admin-btn admin-btn--outline admin-btn--sm"
-                        onClick={() => {
-                            const next = [
-                                ...items,
-                                {
-                                    id: Date.now(),
-                                    name: "Luxury Residence",
-                                    location: "Koregaon Park, Pune",
-                                    heroLocation: "Koregaon Park, Pune",
-                                    config: "3 & 4 BHK",
-                                    area: "1,800 Sq. Ft.",
-                                    price: "₹2.10 Cr*",
-                                    badge: "Signature Living",
-                                    image: "",
-                                    developer: "PPI Partner",
-                                    tagline: "Bespoke luxury residences.",
-                                },
-                            ];
-                            updateSectionData("items", next);
-                            setOpenIdx(next.length - 1);
-                        }}
+                        className="admin-btn admin-btn--primary admin-btn--sm"
+                        onClick={addSpotlightContainer}
                     >
-                        <Plus size={13} /> Add Spotlight
+                        <Plus size={13} /> Add Container
                     </button>
                 </div>
 
@@ -615,6 +630,14 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
                         />
                     </AccordionCard>
                 ))}
+                <button
+                    type="button"
+                    className="admin-btn admin-btn--outline admin-btn--sm"
+                    style={{ width: "100%", justifyContent: "center", marginTop: 6 }}
+                    onClick={addSpotlightContainer}
+                >
+                    <Plus size={13} /> Add Container
+                </button>
             </div>
         );
     }
@@ -626,18 +649,22 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
                 ? sectionData.steps
                 : workflowSteps.map(({ title, description }) => ({ title, description }));
 
+        const addWorkflowContainer = () => {
+            const next = [...steps, { title: "New Step", description: "Describe step." }];
+            updateSectionData("steps", next);
+            setOpenIdx(next.length - 1);
+        };
+
         return (
             <div style={{ marginTop: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700 }}>Workflow Steps ({steps.length})</span>
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>Workflow Step Containers ({steps.length})</span>
                     <button
                         type="button"
-                        className="admin-btn admin-btn--outline admin-btn--sm"
-                        onClick={() =>
-                            updateSectionData("steps", [...steps, { title: "New Step", description: "Describe step." }])
-                        }
+                        className="admin-btn admin-btn--primary admin-btn--sm"
+                        onClick={addWorkflowContainer}
                     >
-                        <Plus size={13} /> Add Step
+                        <Plus size={13} /> Add Container
                     </button>
                 </div>
 
@@ -681,6 +708,14 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
                         </div>
                     </AccordionCard>
                 ))}
+                <button
+                    type="button"
+                    className="admin-btn admin-btn--outline admin-btn--sm"
+                    style={{ width: "100%", justifyContent: "center", marginTop: 6 }}
+                    onClick={addWorkflowContainer}
+                >
+                    <Plus size={13} /> Add Container
+                </button>
             </div>
         );
     }
@@ -692,18 +727,22 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
                 ? sectionData.items
                 : defaultDevelopers;
 
+        const addDeveloperContainer = () => {
+            const next = [...items, { name: "New Developer", domain: "example.com", logoUrl: "" }];
+            updateSectionData("items", next);
+            setOpenIdx(next.length - 1);
+        };
+
         return (
             <div style={{ marginTop: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700 }}>Developer Logos ({items.length})</span>
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>Developer Partner Containers ({items.length})</span>
                     <button
                         type="button"
-                        className="admin-btn admin-btn--outline admin-btn--sm"
-                        onClick={() =>
-                            updateSectionData("items", [...items, { name: "New Developer", domain: "example.com", logoUrl: "" }])
-                        }
+                        className="admin-btn admin-btn--primary admin-btn--sm"
+                        onClick={addDeveloperContainer}
                     >
-                        <Plus size={13} /> Add Developer
+                        <Plus size={13} /> Add Container
                     </button>
                 </div>
 
@@ -760,6 +799,14 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
                         />
                     </AccordionCard>
                 ))}
+                <button
+                    type="button"
+                    className="admin-btn admin-btn--outline admin-btn--sm"
+                    style={{ width: "100%", justifyContent: "center", marginTop: 6 }}
+                    onClick={addDeveloperContainer}
+                >
+                    <Plus size={13} /> Add Container
+                </button>
             </div>
         );
     }
@@ -771,18 +818,22 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
                 ? sectionData.stats
                 : defaultStats.map(({ target, suffix, label }) => ({ target, suffix, label }));
 
+        const addStatContainer = () => {
+            const next = [...statItems, { target: 100, suffix: " +", label: "New Milestone" }];
+            updateSectionData("stats", next);
+            setOpenIdx(next.length - 1);
+        };
+
         return (
             <div style={{ marginTop: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700 }}>Milestone Counters ({statItems.length})</span>
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>Milestone Counter Containers ({statItems.length})</span>
                     <button
                         type="button"
-                        className="admin-btn admin-btn--outline admin-btn--sm"
-                        onClick={() =>
-                            updateSectionData("stats", [...statItems, { target: 100, suffix: " +", label: "New Milestone" }])
-                        }
+                        className="admin-btn admin-btn--primary admin-btn--sm"
+                        onClick={addStatContainer}
                     >
-                        <Plus size={13} /> Add Stat
+                        <Plus size={13} /> Add Container
                     </button>
                 </div>
 
@@ -842,10 +893,640 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
                         </div>
                     </AccordionCard>
                 ))}
+                <button
+                    type="button"
+                    className="admin-btn admin-btn--outline admin-btn--sm"
+                    style={{ width: "100%", justifyContent: "center", marginTop: 6 }}
+                    onClick={addStatContainer}
+                >
+                    <Plus size={13} /> Add Container
+                </button>
             </div>
         );
     }
 
-    return null;
+    // 7. Browse Locations (Locality Containers)
+    if (sectionType === "browse-locations") {
+        const items =
+            Array.isArray(sectionData.items) && sectionData.items.length > 0
+                ? sectionData.items
+                : locationsData;
+
+        const updateItem = (idx, patch) => {
+            updateSectionData(
+                "items",
+                items.map((item, i) => (i === idx ? { ...item, ...patch } : item))
+            );
+        };
+
+        const addLocationContainer = () => {
+            const next = [
+                ...items,
+                {
+                    id: Date.now(),
+                    name: "New Locality",
+                    zone: "West Pune",
+                    subtitle: "Prime Residential Corridor",
+                    description: "High growth, excellent connectivity and infrastructure.",
+                    avgRate: "₹8,500 / sq.ft",
+                    listingsCount: "10+ Properties",
+                    image: "",
+                    searchLocation: "Pune",
+                },
+            ];
+            updateSectionData("items", next);
+            setOpenIdx(next.length - 1);
+        };
+
+        return (
+            <div style={{ marginTop: 14 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>Locality Containers ({items.length})</span>
+                    <button
+                        type="button"
+                        className="admin-btn admin-btn--primary admin-btn--sm"
+                        onClick={addLocationContainer}
+                    >
+                        <Plus size={13} /> Add Container
+                    </button>
+                </div>
+
+                {items.map((item, idx) => (
+                    <AccordionCard
+                        key={item.id || idx}
+                        title={`${idx + 1}. ${item.name || "Locality"}`}
+                        subtitle={item.avgRate}
+                        isOpen={openIdx === idx}
+                        onToggle={() => setOpenIdx(openIdx === idx ? -1 : idx)}
+                        onRemove={
+                            items.length > 1
+                                ? () => updateSectionData("items", items.filter((_, i) => i !== idx))
+                                : null
+                        }
+                    >
+                        <div className="admin-form-grid">
+                            <div className="admin-field">
+                                <label className="admin-label">Locality Name</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.name || ""}
+                                    onChange={(e) => updateItem(idx, { name: e.target.value, searchLocation: e.target.value })}
+                                />
+                            </div>
+                            <div className="admin-field">
+                                <label className="admin-label">Zone</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.zone || ""}
+                                    onChange={(e) => updateItem(idx, { zone: e.target.value })}
+                                />
+                            </div>
+                            <div className="admin-field">
+                                <label className="admin-label">Average Rate</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.avgRate || ""}
+                                    onChange={(e) => updateItem(idx, { avgRate: e.target.value })}
+                                />
+                            </div>
+                            <div className="admin-field">
+                                <label className="admin-label">Listings Count</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.listingsCount || ""}
+                                    onChange={(e) => updateItem(idx, { listingsCount: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                        <div className="admin-field">
+                            <label className="admin-label">Subtitle / Summary</label>
+                            <input
+                                className="admin-input"
+                                value={item.subtitle || item.description || ""}
+                                onChange={(e) => updateItem(idx, { subtitle: e.target.value, description: e.target.value })}
+                            />
+                        </div>
+                        <ImageUploader
+                            label="Locality Cover Image"
+                            value={item.image || ""}
+                            onChange={(val) => updateItem(idx, { image: val })}
+                        />
+                    </AccordionCard>
+                ))}
+
+                <button
+                    type="button"
+                    className="admin-btn admin-btn--outline admin-btn--sm"
+                    style={{ width: "100%", justifyContent: "center", marginTop: 6 }}
+                    onClick={addLocationContainer}
+                >
+                    <Plus size={13} /> Add Container
+                </button>
+            </div>
+        );
+    }
+
+    // 8. Featured Projects (Property Card Containers)
+    if (sectionType === "featured-projects") {
+        const items =
+            Array.isArray(sectionData.items) && sectionData.items.length > 0
+                ? sectionData.items
+                : defaultProjects;
+
+        const updateItem = (idx, patch) => {
+            updateSectionData(
+                "items",
+                items.map((item, i) => (i === idx ? { ...item, ...patch } : item))
+            );
+        };
+
+        const addProjectContainer = () => {
+            const next = [
+                ...items,
+                {
+                    id: Date.now(),
+                    name: "New Landmark Project",
+                    developer: "Leading Builder",
+                    location: "Pune",
+                    price: "₹ 1.25 - 2.80 Cr",
+                    configuration: "2, 3 BHK Luxury Residences",
+                    subtitle: "2, 3 BHK Luxury Residences, Pune",
+                    status: "Under Construction",
+                    possession: "2027",
+                    reraId: "RERA Approved",
+                    badge: "Featured",
+                    image: "",
+                    logo: "",
+                },
+            ];
+            updateSectionData("items", next);
+            setOpenIdx(next.length - 1);
+        };
+
+        return (
+            <div style={{ marginTop: 14 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>Featured Project Containers ({items.length})</span>
+                    <button
+                        type="button"
+                        className="admin-btn admin-btn--primary admin-btn--sm"
+                        onClick={addProjectContainer}
+                    >
+                        <Plus size={13} /> Add Container
+                    </button>
+                </div>
+
+                {items.map((item, idx) => (
+                    <AccordionCard
+                        key={item.id || idx}
+                        title={`${idx + 1}. ${item.name || "Project"}`}
+                        subtitle={item.price}
+                        isOpen={openIdx === idx}
+                        onToggle={() => setOpenIdx(openIdx === idx ? -1 : idx)}
+                        onRemove={
+                            items.length > 1
+                                ? () => updateSectionData("items", items.filter((_, i) => i !== idx))
+                                : null
+                        }
+                    >
+                        <div className="admin-form-grid">
+                            <div className="admin-field">
+                                <label className="admin-label">Project Name</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.name || ""}
+                                    onChange={(e) => updateItem(idx, { name: e.target.value })}
+                                />
+                            </div>
+                            <div className="admin-field">
+                                <label className="admin-label">Developer / Brand</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.developer || ""}
+                                    onChange={(e) => updateItem(idx, { developer: e.target.value })}
+                                />
+                            </div>
+                            <div className="admin-field">
+                                <label className="admin-label">Price Range</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.price || ""}
+                                    onChange={(e) => updateItem(idx, { price: e.target.value })}
+                                />
+                            </div>
+                            <div className="admin-field">
+                                <label className="admin-label">Configuration</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.configuration || ""}
+                                    onChange={(e) => updateItem(idx, { configuration: e.target.value })}
+                                />
+                            </div>
+                            <div className="admin-field">
+                                <label className="admin-label">Location</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.location || ""}
+                                    onChange={(e) => updateItem(idx, { location: e.target.value })}
+                                />
+                            </div>
+                            <div className="admin-field">
+                                <label className="admin-label">Possession Status</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.possession || item.status || ""}
+                                    onChange={(e) => updateItem(idx, { possession: e.target.value, status: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                        <ImageUploader
+                            label="Project Banner Image"
+                            value={item.image || ""}
+                            onChange={(val) => updateItem(idx, { image: val })}
+                        />
+                        <ImageUploader
+                            label="Developer Circular Logo (optional)"
+                            value={item.logo || ""}
+                            onChange={(val) => updateItem(idx, { logo: val })}
+                        />
+                    </AccordionCard>
+                ))}
+
+                <button
+                    type="button"
+                    className="admin-btn admin-btn--outline admin-btn--sm"
+                    style={{ width: "100%", justifyContent: "center", marginTop: 6 }}
+                    onClick={addProjectContainer}
+                >
+                    <Plus size={13} /> Add Container
+                </button>
+            </div>
+        );
+    }
+
+    // 9. Testimonials (Client Review Containers)
+    if (sectionType === "testimonials") {
+        const items =
+            Array.isArray(sectionData.items) && sectionData.items.length > 0
+                ? sectionData.items
+                : defaultTestimonials;
+
+        const updateItem = (idx, patch) => {
+            updateSectionData(
+                "items",
+                items.map((item, i) => (i === idx ? { ...item, ...patch } : item))
+            );
+        };
+
+        const addTestimonialContainer = () => {
+            const next = [
+                ...items,
+                {
+                    id: Date.now(),
+                    name: "Customer Name",
+                    role: "Verified Homebuyer",
+                    location: "Pune",
+                    rating: 5,
+                    text: "Pune Property Investors provided outstanding support throughout our journey to purchase a luxury home.",
+                },
+            ];
+            updateSectionData("items", next);
+            setOpenIdx(next.length - 1);
+        };
+
+        return (
+            <div style={{ marginTop: 14 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>Testimonial Containers ({items.length})</span>
+                    <button
+                        type="button"
+                        className="admin-btn admin-btn--primary admin-btn--sm"
+                        onClick={addTestimonialContainer}
+                    >
+                        <Plus size={13} /> Add Container
+                    </button>
+                </div>
+
+                {items.map((item, idx) => (
+                    <AccordionCard
+                        key={item.id || idx}
+                        title={`${idx + 1}. ${item.name || "Testimonial"}`}
+                        subtitle={item.role}
+                        isOpen={openIdx === idx}
+                        onToggle={() => setOpenIdx(openIdx === idx ? -1 : idx)}
+                        onRemove={
+                            items.length > 1
+                                ? () => updateSectionData("items", items.filter((_, i) => i !== idx))
+                                : null
+                        }
+                    >
+                        <div className="admin-form-grid">
+                            <div className="admin-field">
+                                <label className="admin-label">Client Name</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.name || ""}
+                                    onChange={(e) => updateItem(idx, { name: e.target.value })}
+                                />
+                            </div>
+                            <div className="admin-field">
+                                <label className="admin-label">Role / Neighborhood</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.role || item.location || ""}
+                                    onChange={(e) => updateItem(idx, { role: e.target.value, location: e.target.value })}
+                                />
+                            </div>
+                            <div className="admin-field">
+                                <label className="admin-label">Rating (1-5)</label>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max="5"
+                                    className="admin-input"
+                                    value={item.rating || 5}
+                                    onChange={(e) => updateItem(idx, { rating: Number(e.target.value) })}
+                                />
+                            </div>
+                        </div>
+                        <div className="admin-field" style={{ marginBottom: 0 }}>
+                            <label className="admin-label">Review Text</label>
+                            <textarea
+                                className="admin-textarea"
+                                value={item.text || ""}
+                                onChange={(e) => updateItem(idx, { text: e.target.value })}
+                            />
+                        </div>
+                    </AccordionCard>
+                ))}
+
+                <button
+                    type="button"
+                    className="admin-btn admin-btn--outline admin-btn--sm"
+                    style={{ width: "100%", justifyContent: "center", marginTop: 6 }}
+                    onClick={addTestimonialContainer}
+                >
+                    <Plus size={13} /> Add Container
+                </button>
+            </div>
+        );
+    }
+
+    // 10. Dedicated Custom Containers Block
+    if (sectionType === "custom-containers" || sectionType === "custom-container" || sectionType === "container") {
+        const items =
+            Array.isArray(sectionData.items) && sectionData.items.length > 0
+                ? sectionData.items
+                : (Array.isArray(sectionData.containers) ? sectionData.containers : []);
+
+        const updateItem = (idx, patch) => {
+            const next = items.map((item, i) => (i === idx ? { ...item, ...patch } : item));
+            updateSectionData("items", next);
+            updateSectionData("containers", next);
+        };
+
+        const addCustomCard = () => {
+            const next = [
+                ...items,
+                {
+                    id: Date.now(),
+                    badge: "Featured",
+                    title: "New Promotional Container",
+                    description: "Add details, highlights, or promotions for this card.",
+                    buttonText: "Explore More",
+                    buttonUrl: "/buy",
+                    image: "",
+                    videoUrl: "",
+                },
+            ];
+            updateSectionData("items", next);
+            updateSectionData("containers", next);
+            setOpenIdx(next.length - 1);
+        };
+
+        return (
+            <div style={{ marginTop: 14 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>Custom Card Containers ({items.length})</span>
+                    <button
+                        type="button"
+                        className="admin-btn admin-btn--primary admin-btn--sm"
+                        onClick={addCustomCard}
+                    >
+                        <Plus size={13} /> Add Container
+                    </button>
+                </div>
+
+                {items.map((item, idx) => (
+                    <AccordionCard
+                        key={item.id || idx}
+                        title={`${idx + 1}. ${item.title || "Custom Container"}`}
+                        subtitle={item.badge}
+                        isOpen={openIdx === idx}
+                        onToggle={() => setOpenIdx(openIdx === idx ? -1 : idx)}
+                        onRemove={
+                            items.length > 1
+                                ? () => {
+                                      const next = items.filter((_, i) => i !== idx);
+                                      updateSectionData("items", next);
+                                      updateSectionData("containers", next);
+                                  }
+                                : null
+                        }
+                    >
+                        <div className="admin-form-grid">
+                            <div className="admin-field">
+                                <label className="admin-label">Container Title</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.title || ""}
+                                    onChange={(e) => updateItem(idx, { title: e.target.value })}
+                                />
+                            </div>
+                            <div className="admin-field">
+                                <label className="admin-label">Badge Pill (e.g. Featured, Hot)</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.badge || ""}
+                                    onChange={(e) => updateItem(idx, { badge: e.target.value })}
+                                />
+                            </div>
+                            <div className="admin-field">
+                                <label className="admin-label">Button Text</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.buttonText || ""}
+                                    onChange={(e) => updateItem(idx, { buttonText: e.target.value })}
+                                />
+                            </div>
+                            <div className="admin-field">
+                                <label className="admin-label">Button Link URL</label>
+                                <input
+                                    className="admin-input"
+                                    value={item.buttonUrl || ""}
+                                    onChange={(e) => updateItem(idx, { buttonUrl: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                        <div className="admin-field">
+                            <label className="admin-label">Description Text</label>
+                            <textarea
+                                className="admin-textarea"
+                                value={item.description || ""}
+                                onChange={(e) => updateItem(idx, { description: e.target.value })}
+                            />
+                        </div>
+                        <ImageUploader
+                            label="Container Image"
+                            value={item.image || ""}
+                            onChange={(val) => updateItem(idx, { image: val })}
+                        />
+                        <VideoUploader
+                            label="Or Video URL (YouTube / MP4)"
+                            value={item.videoUrl || ""}
+                            onChange={(val) => updateItem(idx, { videoUrl: val })}
+                        />
+                    </AccordionCard>
+                ))}
+
+                <button
+                    type="button"
+                    className="admin-btn admin-btn--outline admin-btn--sm"
+                    style={{ width: "100%", justifyContent: "center", marginTop: 6 }}
+                    onClick={addCustomCard}
+                >
+                    <Plus size={13} /> Add Container
+                </button>
+            </div>
+        );
+    }
+
+    // 11. Universal Supplementary Containers for ALL Sections
+    const customList = Array.isArray(sectionData.customContainers) ? sectionData.customContainers : [];
+
+    const updateCustomContainer = (idx, patch) => {
+        updateSectionData(
+            "customContainers",
+            customList.map((c, i) => (i === idx ? { ...c, ...patch } : c))
+        );
+    };
+
+    const addUniversalContainer = () => {
+        const next = [
+            ...customList,
+            {
+                id: Date.now(),
+                badge: "Spotlight",
+                title: "New Sub-Container",
+                description: "Describe this custom container card.",
+                buttonText: "Learn More",
+                buttonUrl: "/buy",
+                image: "",
+                videoUrl: "",
+            },
+        ];
+        updateSectionData("customContainers", next);
+        setOpenIdx(next.length - 1);
+    };
+
+    return (
+        <div style={{ marginTop: 18, paddingTop: 14, borderTop: "1px dashed #cbd5e1" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <div>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: "#1e293b", display: "block" }}>
+                        Additional Custom Containers ({customList.length})
+                    </span>
+                    <span style={{ fontSize: 11.5, color: "#64748b" }}>
+                        Add supplementary cards or media boxes to this section.
+                    </span>
+                </div>
+                <button
+                    type="button"
+                    className="admin-btn admin-btn--primary admin-btn--sm"
+                    onClick={addUniversalContainer}
+                >
+                    <Plus size={13} /> Add Container
+                </button>
+            </div>
+
+            {customList.map((item, idx) => (
+                <AccordionCard
+                    key={item.id || idx}
+                    title={`${idx + 1}. ${item.title || "Custom Container"}`}
+                    subtitle={item.badge}
+                    isOpen={openIdx === idx}
+                    onToggle={() => setOpenIdx(openIdx === idx ? -1 : idx)}
+                    onRemove={() =>
+                        updateSectionData(
+                            "customContainers",
+                            customList.filter((_, i) => i !== idx)
+                        )
+                    }
+                >
+                    <div className="admin-form-grid">
+                        <div className="admin-field">
+                            <label className="admin-label">Title</label>
+                            <input
+                                className="admin-input"
+                                value={item.title || ""}
+                                onChange={(e) => updateCustomContainer(idx, { title: e.target.value })}
+                            />
+                        </div>
+                        <div className="admin-field">
+                            <label className="admin-label">Badge Pill</label>
+                            <input
+                                className="admin-input"
+                                value={item.badge || ""}
+                                onChange={(e) => updateCustomContainer(idx, { badge: e.target.value })}
+                            />
+                        </div>
+                        <div className="admin-field">
+                            <label className="admin-label">Button Text</label>
+                            <input
+                                className="admin-input"
+                                value={item.buttonText || ""}
+                                onChange={(e) => updateCustomContainer(idx, { buttonText: e.target.value })}
+                            />
+                        </div>
+                        <div className="admin-field">
+                            <label className="admin-label">Button URL</label>
+                            <input
+                                className="admin-input"
+                                value={item.buttonUrl || ""}
+                                onChange={(e) => updateCustomContainer(idx, { buttonUrl: e.target.value })}
+                            />
+                        </div>
+                    </div>
+                    <div className="admin-field">
+                        <label className="admin-label">Description</label>
+                        <textarea
+                            className="admin-textarea"
+                            value={item.description || ""}
+                            onChange={(e) => updateCustomContainer(idx, { description: e.target.value })}
+                        />
+                    </div>
+                    <ImageUploader
+                        label="Container Image"
+                        value={item.image || ""}
+                        onChange={(val) => updateCustomContainer(idx, { image: val })}
+                    />
+                    <VideoUploader
+                        label="Video URL (optional)"
+                        value={item.videoUrl || ""}
+                        onChange={(val) => updateCustomContainer(idx, { videoUrl: val })}
+                    />
+                </AccordionCard>
+            ))}
+
+            <button
+                type="button"
+                className="admin-btn admin-btn--outline admin-btn--sm"
+                style={{ width: "100%", justifyContent: "center", marginTop: 8 }}
+                onClick={addUniversalContainer}
+            >
+                <Plus size={13} /> Add Container
+            </button>
+        </div>
+    );
 }
 
