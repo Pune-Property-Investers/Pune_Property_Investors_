@@ -73,23 +73,25 @@ const navigationItems = [
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-function Header({ transparentAtTop = false }) {
+function Header({ transparentAtTop = false, forceDark = false, theme = "default" }) {
     const pathname = usePathname();
     const normalizedPath =
         pathname === "/" ? "/" : (pathname || "/").replace(/\/+$/, "");
     const isHome = normalizedPath === "/";
     const isTransparent =
-        isHome ||
-        transparentAtTop ||
-        normalizedPath.startsWith("/buy") ||
-        normalizedPath.startsWith("/properties") ||
-        normalizedPath.startsWith("/property") ||
-        normalizedPath.startsWith("/commercial") ||
-        normalizedPath.startsWith("/plots") ||
-        normalizedPath.startsWith("/new-launches") ||
-        normalizedPath.startsWith("/about") ||
-        normalizedPath.startsWith("/blog") ||
-        normalizedPath.startsWith("/career");
+        !forceDark &&
+        theme !== "black" &&
+        !normalizedPath.startsWith("/property") &&
+        (isHome ||
+            transparentAtTop ||
+            normalizedPath.startsWith("/buy") ||
+            normalizedPath.startsWith("/properties") ||
+            normalizedPath.startsWith("/commercial") ||
+            normalizedPath.startsWith("/plots") ||
+            normalizedPath.startsWith("/new-launches") ||
+            normalizedPath.startsWith("/about") ||
+            normalizedPath.startsWith("/blog") ||
+            normalizedPath.startsWith("/career"));
     const [menuOpen, setMenuOpen] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(null);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -189,7 +191,7 @@ function Header({ transparentAtTop = false }) {
             {/* Header Main Bar (Fixed, Luxury Scrolled State) */}
             <header
                 className={`site-header ${isTransparent ? "site-header--home" : ""} ${isScrolled ? "site-header--scrolled" : ""
-                    } ${menuOpen ? "site-header--open" : ""}`}
+                    } ${menuOpen ? "site-header--open" : ""} ${theme === "black" || forceDark || normalizedPath.startsWith("/property") ? "site-header--black" : ""}`}
             >
                 <div className="header-container">
                     {/* Company Logo and Brand Name */}
