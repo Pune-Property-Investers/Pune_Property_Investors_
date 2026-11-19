@@ -965,6 +965,50 @@
         filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.65));
     }
 
+    /* -------------------------------------------------------------
+       SNAKE BORDER TRACE ANIMATION
+       - Dark gold glowing stroke runs around the container border like a snake
+       - Fires once when the bottom navigation appears (.mobile-bottom-nav--visible)
+       - Runs around perimeter and through scooped cradle curve, then disappears
+       ------------------------------------------------------------- */
+    .mobile-bottom-nav__snake-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 4;
+        overflow: visible;
+    }
+
+    .mobile-bottom-nav__snake-line {
+        stroke-dasharray: 180 920;
+        stroke-dashoffset: 1100;
+        opacity: 0;
+    }
+
+    .mobile-bottom-nav--visible .mobile-bottom-nav__snake-line {
+        animation: ppi-snake-trace 2.6s cubic-bezier(0.25, 1, 0.45, 1) 1 forwards;
+        animation-delay: 0.25s;
+    }
+
+    @keyframes ppi-snake-trace {
+        0% {
+            stroke-dashoffset: 1100;
+            opacity: 0;
+        }
+        8% {
+            opacity: 1;
+        }
+        85% {
+            opacity: 1;
+        }
+        100% {
+            stroke-dashoffset: 0;
+            opacity: 0;
+        }
+    }
+
     /* Individual Nav Item */
     .mobile-bottom-nav__item {
         position: relative;
@@ -1102,9 +1146,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 48px;
-        height: 48px;
-        margin-top: -18px; /* Lowered slightly deeper into the scooped cradle */
+        width: 46px;
+        height: 46px;
+        margin-top: -21px; /* Sits elevated with generous, clean space above the scooped curve */
         border-radius: 50%; /* Perfect Circle matching user's design reference */
         background: linear-gradient(135deg, #F4D58A 0%, #D6B36A 52%, #B88E3E 100%);
         border: 2px solid #FFF2C6;
@@ -1121,8 +1165,8 @@
     }
 
     .mobile-bottom-nav__shorts-icon {
-        width: 23px;
-        height: 23px;
+        width: 22px;
+        height: 22px;
         color: inherit;
         filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.25));
         transition: transform 0.2s ease;
@@ -1308,9 +1352,9 @@
     }
 
     .mobile-bottom-nav__shorts-pod {
-        width: 44px;
-        height: 44px;
-        margin-top: -14px;
+        width: 42px;
+        height: 42px;
+        margin-top: -18px;
     }
 
     .mobile-bottom-nav__item--shorts .mobile-bottom-nav__label {

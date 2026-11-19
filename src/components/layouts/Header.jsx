@@ -473,14 +473,14 @@ function Header({ transparentAtTop = false }) {
                                 <stop offset="100%" stopColor="rgba(214, 179, 106, 0.35)" />
                             </linearGradient>
                         </defs>
-                        {/* Dark Body fill with scooped notch */}
+                        {/* Dark Body fill with scooped notch (depth 35 for clean button clearance) */}
                         <path
-                            d="M -2,0 L 2,0 C 20,0 26,30 48,30 C 70,30 76,0 94,0 L 98,0 L 98,64 L -2,64 Z"
+                            d="M -2,0 L 2,0 C 20,0 26,35 48,35 C 70,35 76,0 94,0 L 98,0 L 98,64 L -2,64 Z"
                             fill="url(#ppi-notch-body)"
                         />
                         {/* Top Scooped Gold Rim Contour */}
                         <path
-                            d="M 0,0 C 20,0 26,30 48,30 C 70,30 76,0 96,0"
+                            d="M 0,0 C 20,0 26,35 48,35 C 70,35 76,0 96,0"
                             fill="none"
                             stroke="url(#ppi-cradle-glow)"
                             strokeWidth="1.6"
@@ -495,6 +495,36 @@ function Header({ transparentAtTop = false }) {
                     </svg>
                     <div className="mobile-bottom-nav__bg-wing mobile-bottom-nav__bg-wing--right" />
                 </div>
+
+                {/* Dark Gold Snake Border Animation (Runs once when container appears) */}
+                <svg
+                    className="mobile-bottom-nav__snake-svg"
+                    viewBox="0 0 400 64"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                >
+                    <defs>
+                        <linearGradient id="ppi-snake-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="#8C6334" stopOpacity="0" />
+                            <stop offset="35%" stopColor="#B88E3E" stopOpacity="0.8" />
+                            <stop offset="70%" stopColor="#D6B36A" stopOpacity="1" />
+                            <stop offset="100%" stopColor="#F4D58A" stopOpacity="1" />
+                        </linearGradient>
+                        <filter id="ppi-snake-glow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="#F4D58A" floodOpacity="0.8" />
+                        </filter>
+                    </defs>
+                    <path
+                        className="mobile-bottom-nav__snake-line"
+                        d="M 32,0 L 152,0 C 172,0 178,35 200,35 C 222,35 228,0 248,0 L 368,0 A 32,32 0 0,1 400,32 A 32,32 0 0,1 368,64 L 32,64 A 32,32 0 0,1 0,32 A 32,32 0 0,1 32,0 Z"
+                        fill="none"
+                        stroke="url(#ppi-snake-grad)"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        filter="url(#ppi-snake-glow)"
+                        vectorEffect="non-scaling-stroke"
+                    />
+                </svg>
 
                 {/* 1. Home */}
                 <Link
