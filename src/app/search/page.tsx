@@ -9,12 +9,13 @@ function SearchRedirect() {
 
     useEffect(() => {
         const params = new URLSearchParams(searchParams ? searchParams.toString() : "");
-        if (!params.has("filter")) {
-            params.set("filter", "open");
-        }
-        const queryString = params.toString();
-        router.replace(queryString ? `/properties?${queryString}` : "/properties?filter=open");
-    }, [router, searchParams]);
+            if (!params.has("focus")) {
+                params.set("focus", "search");
+            }
+            params.delete("filter");
+            const queryString = params.toString();
+            router.replace(queryString ? `/properties?${queryString}#property-search` : "/properties?focus=search#property-search");
+        }, [router, searchParams]);
 
     return null;
 }

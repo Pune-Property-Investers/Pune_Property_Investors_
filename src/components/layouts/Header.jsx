@@ -51,6 +51,7 @@ const navigationItems = [
         href: "/buy",
         dropdown: [
             { label: "All Properties", href: "/buy" },
+            { label: "Search Properties", href: "/properties?focus=search#property-search" },
             { label: "New Launches", href: "/buy?type=new-launch" },
             { label: "Commercial Properties", href: "/commercial" },
             { label: "Plots & Land", href: "/plots" },
@@ -280,6 +281,21 @@ function Header({ transparentAtTop = false }) {
                                 </div>
                             );
                         })}
+
+                        {/* Search Link for Desktop/Laptop View */}
+                        <div className="header-nav-item">
+                            <div className="header-nav-item__main">
+                                <Link
+                                    href="/properties?focus=search#property-search"
+                                    onClick={handleSearchClick}
+                                    className="header-nav-link header-nav-link--search"
+                                    aria-label="Search properties"
+                                >
+                                    <Search size={15} style={{ display: "inline-block", marginRight: "6px", verticalAlign: "-2px" }} />
+                                    <span>Search</span>
+                                </Link>
+                            </div>
+                        </div>
                     </nav>
 
                     {/* Mobile Hamburger Menu Toggle Button (matches Image 2) */}
@@ -456,7 +472,7 @@ function Header({ transparentAtTop = false }) {
                         </a>
 
                         <Link
-                            href="/properties?filter=open"
+                            href="/properties?focus=search#property-search"
                             className="mobile-drawer__btn mobile-drawer__btn--search"
                             onClick={handleSearchClick}
                         >
@@ -567,7 +583,7 @@ function Header({ transparentAtTop = false }) {
 
                 {/* 2. Search */}
                 <Link
-                    href="/properties?filter=open"
+                    href="/properties?focus=search#property-search"
                     onClick={handleSearchClick}
                     className={`mobile-bottom-nav__item mobile-bottom-nav__item--search ${(normalizedPath === "/search" ||
                         normalizedPath === "/buy" ||
