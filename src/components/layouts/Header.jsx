@@ -596,7 +596,7 @@ function Header({ transparentAtTop = false }) {
                     <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </a>
 
-                {/* 5. Menu (Separate Rounded-Square Button) */}
+                {/* 5. Menu */}
                 <button
                     type="button"
                     onClick={() => setMenuOpen((current) => !current)}
@@ -605,14 +605,15 @@ function Header({ transparentAtTop = false }) {
                     aria-label={menuOpen ? "Close menu" : "Open menu"}
                     aria-expanded={menuOpen}
                 >
-                    <div className="mobile-bottom-nav__menu-box">
+                    <div className="mobile-bottom-nav__icon-wrap">
                         {menuOpen ? (
-                            <X className="mobile-bottom-nav__icon mobile-bottom-nav__icon--menu-toggle" size={20} strokeWidth={2} />
+                            <X className="mobile-bottom-nav__icon mobile-bottom-nav__icon--menu-toggle" size={20} strokeWidth={1.8} />
                         ) : (
-                            <Menu className="mobile-bottom-nav__icon mobile-bottom-nav__icon--menu-toggle" size={20} strokeWidth={2} />
+                            <Menu className="mobile-bottom-nav__icon mobile-bottom-nav__icon--menu-toggle" size={20} strokeWidth={1.8} />
                         )}
                     </div>
                     <span className="mobile-bottom-nav__label">Menu</span>
+                    <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </button>
             </nav>
         </>
