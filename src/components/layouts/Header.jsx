@@ -127,10 +127,11 @@ function Header({ transparentAtTop = false }) {
             normalizedPath.startsWith("/buy")
         ) {
             e.preventDefault();
-            window.dispatchEvent(new CustomEvent("open-property-filters"));
+            window.dispatchEvent(new CustomEvent("focus-property-search"));
             try {
                 const url = new URL(window.location.href);
-                url.searchParams.set("filter", "open");
+                url.searchParams.set("focus", "search");
+                url.hash = "property-search";
                 window.history.replaceState({}, "", url.toString());
             } catch (err) {
                 // Ignore URL parsing errors

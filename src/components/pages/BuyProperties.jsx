@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -54,6 +54,60 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
     });
     const [searchQuery, setSearchQuery] = useState(initialProject);
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+    const searchInputRef = useRef(null);
+
+    // Scroll and focus on search input ("Search location, builder, or project...")
+    const scrollToSearchSection = useCallback(() => {
+        const target =
+            document.getElementById("property-search") ||
+            document.querySelector(".buy-properties-sticky-header") ||
+            document.querySelector(".buy-properties-intro");
+
+        if (target) {
+            const headerOffset = 65;
+            const elementPosition = target.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: Math.max(0, offsetPosition),
+                behavior: "smooth",
+            });
+
+            setTimeout(() => {
+                searchInputRef.current?.focus();
+            }, 350);
+        }
+    }, []);
+
+    // Handle incoming search requests from URL or events (both mobile and laptop view)
+    useEffect(() => {
+        const isSearchRequested =
+            searchParams?.get("focus") === "search" ||
+            searchParams?.get("search") === "true" ||
+            searchParams?.get("filter") === "open" ||
+            (typeof window !== "undefined" && window.location.hash.includes("property-search"));
+
+        if (isSearchRequested) {
+            // Keep mobile filter drawer closed so the property listings and search bar are directly shown
+            setMobileFiltersOpen(false);
+
+            const timer = setTimeout(() => {
+                scrollToSearchSection();
+            }, 200);
+
+            return () => clearTimeout(timer);
+        }
+
+        const handleFocusSearch = () => {
+            setMobileFiltersOpen(false);
+            scrollToSearchSection();
+        };
+
+        window.addEventListener("focus-property-search", handleFocusSearch);
+        return () => {
+            window.removeEventListener("focus-property-search", handleFocusSearch);
+        };
+    }, [searchParams, scrollToSearchSection]);
 
     // Lock body scroll when mobile filter drawer is open
     useEffect(() => {
@@ -66,27 +120,6 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
             document.body.style.overflow = "";
         };
     }, [mobileFiltersOpen]);
-
-    // Open filter drawer if URL specifies filter=open or if open-property-filters event is fired
-    useEffect(() => {
-        const filterParam = searchParams?.get("filter");
-        if (filterParam === "open" || filterParam === "true") {
-            setMobileFiltersOpen(true);
-            if (typeof window !== "undefined" && window.innerWidth >= 900) {
-                const el = document.querySelector(".buy-properties-filter-column") || document.querySelector(".buy-properties-search");
-                el?.scrollIntoView({ behavior: "smooth", block: "start" });
-            }
-        }
-
-        const handleOpenFilters = () => {
-            setMobileFiltersOpen(true);
-        };
-
-        window.addEventListener("open-property-filters", handleOpenFilters);
-        return () => {
-            window.removeEventListener("open-property-filters", handleOpenFilters);
-        };
-    }, [searchParams]);
 
     const handleCloseMobileFilters = () => {
         setMobileFiltersOpen(false);
@@ -303,7 +336,7 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                 {/* Main listings area */}
                 <section className="buy-properties-content" id="listings">
                     {/* Sticky Section Intro & Search Bar (Static below Header while contents scroll from background) */}
-                    <div className="buy-properties-sticky-header">
+                    <div className="buy-properties-sticky-header" id="property-search">
                         <div className="buy-properties-container">
                             <div className="buy-properties-intro">
                                 <div className="buy-properties-intro__text">
@@ -337,6 +370,7 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                                         <Search size={18} className="buy-properties-search__icon" />
 
                                         <input
+                                            ref={searchInputRef}
                                             type="search"
                                             placeholder="Search location, builder, or project..."
                                             value={searchQuery}
