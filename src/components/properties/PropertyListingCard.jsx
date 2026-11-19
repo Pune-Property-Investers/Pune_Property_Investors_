@@ -7,11 +7,13 @@ import {
     BedDouble,
     Bath,
     Ruler,
-    ArrowUpRight,
     Heart,
     ShieldCheck,
-    CalendarDays,
+    Star,
+    Play,
+    MessageSquare,
 } from "lucide-react";
+import "./PropertyListingCard.css";
 
 function formatPrice(price) {
     const numericPrice = Number(price);
@@ -51,19 +53,20 @@ function PropertyListingCard({ property }) {
         areaUnit = "sq.ft.",
         price,
         priceLabel,
-        pricePerSqFt,
-        possession,
         image,
         imageAlt,
         featured,
         verified,
-        amenities = [],
         propertyType,
     } = property;
 
     const displayTitle = title || projectName || "Property for Sale";
-    const displayLocation = [locality, location]
-        .filter((value, index, array) => value && array.indexOf(value) === index)
+    const displayLocation = [locality, location, "Pune"]
+        .filter(Boolean)
+        .flatMap((v) => String(v).split(","))
+        .map((s) => s.trim())
+        .filter((v, i, a) => v && a.findIndex((item) => item.toLowerCase() === v.toLowerCase()) === i)
+        .slice(0, 2)
         .join(", ");
 
     const bedroomCount = Number(bedrooms ?? bhk ?? 0);
@@ -75,169 +78,142 @@ function PropertyListingCard({ property }) {
         priceLabel ||
         (numericPrice > 0 ? formatPrice(numericPrice) : "Price on Request");
 
-    const displayPricePerSqFt =
-        pricePerSqFt ||
-        (areaValue > 0 && numericPrice > 0
-            ? `₹${Math.round(numericPrice / areaValue).toLocaleString("en-IN")}/sq.ft.`
-            : "");
+    const propertyUrl = `/property/${id}`;
 
     return (
         <article className="property-listing-card">
-            <div className="property-listing-card__image">
-                {image ? (
-                    <img
-                        src={image}
-                        alt={imageAlt || displayTitle}
-                        loading="lazy"
-                    />
-                ) : (
-                    <div className="property-listing-card__image-placeholder">
-                        <span>Property Image</span>
+                {/* HERO IMAGE CONTAINER */}
+                <div className="property-listing-card__image-wrap">
+                    <Link
+                        href={propertyUrl}
+                        className="property-listing-card__image-link"
+                        aria-label={`View details of ${displayTitle}`}
+                    >
+                        {image ? (
+                            <img
+                                src={image}
+                                alt={imageAlt || displayTitle}
+                                loading="lazy"
+                            />
+                        ) : (
+                            <div className="property-listing-card__image-placeholder">
+                                <span>Property Image</span>
+                            </div>
+                        )}
+                    </Link>
+
+                    {/* Top Badges (Left) */}
+                    <div className="property-listing-card__badges">
+                        {featured ? (
+                            <span className="property-listing-card__badge property-listing-card__badge--featured">
+                                <Star size={11} fill="#e5b869" color="#e5b869" />
+                                <span>Featured</span>
+                            </span>
+                        ) : verified ? (
+                            <span className="property-listing-card__badge property-listing-card__badge--verified">
+                                <ShieldCheck size={12} />
+                                <span>Verified</span>
+                            </span>
+                        ) : null}
                     </div>
-                )}
 
-                <div className="property-listing-card__badges">
-                    {featured && (
-                        <span className="property-listing-card__badge property-listing-card__badge--featured">
-                            Featured
-                        </span>
-                    )}
+                    {/* Favorite Heart Button (Right) */}
+                    <button
+                        type="button"
+                        className={`property-listing-card__favorite ${isFavorite ? "is-favorite" : ""
+                            }`}
+                        aria-label={
+                            isFavorite
+                                ? `Remove ${displayTitle} from favorites`
+                                : `Save ${displayTitle} to favorites`
+                        }
+                        aria-pressed={isFavorite}
+                        onClick={() => setIsFavorite((previous) => !previous)}
+                    >
+                        <Heart size={18} strokeWidth={1.8} />
+                    </button>
 
-                    {verified && (
-                        <span className="property-listing-card__badge property-listing-card__badge--verified">
-                            <ShieldCheck size={13} />
-                            Verified
+                    {/* Video Tour Floating Pill Badge (Bottom-Left of Image) */}
+                    <Link
+                        href={`${propertyUrl}#video-tour`}
+                        className="property-listing-card__video-badge"
+                        aria-label={`Watch Video Tour for ${displayTitle}`}
+                    >
+                        <span className="property-listing-card__video-icon">
+                            <Play size={10} fill="#ffffff" color="#ffffff" />
                         </span>
-                    )}
+                        <span>Video Tour</span>
+                    </Link>
                 </div>
 
-                <button
-                    type="button"
-                    className={`property-listing-card__favorite ${
-                        isFavorite ? "is-favorite" : ""
-                    }`}
-                    aria-label={
-                        isFavorite
-                            ? `Remove ${displayTitle} from favorites`
-                            : `Save ${displayTitle} to favorites`
-                    }
-                    aria-pressed={isFavorite}
-                    onClick={() => setIsFavorite((previous) => !previous)}
-                >
-                    <Heart size={19} />
-                </button>
-
-                <span className="property-listing-card__image-caption">
-                    For Sale
-                </span>
-            </div>
-
-            <div className="property-listing-card__body">
-                <div className="property-listing-card__heading">
+                {/* DARK LUXURY FLOATING SHEET */}
+                <div className="property-listing-card__body">
                     <div className="property-listing-card__main-info">
                         <p className="property-listing-card__project">
-                            {projectName || propertyType || "Property for Sale"}
+                            {projectName || propertyType || "Sample Residential Project"}
                         </p>
 
                         <h3 className="property-listing-card__title">
-                            {displayTitle}
+                            <Link href={propertyUrl}>
+                                {displayTitle}
+                            </Link>
                         </h3>
 
                         <p className="property-listing-card__location">
-                            <MapPin size={15} aria-hidden="true" />
-                            <span>
-                                {displayLocation || "Pune, Maharashtra"}
-                            </span>
+                            <MapPin size={13.5} aria-hidden="true" />
+                            <span>{displayLocation || "Pune, Maharashtra"}</span>
                         </p>
                     </div>
 
-                    <div className="property-listing-card__price">
-                        <strong>{displayPrice}</strong>
-
-                        {displayPricePerSqFt && (
-                            <span>{displayPricePerSqFt}</span>
+                    {/* Specifications Row with Vertical Dividers */}
+                    <div className="property-listing-card__specifications">
+                        {bedroomCount > 0 && (
+                            <div className="property-listing-card__spec">
+                                <BedDouble size={16} aria-hidden="true" />
+                                <span>{bedroomCount} BHK</span>
+                            </div>
                         )}
-                    </div>
-                </div>
 
-                <div className="property-listing-card__specifications">
-                    {bedroomCount > 0 && (
-                        <div className="property-listing-card__spec">
-                            <BedDouble size={17} aria-hidden="true" />
-                            <span>
-                                {bedroomCount} BHK
-                            </span>
-                        </div>
-                    )}
-
-                    {bathroomCount > 0 && (
-                        <div className="property-listing-card__spec">
-                            <Bath size={17} aria-hidden="true" />
-                            <span>
-                                {bathroomCount}{" "}
-                                {bathroomCount === 1 ? "Bathroom" : "Bathrooms"}
-                            </span>
-                        </div>
-                    )}
-
-                    {areaValue > 0 && (
-                        <div className="property-listing-card__spec">
-                            <Ruler size={17} aria-hidden="true" />
-                            <span>
-                                {areaValue.toLocaleString("en-IN")} {areaUnit}
-                            </span>
-                        </div>
-                    )}
-                </div>
-
-                {possession && (
-                    <p className="property-listing-card__possession">
-                        <CalendarDays size={15} aria-hidden="true" />
-                        <span>{possession}</span>
-                    </p>
-                )}
-
-                {amenities.length > 0 && (
-                    <div className="property-listing-card__amenities">
-                        {amenities.slice(0, 3).map((amenity) => (
-                            <span key={amenity}>{amenity}</span>
-                        ))}
-
-                        {amenities.length > 3 && (
-                            <span>+{amenities.length - 3} more</span>
+                        {bedroomCount > 0 && bathroomCount > 0 && (
+                            <span className="property-listing-card__spec-divider" aria-hidden="true" />
                         )}
-                    </div>
-                )}
 
-                <div className="property-listing-card__footer">
-                    <div className="property-listing-card__trust">
-                        {verified && (
-                            <>
-                                <ShieldCheck size={15} />
-                                <span>Verified Listing</span>
-                            </>
+                        {bathroomCount > 0 && (
+                            <div className="property-listing-card__spec">
+                                <Bath size={16} aria-hidden="true" />
+                                <span>
+                                    {bathroomCount}{" "}
+                                    {bathroomCount === 1 ? "Bathroom" : "Bathrooms"}
+                                </span>
+                            </div>
+                        )}
+
+                        {(bedroomCount > 0 || bathroomCount > 0) && areaValue > 0 && (
+                            <span className="property-listing-card__spec-divider" aria-hidden="true" />
+                        )}
+
+                        {areaValue > 0 && (
+                            <div className="property-listing-card__spec">
+                                <Ruler size={16} aria-hidden="true" />
+                                <span>
+                                    {areaValue.toLocaleString("en-IN")} {areaUnit}
+                                </span>
+                            </div>
                         )}
                     </div>
 
-                    <div className="property-listing-card__actions">
-                        <Link
-                            href={`/property/${id}`}
-                            className="property-listing-card__details-button"
-                        >
-                            View Details
-                            <ArrowUpRight size={16} aria-hidden="true" />
-                        </Link>
-
+                    {/* Full-width Gold Enquire Now Button */}
+                    <div className="property-listing-card__footer">
                         <Link
                             href="/#home-contact"
                             className="property-listing-card__contact-button"
                             aria-label={`Enquire about ${displayTitle}`}
                         >
-                            Enquire
+                            <MessageSquare size={16} aria-hidden="true" />
+                            <span>Enquire Now</span>
                         </Link>
                     </div>
                 </div>
-            </div>
         </article>
     );
 }
