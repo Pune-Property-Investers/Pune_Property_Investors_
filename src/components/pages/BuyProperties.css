@@ -1101,14 +1101,21 @@
 }
 
 /* ==========================================================================
-   PROPERTY GRID (Desktop/Laptop: 1-Column feed for horizontal portal cards)
+   PROPERTY GRID (Desktop/Laptop: 2-Column grid to fit two cards)
    ========================================================================== */
 
 .buy-properties-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
     width: 100%;
+}
+
+@media (max-width: 768px) {
+    .buy-properties-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
 }
 
 /* ==========================================================================
