@@ -54,7 +54,7 @@
 @media (max-width: 768px) {
     .scroll-to-top {
         right: 16px;
-        bottom: calc(76px + env(safe-area-inset-bottom));
+        bottom: calc(88px + env(safe-area-inset-bottom, 16px));
         width: 42px;
         height: 42px;
         font-size: 15px;

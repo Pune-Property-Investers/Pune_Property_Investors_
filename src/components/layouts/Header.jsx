@@ -450,7 +450,7 @@ function Header({ transparentAtTop = false }) {
                 </div>
             </aside>
 
-            {/* Mobile Bottom Navigation Bar (Appears when scrolling down from head section with header) */}
+            {/* Mobile Bottom Navigation Bar (Floating Pill Shape with Scooped Centre Cradle) */}
             <nav
                 className={`mobile-bottom-nav ${isScrolled || normalizedPath === "/shorts"
                     ? "mobile-bottom-nav--visible"
@@ -458,27 +458,66 @@ function Header({ transparentAtTop = false }) {
                     }`}
                 aria-label="Mobile Bottom Navigation"
             >
+                {/* Scooped Cradle Backdrop */}
+                <div className="mobile-bottom-nav__backdrop" aria-hidden="true">
+                    <div className="mobile-bottom-nav__bg-wing mobile-bottom-nav__bg-wing--left" />
+                    <svg className="mobile-bottom-nav__bg-notch" viewBox="0 0 96 64" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="ppi-notch-body" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#181818" stopOpacity="0.96" />
+                                <stop offset="100%" stopColor="#0d0d0d" stopOpacity="0.96" />
+                            </linearGradient>
+                            <linearGradient id="ppi-cradle-glow" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stopColor="rgba(214, 179, 106, 0.35)" />
+                                <stop offset="50%" stopColor="rgba(244, 213, 138, 0.9)" />
+                                <stop offset="100%" stopColor="rgba(214, 179, 106, 0.35)" />
+                            </linearGradient>
+                        </defs>
+                        {/* Dark Body fill with scooped notch */}
+                        <path
+                            d="M -2,0 L 2,0 C 20,0 26,30 48,30 C 70,30 76,0 94,0 L 98,0 L 98,64 L -2,64 Z"
+                            fill="url(#ppi-notch-body)"
+                        />
+                        {/* Top Scooped Gold Rim Contour */}
+                        <path
+                            d="M 0,0 C 20,0 26,30 48,30 C 70,30 76,0 96,0"
+                            fill="none"
+                            stroke="url(#ppi-cradle-glow)"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                        />
+                        {/* Bottom Gold Rim Line */}
+                        <line
+                            x1="-2" y1="63.5" x2="98" y2="63.5"
+                            stroke="rgba(214, 179, 106, 0.28)"
+                            strokeWidth="1"
+                        />
+                    </svg>
+                    <div className="mobile-bottom-nav__bg-wing mobile-bottom-nav__bg-wing--right" />
+                </div>
+
                 {/* 1. Home */}
                 <Link
                     href="/"
                     onClick={handleHomeClick}
-                    className={`mobile-bottom-nav__item ${normalizedPath === "/" && !menuOpen
+                    className={`mobile-bottom-nav__item mobile-bottom-nav__item--home ${normalizedPath === "/" && !menuOpen
                         ? "mobile-bottom-nav__item--active"
                         : ""
                         }`}
                     aria-label="Home"
                 >
                     <div className="mobile-bottom-nav__icon-wrap">
-                        <Home className="mobile-bottom-nav__icon" size={20} />
+                        <Home className="mobile-bottom-nav__icon" size={20} strokeWidth={1.8} />
                     </div>
                     <span className="mobile-bottom-nav__label">Home</span>
+                    <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </Link>
 
                 {/* 2. Search */}
                 <Link
                     href="/search"
                     onClick={closeMenu}
-                    className={`mobile-bottom-nav__item ${(normalizedPath === "/search" ||
+                    className={`mobile-bottom-nav__item mobile-bottom-nav__item--search ${(normalizedPath === "/search" ||
                         normalizedPath === "/buy" ||
                         normalizedPath.startsWith("/properties")) &&
                         !menuOpen
@@ -488,28 +527,27 @@ function Header({ transparentAtTop = false }) {
                     aria-label="Search"
                 >
                     <div className="mobile-bottom-nav__icon-wrap">
-                        <Search className="mobile-bottom-nav__icon" size={20} />
+                        <Search className="mobile-bottom-nav__icon" size={20} strokeWidth={1.8} />
                     </div>
                     <span className="mobile-bottom-nav__label">Search</span>
+                    <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </Link>
 
-                {/* 3. PPI Shorts */}
+                {/* 3. PPI Shorts (Special Centre Highlight) */}
                 <Link
                     href="/shorts"
                     onClick={closeMenu}
-                    className={`mobile-bottom-nav__item ${normalizedPath === "/shorts" && !menuOpen
-                        ? "mobile-bottom-nav__item--active mobile-bottom-nav__item--shorts"
+                    className={`mobile-bottom-nav__item mobile-bottom-nav__item--shorts ${normalizedPath === "/shorts" && !menuOpen
+                        ? "mobile-bottom-nav__item--active"
                         : ""
                         }`}
                     aria-label="PPI Shorts"
                 >
-                    <div className="mobile-bottom-nav__icon-wrap">
-                        <Film size={20} className="mobile-bottom-nav__icon" />
+                    <div className="mobile-bottom-nav__shorts-pod">
+                        <ShortsIcon size={22} className="mobile-bottom-nav__shorts-icon" />
                     </div>
                     <span className="mobile-bottom-nav__label">PPI Shorts</span>
-                    {normalizedPath === "/shorts" && !menuOpen && (
-                        <span className="mobile-bottom-nav__dot" />
-                    )}
+                    <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </Link>
 
                 {/* 4. WhatsApp */}
@@ -521,25 +559,26 @@ function Header({ transparentAtTop = false }) {
                     aria-label="WhatsApp"
                 >
                     <div className="mobile-bottom-nav__icon-wrap">
-                        <FaWhatsapp size={20} className="mobile-bottom-nav__icon mobile-bottom-nav__icon--wa" />
+                        <FaWhatsapp size={21} className="mobile-bottom-nav__icon mobile-bottom-nav__icon--wa" />
                     </div>
                     <span className="mobile-bottom-nav__label mobile-bottom-nav__label--wa">WhatsApp</span>
+                    <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </a>
 
-                {/* 5. Menu */}
+                {/* 5. Menu (Separate Rounded-Square Button) */}
                 <button
                     type="button"
                     onClick={() => setMenuOpen((current) => !current)}
-                    className={`mobile-bottom-nav__item ${menuOpen ? "mobile-bottom-nav__item--active" : ""
+                    className={`mobile-bottom-nav__item mobile-bottom-nav__item--menu ${menuOpen ? "mobile-bottom-nav__item--active" : ""
                         }`}
                     aria-label={menuOpen ? "Close menu" : "Open menu"}
                     aria-expanded={menuOpen}
                 >
-                    <div className="mobile-bottom-nav__icon-wrap">
+                    <div className="mobile-bottom-nav__menu-box">
                         {menuOpen ? (
-                            <X className="mobile-bottom-nav__icon" size={20} />
+                            <X className="mobile-bottom-nav__icon mobile-bottom-nav__icon--menu-toggle" size={20} strokeWidth={2} />
                         ) : (
-                            <Menu className="mobile-bottom-nav__icon" size={20} />
+                            <Menu className="mobile-bottom-nav__icon mobile-bottom-nav__icon--menu-toggle" size={20} strokeWidth={2} />
                         )}
                     </div>
                     <span className="mobile-bottom-nav__label">Menu</span>

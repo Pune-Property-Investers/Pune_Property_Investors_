@@ -11,9 +11,11 @@
     width: 100%;
     margin: 0;
     padding: 0;
-    background: #181818; /* Premium matte black */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    background: rgba(16, 16, 16, 0.94); /* Deep charcoal near-black (#101010) */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(214, 179, 106, 0.28);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(214, 179, 106, 0.12);
     transition: background 0.35s cubic-bezier(0.16, 1, 0.3, 1),
         box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
         border-color 0.35s ease,
@@ -23,11 +25,11 @@
 
 .site-header--scrolled,
 .site-header--home.site-header--scrolled {
-    background: #181818; /* Premium matte black */
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    background: rgba(16, 16, 16, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(214, 179, 106, 0.32);
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(214, 179, 106, 0.18);
 }
 
 /* Home screen 100% transparent header when at top */
@@ -41,7 +43,7 @@
 
 .site-header--scrolled .header-brand__subtitle,
 .site-header--home.site-header--scrolled .header-brand__subtitle {
-    color: #c49866;
+    color: #D6B36A;
     text-shadow: none;
 }
 
@@ -49,20 +51,20 @@
 .site-header--home.site-header--scrolled .header-nav-link:hover,
 .site-header--scrolled .header-dropdown-toggle:hover,
 .site-header--home.site-header--scrolled .header-dropdown-toggle:hover {
-    color: #f1d49e;
+    color: #F4D58A;
 }
 
 .site-header--scrolled .header-cta-link,
 .site-header--home.site-header--scrolled .header-cta-link {
-    background: linear-gradient(135deg, #c49866 0%, #a77a48 100%);
-    color: #ffffff;
-    box-shadow: 0 4px 14px rgba(167, 122, 72, 0.35);
+    background: linear-gradient(135deg, #F4D58A 0%, #D6B36A 52%, #B88E3E 100%);
+    color: #101010;
+    box-shadow: 0 4px 16px rgba(214, 179, 106, 0.35);
 }
 
 .site-header--scrolled .header-cta-link:hover,
 .site-header--home.site-header--scrolled .header-cta-link:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(167, 122, 72, 0.5);
+    box-shadow: 0 6px 20px rgba(214, 179, 106, 0.5);
 }
 
 .site-header--scrolled .header-cta-badge,
@@ -143,10 +145,10 @@
 }
 
 .header-brand__name {
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 16.3px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
+    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
+    font-size: 16.5px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
     color: #ffffff;
     text-transform: uppercase;
     text-align: center;
@@ -159,8 +161,8 @@
     font-family: var(--font-sans), Inter, sans-serif;
     font-size: 9.5px;
     font-weight: 700;
-    letter-spacing: 3.7px;
-    color: #c49866;
+    letter-spacing: 3.8px;
+    color: #D6B36A;
     text-transform: uppercase;
     text-align: center;
     width: 100%;
@@ -284,19 +286,19 @@
     gap: 8.5px;
     padding: 7.5px 19px;
     border-radius: 9999px;
-    background: linear-gradient(135deg, #c49866 0%, #a77a48 100%);
-    color: #ffffff;
+    background: linear-gradient(135deg, #F4D58A 0%, #D6B36A 52%, #B88E3E 100%);
+    color: #101010;
     font-family: var(--font-sans), Inter, sans-serif;
     font-size: 13.65px;
     font-weight: 600;
     text-decoration: none;
-    box-shadow: 0 4px 14px rgba(167, 122, 72, 0.35);
+    box-shadow: 0 4px 16px rgba(214, 179, 106, 0.35);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .header-cta-link:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(167, 122, 72, 0.5);
+    box-shadow: 0 6px 20px rgba(214, 179, 106, 0.55);
 }
 
 .header-cta-badge {
@@ -430,14 +432,14 @@
 
 /* Top Header in Black Background (matches reference image) */
 .mobile-drawer__header {
-    background: #080c0a;
+    background: rgba(16, 16, 16, 0.98);
     padding: 16px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+    border-bottom: 1px solid rgba(214, 179, 106, 0.28);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.55);
     flex-shrink: 0;
     width: 100%;
     box-sizing: border-box;
@@ -485,13 +487,13 @@
     font-family: var(--font-sans), Inter, sans-serif;
     font-size: 10.5px;
     font-weight: 700;
-    letter-spacing: 2.6px;
-    color: #c89659;
+    letter-spacing: 2.8px;
+    color: #D6B36A;
     text-transform: uppercase;
     line-height: 1;
     text-align: center;
     width: 100%;
-    padding-left: 2.6px;
+    padding-left: 2.8px;
 }
 
 .mobile-drawer__close-btn {
@@ -826,28 +828,34 @@
     }
 
     .header-brand__name {
-        font-size: 14.2px;
-        letter-spacing: 0.3px;
+        font-family: var(--font-serif), "Playfair Display", Georgia, serif;
+        font-size: 14.5px;
+        letter-spacing: 0.4px;
         text-align: center;
         width: 100%;
     }
 
     .header-brand__subtitle {
-        font-size: 8.4px;
-        letter-spacing: 3.1px;
+        font-size: 8.5px;
+        letter-spacing: 3.2px;
         padding-left: 3px;
         margin-top: 2px;
+        color: #D6B36A;
         text-align: center;
         width: 100%;
     }
 }
 
 /* ==========================================================================
-   MOBILE BOTTOM NAVIGATION BAR
+   MOBILE BOTTOM NAVIGATION BAR (FLOATING LUXURY PILL)
    - Displays ONLY on mobile (<768px)
-   - Stays hidden on initial view
-   - ONLY appears when header appears black (isScrolled)
-   - Matches the dark luxury architectural glassmorphism of Pune Property Investor
+   - Deep charcoal / near-black floating pill (#101010)
+   - Champagne gold (#D6B36A) & Warm metallic gold (#F4D58A) accents
+   - Primary icons in soft white (#F5F3EE)
+   - Original WhatsApp green (#25D366)
+   - Featured elevated centrepiece for PPI Shorts with gold glow & animations
+   - Separate rounded-square button with champagne-gold illuminated outline for Menu
+   - Smooth slide-up transition when header scrolls or on /shorts
    ========================================================================== */
 
 .mobile-bottom-nav {
@@ -863,56 +871,128 @@
 
     .mobile-bottom-nav {
         position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        bottom: max(14px, env(safe-area-inset-bottom, 14px));
+        left: 50%;
+        transform: translate(-50%, calc(100% + 24px));
+        width: calc(100% - 24px);
+        max-width: 412px;
+        min-height: 60px;
+        height: 64px;
         z-index: 999;
         display: flex;
         align-items: center;
-        justify-content: space-around;
-        background: rgba(12, 14, 18, 0.78);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-top: 1px solid rgba(255, 255, 255, 0.12);
-        box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5);
-        padding: 6px 4px max(8px, env(safe-area-inset-bottom));
-        transform: translateY(115%);
+        justify-content: space-between;
+        padding: 0 8px;
+        box-sizing: border-box;
+
+        /* Transparent container so the backdrop wings & scooped cradle notch define the silhouette */
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        overflow: visible;
+
         opacity: 0;
         pointer-events: none;
-        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-            opacity 0.28s ease;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                    opacity 0.28s ease;
     }
 
-    /* Only appears when scrolled down from head section with header */
+    /* Floating Pill Appears when scrolled or on /shorts */
     .mobile-bottom-nav--visible {
-        transform: translateY(0);
+        transform: translate(-50%, 0);
         opacity: 1;
         pointer-events: auto;
     }
 
+    /* -------------------------------------------------------------
+       SCOOPED CRADLE NOTCH BACKDROP
+       - Left & Right curved wings
+       - Center SVG with smooth concave scooped notch curve
+       - Champagne-gold rim contour & depth
+       ------------------------------------------------------------- */
+    .mobile-bottom-nav__backdrop {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        display: flex;
+        overflow: visible;
+    }
+
+    .mobile-bottom-nav__bg-wing {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: calc(50% - 46px);
+        background: linear-gradient(180deg, rgba(22, 22, 22, 0.96) 0%, rgba(12, 12, 12, 0.96) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 
+            0 14px 38px rgba(0, 0, 0, 0.72),
+            0 4px 14px rgba(0, 0, 0, 0.5),
+            inset 0 1px 1px rgba(255, 255, 255, 0.12),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.85);
+    }
+
+    .mobile-bottom-nav__bg-wing--left {
+        left: 0;
+        border-top-left-radius: 9999px;
+        border-bottom-left-radius: 9999px;
+        border-top: 1px solid rgba(214, 179, 106, 0.3);
+        border-bottom: 1px solid rgba(214, 179, 106, 0.28);
+        border-left: 1px solid rgba(214, 179, 106, 0.3);
+        border-right: none;
+    }
+
+    .mobile-bottom-nav__bg-wing--right {
+        right: 0;
+        border-top-right-radius: 9999px;
+        border-bottom-right-radius: 9999px;
+        border-top: 1px solid rgba(214, 179, 106, 0.3);
+        border-bottom: 1px solid rgba(214, 179, 106, 0.28);
+        border-right: 1px solid rgba(214, 179, 106, 0.3);
+        border-left: none;
+    }
+
+    .mobile-bottom-nav__bg-notch {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%);
+        width: 96px;
+        height: 64px;
+        overflow: visible;
+        filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.65));
+    }
+
+    /* Individual Nav Item */
     .mobile-bottom-nav__item {
+        position: relative;
+        z-index: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 2px;
         flex: 1;
         min-width: 0;
-        padding: 3px 2px;
+        height: 100%;
+        padding: 6px 2px 5px;
+        box-sizing: border-box;
         background: transparent;
         border: none;
         outline: none;
         cursor: pointer;
         text-decoration: none;
-        color: #94a3b8;
-        transition: color 0.2s ease, transform 0.15s ease;
+        color: #F5F3EE;
         -webkit-tap-highlight-color: transparent;
+        transition: color 0.2s ease, transform 0.18s ease;
     }
 
     .mobile-bottom-nav__item:active {
         transform: scale(0.92);
     }
 
+    /* Icon Container */
     .mobile-bottom-nav__icon-wrap {
         position: relative;
         display: flex;
@@ -920,56 +1000,342 @@
         justify-content: center;
         width: 24px;
         height: 24px;
+        transition: transform 0.22s ease, filter 0.22s ease;
     }
 
+    /* Primary Icons: Soft white (#F5F3EE) with subtle transparency in idle state */
     .mobile-bottom-nav__icon {
         width: 20px;
         height: 20px;
+        color: #F5F3EE;
+        opacity: 0.88;
         stroke: currentColor;
+        transition: all 0.22s ease;
     }
 
+    /* Labels */
     .mobile-bottom-nav__label {
         font-family: var(--font-sans), Inter, -apple-system, sans-serif;
         font-size: 9.5px;
         font-weight: 500;
-        letter-spacing: 0.1px;
-        line-height: 1.2;
-        color: inherit;
+        letter-spacing: 0.15px;
+        line-height: 1.15;
+        margin-top: 2px;
+        color: rgba(245, 243, 238, 0.78);
+        white-space: nowrap;
+        transition: color 0.22s ease, font-weight 0.22s ease;
     }
 
-    /* Active State: Warm architectural gold */
-    .mobile-bottom-nav__item--active {
-        color: #f6d28b;
-    }
-
-    .mobile-bottom-nav__item--active .mobile-bottom-nav__icon {
-        color: #f6d28b;
-        stroke: #f6d28b;
-    }
-
-    .mobile-bottom-nav__item--active .mobile-bottom-nav__label {
-        color: #f6d28b;
-        font-weight: 700;
-    }
-
-    /* Active small gold dot underneath */
-    .mobile-bottom-nav__dot {
+    /* Active Indicator: Elegant gold dot beneath active item */
+    .mobile-bottom-nav__indicator {
+        display: block;
         width: 4px;
         height: 4px;
         border-radius: 50%;
-        background: #f6d28b;
-        margin-top: 1px;
+        background: #D6B36A;
+        box-shadow: 0 0 6px #F4D58A;
+        margin-top: 2px;
+        opacity: 0;
+        transform: scale(0);
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    opacity 0.22s ease;
     }
 
-    /* WhatsApp item distinct styling matching screenshot */
+    /* -------------------------------------------------------------
+       Hover & Active states for standard items
+       ------------------------------------------------------------- */
+    @media (hover: hover) {
+        .mobile-bottom-nav__item:hover .mobile-bottom-nav__icon {
+            opacity: 1;
+            color: #ffffff;
+            filter: drop-shadow(0 0 6px rgba(214, 179, 106, 0.45));
+        }
+
+        .mobile-bottom-nav__item:hover .mobile-bottom-nav__label {
+            color: #F5F3EE;
+        }
+
+        .mobile-bottom-nav__item--search:hover .mobile-bottom-nav__icon {
+            filter: drop-shadow(0 0 8px rgba(244, 213, 138, 0.6));
+        }
+    }
+
+    /* Active State (Route matched) */
+    .mobile-bottom-nav__item--active .mobile-bottom-nav__icon {
+        color: #F4D58A;
+        opacity: 1;
+        filter: drop-shadow(0 0 6px rgba(244, 213, 138, 0.5));
+    }
+
+    .mobile-bottom-nav__item--active .mobile-bottom-nav__label {
+        color: #F4D58A;
+        font-weight: 600;
+    }
+
+    .mobile-bottom-nav__item--active .mobile-bottom-nav__indicator {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    /* -------------------------------------------------------------
+       SPECIAL CENTRE HIGHLIGHT: PPI SHORTS (CIRCULAR FLOATING BUTTON IN SCOOPED CRADLE)
+       - Centered & elevated above the scooped cradle notch
+       - Perfect circular gold-accented action button matching reference
+       - Contrasting dark icon on rich champagne-gold metallic gradient
+       - Dynamic scale, elevation and pulse animations on hover & tap
+       ------------------------------------------------------------- */
+    .mobile-bottom-nav__item--shorts {
+        position: relative;
+        flex: 1.2;
+        overflow: visible;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 0;
+        padding-bottom: 5px;
+    }
+
+    .mobile-bottom-nav__shorts-pod {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        margin-top: -18px; /* Lowered slightly deeper into the scooped cradle */
+        border-radius: 50%; /* Perfect Circle matching user's design reference */
+        background: linear-gradient(135deg, #F4D58A 0%, #D6B36A 52%, #B88E3E 100%);
+        border: 2px solid #FFF2C6;
+        box-shadow: 
+            0 8px 24px rgba(0, 0, 0, 0.65),
+            0 0 18px rgba(214, 179, 106, 0.45),
+            inset 0 1px 2px rgba(255, 255, 255, 0.65);
+        color: #101010; /* Dark contrasting icon on rich champagne gold circle */
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    box-shadow 0.25s ease,
+                    background 0.25s ease,
+                    border-color 0.25s ease,
+                    color 0.25s ease;
+    }
+
+    .mobile-bottom-nav__shorts-icon {
+        width: 23px;
+        height: 23px;
+        color: inherit;
+        filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.25));
+        transition: transform 0.2s ease;
+    }
+
+    /* Label positioned with comfortable breathing space below the circular button */
+    .mobile-bottom-nav__item--shorts .mobile-bottom-nav__label {
+        margin-top: 6px;
+        font-size: 9px;
+        letter-spacing: 0.15px;
+        white-space: nowrap;
+    }
+
+    /* Shorts tap / click scale feedback */
+    .mobile-bottom-nav__item--shorts:active {
+        transform: none; /* Handled on shorts-pod */
+    }
+
+    .mobile-bottom-nav__item--shorts:active .mobile-bottom-nav__shorts-pod {
+        transform: translateY(2px) scale(0.92);
+        box-shadow: 
+            0 4px 12px rgba(0, 0, 0, 0.6),
+            0 0 12px rgba(214, 179, 106, 0.4);
+    }
+
+    @media (hover: hover) {
+        .mobile-bottom-nav__item--shorts:hover .mobile-bottom-nav__shorts-pod {
+            transform: translateY(-4px) scale(1.06);
+            border-color: #ffffff;
+            box-shadow: 
+                0 12px 30px rgba(0, 0, 0, 0.75),
+                0 0 24px rgba(244, 213, 138, 0.7),
+                inset 0 1px 2px rgba(255, 255, 255, 0.85);
+        }
+
+        .mobile-bottom-nav__item--shorts:hover .mobile-bottom-nav__label {
+            color: #F4D58A;
+        }
+    }
+
+    /* PPI Shorts ACTIVE STATE: Radiant illuminated gold aura */
+    .mobile-bottom-nav__item--shorts.mobile-bottom-nav__item--active .mobile-bottom-nav__shorts-pod {
+        background: linear-gradient(135deg, #FFF3CE 0%, #F4D58A 45%, #D6B36A 100%);
+        border-color: #ffffff;
+        color: #000000;
+        box-shadow: 
+            0 10px 28px rgba(0, 0, 0, 0.75),
+            0 0 26px rgba(244, 213, 138, 0.85),
+            inset 0 1px 2px rgba(255, 255, 255, 0.9);
+    }
+
+    .mobile-bottom-nav__item--shorts.mobile-bottom-nav__item--active .mobile-bottom-nav__shorts-icon {
+        color: #000000;
+    }
+
+    .mobile-bottom-nav__item--shorts.mobile-bottom-nav__item--active .mobile-bottom-nav__label {
+        color: #F4D58A;
+        font-weight: 700;
+    }
+
+    /* -------------------------------------------------------------
+       WHATSAPP ITEM
+       - Preserves authentic WhatsApp brand green (#25D366)
+       - Distinct hover & tap illumination
+       ------------------------------------------------------------- */
     .mobile-bottom-nav__item--wa .mobile-bottom-nav__icon--wa {
-        color: #25d366 !important;
-        fill: #25d366 !important;
+        color: #25D366 !important;
+        fill: #25D366 !important;
         stroke: none;
+        opacity: 1;
+        transition: transform 0.2s ease, filter 0.2s ease;
     }
 
     .mobile-bottom-nav__label--wa {
-        color: #25d366 !important;
+        color: #25D366 !important;
         font-weight: 600;
+    }
+
+    @media (hover: hover) {
+        .mobile-bottom-nav__item--wa:hover .mobile-bottom-nav__icon--wa {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 8px rgba(37, 211, 102, 0.6));
+        }
+
+        .mobile-bottom-nav__item--wa:hover .mobile-bottom-nav__label--wa {
+            color: #2fe673 !important;
+        }
+    }
+
+    .mobile-bottom-nav__item--wa:active .mobile-bottom-nav__icon--wa {
+        transform: scale(0.92);
+    }
+
+    /* -------------------------------------------------------------
+       MENU ITEM
+       - Separate rounded-square button container on the right
+       - Champagne-gold illuminated outline
+       - Contains hamburger icon (<Menu />) or close icon (<X />)
+       - Smooth opening interaction
+       ------------------------------------------------------------- */
+    .mobile-bottom-nav__item--menu {
+        flex: 1;
+    }
+
+    .mobile-bottom-nav__menu-box {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: rgba(214, 179, 106, 0.06);
+        border: 1.5px solid rgba(214, 179, 106, 0.45);
+        box-shadow: 
+            0 2px 8px rgba(0, 0, 0, 0.4),
+            0 0 10px rgba(214, 179, 106, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mobile-bottom-nav__icon--menu-toggle {
+        color: #F5F3EE;
+        opacity: 0.95;
+        transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    color 0.2s ease;
+    }
+
+    @media (hover: hover) {
+        .mobile-bottom-nav__item--menu:hover .mobile-bottom-nav__menu-box {
+            border-color: #D6B36A;
+            background: rgba(214, 179, 106, 0.14);
+            box-shadow: 
+                0 4px 14px rgba(0, 0, 0, 0.5),
+                0 0 16px rgba(214, 179, 106, 0.35);
+            transform: scale(1.04);
+        }
+
+        .mobile-bottom-nav__item--menu:hover .mobile-bottom-nav__icon--menu-toggle {
+            color: #F4D58A;
+        }
+
+        .mobile-bottom-nav__item--menu:hover .mobile-bottom-nav__label {
+            color: #F4D58A;
+        }
+    }
+
+    .mobile-bottom-nav__item--menu:active {
+        transform: none; /* Handled on box */
+    }
+
+    .mobile-bottom-nav__item--menu:active .mobile-bottom-nav__menu-box {
+        transform: scale(0.92);
+    }
+
+    /* Menu Open State (illuminated champagne-gold outline & glow) */
+    .mobile-bottom-nav__item--menu.mobile-bottom-nav__item--active .mobile-bottom-nav__menu-box {
+        border-color: #F4D58A;
+        background: rgba(214, 179, 106, 0.22);
+        box-shadow: 
+            0 4px 16px rgba(0, 0, 0, 0.6),
+            0 0 18px rgba(244, 213, 138, 0.5),
+            inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    }
+
+    .mobile-bottom-nav__item--menu.mobile-bottom-nav__item--active .mobile-bottom-nav__icon--menu-toggle {
+        color: #F4D58A;
+        transform: rotate(90deg);
+    }
+
+    .mobile-bottom-nav__item--menu.mobile-bottom-nav__item--active .mobile-bottom-nav__label {
+        color: #F4D58A;
+        font-weight: 600;
+    }
+}
+
+/* Extra Compact screens */
+@media (max-width: 360px) {
+    .mobile-bottom-nav {
+        width: calc(100% - 16px);
+        padding: 0 4px;
+        height: 60px;
+    }
+
+    .mobile-bottom-nav__shorts-pod {
+        width: 44px;
+        height: 44px;
+        margin-top: -14px;
+    }
+
+    .mobile-bottom-nav__item--shorts .mobile-bottom-nav__label {
+        margin-top: 5px;
+    }
+
+    .mobile-bottom-nav__shorts-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .mobile-bottom-nav__bg-notch {
+        width: 86px;
+    }
+
+    .mobile-bottom-nav__bg-wing {
+        width: calc(50% - 41px);
+    }
+
+    .mobile-bottom-nav__menu-box {
+        width: 34px;
+        height: 34px;
+    }
+
+    .mobile-bottom-nav__label {
+        font-size: 8.5px;
     }
 }
