@@ -25,7 +25,11 @@ import PageHeroBanner from "../common/PageHeroBanner";
 import PropertyHeroHead from "../property-details/PropertyHeroHead";
 import PropertyGallery from "../property-details/PropertyGallery";
 import PropertyOverview from "../property-details/PropertyOverview";
+import ProjectSpecifications from "../property-details/ProjectSpecifications";
 import PropertyAmenities from "../property-details/PropertyAmenities";
+import PropertyMap from "../property-details/PropertyMap";
+import SimilarProperties from "../property-details/SimilarProperties";
+import BuilderProperties from "../property-details/BuilderProperties";
 import PropertyEnquiry from "../property-details/PropertyEnquiry";
 
 import AdvertisementSidebar from "../common/AdvertisementSidebar";
@@ -279,56 +283,18 @@ function PropertyDetails({ propertyId, propertySlug }) {
                                 <PropertyOverview property={property} />
                             </section>
 
+                            {/* 1. Project Specifications (Land acquired, Tower count, Floor count, BHK, Carpet area, Possession date, RERA number) */}
+                            <ProjectSpecifications property={property} />
 
-                            {/* Amenities */}
-                            <section className="property-details__section">
-                                <div className="property-details__section-heading">
-                                    <div>
-                                        <span className="property-details__eyebrow">
-                                            COMFORT & LIFESTYLE
-                                        </span>
+                            {/* 2. Amenities (Internal Amenities & Outdoor Amenities) */}
+                            <PropertyAmenities
+                                amenities={property.amenities}
+                                showHeader={true}
+                                property={property}
+                            />
 
-                                        <h2>Amenities & features</h2>
-                                    </div>
-                                </div>
-
-                                <PropertyAmenities
-                                    amenities={property.amenities}
-                                />
-                            </section>
-
-                            {/* Location */}
-                            <section className="property-details__section property-details__location-section">
-                                <div className="property-details__section-heading">
-                                    <div>
-                                        <span className="property-details__eyebrow">
-                                            EXPLORE THE NEIGHBOURHOOD
-                                        </span>
-
-                                        <h2>Location & neighbourhood</h2>
-                                    </div>
-                                </div>
-
-                                <div className="property-details__location-card">
-                                    <div className="property-details__location-icon">
-                                        <MapPin size={24} />
-                                    </div>
-
-                                    <div>
-                                        <h3>
-                                            {location || "Pune, Maharashtra"}
-                                        </h3>
-
-                                        <p>
-                                            Contact our Pune property
-                                            advisors to learn about nearby
-                                            IT parks, schools, hospitals,
-                                            shopping centres and transport
-                                            facilities.
-                                        </p>
-                                    </div>
-                                </div>
-                            </section>
+                            {/* 3. Location & Google Map with Connectivity */}
+                            <PropertyMap property={property} />
 
                             {/* Trust section */}
                             <section className="property-details__trust">
@@ -342,11 +308,10 @@ function PropertyDetails({ propertyId, propertySlug }) {
                                     </h3>
 
                                     <p>
-                                        Our team can help you understand
-                                        the property details, pricing and
-                                        next steps. Confirm all project
-                                        information before making a
-                                        purchase decision.
+                                        Our senior advisory team can help you
+                                        review verified legal documents, floor
+                                        plans, pricing breakdown, and arrange an
+                                        exclusive site visit in Pune.
                                     </p>
                                 </div>
 
@@ -365,11 +330,17 @@ function PropertyDetails({ propertyId, propertySlug }) {
                         </aside>
                     </div>
 
+                    {/* 4. Similar Projects / Budgets & Area Cards */}
+                    <SimilarProperties currentProperty={property} />
+
+                    {/* 5. More Builder Properties Available */}
+                    <BuilderProperties property={property} />
+
                     {/* Back to listings */}
                     <div className="property-details__bottom-link">
                         <Link href="/buy">
                             <ArrowLeft size={17} />
-                            Explore More Properties
+                            Explore More Properties in Pune
                         </Link>
                     </div>
                 </div>

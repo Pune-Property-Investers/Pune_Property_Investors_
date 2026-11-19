@@ -1,0 +1,237 @@
+/* ==========================================================================
+   PROPERTY MAP & NEIGHBOURHOOD CONNECTIVITY
+   ========================================================================== */
+
+.property-map-section {
+    background: #ffffff;
+    border: 1px solid var(--pd-border, #e9e5df);
+    border-radius: 18px;
+    padding: clamp(20px, 3vw, 32px);
+    margin-bottom: 30px;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+}
+
+.property-map-section__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.property-map-section__eyebrow {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ad7c48;
+    margin-bottom: 6px;
+}
+
+.property-map-section__title {
+    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
+    font-size: clamp(20px, 2.2vw, 26px);
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 6px 0;
+}
+
+.property-map-section__desc {
+    font-size: 13.5px;
+    color: #64748b;
+    margin: 0;
+    max-width: 620px;
+}
+
+.property-map__directions-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
+}
+
+.property-map__directions-btn:hover {
+    background: #ad7c48;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(173, 124, 72, 0.25);
+}
+
+/* Address Bar */
+.property-map__address-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: #fbfaf8;
+    border: 1px solid #e9e5df;
+    border-radius: 12px;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.address-bar__left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #475569;
+}
+
+.address-bar__left strong {
+    color: #0f172a;
+}
+
+.address-bar__badge {
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #ad7c48;
+    background: rgba(173, 124, 72, 0.12);
+    padding: 3px 9px;
+    border-radius: 999px;
+}
+
+/* Embedded Map Frame */
+.property-map__frame-wrapper {
+    position: relative;
+    width: 100%;
+    height: clamp(300px, 38vh, 420px);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 24px;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.property-map__iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Landmarks Connectivity */
+.property-map__landmarks {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 18px 20px;
+}
+
+.landmarks__heading {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 14px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.landmarks__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.landmark-chip {
+    background: #ffffff;
+    border: 1px solid #e9e5df;
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.landmark-chip:hover {
+    transform: translateY(-2px);
+    border-color: #ad7c48;
+    box-shadow: 0 4px 12px rgba(173, 124, 72, 0.08);
+}
+
+.landmark-chip__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #fdfaf7;
+    border: 1px solid #ebd9c8;
+    color: #ad7c48;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.landmark-chip__details {
+    min-width: 0;
+    flex: 1;
+}
+
+.landmark-chip__name {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1e293b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.landmark-chip__metrics {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #64748b;
+}
+
+.landmark-chip__time {
+    color: #ad7c48;
+    font-weight: 700;
+}
+
+.landmark-chip__dot {
+    color: #cbd5e1;
+}
+
+/* ==========================================================================
+   RESPONSIVENESS
+   ========================================================================== */
+@media (max-width: 900px) {
+    .landmarks__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 580px) {
+    .property-map-section {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .property-map-section__header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .landmarks__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .property-map__frame-wrapper {
+        height: 250px;
+    }
+}
