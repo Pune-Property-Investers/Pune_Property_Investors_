@@ -473,14 +473,14 @@ function Header({ transparentAtTop = false }) {
                                 <stop offset="100%" stopColor="rgba(214, 179, 106, 0.35)" />
                             </linearGradient>
                         </defs>
-                        {/* Dark Body fill with scooped notch (depth 30 for sleek reduced clearance) */}
+                        {/* Dark Body fill with circular scooped notch tailored to the Shorts circle */}
                         <path
-                            d="M -2,0 L 2,0 C 18,0 26,30 48,30 C 70,30 78,0 94,0 L 98,0 L 98,64 L -2,64 Z"
+                            d="M -2,0 L 15,0 C 18,0 20.85,5.06 22.4,10.86 A 26.5 26.5 0 0,0 73.6,10.86 C 75.15,5.06 78,0 81,0 L 98,0 L 98,64 L -2,64 Z"
                             fill="url(#ppi-notch-body)"
                         />
-                        {/* Top Scooped Gold Rim Contour */}
+                        {/* Top Scooped Gold Rim Contour (Concentric circular arc around button) */}
                         <path
-                            d="M 0,0 C 18,0 26,30 48,30 C 70,30 78,0 96,0"
+                            d="M 0,0 L 15,0 C 18,0 20.85,5.06 22.4,10.86 A 26.5 26.5 0 0,0 73.6,10.86 C 75.15,5.06 78,0 81,0 L 96,0"
                             fill="none"
                             stroke="url(#ppi-cradle-glow)"
                             strokeWidth="1.6"
@@ -517,7 +517,7 @@ function Header({ transparentAtTop = false }) {
                     </defs>
                     <path
                         className="mobile-bottom-nav__snake-line"
-                        d="M 32,0 L 152,0 C 170,0 178,30 200,30 C 222,30 230,0 248,0 L 368,0 A 32,32 0 0,1 400,32 A 32,32 0 0,1 368,64 L 32,64 A 32,32 0 0,1 0,32 A 32,32 0 0,1 32,0 Z"
+                        d="M 32,0 L 167,0 C 170,0 172.85,5.06 174.4,10.86 A 26.5 26.5 0 0,0 225.6,10.86 C 227.15,5.06 230,0 233,0 L 368,0 A 32,32 0 0,1 400,32 A 32,32 0 0,1 368,64 L 32,64 A 32,32 0 0,1 0,32 A 32,32 0 0,1 32,0 Z"
                         fill="none"
                         stroke="url(#ppi-snake-grad)"
                         strokeWidth="3.2"
