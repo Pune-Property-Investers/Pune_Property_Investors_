@@ -464,8 +464,8 @@ function Header({ transparentAtTop = false }) {
                     <svg className="mobile-bottom-nav__bg-notch" viewBox="0 0 96 64" preserveAspectRatio="none">
                         <defs>
                             <linearGradient id="ppi-notch-body" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#181818" stopOpacity="0.96" />
-                                <stop offset="100%" stopColor="#0d0d0d" stopOpacity="0.96" />
+                                <stop offset="0%" stopColor="#18443d" stopOpacity="0.98" />
+                                <stop offset="100%" stopColor="#11322d" stopOpacity="0.98" />
                             </linearGradient>
                             <linearGradient id="ppi-cradle-glow" x1="0" y1="0" x2="1" y2="0">
                                 <stop offset="0%" stopColor="rgba(214, 179, 106, 0.35)" />
