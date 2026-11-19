@@ -1110,8 +1110,14 @@
         height: 28px;
     }
 
+    /* Specification cards 2 in a row on tablet & mobile */
+    .pune-project-specs-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 5px;
+    }
+
     .pune-spec-card {
-        padding: 3px 4px;
+        padding: 3px 5px;
     }
 }
 
@@ -1147,16 +1153,25 @@
         padding-bottom: 5px;
     }
 
+    .pune-project-specs-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 4px;
+    }
+
+    .pune-spec-card {
+        padding: 3px 5px;
+    }
+
     .pune-spec-card__label {
-        font-size: 6.5px;
+        font-size: 7px;
     }
 
     .pune-spec-card__val {
-        font-size: 9px;
+        font-size: 9.5px;
     }
 
     .pune-spec-card__sub {
-        font-size: 6.5px;
+        font-size: 7px;
     }
 
     .pune-action-whatsapp-btn {

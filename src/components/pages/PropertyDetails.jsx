@@ -278,27 +278,8 @@ function PropertyDetails({ propertyId, propertySlug }) {
                         </div>
                     </section>
 
-                    {/* Property highlights */}
-                    <section
-                        className="property-details__highlights"
-                        aria-label="Property highlights"
-                    >
-                        {highlights.map((item) => (
-                            <article
-                                className="property-details__highlight"
-                                key={item.label}
-                            >
-                                <div className="property-details__highlight-icon">
-                                    {item.icon}
-                                </div>
-
-                                <div className="property-details__highlight-content">
-                                    <span>{item.label}</span>
-                                    <strong>{item.value}</strong>
-                                </div>
-                            </article>
-                        ))}
-                    </section>
+                    {/* 1. Project Specifications directly below Enquire Now */}
+                    <ProjectSpecifications property={property} />
 
                     {/* Three-column content */}
                     <div className="property-details__layout">
@@ -309,23 +290,22 @@ function PropertyDetails({ propertyId, propertySlug }) {
 
                         {/* CENTER: Property information */}
                         <div className="property-details__main">
-                            {/* Overview */}
-                            <section className="property-details__section">
-                                <div className="property-details__section-heading">
-                                    <div>
-                                        <span className="property-details__eyebrow">
-                                            PROPERTY INFORMATION
-                                        </span>
-
-                                        <h2>About this property</h2>
+                            {/* Property Description if available */}
+                            {property.description && (
+                                <section className="property-details__section property-details__description-card">
+                                    <div className="property-details__section-heading">
+                                        <div>
+                                            <span className="property-details__eyebrow">
+                                                PROPERTY OVERVIEW
+                                            </span>
+                                            <h2>About this property</h2>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <PropertyOverview property={property} />
-                            </section>
-
-                            {/* 1. Project Specifications (Land acquired, Tower count, Floor count, BHK, Carpet area, Possession date, RERA number) */}
-                            <ProjectSpecifications property={property} />
+                                    <div className="property-details__description-body">
+                                        <p>{property.description}</p>
+                                    </div>
+                                </section>
+                            )}
 
                             {/* 2. Amenities (Internal Amenities & Outdoor Amenities) */}
                             <PropertyAmenities
