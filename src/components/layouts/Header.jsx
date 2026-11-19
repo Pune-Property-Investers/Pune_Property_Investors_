@@ -601,7 +601,7 @@ function Header({ transparentAtTop = false }) {
                     <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </Link>
 
-                {/* 3. PPI Shorts (Special Centre Highlight) */}
+                {/* 3. PPI Shorts (Special Centre Highlight with Double Circle / Multi-Colour Ring) */}
                 <Link
                     href="/shorts"
                     onClick={closeMenu}
@@ -611,8 +611,10 @@ function Header({ transparentAtTop = false }) {
                         }`}
                     aria-label="PPI Shorts"
                 >
-                    <div className="mobile-bottom-nav__shorts-pod">
-                        <ShortsIcon size={22} className="mobile-bottom-nav__shorts-icon" />
+                    <div className="mobile-bottom-nav__shorts-multi-circle">
+                        <div className="mobile-bottom-nav__shorts-pod">
+                            <ShortsIcon size={20} className="mobile-bottom-nav__shorts-icon" />
+                        </div>
                     </div>
                     <span className="mobile-bottom-nav__label">PPI Shorts</span>
                     <span className="mobile-bottom-nav__indicator" aria-hidden="true" />

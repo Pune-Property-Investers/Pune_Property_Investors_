@@ -1141,32 +1141,60 @@
         padding-bottom: 5px;
     }
 
+    /* Added Outer Multi-Colour Circle */
+    .mobile-bottom-nav__shorts-multi-circle {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        margin-top: -20px;
+        border-radius: 50%; /* Perfect outer circle */
+        /* Vibrant multi-colour spectrum */
+        background: conic-gradient(
+            from 135deg,
+            #FF0055,
+            #FF5E00,
+            #FFD600,
+            #10B981,
+            #00DFD8,
+            #0070F3,
+            #7928CA,
+            #FF0055
+        );
+        padding: 2.5px;
+        box-shadow: 
+            0 8px 24px rgba(0, 0, 0, 0.65),
+            0 0 16px rgba(255, 94, 0, 0.38);
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    box-shadow 0.25s ease;
+    }
+
+    /* Inner Gold Circle */
     .mobile-bottom-nav__shorts-pod {
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 46px;
-        height: 46px;
-        margin-top: -19px; /* Reduced gap - sits snugly with a sleek 3px clearance above the scooped curve */
-        border-radius: 50%; /* Perfect Circle matching user's design reference */
+        width: 100%;
+        height: 100%;
+        margin-top: 0;
+        border-radius: 50%; /* Perfect Inner Circle */
         background: linear-gradient(135deg, #F4D58A 0%, #D6B36A 52%, #B88E3E 100%);
-        border: 2px solid #FFF2C6;
+        border: 1.5px solid #153B35; /* Crisp dark ring separating multi-colour circle and gold circle */
         box-shadow: 
-            0 8px 24px rgba(0, 0, 0, 0.65),
-            0 0 18px rgba(214, 179, 106, 0.45),
-            inset 0 1px 2px rgba(255, 255, 255, 0.65);
+            inset 0 1px 2px rgba(255, 255, 255, 0.75);
         color: #101010; /* Dark contrasting icon on rich champagne gold circle */
-        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    box-shadow 0.25s ease,
+        transition: transform 0.2s ease,
                     background 0.25s ease,
                     border-color 0.25s ease,
                     color 0.25s ease;
     }
 
     .mobile-bottom-nav__shorts-icon {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
         color: inherit;
         filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.25));
         transition: transform 0.2s ease;
@@ -1174,7 +1202,7 @@
 
     /* Label positioned with comfortable breathing space below the circular button */
     .mobile-bottom-nav__item--shorts .mobile-bottom-nav__label {
-        margin-top: 6px;
+        margin-top: 5px;
         font-size: 9px;
         letter-spacing: 0.15px;
         white-space: nowrap;
@@ -1182,24 +1210,22 @@
 
     /* Shorts tap / click scale feedback */
     .mobile-bottom-nav__item--shorts:active {
-        transform: none; /* Handled on shorts-pod */
+        transform: none; /* Handled on shorts-multi-circle */
     }
 
-    .mobile-bottom-nav__item--shorts:active .mobile-bottom-nav__shorts-pod {
+    .mobile-bottom-nav__item--shorts:active .mobile-bottom-nav__shorts-multi-circle {
         transform: translateY(2px) scale(0.92);
         box-shadow: 
             0 4px 12px rgba(0, 0, 0, 0.6),
-            0 0 12px rgba(214, 179, 106, 0.4);
+            0 0 10px rgba(255, 94, 0, 0.3);
     }
 
     @media (hover: hover) {
-        .mobile-bottom-nav__item--shorts:hover .mobile-bottom-nav__shorts-pod {
-            transform: translateY(-4px) scale(1.06);
-            border-color: #ffffff;
+        .mobile-bottom-nav__item--shorts:hover .mobile-bottom-nav__shorts-multi-circle {
+            transform: translateY(-3px) scale(1.06);
             box-shadow: 
                 0 12px 30px rgba(0, 0, 0, 0.75),
-                0 0 24px rgba(244, 213, 138, 0.7),
-                inset 0 1px 2px rgba(255, 255, 255, 0.85);
+                0 0 22px rgba(255, 94, 0, 0.5);
         }
 
         .mobile-bottom-nav__item--shorts:hover .mobile-bottom-nav__label {
@@ -1207,15 +1233,16 @@
         }
     }
 
-    /* PPI Shorts ACTIVE STATE: Radiant illuminated gold aura */
-    .mobile-bottom-nav__item--shorts.mobile-bottom-nav__item--active .mobile-bottom-nav__shorts-pod {
-        background: linear-gradient(135deg, #FFF3CE 0%, #F4D58A 45%, #D6B36A 100%);
-        border-color: #ffffff;
-        color: #000000;
+    /* PPI Shorts ACTIVE STATE */
+    .mobile-bottom-nav__item--shorts.mobile-bottom-nav__item--active .mobile-bottom-nav__shorts-multi-circle {
         box-shadow: 
             0 10px 28px rgba(0, 0, 0, 0.75),
-            0 0 26px rgba(244, 213, 138, 0.85),
-            inset 0 1px 2px rgba(255, 255, 255, 0.9);
+            0 0 24px rgba(255, 0, 122, 0.55);
+    }
+
+    .mobile-bottom-nav__item--shorts.mobile-bottom-nav__item--active .mobile-bottom-nav__shorts-pod {
+        background: linear-gradient(135deg, #FFF3CE 0%, #F4D58A 45%, #D6B36A 100%);
+        color: #000000;
     }
 
     .mobile-bottom-nav__item--shorts.mobile-bottom-nav__item--active .mobile-bottom-nav__shorts-icon {
@@ -1313,10 +1340,17 @@
         height: 60px;
     }
 
+    .mobile-bottom-nav__shorts-multi-circle {
+        width: 44px;
+        height: 44px;
+        margin-top: -17px;
+        padding: 2px;
+    }
+
     .mobile-bottom-nav__shorts-pod {
-        width: 42px;
-        height: 42px;
-        margin-top: -16px;
+        width: 100%;
+        height: 100%;
+        margin-top: 0;
     }
 
     .mobile-bottom-nav__item--shorts .mobile-bottom-nav__label {
