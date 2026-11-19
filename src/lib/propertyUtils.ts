@@ -104,3 +104,29 @@ export function findProperty(identifier: string | number | undefined | null): Pr
 
     return null;
 }
+
+export type PropertyCategory = "commercial" | "plot" | "villa" | "residential";
+
+export function getPropertyCategory(property: any): PropertyCategory {
+    if (!property) return "residential";
+    const type = String(property.propertyType || property.type || property.category || "").toLowerCase();
+    const title = String(property.title || property.name || property.projectName || "").toLowerCase();
+    const config = String(property.configuration || property.subtitle || "").toLowerCase();
+    const purpose = String(property.purpose || "").toLowerCase();
+    const combined = `${type} ${title} ${config} ${purpose}`;
+
+    // 1. Plot / Land check
+    if (/\b(plot|plots|land|layout|na plot|demarcated)\b/i.test(combined)) {
+        return "plot";
+    }
+    // 2. Commercial check
+    if (/\b(commercial|office|offices|shop|shops|retail|showroom|business park|it park|tech park|workspace|bare shell|warm shell)\b/i.test(combined)) {
+        return "commercial";
+    }
+    // 3. Villa check (and not plot)
+    if (/\b(villa|villas|sky villa|row house|bungalow|duplex|mansion|mansions)\b/i.test(combined)) {
+        return "villa";
+    }
+    // 4. Default: Residential
+    return "residential";
+}

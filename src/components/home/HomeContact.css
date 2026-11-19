@@ -1,12 +1,12 @@
 /* ==========================================================================
    STAY CONNECTED WITH US - CONNECT US CARD
-   Desktop & Mobile: Clear Background, Expanded Outer Card & Vertical Inputs
+   Desktop & Mobile: Section Heading, Separate "GET IN TOUCH" Span, Upside on Mobile, Horizontal Headline
    ========================================================================== */
 
 .editorial-contact-section {
     position: relative;
     width: 100%;
-    padding: clamp(32px, 5vw, 64px) 0;
+    padding: clamp(36px, 5vw, 68px) 0;
     background: #fbfaf8;
     color: #ffffff;
     font-family: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -20,109 +20,133 @@
 }
 
 .editorial-contact-container {
-    max-width: 1260px;
+    max-width: 1280px;
     margin: 0 auto;
     padding: 0 clamp(14px, 3.5vw, 28px);
 }
 
 /* ==========================================================================
-   OUTER SHOWCASE FRAME (INCREASED SIZE & CLEAR BACKGROUND IMAGE)
+   SECTION HEADING (ABOVE CONTACT US CARD)
+   ========================================================================== */
+.editorial-contact-section-heading {
+    max-width: 760px;
+    margin: 0 auto clamp(24px, 3.5vw, 36px);
+    text-align: center;
+}
+
+.editorial-contact-section-eyebrow {
+    font-family: var(--font-sans), "Inter", sans-serif;
+    display: inline-block;
+    margin-bottom: 8px;
+    color: #a77a48;
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+}
+
+.editorial-contact-section-title {
+    margin: 0 0 10px;
+    color: #0f172a;
+    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
+    font-size: clamp(28px, 3.6vw, 42px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.6px;
+}
+
+.editorial-contact-section-desc {
+    margin: 0 auto;
+    color: #64748b;
+    font-family: var(--font-sans), "Inter", sans-serif;
+    font-size: clamp(13.5px, 1.2vw, 15px);
+    line-height: 1.65;
+    max-width: 620px;
+}
+
+/* ==========================================================================
+   OUTER SHOWCASE FRAME (100% FULLY VISIBLE BACKGROUND IMAGE)
    ========================================================================== */
 .editorial-showcase-frame {
     position: relative;
     width: 100%;
-    min-height: clamp(580px, 70vh, 670px);
-    border-radius: clamp(20px, 2.8vw, 30px);
+    min-height: clamp(540px, 66vh, 650px);
+    border-radius: clamp(20px, 2.8vw, 32px);
     overflow: hidden;
     background-size: cover;
     background-position: center 38%;
     background-repeat: no-repeat;
     display: flex;
-    align-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.28);
+    flex-direction: column;
+    padding: clamp(28px, 4vw, 44px) clamp(28px, 4.5vw, 54px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     box-shadow:
-        0 24px 56px -12px rgba(12, 18, 26, 0.4),
-        0 0 0 1px rgba(229, 190, 133, 0.18);
+        0 24px 56px -12px rgba(12, 18, 26, 0.45),
+        0 0 0 1px rgba(229, 190, 133, 0.25);
     isolation: isolate;
+    box-sizing: border-box;
 }
 
-/* More Clear & Transparent Overlay: Background photo is vivid & clearly visible */
+/* 100% Full Visible Background - No Dark Tinting */
 .editorial-showcase-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    background: linear-gradient(90deg,
-            rgba(10, 16, 24, 0.45) 0%,
-            rgba(10, 16, 24, 0.24) 52%,
-            rgba(10, 16, 24, 0.06) 100%);
+    display: none !important;
 }
 
-/* Dual Grid Container */
-.fold-dual-grid {
+/* Unified Card Form Layout: Top, Middle, Bottom */
+.editorial-card-layout {
     position: relative;
     z-index: 3;
     width: 100%;
     height: 100%;
+    min-height: inherit;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: space-between;
+    align-items: flex-start;
+    flex: 1;
+    box-sizing: border-box;
 }
 
 /* ==========================================================================
-   INNER FORM CARD: 60% HORIZONTALLY, TRANSPARENT, NO BORDER, NO SHADOW
+   1. TOP OF THE CARD: SEPARATE SPAN FOR "GET IN TOUCH" & HORIZONTAL TITLE
    ========================================================================== */
-.editorial-form-card {
-    position: relative;
-    z-index: 4;
-    width: 60% !important;
-    max-width: 60% !important;
-    margin: clamp(28px, 4vw, 48px) 0 clamp(28px, 4vw, 48px) clamp(28px, 4.5vw, 54px);
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    box-sizing: border-box;
+.editorial-card-top {
+    width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: clamp(18px, 2.8vw, 30px);
 }
 
-/* Header Inside Inner Card */
-.editorial-form-header {
-    margin-bottom: clamp(16px, 2.4vw, 24px);
-}
-
-.editorial-form-eyebrow {
-    display: block;
-    font-size: 10px;
+/* Dedicated separate span for "GET IN TOUCH" */
+.editorial-get-in-touch {
+    display: inline-block;
+    font-size: 11px;
     font-weight: 800;
-    letter-spacing: 2px;
+    letter-spacing: 2.6px;
     text-transform: uppercase;
     color: #e5be85;
     margin-bottom: 6px;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
+    text-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.95),
+        0 0 12px rgba(0, 0, 0, 0.85);
+    transition: transform 0.2s ease;
 }
 
 .editorial-form-title {
     font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: clamp(24px, 3vw, 36px);
+    font-size: clamp(22px, 2.6vw, 34px);
     font-weight: 700;
     color: #ffffff;
-    line-height: 1.2;
+    line-height: 1.25;
     letter-spacing: -0.015em;
-    margin: 0 0 6px 0;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.75), 0 1px 3px rgba(0, 0, 0, 0.9);
-}
-
-.editorial-form-desc {
-    display: block;
-    font-size: clamp(12.5px, 1.2vw, 14px);
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.5;
     margin: 0;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+    white-space: nowrap;
+    /* Horizontal single line on desktop */
+    text-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.95),
+        0 0 20px rgba(0, 0, 0, 0.85),
+        0 1px 3px rgba(0, 0, 0, 1);
 }
 
 /* ==========================================================================
@@ -132,26 +156,28 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 7px 12px;
+    padding: 7px 14px;
     border-radius: 8px;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 14px;
     animation: edAlertFade 0.3s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .editorial-contact-alert--success {
-    background: rgba(34, 197, 94, 0.25);
-    border: 1px solid rgba(34, 197, 94, 0.55);
+    background: rgba(12, 18, 26, 0.85);
+    border: 1px solid rgba(34, 197, 94, 0.7);
     color: #86efac;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 .editorial-contact-alert--error {
-    background: rgba(239, 68, 68, 0.25);
-    border: 1px solid rgba(239, 68, 68, 0.55);
+    background: rgba(12, 18, 26, 0.85);
+    border: 1px solid rgba(239, 68, 68, 0.7);
     color: #fca5a5;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 @keyframes edAlertFade {
@@ -167,69 +193,85 @@
 }
 
 /* ==========================================================================
-   FORM: VERTICAL UNDERLINE INPUTS (STACKED 1-COLUMN)
+   2. MIDDLE OF THE CARD: VERTICAL INPUT TABS (LINES EQUAL TO TEXT ENDING)
    ========================================================================== */
-.editorial-form {
+.editorial-card-middle {
+    width: auto;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: clamp(20px, 3vw, 36px);
 }
 
 .editorial-form-grid {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: clamp(14px, 1.8vw, 20px);
-    margin-bottom: clamp(18px, 2.5vw, 26px);
 }
 
 .editorial-input-group {
     position: relative;
-    width: 100%;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: fit-content;
+    max-width: 100%;
 }
 
+/* Underline ends right where each text/placeholder ends */
 .editorial-input {
-    width: 100%;
+    width: auto;
+    field-sizing: content;
+    box-sizing: content-box;
     border: none;
-    border-bottom: 1.5px solid rgba(255, 255, 255, 0.45);
+    border-bottom: 2px solid #ffffff;
     background: transparent !important;
     border-radius: 0;
-    padding: 9px 2px 8px;
+    padding: 7px 1px 5px;
     color: #ffffff;
     font-family: inherit;
-    font-size: clamp(13.5px, 1.25vw, 15px);
+    font-size: clamp(14px, 1.25vw, 15.5px);
     font-weight: 500;
     outline: none;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.85));
+    text-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.95),
+        0 0 10px rgba(0, 0, 0, 0.8);
     transition:
         border-color 0.25s ease,
-        box-shadow 0.25s ease;
+        box-shadow 0.25s ease,
+        width 0.15s ease;
     -webkit-appearance: none;
     appearance: none;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .editorial-input::placeholder {
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(255, 255, 255, 0.88);
     font-weight: 400;
-    font-size: clamp(13px, 1.2vw, 14px);
+    font-size: clamp(13px, 1.2vw, 14.5px);
     transition: color 0.2s ease;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+    text-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.95),
+        0 0 10px rgba(0, 0, 0, 0.8);
 }
 
 .editorial-input:hover {
-    border-bottom-color: rgba(255, 255, 255, 0.85);
+    border-bottom-color: #ffffff;
 }
 
 .editorial-input:focus {
     border-bottom-color: #e5be85;
-    box-shadow: 0 1.5px 0 0 #e5be85;
+    box-shadow: 0 2px 0 0 #e5be85;
 }
 
 .editorial-input:focus::placeholder {
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .editorial-input-group.has-error .editorial-input {
     border-bottom-color: #f87171;
-    box-shadow: 0 1.5px 0 0 #f87171;
+    box-shadow: 0 2px 0 0 #f87171;
 }
 
 .editorial-field-error {
@@ -237,19 +279,26 @@
     font-size: 11px;
     color: #fca5a5;
     margin-top: 3px;
-    font-weight: 500;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    font-weight: 600;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
 }
 
 /* ==========================================================================
-   SUBMIT BUTTON
+   3. BOTTOM OF THE CARD: SUBMIT BUTTON (LEFT) & SOCIAL MEDIA ICONS (RIGHT)
    ========================================================================== */
-.editorial-actions {
+.editorial-card-bottom {
     width: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: clamp(12px, 2vw, 20px);
+}
+
+.editorial-actions {
+    display: flex;
+    align-items: center;
     justify-content: flex-start;
-    margin-top: 4px;
 }
 
 .editorial-submit-pill {
@@ -266,11 +315,11 @@
     font-size: clamp(13px, 1.1vw, 14px);
     font-weight: 600;
     letter-spacing: 0.2px;
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     cursor: pointer;
     box-shadow:
-        0 6px 18px rgba(0, 0, 0, 0.28),
-        0 0 0 1px rgba(229, 190, 133, 0.4);
+        0 8px 22px rgba(0, 0, 0, 0.38),
+        0 0 0 1px rgba(229, 190, 133, 0.45);
     transition:
         transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
         box-shadow 0.25s ease,
@@ -280,8 +329,8 @@
 .editorial-submit-pill:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow:
-        0 10px 24px rgba(0, 0, 0, 0.35),
-        0 0 0 1.5px rgba(229, 190, 133, 0.6);
+        0 12px 28px rgba(0, 0, 0, 0.45),
+        0 0 0 1.5px rgba(229, 190, 133, 0.7);
     filter: brightness(1.05);
 }
 
@@ -325,17 +374,11 @@
     }
 }
 
-/* ==========================================================================
-   FLOATING SOCIAL & CONTACT CHANNELS (BOTTOM-RIGHT CORNER)
-   ========================================================================== */
+/* Floating Social Media Icons at Bottom Right */
 .editorial-floating-socials {
-    position: absolute;
-    right: clamp(22px, 3.8vw, 44px);
-    bottom: clamp(22px, 3.8vw, 40px);
     display: flex;
     align-items: center;
     gap: 12px;
-    z-index: 5;
 }
 
 .editorial-social-btn {
@@ -346,13 +389,13 @@
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(12, 18, 26, 0.65);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     color: #ffffff;
     text-decoration: none;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
     transition:
         transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
         background-color 0.25s ease,
@@ -362,114 +405,127 @@
 
 .editorial-social-btn:hover {
     transform: translateY(-3px) scale(1.08);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.38);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
 }
 
 .editorial-social-btn--wa:hover {
     background: #25d366;
     border-color: #25d366;
     color: #ffffff;
-    box-shadow: 0 6px 18px rgba(37, 211, 102, 0.45);
+    box-shadow: 0 6px 18px rgba(37, 211, 102, 0.55);
 }
 
 .editorial-social-btn--mail:hover {
     background: #e5be85;
     border-color: #e5be85;
     color: #0c1219;
-    box-shadow: 0 6px 18px rgba(229, 190, 133, 0.45);
+    box-shadow: 0 6px 18px rgba(229, 190, 133, 0.55);
 }
 
 .editorial-social-btn--in:hover {
     background: #0077b5;
     border-color: #0077b5;
     color: #ffffff;
-    box-shadow: 0 6px 18px rgba(0, 119, 181, 0.45);
+    box-shadow: 0 6px 18px rgba(0, 119, 181, 0.55);
 }
 
 /* ==========================================================================
-   MOBILE SCREEN DESIGN: CLEAR BACKGROUND, EXPANDED FRAME, VERTICAL INPUTS
+   MOBILE & TABLET RESPONSIVENESS
    ========================================================================== */
+@media (max-width: 900px) {
+    .editorial-form-title {
+        white-space: normal;
+    }
+}
+
 @media (max-width: 768px) {
     .editorial-contact-section {
-        padding: 20px 0 28px;
+        padding: 24px 0 28px;
     }
 
     .editorial-contact-container {
         padding: 0 10px;
     }
 
-    .editorial-showcase-frame {
-        min-height: 520px;
-        border-radius: 20px;
-        align-items: center;
+    .editorial-contact-section-heading {
+        margin-bottom: 20px;
+        padding: 0 8px;
     }
 
-    .editorial-showcase-overlay {
-        background: linear-gradient(180deg,
-                rgba(10, 16, 24, 0.45) 0%,
-                rgba(10, 16, 24, 0.30) 65%,
-                rgba(10, 16, 24, 0.12) 100%);
-    }
-
-    /* 60% Width, No Border, No Shadow, Completely Transparent */
-    .editorial-form-card {
-        width: 60% !important;
-        max-width: 60% !important;
-        margin: 22px 0 22px 18px !important;
-        padding: 0 !important;
-        background: transparent !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        border: none !important;
-        box-shadow: none !important;
-    }
-
-    .editorial-form-header {
-        margin-bottom: 14px;
-    }
-
-    .editorial-form-eyebrow {
-        font-size: 8.5px;
-        margin-bottom: 3px;
-    }
-
-    .editorial-form-title {
-        font-size: 20px;
-        line-height: 1.2;
+    .editorial-contact-section-eyebrow {
+        font-size: 10px;
+        letter-spacing: 2px;
         margin-bottom: 4px;
     }
 
-    .editorial-form-desc {
-        font-size: 11px;
-        line-height: 1.4;
+    .editorial-contact-section-title {
+        font-size: 26px;
+        margin-bottom: 6px;
+    }
+
+    .editorial-contact-section-desc {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    /* Outer Showcase Frame on Mobile */
+    .editorial-showcase-frame {
+        min-height: 520px;
+        border-radius: 20px;
+        padding: 18px 18px 20px;
+    }
+
+    .editorial-card-top {
+        margin-bottom: 14px;
+    }
+
+    /* ONLY 'GET IN TOUCH' text moves a little bit upside on mobile screens */
+    .editorial-get-in-touch {
+        display: inline-block;
+        font-size: 9.5px;
+        letter-spacing: 2.2px;
+        transform: translateY(-10px);
+        margin-bottom: 0px;
+    }
+
+    .editorial-form-title {
+        font-size: 19.5px;
+        line-height: 1.25;
+        white-space: normal;
+        margin-bottom: 0;
+    }
+
+    .editorial-card-middle {
+        margin-bottom: 18px;
     }
 
     .editorial-form-grid {
-        display: flex;
-        flex-direction: column;
         gap: 12px;
-        margin-bottom: 16px;
     }
 
     .editorial-input {
-        font-size: 12.5px;
-        padding: 6px 0 5px;
-        border-bottom-width: 1px;
+        font-size: 13px;
+        padding: 5px 1px 4px;
+        border-bottom-width: 1.5px;
     }
 
     .editorial-input::placeholder {
-        font-size: 11.5px;
+        font-size: 12px;
+    }
+
+    .editorial-card-bottom {
+        padding-top: 10px;
     }
 
     .editorial-submit-pill {
-        height: 35px;
+        height: 36px;
         padding: 4px 4px 4px 15px;
         font-size: 12px;
     }
 
     .editorial-arrow-circle {
-        width: 23px;
-        height: 23px;
+        width: 24px;
+        height: 24px;
     }
 
     .editorial-arrow-circle svg {
@@ -478,19 +534,17 @@
     }
 
     .editorial-floating-socials {
-        right: 14px !important;
-        bottom: 16px !important;
-        gap: 8px !important;
+        gap: 8px;
     }
 
     .editorial-social-btn {
-        width: 34px !important;
-        height: 34px !important;
+        width: 36px;
+        height: 36px;
     }
 
     .editorial-social-btn svg {
-        width: 14px !important;
-        height: 14px !important;
+        width: 14px;
+        height: 14px;
     }
 }
 
@@ -498,20 +552,16 @@
 @media (max-width: 380px) {
     .editorial-showcase-frame {
         min-height: 500px;
+        padding: 16px 14px 16px;
     }
 
-    .editorial-form-card {
-        width: 65% !important;
-        max-width: 65% !important;
-        margin: 16px 0 16px 12px !important;
+    .editorial-get-in-touch {
+        font-size: 9px;
+        transform: translateY(-12px);
     }
 
     .editorial-form-title {
-        font-size: 18px;
-    }
-
-    .editorial-form-desc {
-        font-size: 10.5px;
+        font-size: 17.5px;
     }
 
     .editorial-form-grid {
@@ -519,16 +569,17 @@
     }
 
     .editorial-input {
-        font-size: 11.5px;
+        font-size: 12px;
     }
 
-    .editorial-floating-socials {
-        right: 10px !important;
-        bottom: 12px !important;
+    .editorial-submit-pill {
+        height: 34px;
+        font-size: 11px;
+        padding-left: 12px;
     }
 
     .editorial-social-btn {
-        width: 30px !important;
-        height: 30px !important;
+        width: 32px;
+        height: 32px;
     }
 }
