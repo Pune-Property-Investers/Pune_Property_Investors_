@@ -51,6 +51,7 @@ const navigationItems = [
         href: "/buy",
         dropdown: [
             { label: "All Properties", href: "/buy" },
+            { label: "Search Properties", href: "/properties?focus=search#property-search" },
             { label: "New Launches", href: "/buy?type=new-launch" },
             { label: "Commercial Properties", href: "/commercial" },
             { label: "Plots & Land", href: "/plots" },
@@ -72,23 +73,25 @@ const navigationItems = [
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-function Header({ transparentAtTop = false }) {
+function Header({ transparentAtTop = false, forceDark = false, theme = "default" }) {
     const pathname = usePathname();
     const normalizedPath =
         pathname === "/" ? "/" : (pathname || "/").replace(/\/+$/, "");
     const isHome = normalizedPath === "/";
     const isTransparent =
-        isHome ||
-        transparentAtTop ||
-        normalizedPath.startsWith("/buy") ||
-        normalizedPath.startsWith("/properties") ||
-        normalizedPath.startsWith("/property") ||
-        normalizedPath.startsWith("/commercial") ||
-        normalizedPath.startsWith("/plots") ||
-        normalizedPath.startsWith("/new-launches") ||
-        normalizedPath.startsWith("/about") ||
-        normalizedPath.startsWith("/blog") ||
-        normalizedPath.startsWith("/career");
+        !forceDark &&
+        theme !== "black" &&
+        !normalizedPath.startsWith("/property") &&
+        (isHome ||
+            transparentAtTop ||
+            normalizedPath.startsWith("/buy") ||
+            normalizedPath.startsWith("/properties") ||
+            normalizedPath.startsWith("/commercial") ||
+            normalizedPath.startsWith("/plots") ||
+            normalizedPath.startsWith("/new-launches") ||
+            normalizedPath.startsWith("/about") ||
+            normalizedPath.startsWith("/blog") ||
+            normalizedPath.startsWith("/career"));
     const [menuOpen, setMenuOpen] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(null);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -114,6 +117,27 @@ function Header({ transparentAtTop = false }) {
                 e.preventDefault();
                 section.scrollIntoView({ behavior: "smooth", block: "start" });
                 return;
+            }
+        }
+    };
+
+    const handleSearchClick = (e) => {
+        closeMenu();
+        if (
+            normalizedPath === "/properties" ||
+            normalizedPath === "/buy" ||
+            normalizedPath.startsWith("/properties") ||
+            normalizedPath.startsWith("/buy")
+        ) {
+            e.preventDefault();
+            window.dispatchEvent(new CustomEvent("focus-property-search"));
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.set("focus", "search");
+                url.hash = "property-search";
+                window.history.replaceState({}, "", url.toString());
+            } catch (err) {
+                // Ignore URL parsing errors
             }
         }
     };
@@ -167,7 +191,7 @@ function Header({ transparentAtTop = false }) {
             {/* Header Main Bar (Fixed, Luxury Scrolled State) */}
             <header
                 className={`site-header ${isTransparent ? "site-header--home" : ""} ${isScrolled ? "site-header--scrolled" : ""
-                    } ${menuOpen ? "site-header--open" : ""}`}
+                    } ${menuOpen ? "site-header--open" : ""} ${theme === "black" || forceDark || normalizedPath.startsWith("/property") ? "site-header--black" : ""}`}
             >
                 <div className="header-container">
                     {/* Company Logo and Brand Name */}
@@ -259,6 +283,21 @@ function Header({ transparentAtTop = false }) {
                                 </div>
                             );
                         })}
+
+                        {/* Search Link for Desktop/Laptop View */}
+                        <div className="header-nav-item">
+                            <div className="header-nav-item__main">
+                                <Link
+                                    href="/properties?focus=search#property-search"
+                                    onClick={handleSearchClick}
+                                    className="header-nav-link header-nav-link--search"
+                                    aria-label="Search properties"
+                                >
+                                    <Search size={15} style={{ display: "inline-block", marginRight: "6px", verticalAlign: "-2px" }} />
+                                    <span>Search</span>
+                                </Link>
+                            </div>
+                        </div>
                     </nav>
 
                     {/* Mobile Hamburger Menu Toggle Button (matches Image 2) */}
@@ -435,9 +474,9 @@ function Header({ transparentAtTop = false }) {
                         </a>
 
                         <Link
-                            href="/buy"
+                            href="/properties?focus=search#property-search"
                             className="mobile-drawer__btn mobile-drawer__btn--search"
-                            onClick={closeMenu}
+                            onClick={handleSearchClick}
                         >
                             <Search size={16} />
                             <span>Search All Properties</span>
@@ -450,7 +489,7 @@ function Header({ transparentAtTop = false }) {
                 </div>
             </aside>
 
-            {/* Mobile Bottom Navigation Bar (Appears when scrolling down from head section with header) */}
+            {/* Mobile Bottom Navigation Bar (Floating Pill Shape with Scooped Centre Cradle) */}
             <nav
                 className={`mobile-bottom-nav ${isScrolled || normalizedPath === "/shorts"
                     ? "mobile-bottom-nav--visible"
@@ -458,58 +497,129 @@ function Header({ transparentAtTop = false }) {
                     }`}
                 aria-label="Mobile Bottom Navigation"
             >
+                {/* Scooped Cradle Backdrop */}
+                <div className="mobile-bottom-nav__backdrop" aria-hidden="true">
+                    <div className="mobile-bottom-nav__bg-wing mobile-bottom-nav__bg-wing--left" />
+                    <svg className="mobile-bottom-nav__bg-notch" viewBox="0 0 96 64" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="ppi-notch-body" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#18443d" stopOpacity="0.98" />
+                                <stop offset="100%" stopColor="#11322d" stopOpacity="0.98" />
+                            </linearGradient>
+                            <linearGradient id="ppi-cradle-glow" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stopColor="rgba(214, 179, 106, 0.35)" />
+                                <stop offset="50%" stopColor="rgba(244, 213, 138, 0.9)" />
+                                <stop offset="100%" stopColor="rgba(214, 179, 106, 0.35)" />
+                            </linearGradient>
+                        </defs>
+                        {/* Dark Body fill with circular scooped notch tailored to the Shorts circle */}
+                        <path
+                            d="M -2,0 L 15,0 C 18,0 20.85,5.06 22.4,10.86 A 26.5 26.5 0 0,0 73.6,10.86 C 75.15,5.06 78,0 81,0 L 98,0 L 98,64 L -2,64 Z"
+                            fill="url(#ppi-notch-body)"
+                        />
+                        {/* Top Scooped Gold Rim Contour (Concentric circular arc around button) */}
+                        <path
+                            d="M 0,0 L 15,0 C 18,0 20.85,5.06 22.4,10.86 A 26.5 26.5 0 0,0 73.6,10.86 C 75.15,5.06 78,0 81,0 L 96,0"
+                            fill="none"
+                            stroke="url(#ppi-cradle-glow)"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                        />
+                        {/* Bottom Gold Rim Line */}
+                        <line
+                            x1="-2" y1="63.5" x2="98" y2="63.5"
+                            stroke="rgba(214, 179, 106, 0.28)"
+                            strokeWidth="1"
+                        />
+                    </svg>
+                    <div className="mobile-bottom-nav__bg-wing mobile-bottom-nav__bg-wing--right" />
+                </div>
+
+                {/* Dark Gold Snake Border Animation (Runs once when container appears, slow & prominently dark) */}
+                <svg
+                    className="mobile-bottom-nav__snake-svg"
+                    viewBox="0 0 400 64"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                >
+                    <defs>
+                        <linearGradient id="ppi-snake-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="#3E2407" stopOpacity="0" />
+                            <stop offset="20%" stopColor="#6D4512" stopOpacity="0.95" />
+                            <stop offset="55%" stopColor="#9B681D" stopOpacity="1" />
+                            <stop offset="85%" stopColor="#C48D2E" stopOpacity="1" />
+                            <stop offset="100%" stopColor="#D99F3B" stopOpacity="1" />
+                        </linearGradient>
+                        <filter id="ppi-snake-glow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="0" stdDeviation="3" floodColor="#B88228" floodOpacity="0.95" />
+                        </filter>
+                    </defs>
+                    <path
+                        className="mobile-bottom-nav__snake-line"
+                        d="M 32,0 L 167,0 C 170,0 172.85,5.06 174.4,10.86 A 26.5 26.5 0 0,0 225.6,10.86 C 227.15,5.06 230,0 233,0 L 368,0 A 32,32 0 0,1 400,32 A 32,32 0 0,1 368,64 L 32,64 A 32,32 0 0,1 0,32 A 32,32 0 0,1 32,0 Z"
+                        fill="none"
+                        stroke="url(#ppi-snake-grad)"
+                        strokeWidth="3.2"
+                        strokeLinecap="round"
+                        filter="url(#ppi-snake-glow)"
+                        vectorEffect="non-scaling-stroke"
+                    />
+                </svg>
+
                 {/* 1. Home */}
                 <Link
                     href="/"
                     onClick={handleHomeClick}
-                    className={`mobile-bottom-nav__item ${normalizedPath === "/" && !menuOpen
+                    className={`mobile-bottom-nav__item mobile-bottom-nav__item--home ${normalizedPath === "/" && !menuOpen
                         ? "mobile-bottom-nav__item--active"
                         : ""
                         }`}
                     aria-label="Home"
                 >
                     <div className="mobile-bottom-nav__icon-wrap">
-                        <Home className="mobile-bottom-nav__icon" size={20} />
+                        <Home className="mobile-bottom-nav__icon" size={20} strokeWidth={1.8} />
                     </div>
                     <span className="mobile-bottom-nav__label">Home</span>
+                    <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </Link>
 
                 {/* 2. Search */}
                 <Link
-                    href="/search"
-                    onClick={closeMenu}
-                    className={`mobile-bottom-nav__item ${(normalizedPath === "/search" ||
+                    href="/properties?focus=search#property-search"
+                    onClick={handleSearchClick}
+                    className={`mobile-bottom-nav__item mobile-bottom-nav__item--search ${(normalizedPath === "/search" ||
                         normalizedPath === "/buy" ||
                         normalizedPath.startsWith("/properties")) &&
                         !menuOpen
                         ? "mobile-bottom-nav__item--active"
                         : ""
                         }`}
-                    aria-label="Search"
+                    aria-label="Search properties"
                 >
                     <div className="mobile-bottom-nav__icon-wrap">
-                        <Search className="mobile-bottom-nav__icon" size={20} />
+                        <Search className="mobile-bottom-nav__icon" size={20} strokeWidth={1.8} />
                     </div>
                     <span className="mobile-bottom-nav__label">Search</span>
+                    <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </Link>
 
-                {/* 3. PPI Shorts */}
+                {/* 3. PPI Shorts (Special Centre Highlight with Double Circle / Multi-Colour Ring) */}
                 <Link
                     href="/shorts"
                     onClick={closeMenu}
-                    className={`mobile-bottom-nav__item ${normalizedPath === "/shorts" && !menuOpen
-                        ? "mobile-bottom-nav__item--active mobile-bottom-nav__item--shorts"
+                    className={`mobile-bottom-nav__item mobile-bottom-nav__item--shorts ${normalizedPath === "/shorts" && !menuOpen
+                        ? "mobile-bottom-nav__item--active"
                         : ""
                         }`}
                     aria-label="PPI Shorts"
                 >
-                    <div className="mobile-bottom-nav__icon-wrap">
-                        <Film size={20} className="mobile-bottom-nav__icon" />
+                    <div className="mobile-bottom-nav__shorts-multi-circle">
+                        <div className="mobile-bottom-nav__shorts-pod">
+                            <ShortsIcon size={20} className="mobile-bottom-nav__shorts-icon" />
+                        </div>
                     </div>
                     <span className="mobile-bottom-nav__label">PPI Shorts</span>
-                    {normalizedPath === "/shorts" && !menuOpen && (
-                        <span className="mobile-bottom-nav__dot" />
-                    )}
+                    <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </Link>
 
                 {/* 4. WhatsApp */}
@@ -521,28 +631,30 @@ function Header({ transparentAtTop = false }) {
                     aria-label="WhatsApp"
                 >
                     <div className="mobile-bottom-nav__icon-wrap">
-                        <FaWhatsapp size={20} className="mobile-bottom-nav__icon mobile-bottom-nav__icon--wa" />
+                        <FaWhatsapp size={21} className="mobile-bottom-nav__icon mobile-bottom-nav__icon--wa" />
                     </div>
                     <span className="mobile-bottom-nav__label mobile-bottom-nav__label--wa">WhatsApp</span>
+                    <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </a>
 
                 {/* 5. Menu */}
                 <button
                     type="button"
                     onClick={() => setMenuOpen((current) => !current)}
-                    className={`mobile-bottom-nav__item ${menuOpen ? "mobile-bottom-nav__item--active" : ""
+                    className={`mobile-bottom-nav__item mobile-bottom-nav__item--menu ${menuOpen ? "mobile-bottom-nav__item--active" : ""
                         }`}
                     aria-label={menuOpen ? "Close menu" : "Open menu"}
                     aria-expanded={menuOpen}
                 >
                     <div className="mobile-bottom-nav__icon-wrap">
                         {menuOpen ? (
-                            <X className="mobile-bottom-nav__icon" size={20} />
+                            <X className="mobile-bottom-nav__icon mobile-bottom-nav__icon--menu-toggle" size={20} strokeWidth={1.8} />
                         ) : (
-                            <Menu className="mobile-bottom-nav__icon" size={20} />
+                            <Menu className="mobile-bottom-nav__icon mobile-bottom-nav__icon--menu-toggle" size={20} strokeWidth={1.8} />
                         )}
                     </div>
                     <span className="mobile-bottom-nav__label">Menu</span>
+                    <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </button>
             </nav>
         </>

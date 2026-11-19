@@ -11,7 +11,7 @@
     --pd-background: #f8f8f5;
 
     min-height: 100vh;
-    padding: 38px 0 70px;
+    padding: 85px 0 70px;
     background: var(--pd-background);
     color: var(--pd-text);
 }
@@ -810,7 +810,7 @@
 
 @media (max-width: 900px) {
     .property-details {
-        padding-top: 24px;
+        padding-top: 75px;
     }
 
     .property-details__project-header {
@@ -874,7 +874,7 @@
 
 @media (max-width: 650px) {
     .property-details {
-        padding: 20px 0 45px;
+        padding: 70px 0 45px;
     }
 
     .property-details__container {

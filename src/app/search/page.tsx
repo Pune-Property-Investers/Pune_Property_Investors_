@@ -8,9 +8,14 @@ function SearchRedirect() {
     const searchParams = useSearchParams();
 
     useEffect(() => {
-        const queryString = searchParams.toString();
-        router.replace(queryString ? `/buy?${queryString}` : "/buy");
-    }, [router, searchParams]);
+        const params = new URLSearchParams(searchParams ? searchParams.toString() : "");
+            if (!params.has("focus")) {
+                params.set("focus", "search");
+            }
+            params.delete("filter");
+            const queryString = params.toString();
+            router.replace(queryString ? `/properties?${queryString}#property-search` : "/properties?focus=search#property-search");
+        }, [router, searchParams]);
 
     return null;
 }
