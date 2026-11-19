@@ -483,6 +483,13 @@
     overflow-wrap: anywhere;
 }
 
+.property-details__description-body p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: #475569;
+    margin: 0;
+}
+
 /* =========================================
    PRICING CARD
 ========================================= */
