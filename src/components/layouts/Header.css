@@ -982,25 +982,25 @@
     }
 
     .mobile-bottom-nav__snake-line {
-        stroke-dasharray: 180 920;
-        stroke-dashoffset: 1100;
+        stroke-dasharray: 260 1100;
+        stroke-dashoffset: 1350;
         opacity: 0;
     }
 
     .mobile-bottom-nav--visible .mobile-bottom-nav__snake-line {
-        animation: ppi-snake-trace 2.6s cubic-bezier(0.25, 1, 0.45, 1) 1 forwards;
-        animation-delay: 0.25s;
+        animation: ppi-snake-trace 5.5s cubic-bezier(0.35, 0, 0.25, 1) 1 forwards;
+        animation-delay: 0.3s;
     }
 
     @keyframes ppi-snake-trace {
         0% {
-            stroke-dashoffset: 1100;
+            stroke-dashoffset: 1350;
             opacity: 0;
         }
-        8% {
+        4% {
             opacity: 1;
         }
-        85% {
+        92% {
             opacity: 1;
         }
         100% {
@@ -1148,7 +1148,7 @@
         justify-content: center;
         width: 46px;
         height: 46px;
-        margin-top: -21px; /* Sits elevated with generous, clean space above the scooped curve */
+        margin-top: -19px; /* Reduced gap - sits snugly with a sleek 3px clearance above the scooped curve */
         border-radius: 50%; /* Perfect Circle matching user's design reference */
         background: linear-gradient(135deg, #F4D58A 0%, #D6B36A 52%, #B88E3E 100%);
         border: 2px solid #FFF2C6;
@@ -1354,7 +1354,7 @@
     .mobile-bottom-nav__shorts-pod {
         width: 42px;
         height: 42px;
-        margin-top: -18px;
+        margin-top: -16px;
     }
 
     .mobile-bottom-nav__item--shorts .mobile-bottom-nav__label {
