@@ -67,6 +67,40 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
         };
     }, [mobileFiltersOpen]);
 
+    // Open filter drawer if URL specifies filter=open or if open-property-filters event is fired
+    useEffect(() => {
+        const filterParam = searchParams?.get("filter");
+        if (filterParam === "open" || filterParam === "true") {
+            setMobileFiltersOpen(true);
+            if (typeof window !== "undefined" && window.innerWidth >= 900) {
+                const el = document.querySelector(".buy-properties-filter-column") || document.querySelector(".buy-properties-search");
+                el?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        }
+
+        const handleOpenFilters = () => {
+            setMobileFiltersOpen(true);
+        };
+
+        window.addEventListener("open-property-filters", handleOpenFilters);
+        return () => {
+            window.removeEventListener("open-property-filters", handleOpenFilters);
+        };
+    }, [searchParams]);
+
+    const handleCloseMobileFilters = () => {
+        setMobileFiltersOpen(false);
+        if (typeof window !== "undefined" && searchParams?.get("filter") === "open") {
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.delete("filter");
+                window.history.replaceState({}, "", url.toString());
+            } catch (err) {
+                // Ignore URL parsing errors
+            }
+        }
+    };
+
     // Sync if URL search params change
     useEffect(() => {
         const loc = searchParams?.get("location");
@@ -362,7 +396,7 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                                 {/* Mobile Drawer Backdrop */}
                                 <div
                                     className="buy-properties-drawer-backdrop"
-                                    onClick={() => setMobileFiltersOpen(false)}
+                                    onClick={handleCloseMobileFilters}
                                     aria-hidden="true"
                                 />
 
@@ -372,7 +406,7 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                                         onFilterChange={handleFilterChange}
                                         onReset={handleResetFilters}
                                         resultCount={filteredProperties.length}
-                                        onCloseMobile={() => setMobileFiltersOpen(false)}
+                                        onCloseMobile={handleCloseMobileFilters}
                                         properties={sourceProperties}
                                         searchQuery={searchQuery}
                                         onSearchQueryChange={setSearchQuery}

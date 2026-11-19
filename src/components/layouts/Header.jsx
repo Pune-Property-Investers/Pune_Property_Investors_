@@ -118,6 +118,26 @@ function Header({ transparentAtTop = false }) {
         }
     };
 
+    const handleSearchClick = (e) => {
+        closeMenu();
+        if (
+            normalizedPath === "/properties" ||
+            normalizedPath === "/buy" ||
+            normalizedPath.startsWith("/properties") ||
+            normalizedPath.startsWith("/buy")
+        ) {
+            e.preventDefault();
+            window.dispatchEvent(new CustomEvent("open-property-filters"));
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.set("filter", "open");
+                window.history.replaceState({}, "", url.toString());
+            } catch (err) {
+                // Ignore URL parsing errors
+            }
+        }
+    };
+
     const toggleDropdown = (label) => {
         setOpenDropdown((current) => (current === label ? null : label));
     };
@@ -435,9 +455,9 @@ function Header({ transparentAtTop = false }) {
                         </a>
 
                         <Link
-                            href="/buy"
+                            href="/properties?filter=open"
                             className="mobile-drawer__btn mobile-drawer__btn--search"
-                            onClick={closeMenu}
+                            onClick={handleSearchClick}
                         >
                             <Search size={16} />
                             <span>Search All Properties</span>
@@ -546,8 +566,8 @@ function Header({ transparentAtTop = false }) {
 
                 {/* 2. Search */}
                 <Link
-                    href="/search"
-                    onClick={closeMenu}
+                    href="/properties?filter=open"
+                    onClick={handleSearchClick}
                     className={`mobile-bottom-nav__item mobile-bottom-nav__item--search ${(normalizedPath === "/search" ||
                         normalizedPath === "/buy" ||
                         normalizedPath.startsWith("/properties")) &&
@@ -555,7 +575,7 @@ function Header({ transparentAtTop = false }) {
                         ? "mobile-bottom-nav__item--active"
                         : ""
                         }`}
-                    aria-label="Search"
+                    aria-label="Search properties"
                 >
                     <div className="mobile-bottom-nav__icon-wrap">
                         <Search className="mobile-bottom-nav__icon" size={20} strokeWidth={1.8} />

@@ -8,8 +8,12 @@ function SearchRedirect() {
     const searchParams = useSearchParams();
 
     useEffect(() => {
-        const queryString = searchParams.toString();
-        router.replace(queryString ? `/buy?${queryString}` : "/buy");
+        const params = new URLSearchParams(searchParams ? searchParams.toString() : "");
+        if (!params.has("filter")) {
+            params.set("filter", "open");
+        }
+        const queryString = params.toString();
+        router.replace(queryString ? `/properties?${queryString}` : "/properties?filter=open");
     }, [router, searchParams]);
 
     return null;
