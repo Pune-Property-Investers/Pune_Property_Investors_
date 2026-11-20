@@ -100,7 +100,7 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
                     youtubeId: "v1KcS0G22EQ",
                     title: "Project Walkthrough Video",
                     tagline: "Describe project highlights.",
-                    completion: "Q4 2027",
+                    completion: "Under Construction",
                     completionSub: "MahaRERA",
                     configurations: "2 & 3 BHK",
                     configSub: "Luxury Residences",
@@ -1052,7 +1052,7 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
                     configuration: "2, 3 BHK Luxury Residences",
                     subtitle: "2, 3 BHK Luxury Residences, Pune",
                     status: "Under Construction",
-                    possession: "2027",
+                    possession: "Under Construction",
                     reraId: "RERA Approved",
                     badge: "Featured",
                     image: "",
@@ -1327,10 +1327,10 @@ export default function HomepageSectionItemsEditor({ sectionType, sectionData, u
                         onRemove={
                             items.length > 1
                                 ? () => {
-                                      const next = items.filter((_, i) => i !== idx);
-                                      updateSectionData("items", next);
-                                      updateSectionData("containers", next);
-                                  }
+                                    const next = items.filter((_, i) => i !== idx);
+                                    updateSectionData("items", next);
+                                    updateSectionData("containers", next);
+                                }
                                 : null
                         }
                     >

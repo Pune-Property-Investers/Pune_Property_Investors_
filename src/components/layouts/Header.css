@@ -11,7 +11,8 @@
     width: 100%;
     margin: 0;
     padding: 0;
-    background: rgba(16, 16, 16, 0.94); /* Deep charcoal near-black (#101010) */
+    background: rgba(16, 16, 16, 0.94);
+    /* Deep charcoal near-black (#101010) */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(214, 179, 106, 0.28);
@@ -884,17 +885,16 @@
         left: 50%;
         transform: translate(-50%, calc(100% + 24px));
         width: calc(100% - 24px);
-        max-width: 412px;
-        min-height: 60px;
+        max-width: 390px;
+        min-height: 64px;
         height: 64px;
         z-index: 999;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 8px;
+        padding: 0 4px;
         box-sizing: border-box;
 
-        /* Transparent container so the backdrop wings & scooped cradle notch define the silhouette */
         background: transparent;
         border: none;
         box-shadow: none;
@@ -903,7 +903,7 @@
         opacity: 0;
         pointer-events: none;
         transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                    opacity 0.28s ease;
+            opacity 0.28s ease;
     }
 
     /* Floating Pill Appears when scrolled or on /shorts */
@@ -914,114 +914,142 @@
     }
 
     /* -------------------------------------------------------------
-       SCOOPED CRADLE NOTCH BACKDROP
-       - Left & Right curved wings
-       - Center SVG with smooth concave scooped notch curve
-       - Champagne-gold rim contour & depth
+       1. BASE PILL BAR BACKGROUND & BORDER
+       - Website matching rich deep emerald green gradient
+       - Luxury champagne-gold border & backdrop blur
        ------------------------------------------------------------- */
-    .mobile-bottom-nav__backdrop {
+    .mobile-bottom-nav__bar-bg {
         position: absolute;
         inset: 0;
-        pointer-events: none;
-        z-index: 0;
-        display: flex;
-        overflow: visible;
-    }
-
-    .mobile-bottom-nav__bg-wing {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: calc(50% - 46px);
-        background: linear-gradient(180deg, rgba(24, 68, 61, 0.98) 0%, rgba(17, 50, 45, 0.98) 100%);
+        border-radius: 32px;
+        background: linear-gradient(180deg, rgba(24, 68, 61, 0.98) 0%, rgba(14, 43, 38, 0.98) 100%);
+        border: 1.2px solid rgba(214, 179, 106, 0.35);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        box-shadow: 
-            0 14px 38px rgba(0, 0, 0, 0.72),
+        box-shadow:
+            0 16px 40px rgba(0, 0, 0, 0.72),
             0 4px 14px rgba(0, 0, 0, 0.5),
             inset 0 1px 1px rgba(255, 255, 255, 0.16),
-            inset 0 -1px 2px rgba(0, 0, 0, 0.6);
-    }
+            inset 0 -1px 2px rgba(0, 0, 0, 0.5);
+        pointer-events: none;
+        z-index: 0;
 
-    .mobile-bottom-nav__bg-wing--left {
-        left: 0;
-        border-top-left-radius: 9999px;
-        border-bottom-left-radius: 9999px;
-        border-top: 1px solid rgba(214, 179, 106, 0.3);
-        border-bottom: 1px solid rgba(214, 179, 106, 0.28);
-        border-left: 1px solid rgba(214, 179, 106, 0.3);
-        border-right: none;
-    }
-
-    .mobile-bottom-nav__bg-wing--right {
-        right: 0;
-        border-top-right-radius: 9999px;
-        border-bottom-right-radius: 9999px;
-        border-top: 1px solid rgba(214, 179, 106, 0.3);
-        border-bottom: 1px solid rgba(214, 179, 106, 0.28);
-        border-right: 1px solid rgba(214, 179, 106, 0.3);
-        border-left: none;
-    }
-
-    .mobile-bottom-nav__bg-notch {
-        position: absolute;
-        left: 50%;
-        top: 0;
-        transform: translateX(-50%);
-        width: 96px;
-        height: 64px;
-        overflow: visible;
-        filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.65));
+        /* Real transparent circular cutout matching the circle size with generous 10px spacing & smooth edge */
+        -webkit-mask-image: radial-gradient(circle at var(--active-pct, 30%) 0px, transparent 0, transparent 31px, #000 32px);
+        mask-image: radial-gradient(circle at var(--active-pct, 30%) 0px, transparent 0, transparent 31px, #000 32px);
+        transition: -webkit-mask-image 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+            mask-image 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     /* -------------------------------------------------------------
-       SNAKE BORDER TRACE ANIMATION
-       - Dark gold glowing stroke runs around the container border like a snake
-       - Fires once when the bottom navigation appears (.mobile-bottom-nav--visible)
-       - Runs around perimeter and through scooped cradle curve, then disappears
+       2. DYNAMIC SLIDER: CONCAVE CUTOUT NOTCH & POPPED-UP BUBBLE
+       - Moves smoothly to any button clicked (0 to 4)
+       - Snappy bouncy spring transition
        ------------------------------------------------------------- */
-    .mobile-bottom-nav__snake-svg {
+    .mobile-bottom-nav__slider {
         position: absolute;
-        inset: 0;
-        width: 100%;
+        top: 0;
+        left: 0;
+        width: 20%;
         height: 100%;
         pointer-events: none;
-        z-index: 4;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Concave Scooped Notch that dips into the bar (smooth blended top edges) */
+    .mobile-bottom-nav__notch-cutout {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 88px;
+        height: 32px;
         overflow: visible;
+        pointer-events: none;
+        z-index: 1;
     }
 
-    .mobile-bottom-nav__snake-line {
-        stroke-dasharray: 260 1100;
-        stroke-dashoffset: 1350;
-        opacity: 0;
+    .mobile-bottom-nav__notch-svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        display: block;
+        filter: drop-shadow(0 2px 6px rgba(214, 179, 106, 0.35));
     }
 
-    .mobile-bottom-nav--visible .mobile-bottom-nav__snake-line {
-        animation: ppi-snake-trace 5.5s cubic-bezier(0.35, 0, 0.25, 1) 1 forwards;
-        animation-delay: 0.3s;
+    /* Circular Popped-Up Active Bubble */
+    .mobile-bottom-nav__bubble {
+        position: absolute;
+        top: -19px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #F5D78E 0%, #D8B56C 50%, #B88E3E 100%);
+        border: 2px solid rgba(214, 179, 106, 0.85);
+        box-shadow:
+            0 10px 24px rgba(0, 0, 0, 0.65),
+            0 0 18px rgba(216, 181, 108, 0.42),
+            inset 0 1px 2px rgba(255, 255, 255, 0.75);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 3;
+        animation: ppi-bubble-pop 0.36s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    @keyframes ppi-snake-trace {
+    .mobile-bottom-nav__bubble-icon {
+        color: #0c2420;
+        animation: ppi-bubble-icon-pop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .mobile-bottom-nav__bubble-icon--wa {
+        color: #084923 !important;
+        fill: #084923 !important;
+    }
+
+    @keyframes ppi-bubble-pop {
         0% {
-            stroke-dashoffset: 1350;
-            opacity: 0;
+            transform: translateX(-50%) scale(0.65);
         }
-        4% {
-            opacity: 1;
+
+        60% {
+            transform: translateX(-50%) scale(1.1);
         }
-        92% {
-            opacity: 1;
-        }
+
         100% {
-            stroke-dashoffset: 0;
-            opacity: 0;
+            transform: translateX(-50%) scale(1);
         }
     }
 
-    /* Individual Nav Item */
+    @keyframes ppi-bubble-icon-pop {
+        0% {
+            transform: scale(0.4) rotate(-12deg);
+            opacity: 0;
+        }
+
+        60% {
+            transform: scale(1.15) rotate(4deg);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(1) rotate(0deg);
+            opacity: 1;
+        }
+    }
+
+    /* -------------------------------------------------------------
+       3. INTERACTIVE NAVIGATION ITEMS
+       ------------------------------------------------------------- */
     .mobile-bottom-nav__item {
         position: relative;
-        z-index: 1;
+        z-index: 4;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -1042,24 +1070,24 @@
     }
 
     .mobile-bottom-nav__item:active {
-        transform: scale(0.92);
+        transform: scale(0.94);
     }
 
-    /* Icon Container */
+    /* In-Bar Icon Wrap */
     .mobile-bottom-nav__icon-wrap {
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 24px;
-        height: 24px;
-        transition: transform 0.22s ease, filter 0.22s ease;
-    }
-
-    /* Primary Icons: Soft white (#F5F3EE) with subtle transparency in idle state */
-    .mobile-bottom-nav__icon {
         width: 20px;
         height: 20px;
+        transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+            opacity 0.22s ease;
+    }
+
+    .mobile-bottom-nav__icon {
+        width: 18px;
+        height: 18px;
         color: #F5F3EE;
         opacity: 0.88;
         stroke: currentColor;
@@ -1069,34 +1097,33 @@
     /* Labels */
     .mobile-bottom-nav__label {
         font-family: var(--font-sans), Inter, -apple-system, sans-serif;
-        font-size: 9.5px;
+        font-size: 8.5px;
         font-weight: 500;
-        letter-spacing: 0.15px;
-        line-height: 1.15;
+        letter-spacing: 0.12px;
+        line-height: 1.1;
         margin-top: 2px;
         color: rgba(245, 243, 238, 0.78);
         white-space: nowrap;
-        transition: color 0.22s ease, font-weight 0.22s ease;
+        transition: color 0.22s ease,
+            font-weight 0.22s ease;
     }
 
-    /* Active Indicator: Elegant gold dot beneath active item */
+    /* Active Indicator dot */
     .mobile-bottom-nav__indicator {
         display: block;
-        width: 4px;
-        height: 4px;
+        width: 3.5px;
+        height: 3.5px;
         border-radius: 50%;
         background: #D6B36A;
-        box-shadow: 0 0 6px #F4D58A;
-        margin-top: 2px;
+        box-shadow: 0 0 5px #F4D58A;
+        margin-top: 1px;
         opacity: 0;
         transform: scale(0);
         transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    opacity 0.22s ease;
+            opacity 0.22s ease;
     }
 
-    /* -------------------------------------------------------------
-       Hover & Active states for standard items
-       ------------------------------------------------------------- */
+    /* Inactive Hover state */
     @media (hover: hover) {
         .mobile-bottom-nav__item:hover .mobile-bottom-nav__icon {
             opacity: 1;
@@ -1107,237 +1134,79 @@
         .mobile-bottom-nav__item:hover .mobile-bottom-nav__label {
             color: #F5F3EE;
         }
-
-        .mobile-bottom-nav__item--search:hover .mobile-bottom-nav__icon {
-            filter: drop-shadow(0 0 8px rgba(244, 213, 138, 0.6));
-        }
     }
 
-    /* Active State (Route matched) */
-    .mobile-bottom-nav__item--active .mobile-bottom-nav__icon {
-        color: #F4D58A;
-        opacity: 1;
-        filter: drop-shadow(0 0 6px rgba(244, 213, 138, 0.5));
+    /* -------------------------------------------------------------
+       ACTIVE BUTTON STATE:
+       - The in-bar icon vanishes (elevated into the popped bubble)
+       - The label is anchored strictly INSIDE the bottom bar with 8px padding
+       - Indicator dot is hidden
+       ------------------------------------------------------------- */
+    .mobile-bottom-nav__item--active .mobile-bottom-nav__icon-wrap {
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        pointer-events: none;
     }
 
     .mobile-bottom-nav__item--active .mobile-bottom-nav__label {
         color: #F4D58A;
         font-weight: 600;
-    }
-
-    .mobile-bottom-nav__item--active .mobile-bottom-nav__indicator {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    /* -------------------------------------------------------------
-       SPECIAL CENTRE HIGHLIGHT: PPI SHORTS (CIRCULAR FLOATING BUTTON IN SCOOPED CRADLE)
-       - Centered & elevated above the scooped cradle notch
-       - Perfect circular gold-accented action button matching reference
-       - Contrasting dark icon on rich champagne-gold metallic gradient
-       - Dynamic scale, elevation and pulse animations on hover & tap
-       ------------------------------------------------------------- */
-    .mobile-bottom-nav__item--shorts {
-        position: relative;
-        flex: 1.2;
-        overflow: visible;
-        z-index: 2;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding-top: 0;
-        padding-bottom: 5px;
-    }
-
-    /* Added Outer Multi-Colour Circle */
-    .mobile-bottom-nav__shorts-multi-circle {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 48px;
-        height: 48px;
-        margin-top: -20px;
-        border-radius: 50%; /* Perfect outer circle */
-        /* Vibrant multi-colour spectrum */
-        background: conic-gradient(
-            from 135deg,
-            #FF0055,
-            #FF5E00,
-            #FFD600,
-            #10B981,
-            #00DFD8,
-            #0070F3,
-            #7928CA,
-            #FF0055
-        );
-        padding: 2.5px;
-        box-shadow: 
-            0 8px 24px rgba(0, 0, 0, 0.65),
-            0 0 16px rgba(255, 94, 0, 0.38);
-        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    box-shadow 0.25s ease;
-    }
-
-    /* Inner Gold Circle */
-    .mobile-bottom-nav__shorts-pod {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        margin-top: 0;
-        border-radius: 50%; /* Perfect Inner Circle */
-        background: linear-gradient(135deg, #F4D58A 0%, #D6B36A 52%, #B88E3E 100%);
-        border: 1.5px solid #153B35; /* Crisp dark ring separating multi-colour circle and gold circle */
-        box-shadow: 
-            inset 0 1px 2px rgba(255, 255, 255, 0.75);
-        color: #101010; /* Dark contrasting icon on rich champagne gold circle */
-        transition: transform 0.2s ease,
-                    background 0.25s ease,
-                    border-color 0.25s ease,
-                    color 0.25s ease;
-    }
-
-    .mobile-bottom-nav__shorts-icon {
-        width: 20px;
-        height: 20px;
-        color: inherit;
-        filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.25));
-        transition: transform 0.2s ease;
-    }
-
-    /* Label positioned with comfortable breathing space below the circular button */
-    .mobile-bottom-nav__item--shorts .mobile-bottom-nav__label {
-        margin-top: 5px;
-        font-size: 9px;
-        letter-spacing: 0.15px;
+        font-size: 8.5px;
+        letter-spacing: 0.2px;
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+        padding: 0;
+        line-height: 1;
         white-space: nowrap;
     }
 
-    /* Shorts tap / click scale feedback */
-    .mobile-bottom-nav__item--shorts:active {
-        transform: none; /* Handled on shorts-multi-circle */
+    .mobile-bottom-nav__item--active .mobile-bottom-nav__indicator {
+        opacity: 0 !important;
+        transform: scale(0) !important;
+        display: none !important;
+        visibility: hidden !important;
     }
 
-    .mobile-bottom-nav__item--shorts:active .mobile-bottom-nav__shorts-multi-circle {
-        transform: translateY(2px) scale(0.92);
-        box-shadow: 
-            0 4px 12px rgba(0, 0, 0, 0.6),
-            0 0 10px rgba(255, 94, 0, 0.3);
-    }
-
-    @media (hover: hover) {
-        .mobile-bottom-nav__item--shorts:hover .mobile-bottom-nav__shorts-multi-circle {
-            transform: translateY(-3px) scale(1.06);
-            box-shadow: 
-                0 12px 30px rgba(0, 0, 0, 0.75),
-                0 0 22px rgba(255, 94, 0, 0.5);
-        }
-
-        .mobile-bottom-nav__item--shorts:hover .mobile-bottom-nav__label {
-            color: #F4D58A;
-        }
-    }
-
-    /* PPI Shorts ACTIVE STATE */
-    .mobile-bottom-nav__item--shorts.mobile-bottom-nav__item--active .mobile-bottom-nav__shorts-multi-circle {
-        box-shadow: 
-            0 10px 28px rgba(0, 0, 0, 0.75),
-            0 0 24px rgba(255, 0, 122, 0.55);
-    }
-
-    .mobile-bottom-nav__item--shorts.mobile-bottom-nav__item--active .mobile-bottom-nav__shorts-pod {
-        background: linear-gradient(135deg, #FFF3CE 0%, #F4D58A 45%, #D6B36A 100%);
-        color: #000000;
-    }
-
-    .mobile-bottom-nav__item--shorts.mobile-bottom-nav__item--active .mobile-bottom-nav__shorts-icon {
-        color: #000000;
-    }
-
-    .mobile-bottom-nav__item--shorts.mobile-bottom-nav__item--active .mobile-bottom-nav__label {
-        color: #F4D58A;
-        font-weight: 700;
-    }
-
-    /* -------------------------------------------------------------
-       WHATSAPP ITEM
-       - Preserves authentic WhatsApp brand green (#25D366)
-       - Distinct hover & tap illumination
-       ------------------------------------------------------------- */
+    /* WhatsApp special icon styling when idle */
     .mobile-bottom-nav__item--wa .mobile-bottom-nav__icon--wa {
         color: #25D366 !important;
         fill: #25D366 !important;
         stroke: none;
         opacity: 1;
-        transition: transform 0.2s ease, filter 0.2s ease;
     }
 
-    .mobile-bottom-nav__label--wa {
+    .mobile-bottom-nav__item--wa .mobile-bottom-nav__label--wa {
+        color: #25D366 !important;
+        font-weight: 500;
+    }
+
+    .mobile-bottom-nav__item--wa.mobile-bottom-nav__item--active .mobile-bottom-nav__label--wa {
         color: #25D366 !important;
         font-weight: 600;
+        font-size: 8.5px;
+        letter-spacing: 0.2px;
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+        padding: 0;
+        line-height: 1;
+        white-space: nowrap;
     }
 
-    @media (hover: hover) {
-        .mobile-bottom-nav__item--wa:hover .mobile-bottom-nav__icon--wa {
-            transform: scale(1.1);
-            filter: drop-shadow(0 0 8px rgba(37, 211, 102, 0.6));
-        }
-
-        .mobile-bottom-nav__item--wa:hover .mobile-bottom-nav__label--wa {
-            color: #2fe673 !important;
-        }
-    }
-
-    .mobile-bottom-nav__item--wa:active .mobile-bottom-nav__icon--wa {
-        transform: scale(0.92);
-    }
-
-    /* -------------------------------------------------------------
-       MENU ITEM
-       - Clean hamburger icon (<Menu />) or close icon (<X />)
-       - Champagne-gold glow on hover & active indicator
-       - Smooth opening interaction
-       ------------------------------------------------------------- */
-    .mobile-bottom-nav__item--menu {
-        flex: 1;
-    }
-
+    /* Menu toggle animation */
     .mobile-bottom-nav__icon--menu-toggle {
-        transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    color 0.2s ease,
-                    filter 0.2s ease;
+        transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    @media (hover: hover) {
-        .mobile-bottom-nav__item--menu:hover .mobile-bottom-nav__icon--menu-toggle {
-            color: #F4D58A;
-            filter: drop-shadow(0 0 6px rgba(244, 213, 138, 0.6));
-        }
-
-        .mobile-bottom-nav__item--menu:hover .mobile-bottom-nav__label {
-            color: #F4D58A;
-        }
-    }
-
-    /* Menu Open State (illuminated gold & active indicator) */
     .mobile-bottom-nav__item--menu.mobile-bottom-nav__item--active .mobile-bottom-nav__icon--menu-toggle {
         color: #F4D58A;
         transform: rotate(90deg);
-        filter: drop-shadow(0 0 8px rgba(244, 213, 138, 0.7));
-    }
-
-    .mobile-bottom-nav__item--menu.mobile-bottom-nav__item--active .mobile-bottom-nav__label {
-        color: #F4D58A;
-        font-weight: 600;
-    }
-
-    .mobile-bottom-nav__item--menu.mobile-bottom-nav__item--active .mobile-bottom-nav__indicator {
-        opacity: 1;
-        transform: scale(1);
     }
 }
 
@@ -1345,41 +1214,36 @@
 @media (max-width: 360px) {
     .mobile-bottom-nav {
         width: calc(100% - 16px);
-        padding: 0 4px;
-        height: 60px;
+        height: 56px;
+        min-height: 56px;
+        max-width: 330px;
+        bottom: max(10px, env(safe-area-inset-bottom, 10px));
     }
 
-    .mobile-bottom-nav__shorts-multi-circle {
-        width: 44px;
-        height: 44px;
-        margin-top: -17px;
-        padding: 2px;
+    .mobile-bottom-nav__bar-bg {
+        border-radius: 28px;
+        -webkit-mask-image: radial-gradient(circle at var(--active-pct, 30%) 0px, transparent 0, transparent 27px, #000 28px);
+        mask-image: radial-gradient(circle at var(--active-pct, 30%) 0px, transparent 0, transparent 27px, #000 28px);
     }
 
-    .mobile-bottom-nav__shorts-pod {
-        width: 100%;
-        height: 100%;
-        margin-top: 0;
+    .mobile-bottom-nav__bubble {
+        width: 38px;
+        height: 38px;
+        top: -16px;
     }
 
-    .mobile-bottom-nav__item--shorts .mobile-bottom-nav__label {
-        margin-top: 5px;
-    }
-
-    .mobile-bottom-nav__shorts-icon {
-        width: 20px;
-        height: 20px;
-    }
-
-    .mobile-bottom-nav__bg-notch {
-        width: 86px;
-    }
-
-    .mobile-bottom-nav__bg-wing {
-        width: calc(50% - 41px);
+    .mobile-bottom-nav__notch-cutout {
+        width: 76px;
+        height: 28px;
     }
 
     .mobile-bottom-nav__label {
-        font-size: 8.5px;
+        font-size: 7.5px;
+    }
+
+    .mobile-bottom-nav__item--active .mobile-bottom-nav__label,
+    .mobile-bottom-nav__item--wa.mobile-bottom-nav__item--active .mobile-bottom-nav__label--wa {
+        bottom: 6px;
+        font-size: 8px;
     }
 }

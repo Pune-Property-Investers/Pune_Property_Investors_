@@ -7,7 +7,7 @@ import "./PropertyEnquiry.css";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-function PropertyEnquiry({ property }) {
+function PropertyEnquiry({ property, isModal = false, onClose = null }) {
     const [formData, setFormData] = useState({
         name: "",
         phone: "",
@@ -62,10 +62,13 @@ function PropertyEnquiry({ property }) {
 
         window.open(whatsappUrl, "_blank", "noopener,noreferrer");
         setSubmitted(true);
+        if (onClose) {
+            setTimeout(() => onClose(), 1500);
+        }
     };
 
     return (
-        <aside className="property-enquiry" id="property-enquiry">
+        <aside className={`property-enquiry ${isModal ? "property-enquiry--modal" : ""}`} id="property-enquiry">
             <div className="property-enquiry__header">
                 <span className="property-enquiry__eyebrow">INTERESTED IN THIS PROPERTY?</span>
                 <h3 className="property-enquiry__title">Get More Information</h3>

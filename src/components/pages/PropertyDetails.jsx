@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
@@ -13,9 +14,11 @@ import {
     BedDouble,
     Home,
     Phone,
+    PhoneCall,
     MessageCircle,
     CheckCircle2,
     ChevronRight,
+    X,
 } from "lucide-react";
 
 import Header from "../layouts/Header";
@@ -208,6 +211,28 @@ function PropertyDetails({ propertyId, propertySlug }) {
         `Hello Pune Property Investor, I would like to know more about ${title} in ${location}. Please share the price and availability details.`
     );
 
+    const [isEnquiryModalOpen, setIsEnquiryModalOpen] = useState(false);
+
+    // Lock body scroll and handle Escape key for the enquiry modal
+    useEffect(() => {
+        if (isEnquiryModalOpen) {
+            const prevOverflow = document.body.style.overflow;
+            document.body.style.overflow = "hidden";
+
+            const handleKeyDown = (e) => {
+                if (e.key === "Escape") {
+                    setIsEnquiryModalOpen(false);
+                }
+            };
+            window.addEventListener("keydown", handleKeyDown);
+
+            return () => {
+                document.body.style.overflow = prevOverflow;
+                window.removeEventListener("keydown", handleKeyDown);
+            };
+        }
+    }, [isEnquiryModalOpen]);
+
     return (
         <>
             <Header forceDark={true} theme="black" />
@@ -268,26 +293,22 @@ function PropertyDetails({ propertyId, propertySlug }) {
                                 </span>
                             )}
 
-                            <a
-                                href="#property-enquiry"
+                            <button
+                                type="button"
+                                onClick={() => setIsEnquiryModalOpen(true)}
                                 className="property-details__price-cta"
                             >
                                 Enquire Now
                                 <ArrowRight size={15} />
-                            </a>
+                            </button>
                         </div>
                     </section>
 
                     {/* 1. Project Specifications directly below Enquire Now */}
                     <ProjectSpecifications property={property} />
 
-                    {/* Three-column content */}
+                    {/* Main content and ad sidebar layout */}
                     <div className="property-details__layout">
-                        {/* LEFT: Enquiry form */}
-                        <aside className="property-details__sidebar property-details__sidebar--left">
-                            <PropertyEnquiry property={property} />
-                        </aside>
-
                         {/* CENTER: Property information */}
                         <div className="property-details__main">
                             {/* Property Description if available */}
@@ -366,6 +387,46 @@ function PropertyDetails({ propertyId, propertySlug }) {
                     </div>
                 </div>
             </main>
+
+            {/* Floating Enquiry Icon Button — Directly on top of back to top button */}
+            <button
+                type="button"
+                className="property-floating-enquiry-btn"
+                onClick={() => setIsEnquiryModalOpen(true)}
+                aria-label="Enquire about this property"
+                title="Enquire Now"
+            >
+                <PhoneCall size={20} />
+            </button>
+
+            {/* Enquiry Form Modal Popup */}
+            {isEnquiryModalOpen && (
+                <div
+                    className="property-enquiry-modal-backdrop"
+                    onClick={() => setIsEnquiryModalOpen(false)}
+                    role="dialog"
+                    aria-modal="true"
+                >
+                    <div
+                        className="property-enquiry-modal"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button
+                            type="button"
+                            className="property-enquiry-modal__close-btn"
+                            onClick={() => setIsEnquiryModalOpen(false)}
+                            aria-label="Close enquiry form"
+                        >
+                            <X size={18} />
+                        </button>
+                        <PropertyEnquiry
+                            property={property}
+                            isModal={true}
+                            onClose={() => setIsEnquiryModalOpen(false)}
+                        />
+                    </div>
+                </div>
+            )}
 
             <Footer />
         </>

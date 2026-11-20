@@ -136,7 +136,7 @@ export default function SimilarProperties({ currentProperty }) {
                                     />
                                     <div className="similar-card__badges">
                                         <span className="similar-card__badge similar-card__badge--status">
-                                            {item.possession || "New Launch"}
+                                            {item.possession && !/\b202\d\b/i.test(item.possession) ? item.possession : "Under Construction"}
                                         </span>
                                         {item.verified !== false && (
                                             <span className="similar-card__badge similar-card__badge--verified">
@@ -174,7 +174,7 @@ export default function SimilarProperties({ currentProperty }) {
                                     <span className="similar-spec-divider">•</span>
                                     <div className="similar-spec">
                                         <CalendarDays size={14} />
-                                        <span>{item.possession || "2026"}</span>
+                                        <span>{item.possession && !/\b202\d\b/i.test(item.possession) ? item.possession : "Under Construction"}</span>
                                     </div>
                                 </div>
 

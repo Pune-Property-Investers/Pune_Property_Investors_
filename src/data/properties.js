@@ -90,7 +90,7 @@ const properties = [
         badge: "New Launch",
         category: "new-launches",
         isNewLaunch: true,
-        possession: "Dec 2028",
+        possession: "Under Construction",
         slug: "skyline-one",
         image:
             "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85",
@@ -111,7 +111,7 @@ const properties = [
         badge: "Early Access",
         category: "new-launches",
         isNewLaunch: true,
-        possession: "Mid 2028",
+        possession: "Under Construction",
         slug: "the-aurelia",
         image:
             "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85",
@@ -132,7 +132,7 @@ const properties = [
         badge: "New Launch",
         category: "new-launches",
         isNewLaunch: true,
-        possession: "Late 2027",
+        possession: "Under Construction",
         slug: "urban-crest",
         image:
             "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
@@ -153,7 +153,7 @@ const properties = [
         badge: "New Launch",
         category: "new-launches",
         isNewLaunch: true,
-        possession: "2028",
+        possession: "Under Construction",
         slug: "kohinoor-presidentia",
         image:
             "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=85",
@@ -340,7 +340,7 @@ const properties = [
         badge: "Pre-Launch",
         category: "upcoming",
         isUpcoming: true,
-        possession: "2029",
+        possession: "Under Construction",
         slug: "godrej-rivergreens",
         image:
             "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=85",
@@ -361,7 +361,7 @@ const properties = [
         badge: "Upcoming Mega Township",
         category: "upcoming",
         isUpcoming: true,
-        possession: "2028",
+        possession: "Under Construction",
         slug: "vtp-blue-waters",
         image:
             "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=85",
@@ -382,7 +382,7 @@ const properties = [
         badge: "Upcoming Sector",
         category: "upcoming",
         isUpcoming: true,
-        possession: "2028",
+        possession: "Under Construction",
         slug: "kolte-patil-life-republic",
         image:
             "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=900&q=85",
@@ -403,7 +403,7 @@ const properties = [
         badge: "Pre-Booking Open",
         category: "upcoming",
         isUpcoming: true,
-        possession: "2029",
+        possession: "Under Construction",
         slug: "pride-world-city-charholi",
         image:
             "https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=900&q=85",
@@ -425,7 +425,7 @@ const properties = [
         purpose: "Buy",
         badge: "Trending",
         category: "projects",
-        possession: "Dec 2027",
+        possession: "Under Construction",
         slug: "godrej-rivergreens",
         image:
             "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=85",

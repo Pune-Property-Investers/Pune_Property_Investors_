@@ -16,6 +16,17 @@
     overflow: hidden;
 }
 
+.property-enquiry--modal {
+    min-height: auto !important;
+    max-height: none !important;
+    height: auto !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+}
+
 .property-enquiry * {
     box-sizing: border-box;
 }

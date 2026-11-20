@@ -34,11 +34,13 @@ function PropertyCard({ property }) {
     const priceUnit = priceMatch ? priceMatch[2] || "" : "";
 
     /* ── Possession / Status pill ── */
-    const possessionRaw = property.possession || property.status || "Ready to Move";
-    const isReady = possessionRaw.toLowerCase() === "ready";
+    const possessionRaw = property.possession || property.status || "Under Construction";
+    const isReady = /ready/i.test(possessionRaw);
     const possessionLabel = isReady
         ? "Ready to Move"
-        : `Possession ${possessionRaw}`;
+        : (/\b202\d\b/i.test(possessionRaw) || /construction/i.test(possessionRaw)
+            ? "Under Construction"
+            : `Possession ${possessionRaw}`);
 
     /* ── RERA: show the actual RERA ID when available ── */
     const reraDisplay =
@@ -155,8 +157,8 @@ function PropertyCard({ property }) {
 
                             <span
                                 className={`property-card__status ${isReady
-                                        ? "property-card__status--ready"
-                                        : "property-card__status--possession"
+                                    ? "property-card__status--ready"
+                                    : "property-card__status--possession"
                                     }`}
                             >
                                 {possessionLabel}

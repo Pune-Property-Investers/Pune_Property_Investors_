@@ -48,7 +48,7 @@ export default function BuilderProperties({ property }) {
                 configuration: item.configuration,
                 price: item.price,
                 area: item.area,
-                possession: item.possession || "Dec 2027",
+                possession: item.possession || "Under Construction",
                 rera: item.rera || "P52100051280",
                 image: item.image,
                 slug: item.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
@@ -140,7 +140,7 @@ export default function BuilderProperties({ property }) {
                                             {item.rera}
                                         </span>
                                         <span className="builder-card__badge builder-card__badge--status">
-                                            {item.possession}
+                                            {item.possession && !/\b202\d\b/i.test(item.possession) ? item.possession : "Under Construction"}
                                         </span>
                                     </div>
                                     <div className="builder-card__price-tag">

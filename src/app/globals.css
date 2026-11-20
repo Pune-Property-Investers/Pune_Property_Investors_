@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Design Tokens & Theme Variables (Updated) */
+/* Design Tokens & Theme Variables (Updated 2026-11-20T15:53:00) */
 @import "../styles/variables.css";
 
 /* Core Global & Typography Styles */
@@ -58,4 +58,4 @@
     --font-sans: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* cache-bust: 1794747000000 */
+/* cache-bust: 1795168000000 */

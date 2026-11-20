@@ -280,36 +280,21 @@
 
 .property-details__layout {
     display: grid;
-    grid-template-columns:
-        minmax(230px, 270px) minmax(0, 1fr) minmax(220px, 260px);
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 300px);
     align-items: start;
-    gap: 24px;
-}
-
-.property-details__sidebar,
-.property-details__main,
-.property-details__ad-sidebar {
-    min-width: 0;
-}
-
-.property-details__sidebar--left {
-    grid-column: 1;
-    grid-row: 1;
-    position: sticky;
-    top: 90px;
-    align-self: start;
-    height: calc(100vh - 115px);
-    max-height: calc(100vh - 115px);
+    gap: 28px;
 }
 
 .property-details__main {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 1;
+    min-width: 0;
 }
 
 .property-details__ad-sidebar {
-    grid-column: 3;
+    grid-column: 2;
     grid-row: 1;
+    min-width: 0;
 }
 
 /* =========================================
@@ -966,22 +951,14 @@
         margin-top: 0;
     }
 
-    .property-details__sidebar--left {
-        grid-column: 1;
-        grid-row: 1;
-        position: static;
-        height: auto;
-        max-height: none;
-    }
-
     .property-details__main {
         grid-column: 1;
-        grid-row: 2;
+        grid-row: 1;
     }
 
     .property-details__ad-sidebar {
         grid-column: 1;
-        grid-row: 3;
+        grid-row: 2;
     }
 
     .property-details__enquiry-wrapper {
@@ -1099,5 +1076,149 @@
 
     .property-details__section-heading h2 {
         font-size: 20px;
+    }
+}
+
+/* =========================================
+   FLOATING ENQUIRY ICON BUTTON (JUST ON TOP OF BACK TO TOP BUTTON)
+========================================= */
+
+.property-floating-enquiry-btn {
+    position: fixed;
+    right: 24px;
+    bottom: 82px; /* 24px bottom + 46px height + 12px gap = directly above back to top */
+    z-index: 920;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    background: linear-gradient(135deg, #c59b6d 0%, #ad7c48 50%, #8c5e2d 100%);
+    color: #ffffff;
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    border-radius: 50%;
+    box-shadow: 0 8px 24px rgba(173, 124, 72, 0.45), 0 2px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.25s ease,
+                background 0.25s ease;
+}
+
+.property-floating-enquiry-btn:hover {
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 12px 28px rgba(173, 124, 72, 0.6);
+    background: linear-gradient(135deg, #d6b36a 0%, #c59b6d 50%, #ad7c48 100%);
+}
+
+.property-floating-enquiry-btn:active {
+    transform: scale(0.92);
+}
+
+.property-floating-enquiry-btn svg {
+    width: 20px;
+    height: 20px;
+    color: #ffffff;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+@media (max-width: 768px) {
+    .property-floating-enquiry-btn {
+        right: 16px;
+        /* Back to top is at bottom: calc(88px + env(safe-area-inset-bottom, 16px)), height 42px.
+           So enquire button sits directly above it with 10px spacing: */
+        bottom: calc(88px + 42px + 10px + env(safe-area-inset-bottom, 16px));
+        width: 42px;
+        height: 42px;
+    }
+
+    .property-floating-enquiry-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* =========================================
+   ENQUIRY POPUP MODAL
+========================================= */
+
+.property-enquiry-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: enquiryModalFadeIn 0.22s ease-out;
+}
+
+@keyframes enquiryModalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.property-enquiry-modal {
+    background: #ffffff;
+    width: 100%;
+    max-width: 440px;
+    max-height: 90vh;
+    border-radius: 20px;
+    border: 1px solid rgba(173, 124, 72, 0.25);
+    box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    padding: 26px 24px;
+    position: relative;
+    overflow-y: auto;
+    animation: enquiryModalSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes enquiryModalSlideUp {
+    from {
+        transform: translateY(24px) scale(0.96);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.property-enquiry-modal__close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.property-enquiry-modal__close-btn:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+    border-color: #cbd5e1;
+    transform: scale(1.05);
+}
+
+@media (max-width: 480px) {
+    .property-enquiry-modal {
+        max-width: 95%;
+        padding: 20px 18px;
+        border-radius: 16px;
     }
 }

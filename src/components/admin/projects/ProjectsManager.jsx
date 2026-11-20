@@ -26,7 +26,7 @@ const EMPTY_PROJECT = {
     subtitle: "",
     area: "950 - 1,650 sq.ft.",
     status: "New Launch",
-    possession: "Dec 2027",
+    possession: "Under Construction",
     reraId: "",
     image: "",
     images: [],

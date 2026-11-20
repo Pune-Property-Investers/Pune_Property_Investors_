@@ -58,83 +58,67 @@ export default function ProjectSpecifications({ property }) {
 
     let specs = [];
     let eyebrow = "ENGINEERING & RESIDENTIAL MASTERPLAN";
-    let title = "Project Specifications & Key Details";
-    let reraLegalText = (
-        <span>
-            Verified as per <strong>Maharashtra Real Estate Regulatory Authority (MahaRERA)</strong> under registration number <strong>{reraNumber}</strong>. Details available on the official MahaRERA website.
-        </span>
-    );
+    let title = "Project Specifications & Details";
 
     // ==========================================
     // 1. COMMERCIAL SPECIFICATIONS
     // ==========================================
     if (category === "commercial") {
-        eyebrow = "COMMERCIAL INFRASTRUCTURE & SPECIFICATIONS";
-        title = "Commercial Masterplan & Technical Specifications";
-        reraLegalText = (
-            <span>
-                Verified as per <strong>Maharashtra Real Estate Regulatory Authority (MahaRERA)</strong> under commercial project registration number <strong>{reraNumber}</strong>. Pre-approved for IT/ITeS, BFSI, retail and corporate enterprise spaces.
-            </span>
-        );
+        eyebrow = "COMMERCIAL SPECIFICATIONS";
+        title = "Commercial Masterplan & Specifications";
 
         const landAcquired =
             property.landArea ||
             property.totalLand ||
-            `${rawArea > 2000 ? "6.5" : "4.2"} Acres Integrated Tech Campus`;
+            (rawArea > 2000 ? "6.5 Acres" : "4.2 Acres");
 
         const structure =
             property.floorsCount ||
             property.floors ||
-            "3 Basements + Ground + 18 Floors";
+            "G + 18 Floors";
 
         const unitTypes =
-            property.configuration ||
             property.furnishing ||
-            "Grade-A Bare Shell / Warm Shell Offices";
+            property.configuration ||
+            "Bare / Warm Shell";
 
         const leasableArea =
             property.carpetArea ||
-            `${rawArea.toLocaleString("en-IN")} sq.ft. (Floor Plate up to 28,000 sq.ft.)`;
+            `${rawArea.toLocaleString("en-IN")} sq.ft.`;
 
-        const powerHvac = "100% DG Power Backup & VRV HVAC Provision";
-        const parkingRatio = "1 : 750 sq.ft. (Multi-Level Basements + EV Bays)";
+        const powerHvac = "100% DG Backup";
+        const parkingRatio = "Reserved + EV Bays";
 
         specs = [
             {
-                icon: <Building2 size={22} className="spec-card__icon" />,
-                label: "Land Parcel / Campus",
+                icon: <Building2 size={20} className="spec-card__icon" />,
+                label: "Land Parcel",
                 value: landAcquired,
-                badge: "Commercial Hub",
             },
             {
-                icon: <Layers size={22} className="spec-card__icon" />,
-                label: "Structure & Storeys",
+                icon: <Layers size={20} className="spec-card__icon" />,
+                label: "Total Floors",
                 value: structure,
-                badge: "Grade-A Tower",
             },
             {
-                icon: <Building size={22} className="spec-card__icon" />,
-                label: "Unit Type & Shell",
+                icon: <Building size={20} className="spec-card__icon" />,
+                label: "Unit Type",
                 value: unitTypes,
-                badge: "Scalable Plates",
             },
             {
-                icon: <Ruler size={22} className="spec-card__icon" />,
-                label: "Leasable / Carpet Area",
+                icon: <Ruler size={20} className="spec-card__icon" />,
+                label: "Carpet Area",
                 value: leasableArea,
-                badge: "RERA Leasable",
             },
             {
-                icon: <Zap size={22} className="spec-card__icon" />,
-                label: "Power & HVAC Load",
+                icon: <Zap size={20} className="spec-card__icon" />,
+                label: "Power Backup",
                 value: powerHvac,
-                badge: "N+1 Redundancy",
             },
             {
-                icon: <Car size={22} className="spec-card__icon" />,
-                label: "Parking & Mobility",
+                icon: <Car size={20} className="spec-card__icon" />,
+                label: "Parking",
                 value: parkingRatio,
-                badge: "EV Ready",
             },
         ];
     }
@@ -142,60 +126,49 @@ export default function ProjectSpecifications({ property }) {
     // 2. PLOT & LAND SPECIFICATIONS
     // ==========================================
     else if (category === "plot") {
-        eyebrow = "LAND & LAYOUT INFRASTRUCTURE";
-        title = "NA Plot Specifications & Development Approvals";
-        reraLegalText = (
-            <span>
-                Verified as per <strong>Maharashtra Real Estate Regulatory Authority (MahaRERA)</strong> under plotted layout registration number <strong>{reraNumber}</strong>. 100% clear title with separate 7/12 extract and sanctioned layout.
-            </span>
-        );
+        eyebrow = "LAND & LAYOUT SPECIFICATIONS";
+        title = "Plot Specifications & Approvals";
 
         const plotArea =
             property.carpetArea ||
-            `${rawArea.toLocaleString("en-IN")} sq.ft. (${(rawArea / 1076.39).toFixed(1)} Guntha / Freehold Plot)`;
+            `${rawArea.toLocaleString("en-IN")} sq.ft. (${(rawArea / 1076.39).toFixed(1)} Guntha)`;
 
-        const sanctions = "Collector NA / PMRDA Sanctioned";
-        const permissibleFsi = "1.5 FSI (G + 2 Floors Permissible)";
-        const roadWidth = "40 ft. & 30 ft. Wide Tar / Concrete DP Road";
-        const boundary = "Pre-Demarcated with Fencing & Private Gate";
-        const utilities = "Underground MSEDCL Power & Water Line";
+        const sanctions = "PMRDA Sanctioned";
+        const permissibleFsi = "1.5 FSI (G+2)";
+        const roadWidth = "40 ft. DP Road";
+        const boundary = "Fenced & Demarcated";
+        const utilities = "Power & Water Ready";
 
         specs = [
             {
-                icon: <Ruler size={22} className="spec-card__icon" />,
-                label: "Plot Area / Dimensions",
+                icon: <Ruler size={20} className="spec-card__icon" />,
+                label: "Plot Area",
                 value: plotArea,
-                badge: "Demarcated",
             },
             {
-                icon: <ShieldCheck size={22} className="spec-card__icon" />,
-                label: "Sanction & Approvals",
+                icon: <ShieldCheck size={20} className="spec-card__icon" />,
+                label: "Sanctions",
                 value: sanctions,
-                badge: "100% Clear Title",
             },
             {
-                icon: <Layers size={22} className="spec-card__icon" />,
-                label: "Permissible FSI & Floors",
+                icon: <Layers size={20} className="spec-card__icon" />,
+                label: "FSI / Floors",
                 value: permissibleFsi,
-                badge: "Custom Build",
             },
             {
-                icon: <Compass size={22} className="spec-card__icon" />,
-                label: "Road Width & Access",
+                icon: <Compass size={20} className="spec-card__icon" />,
+                label: "Road Access",
                 value: roadWidth,
-                badge: "Direct Access",
             },
             {
-                icon: <Trees size={22} className="spec-card__icon" />,
-                label: "Boundary & Enclosure",
+                icon: <Trees size={20} className="spec-card__icon" />,
+                label: "Boundary",
                 value: boundary,
-                badge: "Immediate Ready",
             },
             {
-                icon: <Zap size={22} className="spec-card__icon" />,
-                label: "Water & Power Provision",
+                icon: <Zap size={20} className="spec-card__icon" />,
+                label: "Utilities",
                 value: utilities,
-                badge: "Plug & Play",
             },
         ];
     }
@@ -204,69 +177,58 @@ export default function ProjectSpecifications({ property }) {
     // ==========================================
     else if (category === "villa") {
         eyebrow = "LUXURY VILLA ARCHITECTURE";
-        title = "Villa Specifications & Bespoke Masterplan";
-        reraLegalText = (
-            <span>
-                Verified as per <strong>Maharashtra Real Estate Regulatory Authority (MahaRERA)</strong> under luxury villa registration number <strong>{reraNumber}</strong>. Exclusive gated villa enclave with private grounds.
-            </span>
-        );
+        title = "Villa Specifications & Masterplan";
 
         const plotParcel =
             property.landArea ||
-            `${Math.round(rawArea * 1.35).toLocaleString("en-IN")} sq.ft. Independent Plot Parcel`;
+            `${Math.round(rawArea * 1.35).toLocaleString("en-IN")} sq.ft.`;
 
         const usableArea =
             property.carpetArea ||
-            `${rawArea.toLocaleString("en-IN")} sq.ft. (Carpet + Private Sun Decks)`;
+            `${rawArea.toLocaleString("en-IN")} sq.ft.`;
 
         const storeys =
             property.floorsCount ||
             property.floors ||
-            "G + 2 Floors + Private Rooftop Deck";
+            "G + 2 Floors";
 
         const config =
             property.configuration ||
-            `${property.bhk || 4} BHK Bespoke Villa with Maid's Quarter`;
+            `${property.bhk || 4} BHK Villa`;
 
-        const openSpaces = "Private Landscaped Lawn, Sun Deck & Patio";
-        const garage = "2-3 Dedicated Covered Car Ports (EV Ready)";
+        const openSpaces = "Private Lawn & Deck";
+        const garage = "Covered Garage (EV)";
 
         specs = [
             {
-                icon: <Trees size={22} className="spec-card__icon" />,
-                label: "Private Plot Parcel",
+                icon: <Trees size={20} className="spec-card__icon" />,
+                label: "Plot Parcel",
                 value: plotParcel,
-                badge: "Freehold Land",
             },
             {
-                icon: <Ruler size={22} className="spec-card__icon" />,
-                label: "Villa Built-up & Carpet",
+                icon: <Ruler size={20} className="spec-card__icon" />,
+                label: "Carpet Area",
                 value: usableArea,
-                badge: "Spacious Luxury",
             },
             {
-                icon: <Layers size={22} className="spec-card__icon" />,
-                label: "Structure & Storeys",
+                icon: <Layers size={20} className="spec-card__icon" />,
+                label: "Structure",
                 value: storeys,
-                badge: "Independent Villa",
             },
             {
-                icon: <BedDouble size={22} className="spec-card__icon" />,
+                icon: <BedDouble size={20} className="spec-card__icon" />,
                 label: "Configuration",
                 value: config,
-                badge: "All En-Suite",
             },
             {
-                icon: <Sparkles size={22} className="spec-card__icon" />,
-                label: "Private Garden & Open Deck",
+                icon: <Sparkles size={20} className="spec-card__icon" />,
+                label: "Open Spaces",
                 value: openSpaces,
-                badge: "Exclusive Greens",
             },
             {
-                icon: <Car size={22} className="spec-card__icon" />,
-                label: "Private Parking Garage",
+                icon: <Car size={20} className="spec-card__icon" />,
+                label: "Parking",
                 value: garage,
-                badge: "EV Provision",
             },
         ];
     }
@@ -278,12 +240,12 @@ export default function ProjectSpecifications({ property }) {
             property.landArea ||
             property.totalLand ||
             property.landAcquired ||
-            `${property.area && Number(property.area) > 1000 ? "4.5" : "3.2"} Acres Integrated Parcel`;
+            (property.area && Number(property.area) > 1000 ? "4.5 Acres" : "3.2 Acres");
 
         const towerCount =
             property.towersCount ||
             property.towers ||
-            `${Math.max(2, ((Number(property.id) || 1) % 4) + 3)} High-Rise Towers`;
+            `${Math.max(2, ((Number(property.id) || 1) % 4) + 3)} Towers`;
 
         const floorCount =
             property.floorsCount ||
@@ -293,56 +255,48 @@ export default function ProjectSpecifications({ property }) {
         const rawBhk = property.bhk || property.bedrooms;
         const configuration =
             property.configuration ||
-            (rawBhk
-                ? `${rawBhk} & ${Number(rawBhk) + 1} BHK Luxury Suites`
-                : "2, 3 & 4 BHK Luxury Residences");
+            (rawBhk ? `${rawBhk} BHK` : "2 & 3 BHK");
 
         const carpetArea =
             property.carpetArea ||
-            `${Math.round(rawArea * 0.76).toLocaleString("en-IN")} – ${rawArea.toLocaleString("en-IN")} sq.ft. (RERA Carpet)`;
+            `${rawArea.toLocaleString("en-IN")} sq.ft.`;
 
+        const rawPossession = property.possessionDate || property.possession;
         const possessionDate =
-            property.possessionDate ||
-            (property.possession && property.possession !== "Contact Us"
-                ? property.possession
-                : "December 2026");
+            rawPossession && !/\b202\d\b/i.test(rawPossession) && rawPossession !== "Contact Us"
+                ? rawPossession
+                : "Under Construction";
 
         specs = [
             {
-                icon: <Trees size={22} className="spec-card__icon" />,
-                label: "Land Acquired / Parcel",
+                icon: <Trees size={20} className="spec-card__icon" />,
+                label: "Land Parcel",
                 value: landAcquired,
-                badge: "Freehold Parcel",
             },
             {
-                icon: <Building2 size={22} className="spec-card__icon" />,
-                label: "Tower Count",
+                icon: <Building2 size={20} className="spec-card__icon" />,
+                label: "Towers",
                 value: towerCount,
-                badge: "Low Density",
             },
             {
-                icon: <Layers size={22} className="spec-card__icon" />,
-                label: "Floor Count",
+                icon: <Layers size={20} className="spec-card__icon" />,
+                label: "Total Floors",
                 value: floorCount,
-                badge: "High-Rise Living",
             },
             {
-                icon: <BedDouble size={22} className="spec-card__icon" />,
-                label: "Configuration (BHK)",
+                icon: <BedDouble size={20} className="spec-card__icon" />,
+                label: "Configuration",
                 value: configuration,
-                badge: "Spacious Layouts",
             },
             {
-                icon: <Ruler size={22} className="spec-card__icon" />,
+                icon: <Ruler size={20} className="spec-card__icon" />,
                 label: "Carpet Area",
                 value: carpetArea,
-                badge: "RERA Verified",
             },
             {
-                icon: <CalendarDays size={22} className="spec-card__icon" />,
-                label: "Possession Date",
+                icon: <CalendarDays size={20} className="spec-card__icon" />,
+                label: "Possession",
                 value: possessionDate,
-                badge: property.possession === "Ready to Move" ? "Ready" : "On Track",
             },
         ];
     }
@@ -355,37 +309,36 @@ export default function ProjectSpecifications({ property }) {
                     <h2 className="project-specifications__title">{title}</h2>
                 </div>
 
-                {/* MahaRERA Badge */}
+                {/* Compact MahaRERA Badge */}
                 <div className="project-specifications__rera-badge">
-                    <ShieldCheck size={20} className="text-gold" />
+                    <ShieldCheck size={18} className="text-gold" />
                     <div>
-                        <span className="rera-badge__label">MahaRERA Registered</span>
+                        <span className="rera-badge__label">MahaRERA</span>
                         <strong className="rera-badge__number">{reraNumber}</strong>
                     </div>
                 </div>
             </div>
 
-            {/* Specifications 6-Card Grid */}
+            {/* Clean Specifications Grid (3 in Row Horizontal) */}
             <div className="project-specifications__grid">
                 {specs.map((item, idx) => (
                     <div className="spec-card" key={idx}>
-                        <div className="spec-card__top">
-                            <div className="spec-card__icon-wrapper">{item.icon}</div>
-                            <span className="spec-card__pill">{item.badge}</span>
-                        </div>
-                        <div className="spec-card__content">
+                        <div className="spec-card__header-row">
+                            <span className="spec-card__icon-wrapper">{item.icon}</span>
                             <span className="spec-card__label">{item.label}</span>
-                            <strong className="spec-card__value">{item.value}</strong>
                         </div>
+                        <strong className="spec-card__value">{item.value}</strong>
                     </div>
                 ))}
             </div>
 
-            {/* Bottom MahaRERA Verification Bar */}
+            {/* Bottom Clean MahaRERA Bar */}
             <div className="project-specifications__rera-footer">
                 <div className="rera-footer__info">
                     <CheckCircle2 size={16} className="text-gold" />
-                    {reraLegalText}
+                    <span>
+                        MahaRERA Registered: <strong>{reraNumber}</strong> • 100% Verified Project
+                    </span>
                 </div>
                 <a
                     href="https://maharera.mahaonline.gov.in"

@@ -40,7 +40,7 @@ export const featuredPuneProjects = [
         youtubeUrl: "https://www.youtube.com/watch?v=v1KcS0G22EQ",
         title: "Mantra Magnus Mundhwa Project Details | 2, 2.5, 3.5 BHK | Vridhi Bhava Concept",
         tagline: "Iconic Vridhi Bhava architectural design concept delivering optimal privacy, 360-degree cross ventilation, and scenic views.",
-        completion: "Q4 2026",
+        completion: "Under Construction",
         completionSub: "MahaRERA",
         configurations: "2, 2.5 & 3.5 BHK",
         configSub: "5 Towers // 22 Storeys",
@@ -70,7 +70,7 @@ export const featuredPuneProjects = [
         youtubeUrl: "https://www.youtube.com/watch?v=M1sDYNUJQrY&t=203s",
         title: "Godrej Elements Hinjewadi Project Details | 2 & 3 BHK Eco-Luxury Residences",
         tagline: "Eco-architectural high-rises centered on active wellness, smart automation, and panoramic Hinjewadi skyline views.",
-        completion: "Q2 2027",
+        completion: "Under Construction",
         completionSub: "MahaRERA",
         configurations: "2 & 3 BHK",
         configSub: "6 Towers // 28 Storeys",
@@ -99,7 +99,7 @@ export const featuredPuneProjects = [
         youtubeUrl: "https://www.youtube.com/watch?v=FbWb8gl35BE",
         title: "VTP HiLife Kharadi Project Details | 2 & 3 BHK Riverfront Luxury",
         tagline: "Riverfront promenade lifestyle with Maximum Livable Area (MLA) architectural design in prime New Kharadi.",
-        completion: "Q4 2026",
+        completion: "Under Construction",
         completionSub: "MahaRERA",
         configurations: "2 & 3 BHK",
         configSub: "8 Towers // 24 Storeys",
@@ -156,7 +156,7 @@ export const featuredPuneProjects = [
         youtubeUrl: "https://www.youtube.com/watch?v=M1sDYNUJQrY&t=203s",
         title: "The Ark Voyage Wakad | 3 & 4 BHK Cruise-Inspired Architecture",
         tagline: "Cruise-inspired towers surrounded by protected green reserves, rooftop sky-bridge, and Trump Tower design pedigree.",
-        completion: "Q4 2027",
+        completion: "Under Construction",
         completionSub: "MahaRERA",
         configurations: "3 & 4 BHK",
         configSub: "4 Towers // 30 Storeys",
@@ -184,7 +184,7 @@ export const featuredPuneProjects = [
         youtubeUrl: "https://www.youtube.com/watch?v=FbWb8gl35BE",
         title: "Kohinoor Kaleido Wagholi | 3 & 4 BHK Urban Forest Residences",
         tagline: "An urban masterpiece celebrating natural sunlight, forested landscape, and innovative residential design in East Pune.",
-        completion: "Q1 2027",
+        completion: "Under Construction",
         completionSub: "MahaRERA",
         configurations: "3 & 4 BHK",
         configSub: "5 Towers // 22 Storeys",
@@ -351,9 +351,8 @@ function SiteImageSlideshow({ images = [], projectName = "Project" }) {
                                     e.stopPropagation();
                                     setCurrentIdx(idx);
                                 }}
-                                className={`pune-gallery-card__dot ${
-                                    idx === currentIdx ? "pune-gallery-card__dot--active" : ""
-                                }`}
+                                className={`pune-gallery-card__dot ${idx === currentIdx ? "pune-gallery-card__dot--active" : ""
+                                    }`}
                                 aria-label={`Go to photo ${idx + 1}`}
                             />
                         ))}
@@ -407,9 +406,9 @@ export default function FeaturedProperties({ previewData }) {
     const toggleFullscreen = () => {
         if (!stageContainerRef.current) return;
         if (!document.fullscreenElement) {
-            stageContainerRef.current.requestFullscreen().catch(() => {});
+            stageContainerRef.current.requestFullscreen().catch(() => { });
         } else {
-            document.exitFullscreen().catch(() => {});
+            document.exitFullscreen().catch(() => { });
         }
     };
 
@@ -424,7 +423,7 @@ export default function FeaturedProperties({ previewData }) {
                 title: project.name,
                 text: `${project.title} - Pune Property Investor`,
                 url: window.location.href,
-            }).catch(() => {});
+            }).catch(() => { });
         } else if (typeof navigator !== "undefined" && navigator.clipboard) {
             navigator.clipboard.writeText(window.location.href);
             alert("Property link copied to clipboard!");
@@ -632,11 +631,9 @@ export default function FeaturedProperties({ previewData }) {
                                             <div className="pune-project-stage__video-frame">
                                                 {isCurrent ? (
                                                     <iframe
-                                                        src={`https://www.youtube-nocookie.com/embed/${resolvedYtId}?autoplay=1&mute=${
-                                                            isMuted ? 1 : 0
-                                                        }&loop=1&playlist=${resolvedYtId}&controls=1&modestbranding=1&rel=0&playsinline=1${
-                                                            project.startSeconds ? `&start=${project.startSeconds}` : ""
-                                                        }`}
+                                                        src={`https://www.youtube-nocookie.com/embed/${resolvedYtId}?autoplay=1&mute=${isMuted ? 1 : 0
+                                                            }&loop=1&playlist=${resolvedYtId}&controls=1&modestbranding=1&rel=0&playsinline=1${project.startSeconds ? `&start=${project.startSeconds}` : ""
+                                                            }`}
                                                         title={project.name}
                                                         className="pune-project-stage__iframe"
                                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -871,9 +868,8 @@ export default function FeaturedProperties({ previewData }) {
                                 key={idx}
                                 type="button"
                                 onClick={() => setActiveIndex(idx)}
-                                className={`pune-showcase-dot ${
-                                    idx === activeIndex ? "pune-showcase-dot--active" : ""
-                                }`}
+                                className={`pune-showcase-dot ${idx === activeIndex ? "pune-showcase-dot--active" : ""
+                                    }`}
                                 aria-label={`Jump to slide ${idx + 1}`}
                             />
                         ))}

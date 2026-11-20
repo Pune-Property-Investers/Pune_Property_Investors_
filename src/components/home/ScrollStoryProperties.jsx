@@ -91,7 +91,7 @@ export const STORY_CATEGORIES = {
             type: "Ultra-Luxury High-Rise Sky Residences",
             floors: "32 Storeys",
             units: "128 Premium Units",
-            yearBuilt: "New Launch (Dec 2028)",
+            yearBuilt: "Under Construction",
             price: "From ₹85 Lakh",
             bgImage:
                 "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2400&q=90",
@@ -114,7 +114,7 @@ export const STORY_CATEGORIES = {
             type: "Smart Home Luxury High-Rise",
             floors: "28 Storeys",
             units: "96 Bespoke Residences",
-            yearBuilt: "New Launch (Mid 2028)",
+            yearBuilt: "Under Construction",
             price: "From ₹1.15 Cr",
             bgImage:
                 "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=2400&q=90",
@@ -137,7 +137,7 @@ export const STORY_CATEGORIES = {
             type: "Resort-Inspired Luxury Gated Community",
             floors: "26 Storeys",
             units: "180 Luxury Condos",
-            yearBuilt: "New Launch (2028)",
+            yearBuilt: "Under Construction",
             price: "From ₹92 Lakh",
             bgImage:
                 "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=2400&q=90",
@@ -208,7 +208,7 @@ export const STORY_CATEGORIES = {
             type: "Corporate Office Hub & Tech Workstations",
             floors: "18 Storeys",
             units: "88 Commercial Suites",
-            yearBuilt: "2026 Possession",
+            yearBuilt: "Under Construction",
             price: "From ₹1.20 Cr",
             bgImage:
                 "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=2400&q=90",

@@ -998,7 +998,7 @@ export default function NewLaunches() {
                                                     <div className="nl-dossier-qna-item">
                                                         <h5>How long until possession for this property?</h5>
                                                         <p>
-                                                            Possession is scheduled for {activeProject?.possession} under MahaRERA certificate #{activeProject?.rera}.
+                                                            The project is currently {activeProject?.possession || "Under Construction"} under MahaRERA certificate #{activeProject?.rera}.
                                                         </p>
                                                     </div>
 
