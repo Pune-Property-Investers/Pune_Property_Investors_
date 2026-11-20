@@ -11,7 +11,7 @@
     --pd-background: #f8f8f5;
 
     min-height: 100vh;
-    padding: 85px 0 70px;
+    padding: 0 0 70px;
     background: var(--pd-background);
     color: var(--pd-text);
 }
@@ -209,10 +209,11 @@
 ========================================= */
 
 .property-details__gallery-section {
+    width: 100%;
     min-width: 0;
     margin-bottom: 24px;
     overflow: hidden;
-    border-radius: 16px;
+    border-radius: 0;
 }
 
 /* =========================================
@@ -817,7 +818,7 @@
 
 @media (max-width: 900px) {
     .property-details {
-        padding-top: 75px;
+        padding-top: 0;
     }
 
     .property-details__project-header {
@@ -881,7 +882,7 @@
 
 @media (max-width: 650px) {
     .property-details {
-        padding: 70px 0 45px;
+        padding: 0 0 45px;
     }
 
     .property-details__container {
@@ -927,7 +928,9 @@
     }
 
     .property-details__gallery-section {
-        margin-bottom: 18px;
+        margin-bottom: 16px;
+        border-radius: 0;
+        width: 100%;
     }
 
     .property-details__highlights {

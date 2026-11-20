@@ -210,18 +210,18 @@ function PropertyDetails({ propertyId, propertySlug }) {
 
     return (
         <>
-            <Header forceDark={true} theme="black" />
+            <Header transparentAtTop={true} />
 
             <main className="property-details">
-                <div className="property-details__container">
-                    {/* Property gallery on top */}
-                    <section className="property-details__gallery-section">
-                        <PropertyGallery
-                            images={uniqueImages}
-                            title={title}
-                        />
-                    </section>
+                {/* Property gallery on top - Full width edge-to-edge */}
+                <section className="property-details__gallery-section property-details__gallery-section--full">
+                    <PropertyGallery
+                        images={uniqueImages}
+                        title={title}
+                    />
+                </section>
 
+                <div className="property-details__container">
                     {/* Property heading and price details below gallery */}
                     <section className="property-details__project-header">
                         <div className="property-details__project-info">

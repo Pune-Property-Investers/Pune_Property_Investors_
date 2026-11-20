@@ -79,19 +79,19 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
         pathname === "/" ? "/" : (pathname || "/").replace(/\/+$/, "");
     const isHome = normalizedPath === "/";
     const isTransparent =
-        !forceDark &&
-        theme !== "black" &&
-        !normalizedPath.startsWith("/property") &&
-        !normalizedPath.startsWith("/buy") &&
-        !normalizedPath.startsWith("/properties") &&
-        (isHome ||
-            transparentAtTop ||
-            normalizedPath.startsWith("/commercial") ||
-            normalizedPath.startsWith("/plots") ||
-            normalizedPath.startsWith("/new-launches") ||
-            normalizedPath.startsWith("/about") ||
-            normalizedPath.startsWith("/blog") ||
-            normalizedPath.startsWith("/career"));
+        transparentAtTop ||
+        (!forceDark &&
+            theme !== "black" &&
+            !normalizedPath.startsWith("/property") &&
+            !normalizedPath.startsWith("/buy") &&
+            !normalizedPath.startsWith("/properties") &&
+            (isHome ||
+                normalizedPath.startsWith("/commercial") ||
+                normalizedPath.startsWith("/plots") ||
+                normalizedPath.startsWith("/new-launches") ||
+                normalizedPath.startsWith("/about") ||
+                normalizedPath.startsWith("/blog") ||
+                normalizedPath.startsWith("/career")));
     const [menuOpen, setMenuOpen] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(null);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -191,8 +191,8 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
             {/* Header Main Bar (Fixed, Luxury Scrolled State) */}
             {!hideTopHeader && (
                 <header
-                className={`site-header ${isTransparent ? "site-header--home" : ""} ${isScrolled ? "site-header--scrolled" : ""
-                    } ${menuOpen ? "site-header--open" : ""} ${theme === "black" || forceDark || normalizedPath.startsWith("/property") ? "site-header--black" : ""}`}
+                className={`site-header ${isTransparent && !isScrolled ? "site-header--home" : ""} ${isScrolled ? "site-header--scrolled" : ""
+                    } ${menuOpen ? "site-header--open" : ""} ${(theme === "black" || forceDark || (normalizedPath.startsWith("/property") && !transparentAtTop)) && (!isTransparent || isScrolled) ? "site-header--black" : ""}`}
             >
                 <div className="header-container">
                     {/* Company Logo and Brand Name */}
