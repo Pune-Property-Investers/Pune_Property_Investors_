@@ -237,7 +237,7 @@ function PropertyDetails({ propertyId, propertySlug }) {
     const videoId =
         extractYouTubeVideoId(property?.videoUrl) ||
         extractYouTubeVideoId(property?.videoId) ||
-        "xvT1jH8B9AM";
+        "M1sDYNUJQrY";
 
     return (
         <>
