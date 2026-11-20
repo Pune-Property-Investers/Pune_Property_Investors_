@@ -159,15 +159,22 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                     const scrolled = currentScrollY > 40;
                     setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
 
-                    if (currentScrollY <= 25) {
-                        // At top of page: always show header
-                        setIsHeaderHidden(false);
-                    } else if (currentScrollY > lastScrollY + 8) {
-                        // Scrolling down / swiping up on the page: hide header
-                        setIsHeaderHidden(true);
-                    } else if (currentScrollY < lastScrollY - 12) {
-                        // Scrolling up towards top / swiping down: show header
-                        setIsHeaderHidden(false);
+                    if (transparentAtTop) {
+                        // Lite scroll immediately disappears the header with zero black flash
+                        if (currentScrollY <= 15) {
+                            setIsHeaderHidden(false);
+                        } else {
+                            setIsHeaderHidden(true);
+                        }
+                    } else {
+                        // Standard pages
+                        if (currentScrollY <= 20) {
+                            setIsHeaderHidden(false);
+                        } else if (currentScrollY > lastScrollY + 6) {
+                            setIsHeaderHidden(true);
+                        } else if (currentScrollY < lastScrollY - 10) {
+                            setIsHeaderHidden(false);
+                        }
                     }
 
                     lastScrollY = Math.max(0, currentScrollY);
@@ -180,7 +187,7 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
         handleScroll();
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [transparentAtTop]);
 
     // Close on Escape key and lock body scroll on mobile when drawer is open
     useEffect(() => {
@@ -208,8 +215,8 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
             {/* Header Main Bar (Fixed, Luxury Scrolled State) */}
             {!hideTopHeader && (
                 <header
-                className={`site-header ${isTransparent && !isScrolled ? "site-header--home" : ""} ${isScrolled ? "site-header--scrolled" : ""
-                    } ${menuOpen ? "site-header--open" : ""} ${(theme === "black" || forceDark || (normalizedPath.startsWith("/property") && !transparentAtTop)) && (!isTransparent || isScrolled) ? "site-header--black" : ""} ${isHeaderHidden && !menuOpen ? "site-header--hidden" : ""}`}
+                className={`site-header ${transparentAtTop ? "site-header--transparent" : ""} ${isTransparent && !isScrolled && !transparentAtTop ? "site-header--home" : ""} ${isScrolled && !transparentAtTop ? "site-header--scrolled" : ""
+                    } ${menuOpen ? "site-header--open" : ""} ${(theme === "black" || forceDark || (normalizedPath.startsWith("/property") && !transparentAtTop)) && (!isTransparent || isScrolled) && !transparentAtTop ? "site-header--black" : ""} ${isHeaderHidden && !menuOpen ? "site-header--hidden" : ""}`}
             >
                 <div className="header-container">
                     {/* Company Logo and Brand Name */}
