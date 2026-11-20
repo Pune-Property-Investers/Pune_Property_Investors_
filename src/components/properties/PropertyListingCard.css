@@ -10,12 +10,12 @@
     justify-content: flex-end;
     width: 100%;
     min-width: 0;
-    min-height: 520px;
+    min-height: 485px;
     overflow: hidden;
-    border-radius: 24px;
+    border-radius: 22px;
     background: #14110e;
     border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.42);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.4);
     transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 0.28s ease,
                 border-color 0.28s ease;
@@ -232,11 +232,11 @@
     z-index: 3;
     width: 100%;
     margin-top: auto;
-    padding: 24px 20px 20px 20px;
-    border-top-left-radius: 26px;
-    border-top-right-radius: 26px;
-    border-bottom-left-radius: 24px;
-    border-bottom-right-radius: 24px;
+    padding: 16px 16px 14px 16px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
     background: rgba(14, 11, 9, 0.42);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
@@ -244,7 +244,7 @@
     border-left: 1px solid rgba(255, 255, 255, 0.12);
     border-right: 1px solid rgba(255, 255, 255, 0.12);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 -6px 22px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -253,12 +253,12 @@
 /* PROJECT NAME EYEBROW */
 
 .property-listing-card__project {
-    margin: 0 0 6px;
+    margin: 0 0 3px;
     color: #e5b97c;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 750;
     letter-spacing: 0.06em;
-    line-height: 1.4;
+    line-height: 1.35;
     text-transform: uppercase;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
@@ -266,11 +266,11 @@
 /* PROPERTY TITLE */
 
 .property-listing-card__title {
-    margin: 0 0 7px;
+    margin: 0 0 5px;
     font-family: var(--font-serif), "Playfair Display", Georgia, "Times New Roman", serif;
-    font-size: 19.5px;
+    font-size: 17px;
     font-weight: 750;
-    line-height: 1.3;
+    line-height: 1.25;
     overflow-wrap: break-word;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
 }
@@ -290,11 +290,11 @@
 .property-listing-card__location {
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin: 0 0 16px;
+    gap: 5px;
+    margin: 0 0 10px;
     color: #ded9d0;
-    font-size: 12.5px;
-    line-height: 1.5;
+    font-size: 12px;
+    line-height: 1.4;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
@@ -311,8 +311,8 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    row-gap: 8px;
-    margin: 0 0 20px;
+    row-gap: 6px;
+    margin: 0 0 12px;
     padding: 0;
     border: none;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
@@ -321,11 +321,11 @@
 .property-listing-card__spec {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     color: #f0ebe4;
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 550;
-    line-height: 1.4;
+    line-height: 1.35;
 }
 
 .property-listing-card__spec svg {
@@ -335,9 +335,9 @@
 
 .property-listing-card__spec-divider {
     width: 1px;
-    height: 13px;
+    height: 12px;
     background: rgba(255, 255, 255, 0.22);
-    margin: 0 10px;
+    margin: 0 8px;
     flex-shrink: 0;
 }
 
@@ -354,7 +354,7 @@
 .property-listing-card__actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
     width: 100%;
     box-sizing: border-box;
 }
@@ -364,14 +364,14 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    min-height: 44px;
-    padding: 10px 14px;
+    gap: 6px;
+    min-height: 38px;
+    padding: 8px 12px;
     border-radius: 999px !important;
     background: rgba(24, 20, 16, 0.95) !important;
     color: #ffffff !important;
     border: 1px solid rgba(229, 185, 124, 0.45) !important;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     text-decoration: none;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
@@ -402,14 +402,14 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    min-height: 44px;
-    padding: 10px 14px;
+    gap: 6px;
+    min-height: 38px;
+    padding: 8px 12px;
     border-radius: 999px !important;
     background: linear-gradient(135deg, #e5b97c 0%, #cf9c58 100%) !important;
     color: #1a1307 !important;
     border: none !important;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 750;
     text-decoration: none;
     box-shadow: 0 4px 16px rgba(207, 156, 88, 0.4);
@@ -434,60 +434,35 @@
 
 @media (max-width: 650px) {
     .property-listing-card {
-        min-height: clamp(560px, 145vw, 640px);
-        border-radius: 24px;
+        min-height: clamp(450px, 120vw, 495px);
+        border-radius: 20px;
     }
 
     .property-listing-card__image-wrap {
-        border-radius: 24px;
+        border-radius: 20px;
     }
 
     .property-listing-card__body {
-        padding: 22px 18px 20px 18px;
+        padding: 15px 15px 13px 15px;
         background: rgba(14, 11, 9, 0.45);
         backdrop-filter: blur(18px);
         -webkit-backdrop-filter: blur(18px);
-        border-top-left-radius: 26px;
-        border-top-right-radius: 26px;
-        border-bottom-left-radius: 24px;
-        border-bottom-right-radius: 24px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        border-bottom-left-radius: 18px;
+        border-bottom-right-radius: 18px;
     }
 
     .property-listing-card__title {
-        font-size: 19px;
+        font-size: 16.5px;
     }
 
     .property-listing-card__specifications {
-        margin-bottom: 20px;
-    }
-
-    .property-listing-card__spec-divider {
-        margin: 0 8px;
-    }
-
-    .property-listing-card__actions {
-        gap: 10px;
-    }
-
-    .property-listing-card__details-button,
-    .property-listing-card__contact-button {
-        min-height: 44px;
-        padding: 10px 12px;
-        font-size: 13px;
-    }
-}
-
-@media (max-width: 400px) {
-    .property-listing-card {
-        min-height: 540px;
+        margin-bottom: 12px;
     }
 
     .property-listing-card__spec-divider {
         margin: 0 6px;
-    }
-
-    .property-listing-card__spec {
-        font-size: 11.5px;
     }
 
     .property-listing-card__actions {
@@ -496,10 +471,35 @@
 
     .property-listing-card__details-button,
     .property-listing-card__contact-button {
-        min-height: 42px;
-        padding: 9px 8px;
+        min-height: 38px;
+        padding: 8px 10px;
         font-size: 12px;
-        gap: 5px;
+    }
+}
+
+@media (max-width: 400px) {
+    .property-listing-card {
+        min-height: 440px;
+    }
+
+    .property-listing-card__spec-divider {
+        margin: 0 5px;
+    }
+
+    .property-listing-card__spec {
+        font-size: 11px;
+    }
+
+    .property-listing-card__actions {
+        gap: 6px;
+    }
+
+    .property-listing-card__details-button,
+    .property-listing-card__contact-button {
+        min-height: 36px;
+        padding: 7px 6px;
+        font-size: 11.5px;
+        gap: 4px;
     }
 }
 

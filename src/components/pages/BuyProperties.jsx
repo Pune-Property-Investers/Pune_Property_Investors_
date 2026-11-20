@@ -346,31 +346,18 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
             <main>
                 {/* Main listings area */}
                 <section className="buy-properties-content" id="listings">
-                    {/* Sticky Section Intro & Search Bar with Quick Filter Chips */}
+                    {/* Sticky Search Bar with Quick Filter Chips */}
                     <div className="buy-properties-sticky-header" id="property-search">
                         <div className="buy-properties-container">
-                            <div className="buy-properties-intro">
-                                <div className="buy-properties-intro__text">
-                                    <div className="buy-properties-curated-badge">
-                                        <span className="buy-properties-curated-badge__line" />
-                                        <span className="buy-properties-curated-badge__sparkle">✦</span>
-                                        <span className="buy-properties-curated-badge__text">
-                                            EXPLORE PROPERTIES
-                                        </span>
-                                        <span className="buy-properties-curated-badge__line" />
-                                    </div>
-
-                                    <h2>
-                                        {pageTitle || (
-                                            normalizedCategory === "new-launch"
-                                                ? "New Launches in Pune"
-                                                : normalizedCategory === "commercial"
-                                                    ? "Commercial Properties in Pune"
-                                                    : normalizedCategory === "plot"
-                                                        ? "Plots & Land in Pune"
-                                                        : "Properties for Sale in Pune"
-                                        )}
-                                    </h2>
+                            {/* Explore Properties Badge (Above search bar) */}
+                            <div className="buy-properties-explore-badge-wrap">
+                                <div className="buy-properties-curated-badge">
+                                    <span className="buy-properties-curated-badge__line" />
+                                    <span className="buy-properties-curated-badge__sparkle">✦</span>
+                                    <span className="buy-properties-curated-badge__text">
+                                        EXPLORE PROPERTIES
+                                    </span>
+                                    <span className="buy-properties-curated-badge__line" />
                                 </div>
                             </div>
 
