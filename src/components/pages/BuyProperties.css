@@ -19,6 +19,7 @@
     max-width: 100vw;
     background: var(--buy-bg);
     color: var(--buy-dark);
+    padding-top: 52px;
 }
 
 /* ==========================================================================

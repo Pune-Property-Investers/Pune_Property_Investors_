@@ -82,10 +82,10 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
         !forceDark &&
         theme !== "black" &&
         !normalizedPath.startsWith("/property") &&
+        !normalizedPath.startsWith("/buy") &&
+        !normalizedPath.startsWith("/properties") &&
         (isHome ||
             transparentAtTop ||
-            normalizedPath.startsWith("/buy") ||
-            normalizedPath.startsWith("/properties") ||
             normalizedPath.startsWith("/commercial") ||
             normalizedPath.startsWith("/plots") ||
             normalizedPath.startsWith("/new-launches") ||

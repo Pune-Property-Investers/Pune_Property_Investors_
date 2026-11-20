@@ -18,7 +18,6 @@ import Footer from "../layouts/Footer";
 import PropertyFilters from "../properties/PropertyFilters";
 import PropertyListingCard from "../properties/PropertyListingCard";
 import AdvertisementSidebar from "../common/AdvertisementSidebar";
-import ScrollStoryProperties from "../home/ScrollStoryProperties";
 
 import propertyListingsData from "../../data/propertyListingsData.js";
 import { usePublishedCms } from "../../services/liveContent";
@@ -340,13 +339,9 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
 
     return (
         <div className="buy-properties-page">
-            <Header transparentAtTop={true} />
+            <Header theme="black" />
 
             <main>
-
-                {/* Cinematic Scroll-Driven Storytelling Showcase */}
-                <ScrollStoryProperties category={normalizedCategory} />
-
                 {/* Main listings area */}
                 <section className="buy-properties-content" id="listings">
                     {/* Sticky Section Intro & Search Bar (Static below Header while contents scroll from background) */}
