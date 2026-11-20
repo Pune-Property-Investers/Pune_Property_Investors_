@@ -572,39 +572,45 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                     "--active-pct": `${10 + activeNavIndex * 20}%`,
                 }}
             >
-                {/* 1. Base Pill Bar Background */}
-                <div className="mobile-bottom-nav__bar-bg" aria-hidden="true" />
+                {/* 1. Base Pill Bar Boundary (Clips the bar background AND the notch rim to the exact pill shape) */}
+                <div className="mobile-bottom-nav__pill-boundary" aria-hidden="true">
+                    <div className="mobile-bottom-nav__bar-bg" />
 
-                {/* 2. Sliding Concave Cutout Notch & Popped-Up Bubble */}
+                    {/* Sliding Concave Cutout Notch Rim Line strictly clipped inside the navbar boundary */}
+                    <div
+                        className="mobile-bottom-nav__slider mobile-bottom-nav__slider--rim"
+                        style={{ transform: `translateX(${activeNavIndex * 100}%)` }}
+                    >
+                        <div className="mobile-bottom-nav__notch-cutout">
+                            <svg className="mobile-bottom-nav__notch-svg" viewBox="0 0 76 32">
+                                <defs>
+                                    <linearGradient id="ppi-notch-rim-glow" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="0%" stopColor="rgba(214, 179, 106, 0.15)" />
+                                        <stop offset="18%" stopColor="rgba(244, 213, 138, 0.9)" />
+                                        <stop offset="50%" stopColor="#FFE59E" />
+                                        <stop offset="82%" stopColor="rgba(244, 213, 138, 0.9)" />
+                                        <stop offset="100%" stopColor="rgba(214, 179, 106, 0.15)" />
+                                    </linearGradient>
+                                </defs>
+                                {/* Precision champagne gold contour rim line with ultra-smooth blended top edges */}
+                                <path
+                                    d="M 0,0 C 3,0 6,1 8,4 C 11,15 22,31 38,31 C 54,31 65,15 68,4 C 70,1 73,0 76,0"
+                                    fill="none"
+                                    stroke="url(#ppi-notch-rim-glow)"
+                                    strokeWidth="2.2"
+                                    strokeLinecap="round"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 2. Sliding Popped-Up Bubble (Unclipped, floats above the navbar) */}
                 <div
-                    className="mobile-bottom-nav__slider"
+                    className="mobile-bottom-nav__slider mobile-bottom-nav__slider--bubble"
                     style={{ transform: `translateX(${activeNavIndex * 100}%)` }}
                     aria-hidden="true"
                 >
-                    {/* Transparent Cutout Notch Rim Line matching circle size with smooth top edges */}
-                    <div className="mobile-bottom-nav__notch-cutout">
-                        <svg className="mobile-bottom-nav__notch-svg" viewBox="0 0 88 32">
-                            <defs>
-                                <linearGradient id="ppi-notch-rim-glow" x1="0" y1="0" x2="1" y2="0">
-                                    <stop offset="0%" stopColor="rgba(214, 179, 106, 0.15)" />
-                                    <stop offset="18%" stopColor="rgba(244, 213, 138, 0.9)" />
-                                    <stop offset="50%" stopColor="#FFE59E" />
-                                    <stop offset="82%" stopColor="rgba(244, 213, 138, 0.9)" />
-                                    <stop offset="100%" stopColor="rgba(214, 179, 106, 0.15)" />
-                                </linearGradient>
-                            </defs>
-                            {/* Precision champagne gold contour rim line with ultra-smooth blended top edges */}
-                            <path
-                                d="M 0,0 C 6,0 10,1.2 14,4 C 18,16 28,32 44,32 C 60,32 70,16 74,4 C 78,1.2 82,0 88,0"
-                                fill="none"
-                                stroke="url(#ppi-notch-rim-glow)"
-                                strokeWidth="2.2"
-                                strokeLinecap="round"
-                            />
-                        </svg>
-                    </div>
-
-                    {/* Popped-Up Circular Bubble with the active icon */}
                     <div className="mobile-bottom-nav__bubble" key={activeNavIndex}>
                         {renderActiveBubbleIcon(activeNavIndex)}
                     </div>

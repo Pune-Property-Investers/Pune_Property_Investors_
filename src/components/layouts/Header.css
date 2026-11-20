@@ -937,10 +937,20 @@
     }
 
     /* -------------------------------------------------------------
-       1. BASE PILL BAR BACKGROUND & BORDER
+       1. BASE PILL BAR BOUNDARY & BACKGROUND
        - Website matching rich deep emerald green gradient
        - Luxury champagne-gold border & backdrop blur
+       - Boundary overflow:hidden guarantees the notch rim never bleeds outside
        ------------------------------------------------------------- */
+    .mobile-bottom-nav__pill-boundary {
+        position: absolute;
+        inset: 0;
+        border-radius: 32px;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 1;
+    }
+
     .mobile-bottom-nav__bar-bg {
         position: absolute;
         inset: 0;
@@ -958,8 +968,8 @@
         z-index: 0;
 
         /* Real transparent circular cutout matching the circle size with generous 10px spacing & smooth edge */
-        -webkit-mask-image: radial-gradient(circle at var(--active-pct, 30%) 0px, transparent 0, transparent 31px, #000 32px);
-        mask-image: radial-gradient(circle at var(--active-pct, 30%) 0px, transparent 0, transparent 31px, #000 32px);
+        -webkit-mask-image: radial-gradient(circle at var(--active-pct, 30%) 0px, transparent 0, transparent 30px, #000 31px);
+        mask-image: radial-gradient(circle at var(--active-pct, 30%) 0px, transparent 0, transparent 30px, #000 31px);
         transition: -webkit-mask-image 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
             mask-image 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
@@ -976,11 +986,18 @@
         width: 20%;
         height: 100%;
         pointer-events: none;
-        z-index: 2;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .mobile-bottom-nav__slider--rim {
+        z-index: 1;
+    }
+
+    .mobile-bottom-nav__slider--bubble {
+        z-index: 3;
     }
 
     /* Concave Scooped Notch that dips into the bar (smooth blended top edges) */
@@ -989,7 +1006,7 @@
         top: 0;
         left: 50%;
         transform: translateX(-50%);
-        width: 88px;
+        width: 76px;
         height: 32px;
         overflow: visible;
         pointer-events: none;
@@ -1243,6 +1260,10 @@
         bottom: max(10px, env(safe-area-inset-bottom, 10px));
     }
 
+    .mobile-bottom-nav__pill-boundary {
+        border-radius: 28px;
+    }
+
     .mobile-bottom-nav__bar-bg {
         border-radius: 28px;
         -webkit-mask-image: radial-gradient(circle at var(--active-pct, 30%) 0px, transparent 0, transparent 27px, #000 28px);
@@ -1256,7 +1277,7 @@
     }
 
     .mobile-bottom-nav__notch-cutout {
-        width: 76px;
+        width: 68px;
         height: 28px;
     }
 
