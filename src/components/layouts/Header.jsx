@@ -95,6 +95,7 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
     const [menuOpen, setMenuOpen] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(null);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isHeaderHidden, setIsHeaderHidden] = useState(false);
 
     const closeMenu = () => {
         setMenuOpen(false);
@@ -146,14 +147,30 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
         setOpenDropdown((current) => (current === label ? null : label));
     };
 
-    // Track scroll position using requestAnimationFrame to prevent scroll lag
+    // Track scroll position and auto-hide header on scroll up/down
     useEffect(() => {
         let ticking = false;
+        let lastScrollY = typeof window !== "undefined" ? window.scrollY : 0;
+
         const handleScroll = () => {
             if (!ticking) {
                 window.requestAnimationFrame(() => {
-                    const scrolled = window.scrollY > 40;
+                    const currentScrollY = window.scrollY;
+                    const scrolled = currentScrollY > 40;
                     setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
+
+                    if (currentScrollY <= 25) {
+                        // At top of page: always show header
+                        setIsHeaderHidden(false);
+                    } else if (currentScrollY > lastScrollY + 8) {
+                        // Scrolling down / swiping up on the page: hide header
+                        setIsHeaderHidden(true);
+                    } else if (currentScrollY < lastScrollY - 12) {
+                        // Scrolling up towards top / swiping down: show header
+                        setIsHeaderHidden(false);
+                    }
+
+                    lastScrollY = Math.max(0, currentScrollY);
                     ticking = false;
                 });
                 ticking = true;
@@ -192,7 +209,7 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
             {!hideTopHeader && (
                 <header
                 className={`site-header ${isTransparent && !isScrolled ? "site-header--home" : ""} ${isScrolled ? "site-header--scrolled" : ""
-                    } ${menuOpen ? "site-header--open" : ""} ${(theme === "black" || forceDark || (normalizedPath.startsWith("/property") && !transparentAtTop)) && (!isTransparent || isScrolled) ? "site-header--black" : ""}`}
+                    } ${menuOpen ? "site-header--open" : ""} ${(theme === "black" || forceDark || (normalizedPath.startsWith("/property") && !transparentAtTop)) && (!isTransparent || isScrolled) ? "site-header--black" : ""} ${isHeaderHidden && !menuOpen ? "site-header--hidden" : ""}`}
             >
                 <div className="header-container">
                     {/* Company Logo and Brand Name */}
