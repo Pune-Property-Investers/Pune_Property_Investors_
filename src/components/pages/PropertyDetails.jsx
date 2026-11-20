@@ -28,6 +28,7 @@ import PageHeroBanner from "../common/PageHeroBanner";
 import PropertyGallery from "../property-details/PropertyGallery";
 import PropertyOverview from "../property-details/PropertyOverview";
 import ProjectSpecifications from "../property-details/ProjectSpecifications";
+import PropertyFloorPlans from "../property-details/PropertyFloorPlans";
 import PropertyAmenities from "../property-details/PropertyAmenities";
 import PropertyMap from "../property-details/PropertyMap";
 import SimilarProperties from "../property-details/SimilarProperties";
@@ -312,6 +313,9 @@ function PropertyDetails({ propertyId, propertySlug }) {
 
                     {/* 1. Project Specifications directly below Enquire Now */}
                     <ProjectSpecifications property={property} />
+
+                    {/* 2. Floor Plans & Architectural Layouts directly below Specifications */}
+                    <PropertyFloorPlans property={property} onEnquire={() => setIsEnquiryModalOpen(true)} />
 
                     {/* Main content and ad sidebar layout */}
                     <div className="property-details__layout">

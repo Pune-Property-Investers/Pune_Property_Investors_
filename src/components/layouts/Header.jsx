@@ -582,22 +582,24 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                         style={{ transform: `translateX(${activeNavIndex * 100}%)` }}
                     >
                         <div className="mobile-bottom-nav__notch-cutout">
-                            <svg className="mobile-bottom-nav__notch-svg" viewBox="0 0 76 32">
+                            <svg className="mobile-bottom-nav__notch-svg" viewBox="0 0 68 36">
                                 <defs>
                                     <linearGradient id="ppi-notch-rim-glow" x1="0" y1="0" x2="1" y2="0">
-                                        <stop offset="0%" stopColor="rgba(214, 179, 106, 0.15)" />
-                                        <stop offset="18%" stopColor="rgba(244, 213, 138, 0.9)" />
-                                        <stop offset="50%" stopColor="#FFE59E" />
-                                        <stop offset="82%" stopColor="rgba(244, 213, 138, 0.9)" />
-                                        <stop offset="100%" stopColor="rgba(214, 179, 106, 0.15)" />
+                                        <stop offset="0%" stopColor="transparent" />
+                                        <stop offset="14%" stopColor="rgba(214, 179, 106, 0.4)" />
+                                        <stop offset="30%" stopColor="#F5D78E" />
+                                        <stop offset="50%" stopColor="#FFF1C2" />
+                                        <stop offset="70%" stopColor="#F5D78E" />
+                                        <stop offset="86%" stopColor="rgba(214, 179, 106, 0.4)" />
+                                        <stop offset="100%" stopColor="transparent" />
                                     </linearGradient>
                                 </defs>
-                                {/* Precision champagne gold contour rim line with ultra-smooth blended top edges */}
+                                {/* Precision concentric circular arc matching the 30px cutout with smooth blended fillets */}
                                 <path
-                                    d="M 0,0 C 3,0 6,1 8,4 C 11,15 22,31 38,31 C 54,31 65,15 68,4 C 70,1 73,0 76,0"
+                                    d="M 1,0 C 2.5,0 3.5,0.4 4.3,1.2 A 30 30 0 0 0 63.7,1.2 C 64.5,0.4 65.5,0 67,0"
                                     fill="none"
                                     stroke="url(#ppi-notch-rim-glow)"
-                                    strokeWidth="2.2"
+                                    strokeWidth="2"
                                     strokeLinecap="round"
                                 />
                             </svg>
