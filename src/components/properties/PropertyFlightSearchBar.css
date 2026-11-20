@@ -1,0 +1,404 @@
+/* ==========================================================================
+   PROPERTY SEARCH FILTER BAR & QUICK CHIPS
+   Matches User Reference:
+   - Search Bar (Image 1): [ 🔍 Search location, builder, or project... ]
+   - Filter Chips Row (Image 2): [ BHK ▾ ] [ Price ▾ ] [ Area ▾ ] [ New Projects ] [ Filters ] [ ⇅ ]
+   Designed for BOTH Laptop / Desktop view and Mobile view
+   ========================================================================== */
+
+.property-search-filter-wrapper {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ==========================================================================
+   1. SEARCH BAR ROW (Matches Screenshot 1)
+   ========================================================================== */
+
+.property-search-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+}
+
+.property-search-bar-input-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    padding: 0 18px;
+    border: 1px solid #e7e2d8;
+    border-radius: 9999px;
+    background: #ffffff;
+    box-shadow: 0 4px 16px rgba(18, 24, 22, 0.04);
+    box-sizing: border-box;
+    transition: all 0.25s ease;
+}
+
+.property-search-bar-input-box:focus-within {
+    border-color: #ba874a;
+    box-shadow: 0 0 0 3px rgba(186, 135, 74, 0.15);
+}
+
+.property-search-bar__icon {
+    color: #ba874a;
+    flex-shrink: 0;
+}
+
+.property-search-bar__input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #121816;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.property-search-bar__input::placeholder {
+    color: #94a3b8;
+}
+
+.property-search-bar__clear {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: none;
+    background: #f1ede6;
+    color: #121816;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+    transition: background-color 0.2s ease;
+}
+
+.property-search-bar__clear:hover {
+    background: #e2dcce;
+}
+
+.property-search-results-pill {
+    flex-shrink: 0;
+    background: #ffffff;
+    border: 1px solid #e7e2d8;
+    border-radius: 9999px;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: #5e6863;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(18, 24, 22, 0.03);
+}
+
+.property-search-results-pill strong {
+    color: #121816;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   2. QUICK FILTER CHIPS ROW (Matches Screenshot 2)
+   [ BHK ▾ ] [ Price ▾ ] [ Area ▾ ] [ New Projects ] [ Filters (purple) ] [ ⇅ ]
+   ========================================================================== */
+
+.property-filter-chips-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 2px 2px 8px;
+}
+
+.property-filter-chips-row::-webkit-scrollbar {
+    display: none;
+}
+
+.property-chip-anchor {
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Base Chip Button */
+.property-chip-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    user-select: none;
+}
+
+.property-chip-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
+.property-chip-chevron {
+    color: #94a3b8;
+    transition: transform 0.2s ease;
+}
+
+.property-chip-btn.is-active .property-chip-chevron {
+    transform: rotate(180deg);
+}
+
+/* Selected State */
+.property-chip-btn.is-selected {
+    background: #f0fdf4;
+    border-color: #86efac;
+    color: #15803d;
+    font-weight: 600;
+}
+
+.property-chip-btn.is-selected .property-chip-chevron {
+    color: #15803d;
+}
+
+/* Toggle Chip (New Projects) */
+.property-chip-btn--toggle .property-chip-bullet {
+    color: #f59e0b;
+    font-size: 11px;
+}
+
+.property-chip-btn--toggle.is-selected {
+    background: #fef3c7;
+    border-color: #fcd34d;
+    color: #b45309;
+}
+
+/* Filters Button (Purple / Lavender Capsule in Screenshot 2) */
+.property-chip-btn--purple {
+    background: #f3f0ff;
+    border: 1px solid #e9d5ff;
+    color: #7c3aed;
+    font-weight: 600;
+    gap: 7px;
+    box-shadow: 0 1px 4px rgba(124, 58, 237, 0.08);
+}
+
+.property-chip-btn--purple:hover {
+    background: #ede9fe;
+    border-color: #d8b4fe;
+    color: #6d28d9;
+}
+
+.property-chip-purple-count {
+    background: #7c3aed;
+    color: #ffffff;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 999px;
+    line-height: 1.3;
+}
+
+/* Sort Button (⇅ Icon in Screenshot 2) */
+.property-chip-btn--icon {
+    padding: 8px 12px;
+    color: #475569;
+}
+
+.property-chip-btn--icon.is-selected {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    color: #1d4ed8;
+}
+
+/* ==========================================================================
+   DROPDOWN MENUS (For Chips)
+   ========================================================================== */
+
+.property-chip-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 200px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow:
+        0 16px 36px -6px rgba(15, 23, 42, 0.16),
+        0 4px 12px rgba(15, 23, 42, 0.05);
+    padding: 6px;
+    z-index: 1000;
+    animation: propertyChipMenuIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.property-chip-menu--wide {
+    min-width: 270px;
+}
+
+.property-chip-menu--right {
+    left: auto;
+    right: 0;
+}
+
+@keyframes propertyChipMenuIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-4px) scale(0.97);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.property-chip-menu__header {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #64748b;
+    padding: 6px 10px 8px;
+    border-bottom: 1px solid #f1f5f9;
+    margin-bottom: 4px;
+}
+
+.property-chip-search-box {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 10px;
+    margin: 4px;
+}
+
+.property-chip-search-icon {
+    color: #94a3b8;
+}
+
+.property-chip-search-input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 12.5px;
+    color: #0f172a;
+    width: 100%;
+}
+
+.property-chip-menu__list {
+    max-height: 230px;
+    overflow-y: auto;
+}
+
+.property-chip-menu__list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.property-chip-menu__list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.property-chip-menu__item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    color: #1e293b;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.property-chip-menu__item:hover {
+    background: #f1f5f9;
+}
+
+.property-chip-menu__item.is-active {
+    background: #f0fdf4;
+    color: #15803d;
+    font-weight: 600;
+}
+
+.property-check-icon {
+    color: #15803d;
+}
+
+/* ==========================================================================
+   MOBILE VIEW OPTIMIZATIONS (< 860px)
+   ========================================================================== */
+
+@media (max-width: 860px) {
+    .property-search-bar-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .property-search-results-pill {
+        display: none;
+    }
+
+    .property-filter-chips-row {
+        gap: 6px;
+        padding-bottom: 4px;
+    }
+
+    .property-chip-btn {
+        padding: 6px 13px;
+        font-size: 12px;
+    }
+
+    /* Mobile Bottom-Sheet Dropdowns */
+    .property-chip-menu {
+        position: fixed;
+        top: auto;
+        bottom: 20px;
+        left: 16px;
+        right: 16px;
+        min-width: auto;
+        max-width: none;
+        border-radius: 20px;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+        border: 1px solid #cbd5e1;
+        z-index: 10000;
+        padding: 12px;
+        animation: propertyMobileModalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes propertyMobileModalIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}

@@ -43,6 +43,7 @@
 @import "../components/properties/PropertyCard.css";
 @import "../components/properties/PropertyFilters.css";
 @import "../components/properties/PropertyListingCard.css";
+@import "../components/properties/PropertyFlightSearchBar.css";
 @import "../components/common/AdvertisementSidebar.css";
 @import "../components/property-details/PropertyHeroHead.css";
 @import "../components/property-details/PropertyOverview.css";

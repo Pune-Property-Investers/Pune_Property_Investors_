@@ -12,6 +12,7 @@ import {
     Star,
     Play,
     MessageSquare,
+    ArrowRight,
 } from "lucide-react";
 import "./PropertyListingCard.css";
 
@@ -82,138 +83,135 @@ function PropertyListingCard({ property }) {
 
     return (
         <article className="property-listing-card">
-                {/* HERO IMAGE CONTAINER */}
-                <div className="property-listing-card__image-wrap">
-                    <Link
-                        href={propertyUrl}
-                        className="property-listing-card__image-link"
-                        aria-label={`View details of ${displayTitle}`}
-                    >
-                        {image ? (
-                            <img
-                                src={image}
-                                alt={imageAlt || displayTitle}
-                                loading="lazy"
-                            />
-                        ) : (
-                            <div className="property-listing-card__image-placeholder">
-                                <span>Property Image</span>
-                            </div>
-                        )}
-                    </Link>
+            {/* FULL-BLEED BACKGROUND IMAGE CONTAINER */}
+            <div className="property-listing-card__image-wrap">
+                <Link
+                    href={propertyUrl}
+                    className="property-listing-card__image-link"
+                    aria-label={`View details of ${displayTitle}`}
+                >
+                    {image ? (
+                        <img
+                            src={image}
+                            alt={imageAlt || displayTitle}
+                            loading="lazy"
+                        />
+                    ) : (
+                        <div className="property-listing-card__image-placeholder">
+                            <span>Property Image</span>
+                        </div>
+                    )}
+                </Link>
 
-                    {/* Top Badges (Left) */}
-                    <div className="property-listing-card__badges">
-                        {featured ? (
-                            <span className="property-listing-card__badge property-listing-card__badge--featured">
-                                <Star size={11} fill="#e5b869" color="#e5b869" />
-                                <span>Featured</span>
-                            </span>
-                        ) : verified ? (
-                            <span className="property-listing-card__badge property-listing-card__badge--verified">
-                                <ShieldCheck size={12} />
-                                <span>Verified</span>
-                            </span>
-                        ) : null}
-                    </div>
-
-                    {/* Favorite Heart Button (Right) */}
-                    <button
-                        type="button"
-                        className={`property-listing-card__favorite ${isFavorite ? "is-favorite" : ""
-                            }`}
-                        aria-label={
-                            isFavorite
-                                ? `Remove ${displayTitle} from favorites`
-                                : `Save ${displayTitle} to favorites`
-                        }
-                        aria-pressed={isFavorite}
-                        onClick={() => setIsFavorite((previous) => !previous)}
-                    >
-                        <Heart size={18} strokeWidth={1.8} />
-                    </button>
-
-                    {/* Video Tour Floating Pill Badge (Bottom-Left of Image) */}
-                    <Link
-                        href={`${propertyUrl}#video-tour`}
-                        className="property-listing-card__video-badge"
-                        aria-label={`Watch Video Tour for ${displayTitle}`}
-                    >
-                        <span className="property-listing-card__video-icon">
-                            <Play size={10} fill="#ffffff" color="#ffffff" />
+                {/* Top Badges (Left) */}
+                <div className="property-listing-card__badges">
+                    {featured ? (
+                        <span className="property-listing-card__badge property-listing-card__badge--featured">
+                            <Star size={11} fill="#e5b869" color="#e5b869" />
+                            <span>Featured</span>
                         </span>
-                        <span>Video Tour</span>
-                    </Link>
+                    ) : verified ? (
+                        <span className="property-listing-card__badge property-listing-card__badge--verified">
+                            <ShieldCheck size={12} />
+                            <span>Verified</span>
+                        </span>
+                    ) : null}
                 </div>
 
-                {/* DARK LUXURY FLOATING SHEET */}
-                <div className="property-listing-card__body">
-                    <div className="property-listing-card__main-info">
-                        <p className="property-listing-card__project">
-                            {projectName || propertyType || "Sample Residential Project"}
-                        </p>
+                {/* Favorite Heart Button (Right) */}
+                <button
+                    type="button"
+                    className={`property-listing-card__favorite ${isFavorite ? "is-favorite" : ""
+                        }`}
+                    aria-label={
+                        isFavorite
+                            ? `Remove ${displayTitle} from favorites`
+                            : `Save ${displayTitle} to favorites`
+                    }
+                    aria-pressed={isFavorite}
+                    onClick={() => setIsFavorite((previous) => !previous)}
+                >
+                    <Heart size={18} strokeWidth={1.8} />
+                </button>
+            </div>
 
-                        <h3 className="property-listing-card__title">
-                            <Link href={propertyUrl}>
-                                {displayTitle}
-                            </Link>
-                        </h3>
+            {/* FULLY TRANSPARENT FROSTED GLASS DETAILS SHEET */}
+            <div className="property-listing-card__body">
+                {/* Floating Video Tour Pill Badge */}
+                <Link
+                    href={`${propertyUrl}#video-tour`}
+                    className="property-listing-card__video-badge"
+                    aria-label={`Watch Video Tour for ${displayTitle}`}
+                >
+                    <span className="property-listing-card__video-icon">
+                        <Play size={10} fill="#ffffff" color="#ffffff" />
+                    </span>
+                    <span>Video Tour</span>
+                </Link>
 
-                        <p className="property-listing-card__location">
-                            <MapPin size={13.5} aria-hidden="true" />
-                            <span>{displayLocation || "Pune, Maharashtra"}</span>
-                        </p>
-                    </div>
+                <div className="property-listing-card__main-info">
+                    <p className="property-listing-card__project">
+                        {projectName || propertyType || "Sample Residential Project"}
+                    </p>
 
-                    {/* Specifications Row with Vertical Dividers */}
-                    <div className="property-listing-card__specifications">
-                        {bedroomCount > 0 && (
-                            <div className="property-listing-card__spec">
-                                <BedDouble size={16} aria-hidden="true" />
-                                <span>{bedroomCount} BHK</span>
-                            </div>
-                        )}
+                    <h3 className="property-listing-card__title">
+                        <Link href={propertyUrl}>
+                            {displayTitle}
+                        </Link>
+                    </h3>
 
-                        {bedroomCount > 0 && bathroomCount > 0 && (
+                    <p className="property-listing-card__location">
+                        <MapPin size={13.5} aria-hidden="true" />
+                        <span>{displayLocation || "Pune, Maharashtra"}</span>
+                    </p>
+                </div>
+
+                {/* Specifications Row with Vertical Dividers: Only BHK and sq.ft */}
+                <div className="property-listing-card__specifications">
+                    {bedroomCount > 0 && (
+                        <div className="property-listing-card__spec">
+                            <BedDouble size={16} aria-hidden="true" />
+                            <span>{bedroomCount} BHK</span>
+                        </div>
+                    )}
+
+                        { bedroomCount > 0 && areaValue > 0 && (
                             <span className="property-listing-card__spec-divider" aria-hidden="true" />
                         )}
 
-                        {bathroomCount > 0 && (
-                            <div className="property-listing-card__spec">
-                                <Bath size={16} aria-hidden="true" />
-                                <span>
-                                    {bathroomCount}{" "}
-                                    {bathroomCount === 1 ? "Bathroom" : "Bathrooms"}
-                                </span>
-                            </div>
-                        )}
+                    {areaValue > 0 && (
+                        <div className="property-listing-card__spec">
+                            <Ruler size={16} aria-hidden="true" />
+                            <span>
+                                {areaValue.toLocaleString("en-IN")} {areaUnit}
+                            </span>
+                        </div>
+                    )}
+                </div>
 
-                        {(bedroomCount > 0 || bathroomCount > 0) && areaValue > 0 && (
-                            <span className="property-listing-card__spec-divider" aria-hidden="true" />
-                        )}
+                {/* Action Buttons: View Details & Enquire Now (Both with Background) */}
+                <div className="property-listing-card__footer">
+                    <div className="property-listing-card__actions">
+                        <Link
+                            href={propertyUrl}
+                            className="property-listing-card__details-button"
+                            aria-label={`View details of ${displayTitle}`}
+                        >
+                            <span>View Details</span>
+                            <ArrowRight size={14} aria-hidden="true" />
+                        </Link>
 
-                        {areaValue > 0 && (
-                            <div className="property-listing-card__spec">
-                                <Ruler size={16} aria-hidden="true" />
-                                <span>
-                                    {areaValue.toLocaleString("en-IN")} {areaUnit}
-                                </span>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Full-width Gold Enquire Now Button */}
-                    <div className="property-listing-card__footer">
                         <Link
                             href="/#home-contact"
                             className="property-listing-card__contact-button"
                             aria-label={`Enquire about ${displayTitle}`}
                         >
-                            <MessageSquare size={16} aria-hidden="true" />
+                            <MessageSquare size={14} aria-hidden="true" />
                             <span>Enquire Now</span>
                         </Link>
                     </div>
                 </div>
+            </div>
         </article>
     );
 }

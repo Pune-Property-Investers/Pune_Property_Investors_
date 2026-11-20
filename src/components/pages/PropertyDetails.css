@@ -11,9 +11,10 @@
     --pd-background: #f8f8f5;
 
     min-height: 100vh;
-    padding: 85px 0 70px;
+    padding: 0 0 70px;
     background: var(--pd-background);
     color: var(--pd-text);
+    overflow-x: clip;
 }
 
 .property-details *,
@@ -209,10 +210,11 @@
 ========================================= */
 
 .property-details__gallery-section {
+    width: 100%;
     min-width: 0;
     margin-bottom: 24px;
     overflow: hidden;
-    border-radius: 16px;
+    border-radius: 0;
 }
 
 /* =========================================
@@ -468,11 +470,55 @@
     overflow-wrap: anywhere;
 }
 
+.property-details__description-body {
+    margin-bottom: 22px;
+}
+
 .property-details__description-body p {
     font-size: 14.5px;
     line-height: 1.7;
     color: #475569;
     margin: 0;
+}
+
+/* =========================================
+   VIDEO FRAME CONTAINER (CURVED SIDES)
+========================================= */
+
+.property-details__video-frame-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #0c1017;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.16), 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(214, 179, 106, 0.32);
+}
+
+.property-details__video-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    border-radius: 18px;
+}
+
+@media (max-width: 650px) {
+    .property-details__description-body {
+        margin-bottom: 18px;
+    }
+
+    .property-details__video-frame-container {
+        border-radius: 14px;
+    }
+
+    .property-details__video-iframe {
+        border-radius: 14px;
+    }
 }
 
 /* =========================================
@@ -802,7 +848,7 @@
 
 @media (max-width: 900px) {
     .property-details {
-        padding-top: 75px;
+        padding-top: 0;
     }
 
     .property-details__project-header {
@@ -866,7 +912,7 @@
 
 @media (max-width: 650px) {
     .property-details {
-        padding: 70px 0 45px;
+        padding: 0 0 45px;
     }
 
     .property-details__container {
@@ -912,7 +958,9 @@
     }
 
     .property-details__gallery-section {
-        margin-bottom: 18px;
+        margin-bottom: 16px;
+        border-radius: 0;
+        width: 100%;
     }
 
     .property-details__highlights {

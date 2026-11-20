@@ -73,28 +73,29 @@ const navigationItems = [
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-function Header({ transparentAtTop = false, forceDark = false, theme = "default" }) {
+function Header({ transparentAtTop = false, forceDark = false, theme = "default", hideTopHeader = false }) {
     const pathname = usePathname();
     const normalizedPath =
         pathname === "/" ? "/" : (pathname || "/").replace(/\/+$/, "");
     const isHome = normalizedPath === "/";
     const isTransparent =
-        !forceDark &&
-        theme !== "black" &&
-        !normalizedPath.startsWith("/property") &&
-        (isHome ||
-            transparentAtTop ||
-            normalizedPath.startsWith("/buy") ||
-            normalizedPath.startsWith("/properties") ||
-            normalizedPath.startsWith("/commercial") ||
-            normalizedPath.startsWith("/plots") ||
-            normalizedPath.startsWith("/new-launches") ||
-            normalizedPath.startsWith("/about") ||
-            normalizedPath.startsWith("/blog") ||
-            normalizedPath.startsWith("/career"));
+        transparentAtTop ||
+        (!forceDark &&
+            theme !== "black" &&
+            !normalizedPath.startsWith("/property") &&
+            !normalizedPath.startsWith("/buy") &&
+            !normalizedPath.startsWith("/properties") &&
+            (isHome ||
+                normalizedPath.startsWith("/commercial") ||
+                normalizedPath.startsWith("/plots") ||
+                normalizedPath.startsWith("/new-launches") ||
+                normalizedPath.startsWith("/about") ||
+                normalizedPath.startsWith("/blog") ||
+                normalizedPath.startsWith("/career")));
     const [menuOpen, setMenuOpen] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(null);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isHeaderHidden, setIsHeaderHidden] = useState(false);
 
     // Dynamic Active Index for Mobile Bottom Nav:
     // 0: Home, 1: Search, 2: Shorts, 3: WhatsApp, 4: Menu
@@ -187,14 +188,37 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
         setOpenDropdown((current) => (current === label ? null : label));
     };
 
-    // Track scroll position using requestAnimationFrame to prevent scroll lag
+    // Track scroll position and auto-hide header on scroll up/down
     useEffect(() => {
         let ticking = false;
+        let lastScrollY = typeof window !== "undefined" ? window.scrollY : 0;
+
         const handleScroll = () => {
             if (!ticking) {
                 window.requestAnimationFrame(() => {
-                    const scrolled = window.scrollY > 40;
+                    const currentScrollY = window.scrollY;
+                    const scrolled = currentScrollY > 40;
                     setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
+
+                    if (transparentAtTop) {
+                        // Lite scroll immediately disappears the header with zero black flash
+                        if (currentScrollY <= 15) {
+                            setIsHeaderHidden(false);
+                        } else {
+                            setIsHeaderHidden(true);
+                        }
+                    } else {
+                        // Standard pages
+                        if (currentScrollY <= 20) {
+                            setIsHeaderHidden(false);
+                        } else if (currentScrollY > lastScrollY + 6) {
+                            setIsHeaderHidden(true);
+                        } else if (currentScrollY < lastScrollY - 10) {
+                            setIsHeaderHidden(false);
+                        }
+                    }
+
+                    lastScrollY = Math.max(0, currentScrollY);
                     ticking = false;
                 });
                 ticking = true;
@@ -204,7 +228,7 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
         handleScroll();
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [transparentAtTop]);
 
     // Close on Escape key and lock body scroll on mobile when drawer is open
     useEffect(() => {
@@ -230,9 +254,10 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
     return (
         <>
             {/* Header Main Bar (Fixed, Luxury Scrolled State) */}
-            <header
-                className={`site-header ${isTransparent ? "site-header--home" : ""} ${isScrolled ? "site-header--scrolled" : ""
-                    } ${menuOpen ? "site-header--open" : ""} ${theme === "black" || forceDark || normalizedPath.startsWith("/property") ? "site-header--black" : ""}`}
+            {!hideTopHeader && (
+                <header
+                className={`site-header ${transparentAtTop ? "site-header--transparent" : ""} ${isTransparent && !isScrolled && !transparentAtTop ? "site-header--home" : ""} ${isScrolled && !transparentAtTop ? "site-header--scrolled" : ""
+                    } ${menuOpen ? "site-header--open" : ""} ${(theme === "black" || forceDark || (normalizedPath.startsWith("/property") && !transparentAtTop)) && (!isTransparent || isScrolled) && !transparentAtTop ? "site-header--black" : ""} ${isHeaderHidden && !menuOpen ? "site-header--hidden" : ""}`}
             >
                 <div className="header-container">
                     {/* Company Logo and Brand Name */}
@@ -355,6 +380,7 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                     </button>
                 </div>
             </header>
+            )}
 
             {/* Backdrop Overlay for Mobile Drawer */}
             <div
@@ -532,7 +558,11 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
 
             {/* Mobile Bottom Navigation Bar (Fluid Dynamic Cutout Notch Bar matching website luxury emerald & gold theme) */}
             <nav
-                className={`mobile-bottom-nav ${isScrolled || normalizedPath === "/shorts"
+                className={`mobile-bottom-nav ${isScrolled ||
+                    normalizedPath === "/shorts" ||
+                    hideTopHeader ||
+                    normalizedPath.startsWith("/properties") ||
+                    normalizedPath.startsWith("/buy")
                     ? "mobile-bottom-nav--visible"
                     : ""
                     }`}
