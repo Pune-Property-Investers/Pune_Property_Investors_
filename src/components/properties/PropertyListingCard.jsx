@@ -166,7 +166,7 @@ function PropertyListingCard({ property }) {
                     </p>
                 </div>
 
-                {/* Specifications Row with Vertical Dividers */}
+                {/* Specifications Row with Vertical Dividers: Only BHK and sq.ft */}
                 <div className="property-listing-card__specifications">
                     {bedroomCount > 0 && (
                         <div className="property-listing-card__spec">
@@ -175,23 +175,9 @@ function PropertyListingCard({ property }) {
                         </div>
                     )}
 
-                    {bedroomCount > 0 && bathroomCount > 0 && (
-                        <span className="property-listing-card__spec-divider" aria-hidden="true" />
-                    )}
-
-                    {bathroomCount > 0 && (
-                        <div className="property-listing-card__spec">
-                            <Bath size={16} aria-hidden="true" />
-                            <span>
-                                {bathroomCount}{" "}
-                                {bathroomCount === 1 ? "Bathroom" : "Bathrooms"}
-                            </span>
-                        </div>
-                    )}
-
-                    {(bedroomCount > 0 || bathroomCount > 0) && areaValue > 0 && (
-                        <span className="property-listing-card__spec-divider" aria-hidden="true" />
-                    )}
+                        { bedroomCount > 0 && areaValue > 0 && (
+                            <span className="property-listing-card__spec-divider" aria-hidden="true" />
+                        )}
 
                     {areaValue > 0 && (
                         <div className="property-listing-card__spec">
