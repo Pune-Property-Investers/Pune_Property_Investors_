@@ -17,6 +17,7 @@ import Footer from "../layouts/Footer";
 
 import PropertyFilters from "../properties/PropertyFilters";
 import PropertyListingCard from "../properties/PropertyListingCard";
+import PropertyFlightSearchBar from "../properties/PropertyFlightSearchBar";
 import AdvertisementSidebar from "../common/AdvertisementSidebar";
 
 import propertyListingsData from "../../data/propertyListingsData.js";
@@ -339,217 +340,176 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
 
     return (
         <div className="buy-properties-page">
-            <Header theme="black" />
+            {/* Top header hidden; mobile bottom nav + mobile drawer rendered */}
+            <Header hideTopHeader={true} />
 
             <main>
                 {/* Main listings area */}
                 <section className="buy-properties-content" id="listings">
-                    {/* Sticky Section Intro & Search Bar (Static below Header while contents scroll from background) */}
-                        <div className="buy-properties-sticky-header" id="property-search">
-                            <div className="buy-properties-container">
-                                <div className="buy-properties-intro">
-                                    <div className="buy-properties-intro__text">
-                                        <span className="buy-properties-section-label">
+                    {/* Sticky Section Intro & Search Bar with Quick Filter Chips */}
+                    <div className="buy-properties-sticky-header" id="property-search">
+                        <div className="buy-properties-container">
+                            <div className="buy-properties-intro">
+                                <div className="buy-properties-intro__text">
+                                    <div className="buy-properties-curated-badge">
+                                        <span className="buy-properties-curated-badge__line" />
+                                        <span className="buy-properties-curated-badge__sparkle">✦</span>
+                                        <span className="buy-properties-curated-badge__text">
                                             EXPLORE PROPERTIES
                                         </span>
+                                        <span className="buy-properties-curated-badge__line" />
+                                    </div>
 
-                                        <h2>
-                                            {pageTitle || (
-                                                normalizedCategory === "new-launch"
-                                                    ? "New Launches in Pune"
-                                                    : normalizedCategory === "commercial"
-                                                        ? "Commercial Properties in Pune"
-                                                        : normalizedCategory === "plot"
-                                                            ? "Plots & Land in Pune"
-                                                            : "Properties for Sale in Pune"
-                                            )}
-                                        </h2>
+                                    <h2>
+                                        {pageTitle || (
+                                            normalizedCategory === "new-launch"
+                                                ? "New Launches in Pune"
+                                                : normalizedCategory === "commercial"
+                                                    ? "Commercial Properties in Pune"
+                                                    : normalizedCategory === "plot"
+                                                        ? "Plots & Land in Pune"
+                                                        : "Properties for Sale in Pune"
+                                        )}
+                                    </h2>
+                                </div>
+                            </div>
 
+                            {/* Search Filter Bar (Search input + BHK ▾, Price ▾, Area ▾, New Projects, Filters, ⇅) */}
+                            <div className="buy-properties-search-filter-box">
+                                <PropertyFlightSearchBar
+                                    filters={filters}
+                                    onFilterChange={handleFilterChange}
+                                    searchQuery={searchQuery}
+                                    onSearchQueryChange={setSearchQuery}
+                                    onOpenFilterDrawer={() => setMobileFiltersOpen(true)}
+                                    totalResults={filteredProperties.length}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="buy-properties-container">
+                        {/* Three-column layout */}
+                        <div className="buy-properties-layout">
+                            {/* Left: filters (desktop sticky sidebar / mobile slide drawer) */}
+                            <div
+                                className={`buy-properties-filter-column ${mobileFiltersOpen ? "is-mobile-open" : ""
+                                    }`}
+                            >
+                                {/* Mobile Drawer Backdrop */}
+                                <div
+                                    className="buy-properties-drawer-backdrop"
+                                    onClick={handleCloseMobileFilters}
+                                    aria-hidden="true"
+                                />
+
+                                <div className="buy-properties-drawer-content">
+                                    <PropertyFilters
+                                        filters={filters}
+                                        onFilterChange={handleFilterChange}
+                                        onReset={handleResetFilters}
+                                        resultCount={filteredProperties.length}
+                                        onCloseMobile={handleCloseMobileFilters}
+                                        properties={sourceProperties}
+                                        searchQuery={searchQuery}
+                                        onSearchQueryChange={setSearchQuery}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Centre: listings */}
+                            <div className="buy-properties-results">
+                                <div className="buy-properties-results__header">
+                                    <div>
+                                        <h2>Available Properties</h2>
                                         <p>
-                                            Discover verified apartments, penthouses, villas, and commercial spaces across Pune.
+                                            Showing{" "}
+                                            <strong>
+                                                {filteredProperties.length}
+                                            </strong>{" "}
+                                            {filteredProperties.length === 1
+                                                ? "verified property"
+                                                : "verified properties"}
                                         </p>
                                     </div>
 
-                                    <div className="buy-properties-search-wrapper">
-                                        <form
-                                            className="buy-properties-search"
-                                            onSubmit={(event) => event.preventDefault()}
-                                            role="search"
+                                    {(activeFilterCount > 0 || searchQuery) && (
+                                        <button
+                                            type="button"
+                                            className="buy-properties-clear-button"
+                                            onClick={handleResetFilters}
                                         >
-                                            <Search size={18} className="buy-properties-search__icon" />
+                                            Clear all filters
+                                        </button>
+                                    )}
+                                </div>
 
-                                            <input
-                                                ref={searchInputRef}
-                                                type="search"
-                                                placeholder="Search location, builder, or project..."
-                                                value={searchQuery}
-                                                onChange={(event) =>
-                                                    setSearchQuery(event.target.value)
-                                                }
-                                                aria-label="Search properties by location or project"
+                                {filteredProperties.length > 0 ? (
+                                    <div className="buy-properties-grid">
+                                        {filteredProperties.map((property) => (
+                                            <PropertyListingCard
+                                                key={property.id}
+                                                property={property}
                                             />
-
-                                            {searchQuery && (
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setSearchQuery("")}
-                                                    aria-label="Clear search"
-                                                    className="buy-properties-search__clear"
-                                                >
-                                                    <X size={15} />
-                                                </button>
-                                            )}
-                                        </form>
+                                        ))}
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="buy-properties-container">
-                            {/* Mobile Filter Trigger Bar (visible under 900px) */}
-                            <div className="buy-properties-mobile-bar">
-                                <button
-                                    type="button"
-                                    className="buy-properties-mobile-filter-btn"
-                                    onClick={() => setMobileFiltersOpen(true)}
-                                    aria-label="Open filter options"
-                                >
-                                    <SlidersHorizontal size={17} />
-                                    <span>Filter Properties</span>
-                                    {activeFilterCount > 0 && (
-                                        <span className="buy-properties-mobile-filter-badge">
-                                            {activeFilterCount}
-                                        </span>
-                                    )}
-                                </button>
-
-                                <div className="buy-properties-mobile-results-info">
-                                    <strong>{filteredProperties.length}</strong>{" "}
-                                    {filteredProperties.length === 1 ? "Property" : "Properties"} found
-                                </div>
-                            </div>
-
-                            {/* Three-column layout */}
-                            <div className="buy-properties-layout">
-                                {/* Left: filters (desktop sticky sidebar / mobile slide drawer) */}
-                                <div
-                                    className={`buy-properties-filter-column ${mobileFiltersOpen ? "is-mobile-open" : ""
-                                        }`}
-                                >
-                                    {/* Mobile Drawer Backdrop */}
-                                    <div
-                                        className="buy-properties-drawer-backdrop"
-                                        onClick={handleCloseMobileFilters}
-                                        aria-hidden="true"
-                                    />
-
-                                    <div className="buy-properties-drawer-content">
-                                        <PropertyFilters
-                                            filters={filters}
-                                            onFilterChange={handleFilterChange}
-                                            onReset={handleResetFilters}
-                                            resultCount={filteredProperties.length}
-                                            onCloseMobile={handleCloseMobileFilters}
-                                            properties={sourceProperties}
-                                            searchQuery={searchQuery}
-                                            onSearchQueryChange={setSearchQuery}
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Centre: listings */}
-                                <div className="buy-properties-results">
-                                    <div className="buy-properties-results__header">
-                                        <div>
-                                            <h2>Available Properties</h2>
-                                            <p>
-                                                Showing{" "}
-                                                <strong>
-                                                    {filteredProperties.length}
-                                                </strong>{" "}
-                                                {filteredProperties.length === 1
-                                                    ? "verified property"
-                                                    : "verified properties"}
-                                            </p>
+                                ) : (
+                                    <div className="buy-properties-empty">
+                                        <div className="buy-properties-empty__icon">
+                                            <Search size={32} />
                                         </div>
 
-                                        {(activeFilterCount > 0 || searchQuery) && (
-                                            <button
-                                                type="button"
-                                                className="buy-properties-clear-button"
-                                                onClick={handleResetFilters}
-                                            >
-                                                Clear all filters
-                                            </button>
-                                        )}
-                                    </div>
+                                        <h3>No matching properties found</h3>
 
-                                    {filteredProperties.length > 0 ? (
-                                        <div className="buy-properties-grid">
-                                            {filteredProperties.map((property) => (
-                                                <PropertyListingCard
-                                                    key={property.id}
-                                                    property={property}
-                                                />
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className="buy-properties-empty">
-                                            <div className="buy-properties-empty__icon">
-                                                <Search size={32} />
-                                            </div>
+                                        <p>
+                                            We couldn&apos;t find any properties matching your current criteria.
+                                            Try adjusting your locality, BHK preference, or budget filters.
+                                        </p>
 
-                                            <h3>No matching properties found</h3>
-
-                                            <p>
-                                                We couldn&apos;t find any properties matching your current criteria.
-                                                Try adjusting your locality, BHK preference, or budget filters.
-                                            </p>
-
-                                            <button
-                                                type="button"
-                                                onClick={handleResetFilters}
-                                                className="buy-properties-empty__reset-btn"
-                                            >
-                                                <span>Reset All Filters</span>
-                                                <ArrowRight size={16} />
-                                            </button>
-                                        </div>
-                                    )}
-
-                                    {/* Enquiry call to action */}
-                                    <div className="buy-properties-enquiry">
-                                        <div className="buy-properties-enquiry__text">
-                                            <span className="buy-properties-enquiry__eyebrow">
-                                                NEED HELP FINDING A HOME?
-                                            </span>
-
-                                            <h3>
-                                                Let our Pune property experts guide your search.
-                                            </h3>
-
-                                            <p>
-                                                Share your requirements with our dedicated advisors and receive curated,
-                                                verified property recommendations with zero brokerage on select new launches.
-                                            </p>
-                                        </div>
-
-                                        <Link
-                                            href="/#home-contact"
-                                            className="buy-properties-enquiry__button"
+                                        <button
+                                            type="button"
+                                            onClick={handleResetFilters}
+                                            className="buy-properties-empty__reset-btn"
                                         >
-                                            <span>Talk to an Expert</span>
-                                            <ArrowRight size={17} />
-                                        </Link>
+                                            <span>Reset All Filters</span>
+                                            <ArrowRight size={16} />
+                                        </button>
                                     </div>
-                                </div>
+                                )}
 
-                                {/* Right: advertisements */}
-                                <aside className="buy-properties-ad-column">
-                                    <AdvertisementSidebar />
-                                </aside>
+                                {/* Enquiry call to action */}
+                                <div className="buy-properties-enquiry">
+                                    <div className="buy-properties-enquiry__text">
+                                        <span className="buy-properties-enquiry__eyebrow">
+                                            NEED HELP FINDING A HOME?
+                                        </span>
+
+                                        <h3>
+                                            Let our Pune property experts guide your search.
+                                        </h3>
+
+                                        <p>
+                                            Share your requirements with our dedicated advisors and receive curated,
+                                            verified property recommendations with zero brokerage on select new launches.
+                                        </p>
+                                    </div>
+
+                                    <Link
+                                        href="/#home-contact"
+                                        className="buy-properties-enquiry__button"
+                                    >
+                                        <span>Talk to an Expert</span>
+                                        <ArrowRight size={17} />
+                                    </Link>
+                                </div>
                             </div>
+
+                            {/* Right: advertisements */}
+                            <aside className="buy-properties-ad-column">
+                                <AdvertisementSidebar />
+                            </aside>
                         </div>
+                    </div>
                 </section>
             </main>
 

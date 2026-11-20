@@ -19,7 +19,7 @@
     max-width: 100vw;
     background: var(--buy-bg);
     color: var(--buy-dark);
-    padding-top: 52px;
+    padding-top: 0;
 }
 
 /* ==========================================================================
@@ -800,18 +800,16 @@
 
 .buy-properties-sticky-header {
     position: sticky;
-    top: 50.4px;
-    z-index: 90;
+    top: 0 !important;
+    z-index: 100;
     width: 100%;
     background: #fbfaf7;
     /* Solid non-transparent background */
     border-bottom: none;
-    /* Separating line removed from search */
-    box-shadow: none;
-    /* No dividing shadow */
-    padding: 10px 0 8px;
-    margin-bottom: 24px;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 16px rgba(18, 24, 22, 0.03);
+    padding: 4px 0 4px;
+    margin-bottom: 8px;
+    transition: all 0.25s ease;
 }
 
 .buy-properties-container {
@@ -831,9 +829,48 @@
     margin-bottom: 0;
 }
 
+.buy-properties-search-filter-box {
+    margin-top: 10px;
+    width: 100%;
+}
+
 .buy-properties-intro__text {
     flex: 1;
     min-width: 0;
+}
+
+/* Curated Badge with Flanking Lines (Matches User Reference Image 3) */
+.buy-properties-curated-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.buy-properties-curated-badge__line {
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(186, 135, 74, 0.1), rgba(186, 135, 74, 0.85));
+}
+
+.buy-properties-curated-badge .buy-properties-curated-badge__line:last-child {
+    background: linear-gradient(90deg, rgba(186, 135, 74, 0.85), rgba(186, 135, 74, 0.1));
+}
+
+.buy-properties-curated-badge__sparkle {
+    color: #ba874a;
+    font-size: 11px;
+    line-height: 1;
+}
+
+.buy-properties-curated-badge__text {
+    color: #ba874a;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 2.8px;
+    text-transform: uppercase;
+    font-family: inherit;
 }
 
 .buy-properties-section-label {
@@ -846,13 +883,15 @@
     text-transform: uppercase;
 }
 
+/* Heading Typography (Matches Featured Pune Developments in Image 3) */
 .buy-properties-intro__text h2 {
-    margin: 0;
-    color: var(--buy-dark);
-    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: clamp(20px, 1.8vw, 24px);
-    font-weight: 700;
-    line-height: 1.2;
+    margin: 2px 0 0;
+    color: #0c1829;
+    font-family: var(--font-serif), "Playfair Display", Didot, Georgia, serif;
+    font-size: clamp(28px, 3.2vw, 44px);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.7px;
 }
 
 .buy-properties-intro__text p {
@@ -1279,19 +1318,37 @@
    ========================================================================== */
 
 @media (max-width: 900px) {
+    .buy-properties-page {
+        padding-bottom: 96px;
+    }
+
     .buy-properties-sticky-header {
-        top: 48.3px;
-        padding: 12px 0 10px;
-        margin-bottom: 18px;
+        top: 0 !important;
+        padding: 4px 0 2px;
+        margin-bottom: 6px;
         background: #fbfaf7;
         border-bottom: none;
-        box-shadow: none;
+        box-shadow: 0 4px 16px rgba(18, 24, 22, 0.03);
     }
 
     .buy-properties-intro {
         flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
+        align-items: center;
+        text-align: center;
+        gap: 6px;
+    }
+
+    .buy-properties-intro__text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+    }
+
+    .buy-properties-curated-badge {
+        justify-content: center;
+        margin: 0 auto 4px auto;
     }
 
     .buy-properties-intro__text p {
@@ -1299,7 +1356,13 @@
     }
 
     .buy-properties-intro__text h2 {
-        font-size: 21px;
+        text-align: center;
+        font-family: var(--font-serif), "Playfair Display", Didot, Georgia, serif;
+        font-size: clamp(24px, 5.5vw, 32px);
+        font-weight: 800;
+        letter-spacing: -0.6px;
+        line-height: 1.15;
+        margin: 0 auto;
     }
 
     .buy-properties-search-wrapper,
@@ -1397,13 +1460,15 @@
     }
 
     .buy-properties-sticky-header {
-        top: 48px;
-        padding: 8px 0;
-        margin-bottom: 14px;
+        top: 0 !important;
+        padding: 4px 0 2px;
+        margin-bottom: 6px;
     }
 
     .buy-properties-intro__text h2 {
-        font-size: 19px;
+        text-align: center;
+        font-size: clamp(22px, 6vw, 26px);
+        margin: 0 auto;
     }
 
     .buy-properties-search {

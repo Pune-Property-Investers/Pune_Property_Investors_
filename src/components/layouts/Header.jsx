@@ -73,7 +73,7 @@ const navigationItems = [
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-function Header({ transparentAtTop = false, forceDark = false, theme = "default" }) {
+function Header({ transparentAtTop = false, forceDark = false, theme = "default", hideTopHeader = false }) {
     const pathname = usePathname();
     const normalizedPath =
         pathname === "/" ? "/" : (pathname || "/").replace(/\/+$/, "");
@@ -189,7 +189,8 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
     return (
         <>
             {/* Header Main Bar (Fixed, Luxury Scrolled State) */}
-            <header
+            {!hideTopHeader && (
+                <header
                 className={`site-header ${isTransparent ? "site-header--home" : ""} ${isScrolled ? "site-header--scrolled" : ""
                     } ${menuOpen ? "site-header--open" : ""} ${theme === "black" || forceDark || normalizedPath.startsWith("/property") ? "site-header--black" : ""}`}
             >
@@ -314,6 +315,7 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                     </button>
                 </div>
             </header>
+            )}
 
             {/* Backdrop Overlay for Mobile Drawer */}
             <div
@@ -491,7 +493,11 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
 
             {/* Mobile Bottom Navigation Bar (Floating Pill Shape with Scooped Centre Cradle) */}
             <nav
-                className={`mobile-bottom-nav ${isScrolled || normalizedPath === "/shorts"
+                className={`mobile-bottom-nav ${isScrolled ||
+                    normalizedPath === "/shorts" ||
+                    hideTopHeader ||
+                    normalizedPath.startsWith("/properties") ||
+                    normalizedPath.startsWith("/buy")
                     ? "mobile-bottom-nav--visible"
                     : ""
                     }`}
