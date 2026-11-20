@@ -32,6 +32,7 @@ import BuilderProperties from "../property-details/BuilderProperties";
 import PropertyEnquiry from "../property-details/PropertyEnquiry";
 
 import AdvertisementSidebar from "../common/AdvertisementSidebar";
+import { extractYouTubeVideoId } from "../../lib/youtube";
 
 const WHATSAPP_NUMBER = "917398174444";
 const ADVISOR_PHONE = "+917398174444";
@@ -208,6 +209,11 @@ function PropertyDetails({ propertyId, propertySlug }) {
         `Hello Pune Property Investor, I would like to know more about ${title} in ${location}. Please share the price and availability details.`
     );
 
+    const videoId =
+        extractYouTubeVideoId(property?.videoUrl) ||
+        extractYouTubeVideoId(property?.videoId) ||
+        "xvT1jH8B9AM";
+
     return (
         <>
             <Header transparentAtTop={true} />
@@ -290,22 +296,34 @@ function PropertyDetails({ propertyId, propertySlug }) {
 
                         {/* CENTER: Property information */}
                         <div className="property-details__main">
-                            {/* Property Description if available */}
-                            {property.description && (
-                                <section className="property-details__section property-details__description-card">
-                                    <div className="property-details__section-heading">
-                                        <div>
-                                            <span className="property-details__eyebrow">
-                                                PROPERTY OVERVIEW
-                                            </span>
-                                            <h2>About this property</h2>
-                                        </div>
+                            {/* Merged Property Overview & Video Container */}
+                            <section id="video-tour" className="property-details__section property-details__description-card">
+                                <div className="property-details__section-heading">
+                                    <div>
+                                        <span className="property-details__eyebrow">
+                                            PROPERTY OVERVIEW
+                                        </span>
+                                        <h2>About this property</h2>
                                     </div>
+                                </div>
+                                {property.description && (
                                     <div className="property-details__description-body">
                                         <p>{property.description}</p>
                                     </div>
-                                </section>
-                            )}
+                                )}
+
+                                {/* Video Frame Container with curved sides and continuous autoplay */}
+                                <div className="property-details__video-frame-container">
+                                    <iframe
+                                        src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&playsinline=1&controls=1&modestbranding=1&rel=0`}
+                                        title={`${title} - Video Tour`}
+                                        className="property-details__video-iframe"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowFullScreen
+                                        loading="lazy"
+                                    />
+                                </div>
+                            </section>
 
                             {/* 2. Amenities (Internal Amenities & Outdoor Amenities) */}
                             <PropertyAmenities
