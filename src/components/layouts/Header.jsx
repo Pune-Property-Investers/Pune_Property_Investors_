@@ -69,10 +69,6 @@ const navigationItems = [
         label: "Career",
         href: "/career",
     },
-    {
-        label: "Contact Us",
-        href: "/contact",
-    },
 ];
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -264,130 +260,130 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
             {/* Header Main Bar (Fixed, Luxury Scrolled State) */}
             {!hideTopHeader && (
                 <header
-                className={`site-header ${transparentAtTop ? "site-header--transparent" : ""} ${isTransparent && !isScrolled && !transparentAtTop ? "site-header--home" : ""} ${isScrolled && !transparentAtTop ? "site-header--scrolled" : ""
-                    } ${menuOpen ? "site-header--open" : ""} ${(theme === "black" || forceDark || (normalizedPath.startsWith("/property") && !transparentAtTop)) && (!isTransparent || isScrolled) && !transparentAtTop ? "site-header--black" : ""} ${isHeaderHidden && !menuOpen ? "site-header--hidden" : ""} ${isHome ? "site-header--is-home" : ""}`}
-            >
-                <div className="header-container">
-                    {/* Company Logo and Brand Name */}
-                    <Link
-                        href="/"
-                        className="header-brand"
-                        aria-label="Pune Property Investor home"
-                        onClick={closeMenu}
-                    >
-                        <Image
-                            src={`${basePath}/images/logo.png`}
-                            alt="Pune Property Investor logo"
-                            className="header-brand__image"
-                            width={68}
-                            height={68}
-                            priority
-                        />
+                    className={`site-header ${transparentAtTop ? "site-header--transparent" : ""} ${isTransparent && !isScrolled && !transparentAtTop ? "site-header--home" : ""} ${isScrolled && !transparentAtTop ? "site-header--scrolled" : ""
+                        } ${menuOpen ? "site-header--open" : ""} ${(theme === "black" || forceDark || (normalizedPath.startsWith("/property") && !transparentAtTop)) && (!isTransparent || isScrolled) && !transparentAtTop ? "site-header--black" : ""} ${isHeaderHidden && !menuOpen ? "site-header--hidden" : ""} ${isHome ? "site-header--is-home" : ""}`}
+                >
+                    <div className="header-container">
+                        {/* Company Logo and Brand Name */}
+                        <Link
+                            href="/"
+                            className="header-brand"
+                            aria-label="Pune Property Investor home"
+                            onClick={closeMenu}
+                        >
+                            <Image
+                                src={`${basePath}/images/logo.png`}
+                                alt="Pune Property Investor logo"
+                                className="header-brand__image"
+                                width={68}
+                                height={68}
+                                priority
+                            />
 
-                        <span className="header-brand__text">
-                            <span className="header-brand__name">
-                                PUNE PROPERTY
+                            <span className="header-brand__text">
+                                <span className="header-brand__name">
+                                    PUNE PROPERTY
+                                </span>
+                                <span className="header-brand__subtitle">
+                                    INVESTOR
+                                </span>
                             </span>
-                            <span className="header-brand__subtitle">
-                                INVESTOR
-                            </span>
-                        </span>
-                    </Link>
+                        </Link>
 
-                    {/* Desktop Horizontal Navigation (Hidden on Mobile) */}
-                    <nav
-                        className="header-navigation desktop-only"
-                        aria-label="Main navigation"
-                    >
-                        {navigationItems.map((item) => {
-                            const isDropdownOpen = openDropdown === item.label;
+                        {/* Desktop Horizontal Navigation (Hidden on Mobile) */}
+                        <nav
+                            className="header-navigation desktop-only"
+                            aria-label="Main navigation"
+                        >
+                            {navigationItems.map((item) => {
+                                const isDropdownOpen = openDropdown === item.label;
 
-                            return (
-                                <div
-                                    key={item.label}
-                                    className={`header-nav-item ${isDropdownOpen
-                                        ? "header-nav-item--open"
-                                        : ""
-                                        }`}
-                                >
-                                    <div className="header-nav-item__main">
-                                        <Link
-                                            href={item.href}
-                                            className={`header-nav-link ${item.label === "Home"
-                                                ? "header-nav-link--home"
-                                                : ""
-                                                }`}
-                                        >
-                                            <span>{item.label}</span>
-                                        </Link>
+                                return (
+                                    <div
+                                        key={item.label}
+                                        className={`header-nav-item ${isDropdownOpen
+                                            ? "header-nav-item--open"
+                                            : ""
+                                            }`}
+                                    >
+                                        <div className="header-nav-item__main">
+                                            <Link
+                                                href={item.href}
+                                                className={`header-nav-link ${item.label === "Home"
+                                                    ? "header-nav-link--home"
+                                                    : ""
+                                                    }`}
+                                            >
+                                                <span>{item.label}</span>
+                                            </Link>
+
+                                            {item.dropdown && (
+                                                <button
+                                                    type="button"
+                                                    className="header-dropdown-toggle"
+                                                    aria-label={`Toggle ${item.label} submenu`}
+                                                    aria-expanded={isDropdownOpen}
+                                                    onClick={() =>
+                                                        toggleDropdown(item.label)
+                                                    }
+                                                >
+                                                    <ChevronDown size={17} />
+                                                </button>
+                                            )}
+                                        </div>
 
                                         {item.dropdown && (
-                                            <button
-                                                type="button"
-                                                className="header-dropdown-toggle"
-                                                aria-label={`Toggle ${item.label} submenu`}
-                                                aria-expanded={isDropdownOpen}
-                                                onClick={() =>
-                                                    toggleDropdown(item.label)
-                                                }
+                                            <div
+                                                className={`header-dropdown ${isDropdownOpen
+                                                    ? "header-dropdown--visible"
+                                                    : ""
+                                                    }`}
                                             >
-                                                <ChevronDown size={17} />
-                                            </button>
+                                                {item.dropdown.map((subItem) => (
+                                                    <Link
+                                                        key={subItem.label}
+                                                        href={subItem.href}
+                                                        className="header-dropdown__link"
+                                                    >
+                                                        {subItem.label}
+                                                    </Link>
+                                                ))}
+                                            </div>
                                         )}
                                     </div>
+                                );
+                            })}
 
-                                    {item.dropdown && (
-                                        <div
-                                            className={`header-dropdown ${isDropdownOpen
-                                                ? "header-dropdown--visible"
-                                                : ""
-                                                }`}
-                                        >
-                                            {item.dropdown.map((subItem) => (
-                                                <Link
-                                                    key={subItem.label}
-                                                    href={subItem.href}
-                                                    className="header-dropdown__link"
-                                                >
-                                                    {subItem.label}
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    )}
+                            {/* Search Link for Desktop/Laptop View */}
+                            <div className="header-nav-item">
+                                <div className="header-nav-item__main">
+                                    <Link
+                                        href="/properties?focus=search#property-search"
+                                        onClick={handleSearchClick}
+                                        className="header-nav-link header-nav-link--search"
+                                        aria-label="Search properties"
+                                    >
+                                        <Search size={15} style={{ display: "inline-block", marginRight: "6px", verticalAlign: "-2px" }} />
+                                        <span>Search</span>
+                                    </Link>
                                 </div>
-                            );
-                        })}
-
-                        {/* Search Link for Desktop/Laptop View */}
-                        <div className="header-nav-item">
-                            <div className="header-nav-item__main">
-                                <Link
-                                    href="/properties?focus=search#property-search"
-                                    onClick={handleSearchClick}
-                                    className="header-nav-link header-nav-link--search"
-                                    aria-label="Search properties"
-                                >
-                                    <Search size={15} style={{ display: "inline-block", marginRight: "6px", verticalAlign: "-2px" }} />
-                                    <span>Search</span>
-                                </Link>
                             </div>
-                        </div>
-                    </nav>
+                        </nav>
 
-                    {/* Mobile Hamburger Menu Toggle Button (matches Image 2) */}
-                    <button
-                        type="button"
-                        className="header-mobile-hamburger"
-                        onClick={() => setMenuOpen((prev) => !prev)}
-                        aria-label={menuOpen ? "Close menu" : "Open menu"}
-                        aria-expanded={menuOpen}
-                    >
-                        <span className="header-mobile-hamburger__bar" />
-                        <span className="header-mobile-hamburger__bar" />
-                        <span className="header-mobile-hamburger__bar" />
-                    </button>
-                </div>
-            </header>
+                        {/* Mobile Hamburger Menu Toggle Button (matches Image 2) */}
+                        <button
+                            type="button"
+                            className="header-mobile-hamburger"
+                            onClick={() => setMenuOpen((prev) => !prev)}
+                            aria-label={menuOpen ? "Close menu" : "Open menu"}
+                            aria-expanded={menuOpen}
+                        >
+                            <span className="header-mobile-hamburger__bar" />
+                            <span className="header-mobile-hamburger__bar" />
+                            <span className="header-mobile-hamburger__bar" />
+                        </button>
+                    </div>
+                </header>
             )}
 
             {/* Backdrop Overlay for Mobile Drawer */}
