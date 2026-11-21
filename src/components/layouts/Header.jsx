@@ -197,10 +197,14 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
             if (!ticking) {
                 window.requestAnimationFrame(() => {
                     const currentScrollY = window.scrollY;
-                    const scrolled = currentScrollY > 40;
+                    const scrolled = currentScrollY > 20;
                     setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
 
-                    if (transparentAtTop) {
+                    if (isHome) {
+                        // For only home page in mobile and laptop view:
+                        // Always keep the header visible when scrolling down!
+                        setIsHeaderHidden(false);
+                    } else if (transparentAtTop) {
                         // Lite scroll immediately disappears the header with zero black flash
                         if (currentScrollY <= 15) {
                             setIsHeaderHidden(false);
@@ -228,7 +232,7 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
         handleScroll();
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [transparentAtTop]);
+    }, [transparentAtTop, isHome]);
 
     // Close on Escape key and lock body scroll on mobile when drawer is open
     useEffect(() => {
@@ -257,7 +261,7 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
             {!hideTopHeader && (
                 <header
                 className={`site-header ${transparentAtTop ? "site-header--transparent" : ""} ${isTransparent && !isScrolled && !transparentAtTop ? "site-header--home" : ""} ${isScrolled && !transparentAtTop ? "site-header--scrolled" : ""
-                    } ${menuOpen ? "site-header--open" : ""} ${(theme === "black" || forceDark || (normalizedPath.startsWith("/property") && !transparentAtTop)) && (!isTransparent || isScrolled) && !transparentAtTop ? "site-header--black" : ""} ${isHeaderHidden && !menuOpen ? "site-header--hidden" : ""}`}
+                    } ${menuOpen ? "site-header--open" : ""} ${(theme === "black" || forceDark || (normalizedPath.startsWith("/property") && !transparentAtTop)) && (!isTransparent || isScrolled) && !transparentAtTop ? "site-header--black" : ""} ${isHeaderHidden && !menuOpen ? "site-header--hidden" : ""} ${isHome ? "site-header--is-home" : ""}`}
             >
                 <div className="header-container">
                     {/* Company Logo and Brand Name */}
