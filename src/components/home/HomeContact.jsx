@@ -132,7 +132,20 @@ export default function HomeContact({ previewData }) {
             aria-label="Start your Pune property journey today"
         >
             <div className="editorial-contact-container">
-                {/* Outer Showcase Frame with Background Image */}
+                {/* 1. Section Heading at Top */}
+                <div className="editorial-contact-header">
+                    <span className="editorial-contact-header__eyebrow">
+                        GET IN TOUCH
+                    </span>
+                    <h2 className="editorial-contact-header__title">
+                        Connect With Our Pune Real Estate Advisors
+                    </h2>
+                    <p className="editorial-contact-header__subtitle">
+                        Looking for inaugural price sheets, verified layouts, or private site visits across Pune? Speak directly with our senior property advisors.
+                    </p>
+                </div>
+
+                {/* 2. Outer Showcase Frame with Background Image */}
                 <div
                     className="editorial-showcase-frame"
                     style={{ backgroundImage: `url(${VILLA_BG_IMAGE})` }}
@@ -140,7 +153,7 @@ export default function HomeContact({ previewData }) {
                     {/* Top-Right Badge: Office Location */}
                     <div className="home-showcase__tag home-showcase__tag--top">
                         <span className="home-tag-dot" aria-hidden="true" />
-                        <Building2 size={15} className="home-tag-icon" />
+                        <Building2 size={14} className="home-tag-icon" />
                         <span>Gera Imperium Alpha, Kharadi</span>
                     </div>
 
@@ -154,18 +167,18 @@ export default function HomeContact({ previewData }) {
                         className="home-showcase__tag home-showcase__tag--bottom"
                         aria-label="Fast-Track Hotline on WhatsApp"
                     >
-                        <FaWhatsapp size={16} className="home-tag-icon-wa" />
+                        <FaWhatsapp size={15} className="home-tag-icon-wa" />
                         <span>Fast-Track Hotline: +91 73981 74444</span>
                     </a>
 
-                    {/* Floating Left Form Card (Exact match to reference image) */}
+                    {/* Decreased Compact Floating Form Card */}
                     <div className="home-form-card">
                         <span className="home-form__eyebrow">
                             {previewData?.eyebrow || "PUNE PROPERTY INVESTORS"}
                         </span>
-                        <h2 className="home-form__title">
+                        <h3 className="home-form__title">
                             {previewData?.heading || "Start your Pune property journey today"}
-                        </h2>
+                        </h3>
                         <p className="home-form__subtitle">
                             {previewData?.subtitle ||
                                 "Complete the form and get a personalized list of verified properties within 24 hours."}

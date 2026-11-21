@@ -3,58 +3,112 @@
    Features the exact hero villa showcase card matching reference design
    ========================================================================== */
 
+/* ==========================================================================
+   HOMEPAGE CONTACT US CARD — PUNE PROPERTY INVESTORS
+   Features the exact hero villa showcase card matching reference design
+   - Outer card expanded for cinematic luxury scale
+   - Inner card decreased & compact so villa is prominently visible
+   - Heading integrated seamlessly in same viewport
+   ========================================================================== */
+
 .editorial-contact-section {
     position: relative;
     width: 100%;
-    padding: clamp(32px, 4.5vw, 60px) 0;
+    padding: clamp(10px, 1.4vh, 20px) 0 clamp(16px, 2vh, 28px);
     background: #fbfaf8;
     color: #1e293b;
     font-family: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .editorial-contact-container {
-    max-width: 1340px;
+    width: 100%;
+    max-width: 1380px;
     margin: 0 auto;
-    padding: 0 clamp(16px, 3.5vw, 32px);
+    padding: 0 clamp(12px, 2vw, 24px);
+    box-sizing: border-box;
 }
 
-/* Outer Showcase Frame with 100% visible luxury villa background */
+/* ==========================================================================
+   SECTION HEADING AT TOP OF CONTACT CARD (FIT IN SAME PAGE)
+   ========================================================================== */
+.editorial-contact-header {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto clamp(4px, 0.8vh, 10px);
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.editorial-contact-header__eyebrow {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ad7c48;
+    margin-bottom: 2px;
+}
+
+.editorial-contact-header__title {
+    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
+    font-size: clamp(20px, 2.2vw, 26px);
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.15;
+    margin: 0 0 2px 0;
+    letter-spacing: -0.3px;
+}
+
+.editorial-contact-header__subtitle {
+    font-size: clamp(11.5px, 1.05vw, 13px);
+    color: #64748b;
+    margin: 0;
+    line-height: 1.35;
+}
+
+/* Outer Showcase Frame with 100% visible luxury villa background (Expanded Scale) */
 .editorial-showcase-frame {
     position: relative;
     width: 100%;
-    min-height: clamp(560px, 78vh, 680px);
-    border-radius: clamp(20px, 2.8vw, 32px);
+    max-width: 1380px;
+    height: clamp(480px, calc(100vh - 160px), 620px);
+    border-radius: clamp(18px, 1.8vw, 26px);
     overflow: hidden;
     background-size: cover;
     background-position: center 36%;
     background-repeat: no-repeat;
     display: flex;
     align-items: center;
-    padding: clamp(24px, 4vw, 48px);
+    padding: clamp(14px, 2vw, 28px);
     box-shadow:
-        0 24px 60px -12px rgba(15, 23, 42, 0.2),
-        0 4px 16px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+        0 24px 60px -12px rgba(15, 23, 42, 0.22),
+        0 6px 18px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.55);
     box-sizing: border-box;
 }
 
 /* Top-Right Badge: Office Location */
 .home-showcase__tag--top {
     position: absolute;
-    top: clamp(16px, 2.5vw, 28px);
-    right: clamp(16px, 2.8vw, 32px);
+    top: 16px;
+    right: 20px;
     background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.85);
     border-radius: 9999px;
-    padding: 8px 18px;
+    padding: 5px 13px;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    font-size: 13px;
+    gap: 6px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    font-size: 11px;
     font-weight: 700;
     color: #1e293b;
     z-index: 3;
@@ -62,11 +116,11 @@
 }
 
 .home-tag-dot {
-    width: 8px;
-    height: 8px;
+    width: 6.5px;
+    height: 6.5px;
     border-radius: 50%;
     background: #ad7c48;
-    box-shadow: 0 0 6px rgba(173, 124, 72, 0.6);
+    box-shadow: 0 0 5px rgba(173, 124, 72, 0.6);
 }
 
 .home-tag-icon {
@@ -76,19 +130,19 @@
 /* Bottom-Right Badge: Fast-Track Hotline */
 .home-showcase__tag--bottom {
     position: absolute;
-    bottom: clamp(16px, 2.5vw, 28px);
-    right: clamp(16px, 2.8vw, 32px);
+    bottom: 16px;
+    right: 20px;
     background: rgba(18, 22, 25, 0.94);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 9999px;
-    padding: 10px 22px;
+    padding: 7px 16px;
     display: inline-flex;
     align-items: center;
-    gap: 9px;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
-    font-size: 13.5px;
+    gap: 7px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    font-size: 11.5px;
     font-weight: 600;
     color: #ffffff;
     text-decoration: none;
@@ -99,7 +153,7 @@
 .home-showcase__tag--bottom:hover {
     background: #0f172a;
     transform: translateY(-2px);
-    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
 }
 
 .home-tag-icon-wa {
@@ -107,16 +161,19 @@
     flex-shrink: 0;
 }
 
-/* Floating Left Form Card */
+/* ==========================================================================
+   DECREASED INNER SMALL FORM CARD
+   - Compact, leaves villa view open
+   ========================================================================== */
 .home-form-card {
     width: 100%;
-    max-width: 440px;
+    max-width: 315px;
     background: #ffffff;
-    border-radius: 26px;
-    padding: clamp(28px, 3.5vw, 42px) clamp(24px, 3.2vw, 38px);
+    border-radius: 16px;
+    padding: 14px 18px 12px;
     box-shadow:
-        0 24px 50px rgba(0, 0, 0, 0.15),
-        0 4px 12px rgba(0, 0, 0, 0.05);
+        0 18px 36px rgba(0, 0, 0, 0.16),
+        0 4px 10px rgba(0, 0, 0, 0.05);
     position: relative;
     z-index: 2;
     box-sizing: border-box;
@@ -124,40 +181,40 @@
 
 .home-form__eyebrow {
     display: block;
-    font-size: 11px;
+    font-size: 8.5px;
     font-weight: 800;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
     color: #ad7c48;
-    margin-bottom: 12px;
+    margin-bottom: 2px;
 }
 
 .home-form__title {
     font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: clamp(24px, 2.3vw, 29px);
+    font-size: 15.5px;
     font-weight: 700;
     color: #0f172a;
-    line-height: 1.24;
-    letter-spacing: -0.3px;
-    margin: 0 0 12px 0;
+    line-height: 1.2;
+    letter-spacing: -0.2px;
+    margin: 0 0 3px 0;
 }
 
 .home-form__subtitle {
-    font-size: 13.5px;
+    font-size: 10.5px;
     color: #64748b;
-    line-height: 1.55;
-    margin: 0 0 22px 0;
+    line-height: 1.35;
+    margin: 0 0 8px 0;
 }
 
 /* Alerts */
 .home-contact-alert {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    border-radius: 10px;
-    font-size: 12.5px;
-    margin-bottom: 16px;
+    gap: 6px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-size: 10.5px;
+    margin-bottom: 7px;
 }
 
 .home-contact-alert--success {
@@ -172,7 +229,7 @@
     color: #991b1b;
 }
 
-/* Underline Input Fields (Matches Reference Image) */
+/* Underline Input Fields (Compact & Sleek) */
 .home-contact-form {
     display: flex;
     flex-direction: column;
@@ -180,7 +237,7 @@
 
 .home-form__input-group {
     position: relative;
-    margin-bottom: 14px;
+    margin-bottom: 4px;
 }
 
 .home-form__underline-input {
@@ -188,8 +245,8 @@
     border: none;
     border-bottom: 1px solid #e2e8f0;
     background: transparent;
-    padding: 11px 0 9px;
-    font-size: 14px;
+    padding: 4px 0 3px;
+    font-size: 11.5px;
     font-weight: 400;
     color: #0f172a;
     font-family: inherit;
@@ -214,37 +271,37 @@
 
 .home-form__field-error {
     display: block;
-    font-size: 11px;
+    font-size: 9.5px;
     color: #ef4444;
-    margin-top: 3px;
+    margin-top: 1px;
 }
 
 /* Privacy Checkbox */
 .home-form__checkbox-row {
-    margin: 14px 0 20px;
+    margin: 5px 0 8px;
 }
 
 .home-form__checkbox-label {
     display: inline-flex;
     align-items: flex-start;
-    gap: 9px;
+    gap: 6px;
     cursor: pointer;
     user-select: none;
 }
 
 .home-form__checkbox {
-    margin-top: 2.5px;
-    width: 16px;
-    height: 16px;
+    margin-top: 1px;
+    width: 12px;
+    height: 12px;
     accent-color: #0f172a;
     cursor: pointer;
     flex-shrink: 0;
 }
 
 .home-form__checkbox-text {
-    font-size: 12px;
+    font-size: 10px;
     color: #475569;
-    line-height: 1.45;
+    line-height: 1.35;
 }
 
 .home-form__privacy-link {
@@ -257,7 +314,7 @@
     color: #ad7c48;
 }
 
-/* Submit Pill Button (Matches Reference Image) */
+/* Submit Pill Button (Compact) */
 .home-form__actions {
     display: flex;
 }
@@ -265,23 +322,23 @@
 .home-form__submit-btn {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 7px;
     background: #0f172a;
     color: #ffffff;
     border: none;
     border-radius: 9999px;
-    padding: 8px 12px 8px 24px;
-    font-size: 14px;
+    padding: 4px 6px 4px 13px;
+    font-size: 11.5px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.22s ease;
-    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.2);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
 }
 
 .home-form__submit-btn:hover {
     background: #1e293b;
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.3);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25);
 }
 
 .home-form__submit-btn:disabled {
@@ -291,8 +348,8 @@
 }
 
 .home-form__btn-arrow {
-    width: 32px;
-    height: 32px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     background: #ffffff;
     color: #0f172a;
@@ -316,50 +373,76 @@
 }
 
 /* ==========================================================================
-   RESPONSIVE DESIGN (<= 992px & <= 640px)
+   RESPONSIVE DESIGN (<= 992px, <= 768px, <= 480px)
    ========================================================================== */
 
 @media (max-width: 992px) {
+    .editorial-contact-section {
+        padding: 20px 0;
+    }
+
     .editorial-showcase-frame {
+        height: auto;
         min-height: auto;
-        padding: clamp(20px, 3vw, 36px);
+        padding: 20px;
         flex-direction: column;
         align-items: stretch;
     }
 
     .home-form-card {
         max-width: 100%;
-        margin-top: 50px;
-        margin-bottom: 50px;
+        margin-top: 32px;
+        margin-bottom: 32px;
     }
 
     .home-showcase__tag--top {
-        top: 18px;
-        right: 18px;
+        top: 14px;
+        right: 14px;
     }
 
     .home-showcase__tag--bottom {
-        bottom: 18px;
-        right: 18px;
+        bottom: 14px;
+        right: 14px;
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
     .editorial-contact-section {
-        padding: 16px 0 28px;
+        padding: 14px 0 24px;
+    }
+
+    .editorial-contact-header {
+        margin-bottom: 12px;
+        padding: 0 8px;
+    }
+
+    .editorial-contact-header__eyebrow {
+        font-size: 9.5px;
+        letter-spacing: 1.6px;
+        margin-bottom: 3px;
+    }
+
+    .editorial-contact-header__title {
+        font-size: 21px;
+        margin-bottom: 3px;
+    }
+
+    .editorial-contact-header__subtitle {
+        font-size: 12px;
     }
 
     .editorial-showcase-frame {
-        border-radius: 20px;
-        padding: 16px;
+        border-radius: 18px;
+        padding: 14px 12px;
+        background-position: center 30%;
     }
 
     .home-showcase__tag--top {
         position: static;
-        margin-bottom: 14px;
+        margin-bottom: 10px;
         align-self: flex-start;
-        font-size: 11.5px;
-        padding: 6px 14px;
+        font-size: 11px;
+        padding: 5px 12px;
     }
 
     .home-showcase__tag--bottom {
@@ -367,23 +450,86 @@
         margin-top: 14px;
         align-self: stretch;
         justify-content: center;
-        font-size: 12.5px;
-        padding: 9px 16px;
+        font-size: 11.5px;
+        padding: 9px 14px;
     }
 
     .home-form-card {
-        border-radius: 18px;
-        padding: 24px 18px 20px;
+        border-radius: 16px;
+        padding: 18px 16px 16px;
         margin-top: 0;
         margin-bottom: 0;
+        max-width: 100%;
     }
 
     .home-form__title {
-        font-size: 22px;
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+
+    .home-form__subtitle {
+        font-size: 11.5px;
+        margin-bottom: 14px;
+    }
+
+    /* 16px prevents iOS Safari auto-zoom on input focus */
+    .home-form__underline-input {
+        font-size: 16px;
+        padding: 8px 0 6px;
+        min-height: 40px;
+    }
+
+    .home-form__checkbox-label {
+        font-size: 11px;
+        gap: 8px;
+    }
+
+    .home-form__checkbox {
+        width: 14px;
+        height: 14px;
     }
 
     .home-form__submit-btn {
         width: 100%;
         justify-content: space-between;
+        padding: 8px 10px 8px 18px;
+        font-size: 13.5px;
+    }
+
+    .home-form__btn-arrow {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .editorial-contact-header {
+        margin-bottom: 10px;
+    }
+
+    .editorial-contact-header__title {
+        font-size: 19px;
+    }
+
+    .editorial-contact-header__subtitle {
+        font-size: 11.5px;
+    }
+
+    .editorial-showcase-frame {
+        border-radius: 16px;
+        padding: 12px 10px;
+    }
+
+    .home-form-card {
+        padding: 15px 12px 14px;
+        border-radius: 14px;
+    }
+
+    .home-form__title {
+        font-size: 17px;
+    }
+
+    .home-form__submit-btn {
+        padding: 7px 8px 7px 16px;
     }
 }

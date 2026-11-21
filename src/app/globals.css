@@ -58,8 +58,8 @@
 @import "../components/common/PlaceholderPage.css";
 
 @theme {
-    --font-serif: var(--font-serif), "Playfair Display", Georgia, serif;
-    --font-sans: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-serif: "Playfair Display", Georgia, serif;
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 /* cache-bust: 1795168000000 */
