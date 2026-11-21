@@ -27,11 +27,23 @@ function PropertyCard({ property }) {
     const developerName = property.developer || property.brandName || "Prime Realty";
 
     /* ── Price: split into amount line + "Cr" line ── */
-    const rawPrice = property.price || "";
-    // Extract the rupee amount part and the unit (Cr/Lac)
-    const priceMatch = rawPrice.match(/^(₹\s*[\d.,]+\s*-\s*[\d.,]+)\s*(Cr|Lac|L)?$/i);
-    const priceAmount = priceMatch ? priceMatch[1] : rawPrice;
-    const priceUnit = priceMatch ? priceMatch[2] || "" : "";
+    let priceAmount = "Price on Request";
+    let priceUnit = "";
+    if (typeof property.price === "string") {
+        const priceMatch = property.price.match(/^(₹\s*[\d.,]+\s*-\s*[\d.,]+)\s*(Cr|Lac|L)?$/i);
+        priceAmount = priceMatch ? priceMatch[1] : property.price;
+        priceUnit = priceMatch ? priceMatch[2] || "" : "";
+    } else if (typeof property.price === "number" && property.price > 0) {
+        if (property.price >= 10000000) {
+            priceAmount = `₹ ${(property.price / 10000000).toFixed(2)}`;
+            priceUnit = "Cr";
+        } else if (property.price >= 100000) {
+            priceAmount = `₹ ${(property.price / 100000).toFixed(2)}`;
+            priceUnit = "Lakh";
+        } else {
+            priceAmount = `₹ ${property.price.toLocaleString("en-IN")}`;
+        }
+    }
 
     /* ── Possession / Status pill ── */
     const possessionRaw = property.possession || property.status || "Under Construction";
