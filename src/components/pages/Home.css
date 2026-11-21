@@ -56,10 +56,10 @@
 /* Keep the advertisement visible while scrolling */
 .home-page__sidebar {
     position: sticky;
-    top: 105px;
+    top: 60px;
     align-self: start;
     min-width: 0;
-    padding-top: 30px;
+    padding-top: 0;
     padding-bottom: 30px;
 }
 
@@ -80,7 +80,8 @@
     }
 
     .home-page__sidebar {
-        top: 90px;
+        top: 58px;
+        padding-top: 0;
     }
 }
 

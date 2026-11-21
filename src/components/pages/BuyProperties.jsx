@@ -16,7 +16,7 @@ import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 
 import PropertyFilters from "../properties/PropertyFilters";
-import PropertyListingCard from "../properties/PropertyListingCard";
+import PropertyCard from "../properties/PropertyCard";
 import PropertyFlightSearchBar from "../properties/PropertyFlightSearchBar";
 import AdvertisementSidebar from "../common/AdvertisementSidebar";
 
@@ -434,7 +434,7 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                                 {filteredProperties.length > 0 ? (
                                     <div className="buy-properties-grid">
                                         {filteredProperties.map((property) => (
-                                            <PropertyListingCard
+                                            <PropertyCard
                                                 key={property.id}
                                                 property={property}
                                             />
