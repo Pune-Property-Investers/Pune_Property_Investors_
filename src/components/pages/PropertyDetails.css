@@ -412,8 +412,9 @@
 
 .property-details__ad-sticky {
     position: sticky;
-    top: 100px;
+    top: 64px;
     min-width: 0;
+    padding-top: 0;
 }
 
 /*

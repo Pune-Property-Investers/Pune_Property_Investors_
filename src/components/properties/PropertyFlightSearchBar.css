@@ -107,12 +107,13 @@
 }
 
 /* ==========================================================================
-   2. QUICK FILTER CHIPS ROW (Matches Screenshot 2)
-   [ BHK ▾ ] [ Price ▾ ] [ Area ▾ ] [ New Projects ] [ Filters (purple) ] [ ⇅ ]
+   2. QUICK FILTER CHIPS ROW
+   - Hidden on Laptop / Desktop view (sidebar filters already exist)
+   - Visible on Mobile / Small Tablet view (<= 900px)
    ========================================================================== */
 
 .property-filter-chips-row {
-    display: flex;
+    display: none;
     align-items: center;
     gap: 8px;
     width: 100%;
@@ -349,10 +350,10 @@
 }
 
 /* ==========================================================================
-   MOBILE VIEW OPTIMIZATIONS (< 860px)
+   MOBILE VIEW OPTIMIZATIONS (<= 900px)
    ========================================================================== */
 
-@media (max-width: 860px) {
+@media (max-width: 900px) {
     .property-search-bar-row {
         flex-direction: column;
         align-items: stretch;
@@ -363,7 +364,9 @@
         display: none;
     }
 
+    /* Show quick filter chips row exclusively on mobile */
     .property-filter-chips-row {
+        display: flex;
         gap: 6px;
         padding-bottom: 4px;
     }

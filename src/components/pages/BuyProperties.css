@@ -1160,7 +1160,10 @@
 @media (max-width: 768px) {
     .buy-properties-grid {
         grid-template-columns: 1fr;
-        gap: 18px;
+        gap: 20px;
+        padding: 0 16px;
+        box-sizing: border-box;
+        justify-items: center;
     }
 }
 
@@ -1535,7 +1538,10 @@
 
     .buy-properties-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 18px;
+        padding: 0 14px;
+        box-sizing: border-box;
+        justify-items: center;
     }
 
     .buy-properties-results__header {
