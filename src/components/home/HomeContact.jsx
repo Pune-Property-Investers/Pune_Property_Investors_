@@ -1,19 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
     ArrowRight,
+    Building2,
     CheckCircle2,
     AlertCircle,
     Loader2,
 } from "lucide-react";
-import { FaWhatsapp, FaLinkedinIn, FaEnvelope } from "react-icons/fa6";
+import { FaWhatsapp } from "react-icons/fa6";
 import { leadService } from "../../services/lead.service";
 import "./HomeContact.css";
 
 const WHATSAPP_NUMBER = "917398174444";
-const CONTACT_EMAIL = "info@punepropertyinvestor.com";
-const LINKEDIN_URL = "https://www.linkedin.com/company/puneproperty-investor/home/";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const VILLA_BG_IMAGE = `${BASE_PATH}/images/luxury-villa-bg.jpg`;
 
@@ -22,9 +22,11 @@ export default function HomeContact({ previewData }) {
         name: "",
         email: "",
         phone: "",
-        projectLocation: "",
+        localityBudget: "",
+        message: "",
     });
 
+    const [agreedToPolicy, setAgreedToPolicy] = useState(true);
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
@@ -46,6 +48,10 @@ export default function HomeContact({ previewData }) {
 
         if (cleanEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
             errs.email = "Enter valid email address";
+        }
+
+        if (!agreedToPolicy) {
+            errs.policy = "Please agree to the privacy policy";
         }
 
         setErrors(errs);
@@ -76,21 +82,22 @@ export default function HomeContact({ previewData }) {
                 name: formData.name.trim(),
                 phone: formData.phone.trim(),
                 email: formData.email.trim(),
-                propertyTitle: "Stay Connected With Us Inquiry",
-                locality: formData.projectLocation.trim() || "Pune",
-                budget: "Open Consultation",
-                message: `Project Location: ${formData.projectLocation.trim() || "Pune"}`,
+                propertyTitle: "Home Showcase Inquiry",
+                locality: formData.localityBudget.trim() || "Pune",
+                budget: formData.localityBudget.trim() || "Open Consultation",
+                message: formData.message.trim() || `Locality & Budget: ${formData.localityBudget.trim() || "Pune"}`,
             });
 
             setIsSuccess(true);
 
             // WhatsApp chat handoff
             const messageLines = [
-                `*New Inquiry via Website - Stay Connected*`,
+                `*New Inquiry via Website - Start Property Journey*`,
                 `*Name:* ${formData.name.trim()}`,
                 `*Phone:* ${formData.phone.trim()}`,
                 `*Email:* ${formData.email.trim() || "Not provided"}`,
-                `*Project Location:* ${formData.projectLocation.trim() || "Pune"}`,
+                `*Preferred Locality & Budget:* ${formData.localityBudget.trim() || "Pune General"}`,
+                `*Requirement:* ${formData.message.trim() || "Assistance requested"}`,
             ];
             const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
                 messageLines.join("\n")
@@ -105,7 +112,8 @@ export default function HomeContact({ previewData }) {
                     name: "",
                     email: "",
                     phone: "",
-                    projectLocation: "",
+                    localityBudget: "",
+                    message: "",
                 });
                 setIsSuccess(false);
             }, 4500);
@@ -121,7 +129,7 @@ export default function HomeContact({ previewData }) {
         <section
             className="editorial-contact-section"
             id="home-contact"
-            aria-label="Stay Connected With Us"
+            aria-label="Start your Pune property journey today"
         >
             <div className="editorial-contact-container">
                 {/* Outer Showcase Frame with Background Image */}
@@ -129,185 +137,188 @@ export default function HomeContact({ previewData }) {
                     className="editorial-showcase-frame"
                     style={{ backgroundImage: `url(${VILLA_BG_IMAGE})` }}
                 >
-                    {/* Subtle Dark Gradient Overlay */}
-                    <div className="editorial-showcase-overlay" aria-hidden="true" />
+                    {/* Top-Right Badge: Office Location */}
+                    <div className="home-showcase__tag home-showcase__tag--top">
+                        <span className="home-tag-dot" aria-hidden="true" />
+                        <Building2 size={15} className="home-tag-icon" />
+                        <span>Gera Imperium Alpha, Kharadi</span>
+                    </div>
 
-                    {/* Inner Content Grid */}
-                    <div className="fold-dual-grid">
-                        {/* Floating Inner Form Card - Transparent Glass & Compact on Mobile */}
-                        <div className="editorial-form-card fold-screen-left">
-                            <div className="editorial-form-header">
-                                <span className="editorial-form-eyebrow">
-                                    {previewData?.eyebrow || "PUNE PROPERTY INVESTORS"}
-                                </span>
-                                <h2 className="editorial-form-title">
-                                    {previewData?.heading || "Stay Connected With Us"}
-                                </h2>
-                                <p className="editorial-form-desc">
-                                    {previewData?.subtitle ||
-                                        "Connect with our senior property advisors for personalized recommendations in Pune."}
-                                </p>
+                    {/* Bottom-Right Badge: Fast-Track Hotline */}
+                    <a
+                        href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                            "Hello Pune Property Investors, I would like to consult with a property advisor."
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="home-showcase__tag home-showcase__tag--bottom"
+                        aria-label="Fast-Track Hotline on WhatsApp"
+                    >
+                        <FaWhatsapp size={16} className="home-tag-icon-wa" />
+                        <span>Fast-Track Hotline: +91 73981 74444</span>
+                    </a>
+
+                    {/* Floating Left Form Card (Exact match to reference image) */}
+                    <div className="home-form-card">
+                        <span className="home-form__eyebrow">
+                            {previewData?.eyebrow || "PUNE PROPERTY INVESTORS"}
+                        </span>
+                        <h2 className="home-form__title">
+                            {previewData?.heading || "Start your Pune property journey today"}
+                        </h2>
+                        <p className="home-form__subtitle">
+                            {previewData?.subtitle ||
+                                "Complete the form and get a personalized list of verified properties within 24 hours."}
+                        </p>
+
+                        {/* Success Notification */}
+                        {isSuccess && (
+                            <div className="home-contact-alert home-contact-alert--success">
+                                <CheckCircle2 size={15} />
+                                <span>Thank you! Your inquiry has been received. Redirecting to WhatsApp...</span>
+                            </div>
+                        )}
+
+                        {/* Error Notification */}
+                        {serverError && (
+                            <div className="home-contact-alert home-contact-alert--error">
+                                <AlertCircle size={15} />
+                                <span>{serverError}</span>
+                            </div>
+                        )}
+
+                        <form onSubmit={handleSubmit} className="home-contact-form" noValidate>
+                            {/* 1. Your name * */}
+                            <div className={`home-form__input-group ${errors.name ? "has-error" : ""}`}>
+                                <input
+                                    id="ed-name"
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder="Your name *"
+                                    className="home-form__underline-input"
+                                    required
+                                    disabled={isSubmitting}
+                                />
+                                {errors.name && (
+                                    <span className="home-form__field-error">{errors.name}</span>
+                                )}
                             </div>
 
-                            {/* Success Notification */}
-                            {isSuccess && (
-                                <div className="editorial-contact-alert editorial-contact-alert--success">
-                                    <CheckCircle2 size={15} />
-                                    <span>Thank you! Your inquiry has been received.</span>
-                                </div>
-                            )}
+                            {/* 2. Email */}
+                            <div className={`home-form__input-group ${errors.email ? "has-error" : ""}`}>
+                                <input
+                                    id="ed-email"
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    placeholder="Email"
+                                    className="home-form__underline-input"
+                                    disabled={isSubmitting}
+                                />
+                                {errors.email && (
+                                    <span className="home-form__field-error">{errors.email}</span>
+                                )}
+                            </div>
 
-                            {/* Error Notification */}
-                            {serverError && (
-                                <div className="editorial-contact-alert editorial-contact-alert--error">
-                                    <AlertCircle size={15} />
-                                    <span>{serverError}</span>
-                                </div>
-                            )}
+                            {/* 3. Phone number * */}
+                            <div className={`home-form__input-group ${errors.phone ? "has-error" : ""}`}>
+                                <input
+                                    id="ed-phone"
+                                    type="tel"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    placeholder="Phone number *"
+                                    className="home-form__underline-input"
+                                    required
+                                    disabled={isSubmitting}
+                                />
+                                {errors.phone && (
+                                    <span className="home-form__field-error">{errors.phone}</span>
+                                )}
+                            </div>
 
-                            <form onSubmit={handleSubmit} className="editorial-form" noValidate>
-                                <div className="editorial-form-grid">
-                                    {/* 1. Your Name */}
-                                    <div className={`editorial-input-group ${errors.name ? "has-error" : ""}`}>
-                                        <input
-                                            id="ed-name"
-                                            type="text"
-                                            name="name"
-                                            value={formData.name}
-                                            onChange={handleChange}
-                                            placeholder="Your Name *"
-                                            className="editorial-input"
-                                            required
-                                            disabled={isSubmitting}
-                                        />
-                                        {errors.name && (
-                                            <span className="editorial-field-error">{errors.name}</span>
-                                        )}
-                                    </div>
+                            {/* 4. Preferred locality & budget */}
+                            <div className="home-form__input-group">
+                                <input
+                                    id="ed-locality"
+                                    type="text"
+                                    name="localityBudget"
+                                    value={formData.localityBudget}
+                                    onChange={handleChange}
+                                    placeholder="Preferred locality & budget"
+                                    className="home-form__underline-input"
+                                    disabled={isSubmitting}
+                                />
+                            </div>
 
-                                    {/* 2. Email Address */}
-                                    <div className={`editorial-input-group ${errors.email ? "has-error" : ""}`}>
-                                        <input
-                                            id="ed-email"
-                                            type="email"
-                                            name="email"
-                                            value={formData.email}
-                                            onChange={handleChange}
-                                            placeholder="Email Address"
-                                            className="editorial-input"
-                                            disabled={isSubmitting}
-                                        />
-                                        {errors.email && (
-                                            <span className="editorial-field-error">{errors.email}</span>
-                                        )}
-                                    </div>
+                            {/* 5. How can we help? */}
+                            <div className="home-form__input-group">
+                                <input
+                                    id="ed-message"
+                                    type="text"
+                                    name="message"
+                                    value={formData.message}
+                                    onChange={handleChange}
+                                    placeholder="How can we help?"
+                                    className="home-form__underline-input"
+                                    disabled={isSubmitting}
+                                />
+                            </div>
 
-                                    {/* 3. Phone Number */}
-                                    <div className={`editorial-input-group ${errors.phone ? "has-error" : ""}`}>
-                                        <input
-                                            id="ed-phone"
-                                            type="tel"
-                                            name="phone"
-                                            value={formData.phone}
-                                            onChange={handleChange}
-                                            placeholder="Phone Number *"
-                                            className="editorial-input"
-                                            required
-                                            disabled={isSubmitting}
-                                        />
-                                        {errors.phone && (
-                                            <span className="editorial-field-error">{errors.phone}</span>
-                                        )}
-                                    </div>
+                            {/* Privacy Policy Checkbox */}
+                            <div className="home-form__checkbox-row">
+                                <label className="home-form__checkbox-label">
+                                    <input
+                                        type="checkbox"
+                                        checked={agreedToPolicy}
+                                        onChange={(e) => setAgreedToPolicy(e.target.checked)}
+                                        className="home-form__checkbox"
+                                    />
+                                    <span className="home-form__checkbox-text">
+                                        By submitting, you agree to our{" "}
+                                        <Link href="/privacy-policy" className="home-form__privacy-link">
+                                            Privacy Policy
+                                        </Link>
+                                        .
+                                    </span>
+                                </label>
+                                {errors.policy && (
+                                    <span className="home-form__field-error">{errors.policy}</span>
+                                )}
+                            </div>
 
-                                    {/* 4. Project Location */}
-                                    <div className="editorial-input-group">
-                                        <input
-                                            id="ed-location"
-                                            type="text"
-                                            name="projectLocation"
-                                            value={formData.projectLocation}
-                                            onChange={handleChange}
-                                            placeholder="Project Location"
-                                            className="editorial-input"
-                                            disabled={isSubmitting}
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Submit Button Row */}
-                                <div className="editorial-actions">
-                                    <button
-                                        type="submit"
-                                        className="editorial-submit-pill"
-                                        disabled={isSubmitting || isSuccess}
-                                    >
-                                        {isSubmitting ? (
-                                            <>
-                                                <Loader2 size={14} className="editorial-spinner" />
-                                                <span>Submitting...</span>
-                                            </>
-                                        ) : isSuccess ? (
-                                            <>
-                                                <CheckCircle2 size={14} />
-                                                <span>Connected!</span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span>Submit</span>
-                                                <span className="editorial-arrow-circle">
-                                                    <ArrowRight size={11} />
-                                                </span>
-                                            </>
-                                        )}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        {/* Floating Contact Icons (Bottom-Right Corner) */}
-                        <div
-                            className="editorial-floating-socials"
-                            aria-label="Direct Contact Channels"
-                        >
-                            {/* WhatsApp Icon */}
-                            <a
-                                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-                                    "Hello Pune Property Investors, I would like to consult with a property advisor."
-                                )}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="editorial-social-btn editorial-social-btn--wa"
-                                aria-label="Chat on WhatsApp"
-                                title="Chat on WhatsApp"
-                            >
-                                <FaWhatsapp size={16} />
-                            </a>
-
-                            {/* Email Icon */}
-                            <a
-                                href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
-                                    "Property Inquiry - Stay Connected"
-                                )}`}
-                                className="editorial-social-btn editorial-social-btn--mail"
-                                aria-label="Send an Email"
-                                title="Send an Email"
-                            >
-                                <FaEnvelope size={14} />
-                            </a>
-
-                            {/* LinkedIn Icon */}
-                            <a
-                                href={LINKEDIN_URL}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="editorial-social-btn editorial-social-btn--in"
-                                aria-label="Visit LinkedIn"
-                                title="Visit our LinkedIn"
-                            >
-                                <FaLinkedinIn size={14} />
-                            </a>
-                        </div>
+                            {/* Submit Button Row */}
+                            <div className="home-form__actions">
+                                <button
+                                    type="submit"
+                                    className="home-form__submit-btn"
+                                    disabled={isSubmitting || isSuccess}
+                                >
+                                    {isSubmitting ? (
+                                        <>
+                                            <Loader2 size={16} className="home-form-spinner" />
+                                            <span>Submitting...</span>
+                                        </>
+                                    ) : isSuccess ? (
+                                        <>
+                                            <CheckCircle2 size={16} />
+                                            <span>Sent Successfully</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span>Send message</span>
+                                            <span className="home-form__btn-arrow" aria-hidden="true">
+                                                <ArrowRight size={13} strokeWidth={2.4} />
+                                            </span>
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -69,6 +69,10 @@ const navigationItems = [
         label: "Career",
         href: "/career",
     },
+    {
+        label: "Contact Us",
+        href: "/contact",
+    },
 ];
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
