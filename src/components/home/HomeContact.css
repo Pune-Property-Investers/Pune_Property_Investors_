@@ -25,20 +25,20 @@
 }
 
 .editorial-contact-container {
-    width: 100%;
+    width: min(94%, 1380px);
     max-width: 1380px;
     margin: 0 auto;
-    padding: 0 clamp(12px, 2vw, 24px);
+    padding: 0;
     box-sizing: border-box;
 }
 
 /* ==========================================================================
-   SECTION HEADING AT TOP OF CONTACT CARD (FIT IN SAME PAGE)
+   SECTION HEADING AT TOP OF CONTACT CARD (MATCHING OTHER WEBSITE SECTION HEADINGS)
    ========================================================================== */
 .editorial-contact-header {
     text-align: center;
     max-width: 760px;
-    margin: 0 auto clamp(4px, 0.8vh, 10px);
+    margin: 0 auto clamp(10px, 1.8vh, 22px);
     padding: 0 16px;
     display: flex;
     flex-direction: column;
@@ -47,45 +47,56 @@
 
 .editorial-contact-header__eyebrow {
     display: inline-block;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 2px;
+    font-family: var(--font-sans), Inter, -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.2px;
     text-transform: uppercase;
-    color: #ad7c48;
-    margin-bottom: 2px;
+    color: #c49866;
+    margin-bottom: 6px;
 }
 
 .editorial-contact-header__title {
     font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: clamp(20px, 2.2vw, 26px);
+    font-size: clamp(24px, 3.2vw, 38px);
     font-weight: 700;
     color: #0f172a;
-    line-height: 1.15;
-    margin: 0 0 2px 0;
-    letter-spacing: -0.3px;
-}
-
-.editorial-contact-header__subtitle {
-    font-size: clamp(11.5px, 1.05vw, 13px);
-    color: #64748b;
+    line-height: 1.22;
     margin: 0;
-    line-height: 1.35;
+    letter-spacing: -0.6px;
 }
 
-/* Outer Showcase Frame with 100% visible luxury villa background (Expanded Scale) */
+.editorial-contact-header__title span {
+    font-style: italic;
+    color: #c49866;
+    font-weight: 600;
+}
+
+.editorial-contact-header__divider {
+    width: 48px;
+    height: 2.5px;
+    background: #c49866;
+    margin: 10px auto 0;
+    border-radius: 9999px;
+}
+
+/* Outer Showcase Frame with 100% visible luxury villa background (Reduced length & proportionate) */
 .editorial-showcase-frame {
     position: relative;
     width: 100%;
-    max-width: 1380px;
-    height: clamp(480px, calc(100vh - 160px), 620px);
-    border-radius: clamp(18px, 1.8vw, 26px);
+    max-width: 1060px;
+    margin: 0 auto;
+    height: clamp(480px, 64vh, 540px);
+    min-height: 480px;
+    max-height: 540px;
+    border-radius: clamp(20px, 2.2vw, 28px);
     overflow: hidden;
     background-size: cover;
-    background-position: center 36%;
+    background-position: center 34%;
     background-repeat: no-repeat;
     display: flex;
     align-items: center;
-    padding: clamp(14px, 2vw, 28px);
+    padding: clamp(20px, 2.6vw, 32px);
     box-shadow:
         0 24px 60px -12px rgba(15, 23, 42, 0.22),
         0 6px 18px rgba(0, 0, 0, 0.08);
@@ -96,8 +107,8 @@
 /* Top-Right Badge: Office Location */
 .home-showcase__tag--top {
     position: absolute;
-    top: 16px;
-    right: 20px;
+    top: 18px;
+    right: 22px;
     background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -109,7 +120,7 @@
     gap: 6px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 600;
     color: #1e293b;
     z-index: 3;
     pointer-events: auto;
@@ -130,9 +141,9 @@
 /* Bottom-Right Badge: Fast-Track Hotline */
 .home-showcase__tag--bottom {
     position: absolute;
-    bottom: 16px;
-    right: 20px;
-    background: rgba(18, 22, 25, 0.94);
+    bottom: 18px;
+    right: 22px;
+    background: rgba(22, 27, 34, 0.92);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.18);
@@ -140,7 +151,7 @@
     padding: 7px 16px;
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 8px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     font-size: 11.5px;
     font-weight: 600;
@@ -157,53 +168,53 @@
 }
 
 .home-tag-icon-wa {
-    color: #25D366;
+    color: #ffffff;
     flex-shrink: 0;
 }
 
 /* ==========================================================================
-   DECREASED INNER SMALL FORM CARD
-   - Compact, leaves villa view open
+   FLOATING FORM CARD (MATCHING REFERENCE DESIGN 1-TO-1)
    ========================================================================== */
 .home-form-card {
     width: 100%;
-    max-width: 315px;
+    max-width: 335px;
     background: #ffffff;
-    border-radius: 16px;
-    padding: 14px 18px 12px;
+    border-radius: 22px;
+    padding: 20px 22px 18px 22px;
     box-shadow:
-        0 18px 36px rgba(0, 0, 0, 0.16),
-        0 4px 10px rgba(0, 0, 0, 0.05);
+        0 18px 42px rgba(0, 0, 0, 0.14),
+        0 2px 8px rgba(0, 0, 0, 0.04);
     position: relative;
     z-index: 2;
     box-sizing: border-box;
+    align-self: center;
 }
 
 .home-form__eyebrow {
     display: block;
-    font-size: 8.5px;
+    font-size: 9px;
     font-weight: 800;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.8px;
     text-transform: uppercase;
     color: #ad7c48;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 
 .home-form__title {
     font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: 15.5px;
+    font-size: 18px;
     font-weight: 700;
     color: #0f172a;
-    line-height: 1.2;
-    letter-spacing: -0.2px;
-    margin: 0 0 3px 0;
+    line-height: 1.22;
+    letter-spacing: -0.3px;
+    margin: 0 0 5px 0;
 }
 
 .home-form__subtitle {
     font-size: 10.5px;
     color: #64748b;
-    line-height: 1.35;
-    margin: 0 0 8px 0;
+    line-height: 1.38;
+    margin: 0 0 12px 0;
 }
 
 /* Alerts */
@@ -211,10 +222,10 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 5px 8px;
+    padding: 5px 9px;
     border-radius: 6px;
-    font-size: 10.5px;
-    margin-bottom: 7px;
+    font-size: 11px;
+    margin-bottom: 8px;
 }
 
 .home-contact-alert--success {
@@ -229,7 +240,7 @@
     color: #991b1b;
 }
 
-/* Underline Input Fields (Compact & Sleek) */
+/* Underline Input Fields (Minimal Elegant Style) */
 .home-contact-form {
     display: flex;
     flex-direction: column;
@@ -237,7 +248,7 @@
 
 .home-form__input-group {
     position: relative;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .home-form__underline-input {
@@ -245,13 +256,13 @@
     border: none;
     border-bottom: 1px solid #e2e8f0;
     background: transparent;
-    padding: 4px 0 3px;
-    font-size: 11.5px;
+    padding: 5px 0 4px;
+    font-size: 12px;
     font-weight: 400;
     color: #0f172a;
     font-family: inherit;
     outline: none;
-    transition: border-color 0.22s ease;
+    transition: border-color 0.2s ease;
     box-sizing: border-box;
     border-radius: 0;
 }
@@ -271,35 +282,35 @@
 
 .home-form__field-error {
     display: block;
-    font-size: 9.5px;
+    font-size: 10px;
     color: #ef4444;
-    margin-top: 1px;
+    margin-top: 2px;
+    font-weight: 500;
 }
 
 /* Privacy Checkbox */
 .home-form__checkbox-row {
-    margin: 5px 0 8px;
+    margin: 10px 0 12px;
 }
 
 .home-form__checkbox-label {
     display: inline-flex;
-    align-items: flex-start;
-    gap: 6px;
+    align-items: center;
+    gap: 7px;
     cursor: pointer;
     user-select: none;
 }
 
 .home-form__checkbox {
-    margin-top: 1px;
-    width: 12px;
-    height: 12px;
+    width: 13px;
+    height: 13px;
     accent-color: #0f172a;
     cursor: pointer;
     flex-shrink: 0;
 }
 
 .home-form__checkbox-text {
-    font-size: 10px;
+    font-size: 10.5px;
     color: #475569;
     line-height: 1.35;
 }
@@ -308,13 +319,14 @@
     color: #0f172a;
     text-decoration: underline;
     font-weight: 600;
+    text-underline-offset: 2px;
 }
 
 .home-form__privacy-link:hover {
     color: #ad7c48;
 }
 
-/* Submit Pill Button (Compact) */
+/* Submit Pill Button */
 .home-form__actions {
     display: flex;
 }
@@ -322,13 +334,13 @@
 .home-form__submit-btn {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 10px;
     background: #0f172a;
     color: #ffffff;
     border: none;
     border-radius: 9999px;
-    padding: 4px 6px 4px 13px;
-    font-size: 11.5px;
+    padding: 5px 5px 5px 16px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.22s ease;
@@ -348,8 +360,8 @@
 }
 
 .home-form__btn-arrow {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     background: #ffffff;
     color: #0f172a;

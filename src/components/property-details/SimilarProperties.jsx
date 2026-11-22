@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import {
     MapPin,
@@ -21,6 +22,14 @@ function formatPrice(price, priceLabel) {
     if (num >= 10000000) return `₹${(num / 10000000).toFixed(2).replace(/\.?0+$/, "")} Cr`;
     if (num >= 100000) return `₹${(num / 100000).toFixed(2).replace(/\.?0+$/, "")} L`;
     return `₹${num.toLocaleString("en-IN")}`;
+}
+
+function formatArea(val) {
+    if (!val) return "1,250 sq.ft.";
+    const str = String(val).trim();
+    if (/sq\.?\s*ft/i.test(str)) return str;
+    const num = Number(str.replace(/\D/g, ""));
+    return num ? `${num.toLocaleString("en-IN")} sq.ft.` : `${str} sq.ft.`;
 }
 
 export default function SimilarProperties({ currentProperty }) {
@@ -65,12 +74,12 @@ export default function SimilarProperties({ currentProperty }) {
 
     scored.sort((a, b) => b.score - a.score);
 
-    // Take top 3 or fallback to trending projects
-    let similarList = scored.slice(0, 3).map((s) => s.item);
+    // Take top 8 matching properties or fallback to trending projects for a rich horizontal scroll
+    let similarList = scored.slice(0, 8).map((s) => s.item);
 
-    if (similarList.length < 3) {
+    if (similarList.length < 6) {
         const fallbacks = trendingProjects
-            .filter((tp) => String(tp.id) !== currentId)
+            .filter((tp) => String(tp.id) !== currentId && !similarList.some(s => String(s.id) === String(tp.id)))
             .map((tp) => ({
                 id: tp.id,
                 title: tp.name,
@@ -85,8 +94,10 @@ export default function SimilarProperties({ currentProperty }) {
                 slug: tp.slug || String(tp.id),
                 verified: true,
             }));
-        similarList = [...similarList, ...fallbacks].slice(0, 3);
+        similarList = [...similarList, ...fallbacks].slice(0, 8);
     }
+
+    const trackRef = useRef(null);
 
     if (similarList.length === 0) return null;
 
@@ -102,27 +113,33 @@ export default function SimilarProperties({ currentProperty }) {
                         CURATED RECOMMENDATIONS
                     </span>
                     <h2 className="similar-properties__title">
-                        Similar Projects in {localityDisplayName} & Matching Budgets
+                        Similar Projects in {localityDisplayName}
                     </h2>
                     <p className="similar-properties__desc">
-                        Explore handpicked verified properties in nearby corridors with comparable carpet area, configuration, and investment returns.
+                        Explore handpicked verified properties in nearby corridors with comparable carpet area, configuration, and budget.
                     </p>
                 </div>
 
-                <Link href="/buy" className="similar-properties__view-all">
-                    <span>View All Listings</span>
-                    <ArrowRight size={15} />
-                </Link>
+                <div className="similar-properties__header-actions">
+                    <Link href="/buy" className="similar-properties__view-all">
+                        <span>View All</span>
+                        <ArrowRight size={14} />
+                    </Link>
+                </div>
             </div>
 
-            {/* Cards Grid */}
-            <div className="similar-properties__grid">
+            {/* Horizontal Manual Scroll Track */}
+            <div
+                className="similar-properties__track"
+                ref={trackRef}
+                tabIndex={0}
+                role="region"
+                aria-label="Horizontally scrollable similar properties"
+            >
                 {similarList.map((item) => {
                     const priceFormatted = formatPrice(item.price, item.priceLabel);
                     const itemUrl = `/properties/${item.slug || item.id}`;
-                    const rawArea = item.area
-                        ? `${Number(item.area).toLocaleString("en-IN")} sq.ft.`
-                        : "1,250 sq.ft.";
+                    const rawArea = formatArea(item.area);
 
                     return (
                         <article className="similar-card" key={item.id}>
@@ -166,20 +183,18 @@ export default function SimilarProperties({ currentProperty }) {
                                         <BedDouble size={14} />
                                         <span>{item.bhk || 2} BHK</span>
                                     </div>
-                                    <span className="similar-spec-divider">•</span>
                                     <div className="similar-spec">
                                         <Ruler size={14} />
                                         <span>{rawArea}</span>
                                     </div>
-                                    <span className="similar-spec-divider">•</span>
                                     <div className="similar-spec">
                                         <CalendarDays size={14} />
-                                        <span>{item.possession && !/\b202\d\b/i.test(item.possession) ? item.possession : "Under Construction"}</span>
+                                        <span>{item.possession || "2026"}</span>
                                     </div>
                                 </div>
 
                                 <div className="similar-card__footer">
-                                    <Link href={itemUrl} className="similar-card__action-btn">
+                                    <Link href={itemUrl} className="similar-card__cta">
                                         <span>View Details</span>
                                         <ArrowRight size={13} />
                                     </Link>

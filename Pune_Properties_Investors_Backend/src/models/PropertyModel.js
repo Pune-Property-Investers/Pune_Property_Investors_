@@ -1,9 +1,11 @@
+import { query, isDBConnected } from "../config/db.js";
+
 /**
  * Property Model (Data Layer)
- * Manages storage and raw retrieval of property records.
+ * Supports parameterized MySQL database operations with seamless in-memory fallback.
  */
 
-let properties = [
+let memoryProperties = [
     {
         id: "1",
         slug: "godrej-rivergreens-kharadi",
@@ -128,36 +130,175 @@ let properties = [
     }
 ];
 
+function formatRow(row) {
+    if (!row) return null;
+    return {
+        id: String(row.id),
+        slug: row.slug,
+        title: row.title,
+        developer: row.developer,
+        location: row.location,
+        locality: row.locality,
+        city: row.city,
+        propertyCategory: row.property_category || row.propertyCategory,
+        propertyType: row.property_type || row.propertyType,
+        purpose: row.purpose,
+        price: row.price,
+        numericPrice: Number(row.numeric_price || row.numericPrice || 0),
+        bhk: typeof row.bhk === "string" ? JSON.parse(row.bhk) : row.bhk || [],
+        area: row.area,
+        status: row.status,
+        possession: row.possession,
+        isNewLaunch: Boolean(row.is_new_launch || row.isNewLaunch),
+        isFeatured: Boolean(row.is_featured || row.isFeatured),
+        isTrending: Boolean(row.is_trending || row.isTrending),
+        verified: Boolean(row.verified),
+        badge: row.badge,
+        image: row.image,
+        images: typeof row.images === "string" ? JSON.parse(row.images) : row.images || [],
+        videoUrl: row.video_url || row.videoUrl,
+        description: row.description,
+        amenities: typeof row.amenities === "string" ? JSON.parse(row.amenities) : row.amenities || [],
+        createdAt: row.created_at || row.createdAt
+    };
+}
+
 export const PropertyModel = {
     async findAll() {
-        return [...properties];
+        if (isDBConnected()) {
+            const rows = await query("SELECT * FROM properties ORDER BY created_at DESC");
+            if (rows && rows.length > 0) {
+                return rows.map(formatRow);
+            }
+        }
+        return [...memoryProperties];
     },
 
     async findBySlugOrId(identifier) {
-        return properties.find(p => p.slug === identifier || p.id === identifier) || null;
+        if (isDBConnected()) {
+            const rows = await query(
+                "SELECT * FROM properties WHERE slug = ? OR id = ? LIMIT 1",
+                [identifier, identifier]
+            );
+            if (rows && rows.length > 0) {
+                return formatRow(rows[0]);
+            }
+        }
+        return memoryProperties.find(p => p.slug === identifier || p.id === identifier) || null;
     },
 
     async create(propertyData) {
+        const id = String(Date.now());
+        const now = new Date().toISOString();
+
+        if (isDBConnected()) {
+            await query(
+                `INSERT INTO properties (
+                    id, slug, title, developer, location, locality, city,
+                    property_category, property_type, purpose, price, numeric_price,
+                    bhk, area, status, possession, is_new_launch, is_featured, is_trending,
+                    verified, badge, image, images, video_url, description, amenities
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [
+                    id,
+                    propertyData.slug || id,
+                    propertyData.title,
+                    propertyData.developer || "",
+                    propertyData.location || "",
+                    propertyData.locality || "",
+                    propertyData.city || "Pune",
+                    propertyData.propertyCategory || "residential",
+                    propertyData.propertyType || "Apartment",
+                    propertyData.purpose || "buy",
+                    propertyData.price || "",
+                    propertyData.numericPrice || 0,
+                    JSON.stringify(propertyData.bhk || []),
+                    propertyData.area || "",
+                    propertyData.status || "Under Construction",
+                    propertyData.possession || "",
+                    propertyData.isNewLaunch ? 1 : 0,
+                    propertyData.isFeatured ? 1 : 0,
+                    propertyData.isTrending ? 1 : 0,
+                    propertyData.verified ? 1 : 0,
+                    propertyData.badge || "",
+                    propertyData.image || "",
+                    JSON.stringify(propertyData.images || []),
+                    propertyData.videoUrl || "",
+                    propertyData.description || "",
+                    JSON.stringify(propertyData.amenities || [])
+                ]
+            );
+            return this.findBySlugOrId(id);
+        }
+
         const newProperty = {
-            id: String(Date.now()),
-            createdAt: new Date().toISOString(),
+            id,
+            createdAt: now,
             ...propertyData
         };
-        properties.push(newProperty);
+        memoryProperties.unshift(newProperty);
         return newProperty;
     },
 
     async update(id, updateData) {
-        const index = properties.findIndex(p => p.id === id);
+        if (isDBConnected()) {
+            const existing = await this.findBySlugOrId(id);
+            if (!existing) return null;
+
+            const merged = { ...existing, ...updateData };
+            await query(
+                `UPDATE properties SET
+                    title = ?, developer = ?, location = ?, locality = ?, city = ?,
+                    property_category = ?, property_type = ?, purpose = ?, price = ?, numeric_price = ?,
+                    bhk = ?, area = ?, status = ?, possession = ?, is_new_launch = ?, is_featured = ?, is_trending = ?,
+                    verified = ?, badge = ?, image = ?, images = ?, video_url = ?, description = ?, amenities = ?
+                WHERE id = ?`,
+                [
+                    merged.title,
+                    merged.developer || "",
+                    merged.location || "",
+                    merged.locality || "",
+                    merged.city || "Pune",
+                    merged.propertyCategory || "residential",
+                    merged.propertyType || "Apartment",
+                    merged.purpose || "buy",
+                    merged.price || "",
+                    merged.numericPrice || 0,
+                    JSON.stringify(merged.bhk || []),
+                    merged.area || "",
+                    merged.status || "Under Construction",
+                    merged.possession || "",
+                    merged.isNewLaunch ? 1 : 0,
+                    merged.isFeatured ? 1 : 0,
+                    merged.isTrending ? 1 : 0,
+                    merged.verified ? 1 : 0,
+                    merged.badge || "",
+                    merged.image || "",
+                    JSON.stringify(merged.images || []),
+                    merged.videoUrl || "",
+                    merged.description || "",
+                    JSON.stringify(merged.amenities || []),
+                    id
+                ]
+            );
+            return this.findBySlugOrId(id);
+        }
+
+        const index = memoryProperties.findIndex(p => p.id === id);
         if (index === -1) return null;
-        properties[index] = { ...properties[index], ...updateData, updatedAt: new Date().toISOString() };
-        return properties[index];
+        memoryProperties[index] = { ...memoryProperties[index], ...updateData, updatedAt: new Date().toISOString() };
+        return memoryProperties[index];
     },
 
     async delete(id) {
-        const index = properties.findIndex(p => p.id === id);
+        if (isDBConnected()) {
+            const result = await query("DELETE FROM properties WHERE id = ?", [id]);
+            return result && result.affectedRows > 0;
+        }
+
+        const index = memoryProperties.findIndex(p => p.id === id);
         if (index === -1) return false;
-        properties.splice(index, 1);
+        memoryProperties.splice(index, 1);
         return true;
     }
 };

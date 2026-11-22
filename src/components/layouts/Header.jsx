@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
     Menu,
     X,
     ChevronDown,
+    ChevronLeft,
     Phone,
     Search,
     Building2,
@@ -73,8 +74,44 @@ const navigationItems = [
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
+const PUNE_LOCALITIES = [
+    "kharadi", "hinjewadi", "hinjawadi", "wakad", "baner", "balewadi",
+    "hadapsar", "kothrud", "viman nagar", "bavdhan", "nibm", "magarpatta",
+    "kalyani nagar", "aundh", "ravet", "punawale", "tathawade", "mahalunge",
+    "undri", "pisoli", "wagholi", "dhanori", "moshi", "chakan", "pcmc"
+];
+
+function isKnownLocality(term = "") {
+    const lower = term.toLowerCase().trim();
+    return PUNE_LOCALITIES.some((loc) => lower.includes(loc) || loc.includes(lower));
+}
+
 function Header({ transparentAtTop = false, forceDark = false, theme = "default", hideTopHeader = false }) {
+    const router = useRouter();
     const pathname = usePathname();
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const handleGoBack = () => {
+        if (typeof window !== "undefined" && window.history.length > 1) {
+            window.history.back();
+        } else {
+            router.push("/buy");
+        }
+    };
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        const q = (searchQuery || "").trim();
+        if (q) {
+            if (isKnownLocality(q)) {
+                router.push(`/buy?location=${encodeURIComponent(q)}&search=${encodeURIComponent(q)}#property-search`);
+            } else {
+                router.push(`/buy?search=${encodeURIComponent(q)}#property-search`);
+            }
+        } else {
+            router.push("/buy?focus=search#property-search");
+        }
+    };
     const normalizedPath =
         pathname === "/" ? "/" : (pathname || "/").replace(/\/+$/, "");
     const isHome = normalizedPath === "/";
@@ -98,16 +135,10 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
     const [isHeaderHidden, setIsHeaderHidden] = useState(false);
 
     // Dynamic Active Index for Mobile Bottom Nav:
-    // 0: Home, 1: Search, 2: Shorts, 3: WhatsApp, 4: Menu
+    // 0: Home, 1: Shorts, 2: WhatsApp, 3: Menu
     const getActiveIndex = () => {
-        if (menuOpen) return 4;
-        if (normalizedPath === "/shorts") return 2;
-        if (
-            normalizedPath === "/search" ||
-            normalizedPath === "/buy" ||
-            normalizedPath.startsWith("/properties") ||
-            normalizedPath.startsWith("/property")
-        ) return 1;
+        if (menuOpen) return 3;
+        if (normalizedPath === "/shorts") return 1;
         return 0; // Default to Home
     };
 
@@ -122,12 +153,10 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
             case 0:
                 return <Home size={20} strokeWidth={2.2} className="mobile-bottom-nav__bubble-icon" />;
             case 1:
-                return <Search size={20} strokeWidth={2.2} className="mobile-bottom-nav__bubble-icon" />;
-            case 2:
                 return <ShortsIcon size={20} className="mobile-bottom-nav__bubble-icon" />;
-            case 3:
+            case 2:
                 return <FaWhatsapp size={22} className="mobile-bottom-nav__bubble-icon mobile-bottom-nav__bubble-icon--wa" />;
-            case 4:
+            case 3:
                 return menuOpen ? (
                     <X size={20} strokeWidth={2.2} className="mobile-bottom-nav__bubble-icon" />
                 ) : (
@@ -205,12 +234,8 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                         // Always keep the header visible when scrolling down!
                         setIsHeaderHidden(false);
                     } else if (transparentAtTop) {
-                        // Lite scroll immediately disappears the header with zero black flash
-                        if (currentScrollY <= 15) {
-                            setIsHeaderHidden(false);
-                        } else {
-                            setIsHeaderHidden(true);
-                        }
+                        // Static header with back button & search pill stays visible on scroll
+                        setIsHeaderHidden(false);
                     } else {
                         // Standard pages
                         if (currentScrollY <= 20) {
@@ -260,10 +285,40 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
             {/* Header Main Bar (Fixed, Luxury Scrolled State) */}
             {!hideTopHeader && (
                 <header
-                    className={`site-header ${transparentAtTop ? "site-header--transparent" : ""} ${isTransparent && !isScrolled && !transparentAtTop ? "site-header--home" : ""} ${isScrolled && !transparentAtTop ? "site-header--scrolled" : ""
+                    className={`site-header ${transparentAtTop ? "site-header--transparent" : ""} ${isTransparent && !isScrolled && !transparentAtTop ? "site-header--home" : ""} ${isScrolled ? "site-header--scrolled" : ""
                         } ${menuOpen ? "site-header--open" : ""} ${(theme === "black" || forceDark || (normalizedPath.startsWith("/property") && !transparentAtTop)) && (!isTransparent || isScrolled) && !transparentAtTop ? "site-header--black" : ""} ${isHeaderHidden && !menuOpen ? "site-header--hidden" : ""} ${isHome ? "site-header--is-home" : ""}`}
                 >
-                    <div className="header-container">
+                    {transparentAtTop ? (
+                        <div className="property-header-container">
+                            <button
+                                type="button"
+                                onClick={handleGoBack}
+                                className="property-header__back-btn"
+                                aria-label="Go back"
+                            >
+                                <ChevronLeft size={22} strokeWidth={2.4} />
+                            </button>
+
+                            <form onSubmit={handleSearchSubmit} className="property-header__search-form">
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Search City/Locality/Project..."
+                                    className="property-header__search-input"
+                                    aria-label="Search City, Locality, or Project"
+                                />
+                                <button
+                                    type="submit"
+                                    className="property-header__search-btn"
+                                    aria-label="Search"
+                                >
+                                    <Search size={18} strokeWidth={2.2} />
+                                </button>
+                            </form>
+                        </div>
+                    ) : (
+                        <div className="header-container">
                         {/* Company Logo and Brand Name */}
                         <Link
                             href="/"
@@ -354,36 +409,53 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                                 );
                             })}
 
-                            {/* Search Link for Desktop/Laptop View */}
-                            <div className="header-nav-item">
-                                <div className="header-nav-item__main">
-                                    <Link
-                                        href="/properties?focus=search#property-search"
-                                        onClick={handleSearchClick}
-                                        className="header-nav-link header-nav-link--search"
-                                        aria-label="Search properties"
-                                    >
-                                        <Search size={15} style={{ display: "inline-block", marginRight: "6px", verticalAlign: "-2px" }} />
-                                        <span>Search</span>
-                                    </Link>
+                            {/* Search Link for Desktop/Laptop View (Hidden on Home page) */}
+                            {!isHome && (
+                                <div className="header-nav-item">
+                                    <div className="header-nav-item__main">
+                                        <Link
+                                            href="/properties?focus=search#property-search"
+                                            onClick={handleSearchClick}
+                                            className="header-nav-link header-nav-link--search"
+                                            aria-label="Search properties"
+                                        >
+                                            <Search size={15} style={{ display: "inline-block", marginRight: "6px", verticalAlign: "-2px" }} />
+                                            <span>Search</span>
+                                        </Link>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </nav>
 
-                        {/* Mobile Hamburger Menu Toggle Button (matches Image 2) */}
-                        <button
-                            type="button"
-                            className="header-mobile-hamburger"
-                            onClick={() => setMenuOpen((prev) => !prev)}
-                            aria-label={menuOpen ? "Close menu" : "Open menu"}
-                            aria-expanded={menuOpen}
-                        >
-                            <span className="header-mobile-hamburger__bar" />
-                            <span className="header-mobile-hamburger__bar" />
-                            <span className="header-mobile-hamburger__bar" />
-                        </button>
+                        {/* Mobile Header Actions (Right corner in logo row) */}
+                        <div className="header-mobile-actions">
+                            {!isHome && (
+                                <Link
+                                    href="/properties?focus=search#property-search"
+                                    onClick={handleSearchClick}
+                                    className="header-mobile-search-btn"
+                                    aria-label="Search properties"
+                                >
+                                    <Search size={22} strokeWidth={2.1} />
+                                </Link>
+                            )}
+
+                            {/* Mobile Hamburger Menu Toggle Button (matches Image 2 on tablet) */}
+                            <button
+                                type="button"
+                                className="header-mobile-hamburger"
+                                onClick={() => setMenuOpen((prev) => !prev)}
+                                aria-label={menuOpen ? "Close menu" : "Open menu"}
+                                aria-expanded={menuOpen}
+                            >
+                                <span className="header-mobile-hamburger__bar" />
+                                <span className="header-mobile-hamburger__bar" />
+                                <span className="header-mobile-hamburger__bar" />
+                            </button>
+                        </div>
                     </div>
-                </header>
+                )}
+            </header>
             )}
 
             {/* Backdrop Overlay for Mobile Drawer */}
@@ -573,7 +645,7 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                 aria-label="Mobile Bottom Navigation"
                 style={{
                     "--active-idx": activeNavIndex,
-                    "--active-pct": `${10 + activeNavIndex * 20}%`,
+                    "--active-pct": `${12.5 + activeNavIndex * 25}%`,
                 }}
             >
                 {/* 1. Base Pill Bar Boundary (Clips the bar background AND the notch rim to the exact pill shape) */}
@@ -622,7 +694,7 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                     </div>
                 </div>
 
-                {/* 3. The 5 Interactive Navigation Buttons */}
+                {/* 3. The 4 Interactive Navigation Buttons */}
                 {/* 1. Home */}
                 <Link
                     href="/"
@@ -640,31 +712,14 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                     <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </Link>
 
-                {/* 2. Search */}
-                <Link
-                    href="/properties?focus=search#property-search"
-                    onClick={(e) => {
-                        setActiveNavIndex(1);
-                        handleSearchClick(e);
-                    }}
-                    className={`mobile-bottom-nav__item ${activeNavIndex === 1 ? "mobile-bottom-nav__item--active" : ""}`}
-                    aria-label="Search properties"
-                >
-                    <div className="mobile-bottom-nav__icon-wrap">
-                        <Search className="mobile-bottom-nav__icon" size={20} strokeWidth={1.8} />
-                    </div>
-                    <span className="mobile-bottom-nav__label">Search</span>
-                    <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
-                </Link>
-
-                {/* 3. PPI Shorts */}
+                {/* 2. PPI Shorts */}
                 <Link
                     href="/shorts"
                     onClick={() => {
-                        setActiveNavIndex(2);
+                        setActiveNavIndex(1);
                         closeMenu();
                     }}
-                    className={`mobile-bottom-nav__item ${activeNavIndex === 2 ? "mobile-bottom-nav__item--active" : ""}`}
+                    className={`mobile-bottom-nav__item ${activeNavIndex === 1 ? "mobile-bottom-nav__item--active" : ""}`}
                     aria-label="PPI Shorts"
                 >
                     <div className="mobile-bottom-nav__icon-wrap">
@@ -674,16 +729,16 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                     <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </Link>
 
-                {/* 4. WhatsApp */}
+                {/* 3. WhatsApp */}
                 <a
                     href="https://wa.me/917398174444?text=Hello%20Pune%20Property%20Investors%2C%20I%20would%20like%20to%20know%20more%20about%20your%20properties."
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => {
-                        setActiveNavIndex(3);
+                        setActiveNavIndex(2);
                         closeMenu();
                     }}
-                    className={`mobile-bottom-nav__item mobile-bottom-nav__item--wa ${activeNavIndex === 3 ? "mobile-bottom-nav__item--active" : ""}`}
+                    className={`mobile-bottom-nav__item mobile-bottom-nav__item--wa ${activeNavIndex === 2 ? "mobile-bottom-nav__item--active" : ""}`}
                     aria-label="WhatsApp"
                 >
                     <div className="mobile-bottom-nav__icon-wrap">
@@ -693,15 +748,15 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                     <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </a>
 
-                {/* 5. Menu */}
+                {/* 4. Menu */}
                 <button
                     type="button"
                     onClick={() => {
                         const next = !menuOpen;
                         setMenuOpen(next);
-                        setActiveNavIndex(next ? 4 : getActiveIndex());
+                        setActiveNavIndex(next ? 3 : getActiveIndex());
                     }}
-                    className={`mobile-bottom-nav__item mobile-bottom-nav__item--menu ${activeNavIndex === 4 ? "mobile-bottom-nav__item--active" : ""}`}
+                    className={`mobile-bottom-nav__item mobile-bottom-nav__item--menu ${activeNavIndex === 3 ? "mobile-bottom-nav__item--active" : ""}`}
                     aria-label={menuOpen ? "Close menu" : "Open menu"}
                     aria-expanded={menuOpen}
                 >

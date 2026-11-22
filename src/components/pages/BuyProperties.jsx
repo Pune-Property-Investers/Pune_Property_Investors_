@@ -41,10 +41,12 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
             : propertyListingsData;
 
     const searchParams = useSearchParams();
-    const initialLocation = searchParams?.get("location") || "all";
+    const rawSearch = searchParams?.get("search") || searchParams?.get("q") || "";
+    const rawLocation = searchParams?.get("location");
+    const initialLocation = rawLocation || (rawSearch ? rawSearch : "all");
     const initialBhk = searchParams?.get("bhk") || "all";
     const initialType = searchParams?.get("type") || defaultPropertyType || "all";
-    const initialProject = searchParams?.get("project") || "";
+    const initialProject = searchParams?.get("project") || rawSearch || "";
 
     const [filters, setFilters] = useState({
         ...DEFAULT_FILTERS,
@@ -55,6 +57,20 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
     const [searchQuery, setSearchQuery] = useState(initialProject);
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
     const searchInputRef = useRef(null);
+
+    // Sync filters and search box if searchParams change dynamically
+    useEffect(() => {
+        const loc = searchParams?.get("location");
+        const search = searchParams?.get("search") || searchParams?.get("q") || searchParams?.get("project");
+        if (loc) {
+            setFilters((prev) => ({ ...prev, location: loc }));
+        } else if (search && search !== "true") {
+            setFilters((prev) => ({ ...prev, location: search }));
+        }
+        if (search && search !== "true") {
+            setSearchQuery(search);
+        }
+    }, [searchParams]);
 
     // Scroll and focus on search input ("Search location, builder, or project...")
     const scrollToSearchSection = useCallback(() => {

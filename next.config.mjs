@@ -37,6 +37,7 @@ const nextConfig = {
     NEXT_PUBLIC_BASE_PATH: basePath,
   },
   reactStrictMode: true,
+  poweredByHeader: false, // Prevents X-Powered-By: Next.js exposure
   images: {
     unoptimized: true,
     remotePatterns: [

@@ -138,11 +138,9 @@ export default function HomeContact({ previewData }) {
                         GET IN TOUCH
                     </span>
                     <h2 className="editorial-contact-header__title">
-                        Connect With Our Pune Real Estate Advisors
+                        Connect With Our <span>Property Advisors</span>
                     </h2>
-                    <p className="editorial-contact-header__subtitle">
-                        Looking for inaugural price sheets, verified layouts, or private site visits across Pune? Speak directly with our senior property advisors.
-                    </p>
+                    <div className="editorial-contact-header__divider" aria-hidden="true" />
                 </div>
 
                 {/* 2. Outer Showcase Frame with Background Image */}

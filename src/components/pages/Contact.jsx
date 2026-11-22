@@ -131,21 +131,8 @@ export default function Contact() {
             <Header theme="black" forceDark={true} />
 
             <main className="contact-single-main">
-                {/* 1. Page Heading at Top - Fits in Single Viewport */}
-                <div className="contact-page-header">
-                    <span className="contact-page-header__eyebrow">
-                        GET IN TOUCH
-                    </span>
-                    <h1 className="contact-page-header__title">
-                        Connect With Our Pune Real Estate Advisors
-                    </h1>
-                    <p className="contact-page-header__subtitle">
-                        Looking for inaugural price sheets, verified layouts, or private site visits across Pune? Speak directly with our senior property advisors.
-                    </p>
-                </div>
-
-                {/* 2. Expansive Luxury Villa Showcase Card */}
                 <div className="contact-single-container">
+                    {/* Luxury Villa Showcase Card Matching Reference Design */}
                     <div
                         className="contact-showcase-frame"
                         style={{ backgroundImage: `url(${VILLA_BG_IMAGE})` }}
@@ -153,7 +140,7 @@ export default function Contact() {
                         {/* Top-Right Badge: Office Location */}
                         <div className="contact-showcase__tag contact-showcase__tag--top">
                             <span className="tag-dot" aria-hidden="true" />
-                            <Building2 size={14} className="tag-icon" />
+                            <Building2 size={13.5} className="tag-icon" />
                             <span>Gera Imperium Alpha, Kharadi</span>
                         </div>
 
@@ -171,14 +158,14 @@ export default function Contact() {
                             <span>Fast-Track Hotline: +91 73981 74444</span>
                         </a>
 
-                        {/* Decreased Compact Floating Form Card */}
+                        {/* Floating Form Card */}
                         <div className="contact-form-card">
                             <span className="contact-form__eyebrow">
                                 PUNE PROPERTY INVESTORS
                             </span>
-                            <h2 className="contact-form__title">
+                            <h1 className="contact-form__title">
                                 Start your Pune property journey today
-                            </h2>
+                            </h1>
                             <p className="contact-form__subtitle">
                                 Complete the form and get a personalized list of verified properties within 24 hours.
                             </p>

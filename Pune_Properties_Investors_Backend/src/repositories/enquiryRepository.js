@@ -11,15 +11,22 @@ export const EnquiryRepository = {
     },
 
     async findById(id) {
-        const all = await EnquiryModel.findAll();
-        return all.find(e => e.id === id) || null;
+        return await EnquiryModel.findById(id);
     },
 
     async create(enquiryData) {
         return await EnquiryModel.create(enquiryData);
     },
 
+    async update(id, updateData) {
+        return await EnquiryModel.update(id, updateData);
+    },
+
     async updateStatus(id, status) {
         return await EnquiryModel.updateStatus(id, status);
+    },
+
+    async delete(id) {
+        return await EnquiryModel.delete(id);
     }
 };

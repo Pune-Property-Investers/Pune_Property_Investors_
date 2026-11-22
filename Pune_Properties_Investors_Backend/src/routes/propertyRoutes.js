@@ -6,13 +6,17 @@ import {
     updateProperty,
     deleteProperty
 } from "../controllers/propertyController.js";
+import { verifyToken, requireAdmin } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
+// Public Property Endpoints
 router.get("/", getAllProperties);
 router.get("/:slug", getPropertyBySlug);
-router.post("/", createProperty);
-router.put("/:id", updateProperty);
-router.delete("/:id", deleteProperty);
+
+// Protected Admin Property Management Endpoints (Requires valid JWT + Admin Role)
+router.post("/", verifyToken, requireAdmin, createProperty);
+router.put("/:id", verifyToken, requireAdmin, updateProperty);
+router.delete("/:id", verifyToken, requireAdmin, deleteProperty);
 
 export default router;

@@ -48,12 +48,26 @@ export const securityConfig = {
 
 /**
  * In-memory sliding window rate limiter
+ * Each limiter instance maintains its own isolated hit map.
  */
-const ipHitMap = new Map();
-
 export const createRateLimiter = (maxHits = 100, windowMs = 15 * 60 * 1000) => {
+    const ipHitMap = new Map();
+
     return (req, res, next) => {
-        const clientIp = req.ip || req.connection.remoteAddress || "unknown_ip";
+        const clientIp = req.ip || req.connection?.remoteAddress || "unknown_ip";
+
+        // In local development or on loopback/localhost, bypass rate limiting
+        const isLocalhost =
+            clientIp === "127.0.0.1" ||
+            clientIp === "::1" ||
+            clientIp.includes("127.0.0.1") ||
+            clientIp === "::ffff:127.0.0.1" ||
+            process.env.NODE_ENV !== "production";
+
+        if (isLocalhost) {
+            return next();
+        }
+
         const now = Date.now();
 
         if (!ipHitMap.has(clientIp)) {

@@ -1,17 +1,33 @@
 /* ==========================================================================
-   CONTACT US SINGLE-SCREEN EXPERIENCE — PUNE PROPERTY INVESTORS
-   Exact 1-to-1 match of reference design: Compact single viewport card
+   CONTACT US LUXURY SHOWCASE EXPERIENCE — PUNE PROPERTY INVESTORS
+   Exact 1-to-1 match of reference design:
+   - Compact left white card contained with ample breathing room (no overlap/overflow)
+   - Reduced length & proportionate aspect ratio for outer villa card
+   - Architectural luxury villa background with swimming pool
+   - Top-right office badge & bottom-right WhatsApp hotline badge
+   - Single-screen fit on desktop, smooth responsive stacking on mobile
    ========================================================================== */
 
 .contact-single-page {
     min-height: 100vh;
     min-height: 100dvh;
-    background: #f7f5f2;
+    background: #eef1f5;
     color: #1e293b;
     font-family: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+/* Strict single viewport on desktop */
+@media (min-width: 993px) and (min-height: 640px) {
+    .contact-single-page {
+        height: 100vh;
+        height: 100dvh;
+        max-height: 100vh;
+        max-height: 100dvh;
+        overflow: hidden;
+    }
 }
 
 .contact-single-main {
@@ -19,68 +35,73 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: clamp(10px, 1.8vh, 20px) clamp(14px, 2.5vw, 28px);
+    padding: clamp(12px, 1.8vw, 24px);
     box-sizing: border-box;
+    width: 100%;
+    min-height: 0;
 }
 
 .contact-single-container {
-    width: 100%;
-    max-width: 1140px;
-    margin: 0 auto;
+    width: min(94%, 1060px);
+    max-width: 1060px;
+    height: 100%;
+    max-height: calc(100dvh - 100px);
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    min-height: 0;
 }
 
 /* ==========================================================================
-   VILLA SHOWCASE FRAME (100% VISIBLE VILLA BACKGROUND)
+   VILLA SHOWCASE FRAME (REDUCED LENGTH & PROPORTIONATE ASPECT)
    ========================================================================== */
 .contact-showcase-frame {
     position: relative;
     width: 100%;
+    max-width: 1060px;
+    height: clamp(480px, 64vh, 540px);
     min-height: 480px;
-    height: min(540px, calc(100vh - 110px));
-    border-radius: clamp(18px, 2vw, 24px);
+    max-height: 540px;
+    border-radius: clamp(20px, 2.2vw, 28px);
     overflow: hidden;
     background-size: cover;
-    background-position: center 36%;
+    background-position: center 34%;
     background-repeat: no-repeat;
     display: flex;
     align-items: center;
-    padding: clamp(18px, 2.5vw, 32px);
+    padding: clamp(20px, 2.6vw, 32px);
     box-shadow:
-        0 20px 50px -10px rgba(15, 23, 42, 0.2),
-        0 4px 14px rgba(0, 0, 0, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.45);
+        0 24px 60px -12px rgba(15, 23, 42, 0.22),
+        0 6px 18px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.65);
     box-sizing: border-box;
 }
 
 /* Top-Right Badge: Office Location */
 .contact-showcase__tag--top {
     position: absolute;
-    top: 16px;
-    right: 20px;
+    top: 18px;
+    right: 22px;
     background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.85);
     border-radius: 9999px;
-    padding: 6px 14px;
+    padding: 5px 13px;
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 6px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    font-size: 11.5px;
-    font-weight: 700;
+    font-size: 11px;
+    font-weight: 600;
     color: #1e293b;
     z-index: 3;
     pointer-events: auto;
 }
 
 .tag-dot {
-    width: 7px;
-    height: 7px;
+    width: 6.5px;
+    height: 6.5px;
     border-radius: 50%;
     background: #ad7c48;
     box-shadow: 0 0 5px rgba(173, 124, 72, 0.6);
@@ -93,19 +114,19 @@
 /* Bottom-Right Badge: Fast-Track Hotline */
 .contact-showcase__tag--bottom {
     position: absolute;
-    bottom: 16px;
-    right: 20px;
-    background: rgba(18, 22, 25, 0.94);
+    bottom: 18px;
+    right: 22px;
+    background: rgba(22, 27, 34, 0.92);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 9999px;
-    padding: 8px 18px;
+    padding: 7px 16px;
     display: inline-flex;
     align-items: center;
     gap: 8px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 600;
     color: #ffffff;
     text-decoration: none;
@@ -120,63 +141,64 @@
 }
 
 .tag-icon-wa {
-    color: #25D366;
+    color: #ffffff;
     flex-shrink: 0;
 }
 
 /* ==========================================================================
-   FLOATING LEFT FORM CARD (WHITE PILL-SHAPED FORM)
+   FLOATING FORM CARD (PERFECTLY SIZED, NO OVERLAPPING OR OVERFLOWING)
    ========================================================================== */
 .contact-form-card {
     width: 100%;
-    max-width: 375px;
+    max-width: 335px;
     background: #ffffff;
-    border-radius: 20px;
-    padding: 22px 24px 18px;
+    border-radius: 22px;
+    padding: 20px 22px 18px 22px;
     box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.15),
-        0 4px 10px rgba(0, 0, 0, 0.04);
+        0 18px 42px rgba(0, 0, 0, 0.14),
+        0 2px 8px rgba(0, 0, 0, 0.04);
     position: relative;
     z-index: 2;
     box-sizing: border-box;
+    align-self: center;
 }
 
 .contact-form__eyebrow {
     display: block;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 800;
     letter-spacing: 1.8px;
     text-transform: uppercase;
     color: #ad7c48;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .contact-form__title {
     font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: clamp(20px, 1.8vw, 23px);
+    font-size: 18px;
     font-weight: 700;
     color: #0f172a;
     line-height: 1.22;
-    letter-spacing: -0.2px;
-    margin: 0 0 6px 0;
+    letter-spacing: -0.3px;
+    margin: 0 0 5px 0;
 }
 
 .contact-form__subtitle {
-    font-size: 12px;
+    font-size: 10.5px;
     color: #64748b;
-    line-height: 1.45;
-    margin: 0 0 14px 0;
+    line-height: 1.38;
+    margin: 0 0 12px 0;
 }
 
 /* Alerts */
 .contact-alert {
     display: flex;
     align-items: center;
-    gap: 7px;
-    padding: 7px 10px;
-    border-radius: 8px;
-    font-size: 11.5px;
-    margin-bottom: 10px;
+    gap: 6px;
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+    margin-bottom: 8px;
 }
 
 .contact-alert--success {
@@ -191,7 +213,7 @@
     color: #991b1b;
 }
 
-/* Underline Input Fields (Matches Reference Image) */
+/* Underline Input Fields (Minimal Elegant Style) */
 .contact-form {
     display: flex;
     flex-direction: column;
@@ -199,7 +221,7 @@
 
 .contact-form__input-group {
     position: relative;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .contact-form__underline-input {
@@ -207,13 +229,13 @@
     border: none;
     border-bottom: 1px solid #e2e8f0;
     background: transparent;
-    padding: 7px 0 5px;
-    font-size: 13px;
+    padding: 5px 0 4px;
+    font-size: 12px;
     font-weight: 400;
     color: #0f172a;
     font-family: inherit;
     outline: none;
-    transition: border-color 0.22s ease;
+    transition: border-color 0.2s ease;
     box-sizing: border-box;
     border-radius: 0;
 }
@@ -236,47 +258,48 @@
     font-size: 10px;
     color: #ef4444;
     margin-top: 2px;
+    font-weight: 500;
 }
 
 /* Privacy Checkbox */
 .contact-form__checkbox-row {
-    margin: 8px 0 12px;
+    margin: 10px 0 12px;
 }
 
 .contact-form__checkbox-label {
     display: inline-flex;
-    align-items: flex-start;
-    gap: 8px;
+    align-items: center;
+    gap: 7px;
     cursor: pointer;
     user-select: none;
 }
 
 .contact-form__checkbox {
-    margin-top: 1.5px;
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
     accent-color: #0f172a;
     cursor: pointer;
     flex-shrink: 0;
 }
 
 .contact-form__checkbox-text {
-    font-size: 11px;
+    font-size: 10.5px;
     color: #475569;
-    line-height: 1.4;
+    line-height: 1.35;
 }
 
 .contact-form__privacy-link {
     color: #0f172a;
     text-decoration: underline;
     font-weight: 600;
+    text-underline-offset: 2px;
 }
 
 .contact-form__privacy-link:hover {
     color: #ad7c48;
 }
 
-/* Submit Pill Button (Matches Reference Image) */
+/* Submit Pill Button */
 .contact-form__submit-btn {
     display: inline-flex;
     align-items: center;
@@ -286,18 +309,18 @@
     color: #ffffff;
     border: none;
     border-radius: 9999px;
-    padding: 6px 8px 6px 18px;
-    font-size: 13px;
+    padding: 5px 5px 5px 16px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.22s ease;
-    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
 }
 
 .contact-form__submit-btn:hover {
     background: #1e293b;
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.28);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25);
 }
 
 .contact-form__submit-btn:disabled {
@@ -307,8 +330,8 @@
 }
 
 .contact-form__btn-arrow {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     background: #ffffff;
     color: #0f172a;
@@ -337,47 +360,69 @@
 }
 
 /* ==========================================================================
-   RESPONSIVE DESIGN (<= 992px & <= 640px)
+   RESPONSIVE DESIGN (<= 992px, <= 768px, <= 480px)
    ========================================================================== */
 
 @media (max-width: 992px) {
+    .contact-single-page {
+        height: auto;
+        min-height: 100vh;
+        max-height: none;
+        overflow-y: auto;
+    }
+
     .contact-single-main {
-        padding: 14px;
+        padding: 16px 16px 32px;
+        justify-content: flex-start;
+    }
+
+    .contact-single-container {
+        height: auto;
+        max-height: none;
+        width: 100%;
+        max-width: 100%;
     }
 
     .contact-showcase-frame {
         height: auto;
         min-height: auto;
-        padding: 20px;
+        max-height: none;
+        padding: 24px 20px;
         flex-direction: column;
         align-items: stretch;
     }
 
     .contact-form-card {
         max-width: 100%;
-        margin-top: 40px;
-        margin-bottom: 40px;
+        margin-top: 36px;
+        margin-bottom: 36px;
     }
 
     .contact-showcase__tag--top {
-        top: 14px;
-        right: 14px;
+        top: 16px;
+        right: 16px;
     }
 
     .contact-showcase__tag--bottom {
-        bottom: 14px;
-        right: 14px;
+        bottom: 16px;
+        right: 16px;
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+    .contact-single-page {
+        padding-top: 64px;
+        padding-bottom: 96px;
+    }
+
     .contact-single-main {
-        padding: 10px 8px 20px;
+        padding: 10px 14px 20px;
     }
 
     .contact-showcase-frame {
-        border-radius: 16px;
-        padding: 12px;
+        border-radius: 20px;
+        padding: 16px 14px;
+        background-position: center 30%;
     }
 
     .contact-showcase__tag--top {
@@ -390,26 +435,86 @@
 
     .contact-showcase__tag--bottom {
         position: static;
-        margin-top: 12px;
+        margin-top: 16px;
         align-self: stretch;
         justify-content: center;
         font-size: 11.5px;
-        padding: 8px 14px;
+        padding: 10px 16px;
     }
 
     .contact-form-card {
-        border-radius: 16px;
-        padding: 18px 14px 16px;
+        border-radius: 20px;
+        padding: 22px 18px 18px;
         margin-top: 0;
         margin-bottom: 0;
+        max-width: 100%;
     }
 
     .contact-form__title {
         font-size: 19px;
+        margin-bottom: 5px;
+    }
+
+    .contact-form__subtitle {
+        font-size: 11.5px;
+        margin-bottom: 14px;
+    }
+
+    /* 16px prevents iOS Safari auto-zoom on input focus */
+    .contact-form__underline-input {
+        font-size: 16px;
+        padding: 8px 0 6px;
+        min-height: 38px;
+    }
+
+    .contact-form__checkbox-label {
+        font-size: 11px;
+        gap: 8px;
+    }
+
+    .contact-form__checkbox {
+        width: 14px;
+        height: 14px;
     }
 
     .contact-form__submit-btn {
         width: 100%;
         justify-content: space-between;
+        padding: 7px 7px 7px 18px;
+        font-size: 13px;
+    }
+
+    .contact-form__btn-arrow {
+        width: 26px;
+        height: 26px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-single-page {
+        padding-top: 58px;
+        padding-bottom: 92px;
+    }
+
+    .contact-single-main {
+        padding: 6px 10px 16px;
+    }
+
+    .contact-showcase-frame {
+        border-radius: 18px;
+        padding: 14px 12px;
+    }
+
+    .contact-form-card {
+        padding: 18px 14px 16px;
+        border-radius: 18px;
+    }
+
+    .contact-form__title {
+        font-size: 18px;
+    }
+
+    .contact-form__submit-btn {
+        padding: 7px 7px 7px 16px;
     }
 }

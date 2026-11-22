@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import {
     Building2,
@@ -17,6 +18,14 @@ import trendingProjects from "../../data/trendingProjectsData.js";
 import "./BuilderProperties.css";
 
 const WHATSAPP_NUMBER = "917398174444";
+
+function formatArea(val) {
+    if (!val) return "1,200 sq.ft.";
+    const str = String(val).trim();
+    if (/sq\.?\s*ft/i.test(str)) return str;
+    const num = Number(str.replace(/\D/g, ""));
+    return num ? `${num.toLocaleString("en-IN")} sq.ft.` : `${str} sq.ft.`;
+}
 
 export default function BuilderProperties({ property }) {
     if (!property) return null;
@@ -82,13 +91,15 @@ export default function BuilderProperties({ property }) {
         cleanDev.includes((p.developer || "").toLowerCase())
     );
 
-    // If fewer than 3, backfill with top developer projects in Pune
-    if (matched.length < 3) {
+    // If fewer than 6, backfill with top developer projects in Pune
+    if (matched.length < 6) {
         const remaining = devPool.filter((p) => !matched.some((m) => m.title === p.title));
-        matched = [...matched, ...remaining].slice(0, 3);
+        matched = [...matched, ...remaining].slice(0, 6);
     } else {
-        matched = matched.slice(0, 3);
+        matched = matched.slice(0, 6);
     }
+
+    const trackRef = useRef(null);
 
     if (matched.length === 0) return null;
 
@@ -108,19 +119,27 @@ export default function BuilderProperties({ property }) {
                     </p>
                 </div>
 
-                <div className="builder-properties__developer-badge">
-                    <div className="dev-badge__icon">
-                        <Building2 size={20} />
-                    </div>
-                    <div>
-                        <strong className="dev-badge__name">{rawDeveloper}</strong>
-                        <span className="dev-badge__tag">Verified Partner Developer</span>
+                <div className="builder-properties__header-actions">
+                    <div className="builder-properties__developer-badge">
+                        <div className="dev-badge__icon">
+                            <Building2 size={18} />
+                        </div>
+                        <div>
+                            <strong className="dev-badge__name">{rawDeveloper}</strong>
+                            <span className="dev-badge__tag">Verified Partner</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* Builder Projects Grid */}
-            <div className="builder-properties__grid">
+            {/* Horizontal Manual Scroll Track */}
+            <div
+                className="builder-properties__track"
+                ref={trackRef}
+                tabIndex={0}
+                role="region"
+                aria-label="Horizontally scrollable landmark properties"
+            >
                 {matched.map((item, idx) => {
                     const itemUrl = `/properties/${item.slug || item.id}`;
 
@@ -139,9 +158,6 @@ export default function BuilderProperties({ property }) {
                                             <ShieldCheck size={12} />
                                             {item.rera}
                                         </span>
-                                        <span className="builder-card__badge builder-card__badge--status">
-                                            {item.possession && !/\b202\d\b/i.test(item.possession) ? item.possession : "Under Construction"}
-                                        </span>
                                     </div>
                                     <div className="builder-card__price-tag">
                                         {item.price}
@@ -150,48 +166,34 @@ export default function BuilderProperties({ property }) {
                             </Link>
 
                             <div className="builder-card__content">
-                                <div className="builder-card__dev-tag">
-                                    <Building2 size={13} className="text-gold" />
-                                    <span>{item.developer}</span>
-                                </div>
-
-                                <h3 className="builder-card__title">
-                                    <Link href={itemUrl}>{item.title}</Link>
-                                </h3>
-
                                 <p className="builder-card__location">
                                     <MapPin size={13} className="text-gold" />
                                     <span>{item.location}</span>
                                 </p>
+
+                                <h3 className="builder-card__title">
+                                    <Link href={itemUrl}>{item.title}</Link>
+                                </h3>
 
                                 <div className="builder-card__specs">
                                     <div className="builder-spec">
                                         <BedDouble size={14} />
                                         <span>{item.configuration || "2 & 3 BHK"}</span>
                                     </div>
-                                    <span className="builder-spec-dot">•</span>
                                     <div className="builder-spec">
                                         <Ruler size={14} />
-                                        <span>{item.area || "1,250 sq.ft."}</span>
+                                        <span>{formatArea(item.area)}</span>
                                     </div>
                                 </div>
 
-                                <div className="builder-card__actions">
-                                    <Link href={itemUrl} className="builder-card__btn builder-card__btn--primary">
-                                        <span>View Details</span>
+                                <div className="builder-card__footer">
+                                    <span className="builder-card__possession">
+                                        Possession: <strong>{item.possession}</strong>
+                                    </span>
+                                    <Link href={itemUrl} className="builder-card__cta">
+                                        <span>Explore</span>
                                         <ArrowRight size={13} />
                                     </Link>
-                                    <a
-                                        href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-                                            `Hello Pune Property Investors, I am interested in ${item.title} by ${item.developer}. Please share current pricing and brochure.`
-                                        )}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="builder-card__btn builder-card__btn--wa"
-                                        title="Chat on WhatsApp"
-                                    >
-                                        <span>Inquire</span>
-                                    </a>
                                 </div>
                             </div>
                         </article>

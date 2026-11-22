@@ -119,19 +119,45 @@ function PropertyGallery({ images = [], title = "Property" }) {
                             </>
                         )}
 
-                        <div className="property-gallery__main-bottom">
-                            <span className="property-gallery__counter">
-                                {activeIndex + 1} / {validImages.length} Photos
-                            </span>
+                        {/* Floating bottom overlay on main photo with counter, thumbnails, and corner view-all icon */}
+                        <div className="property-gallery__main-overlay-bottom">
+                            <div className="property-gallery__main-bottom-row">
+                                <span className="property-gallery__counter">
+                                    {activeIndex + 1} / {validImages.length} Photos
+                                </span>
+                            </div>
 
-                            <button
-                                type="button"
-                                className="property-gallery__view-all"
-                                onClick={() => openLightbox()}
-                            >
-                                <Expand size={15} />
-                                View All Photos
-                            </button>
+                            <div className="property-gallery__bottom-track-row">
+                                {validImages.length > 1 && (
+                                    <div className="property-gallery__thumbnails">
+                                        {validImages.map((image, index) => (
+                                            <button
+                                                type="button"
+                                                key={`${image}-${index}`}
+                                                className={`property-gallery__thumbnail ${activeIndex === index
+                                                        ? "property-gallery__thumbnail--active"
+                                                        : ""
+                                                    }`}
+                                                onClick={() => setActiveIndex(index)}
+                                                aria-label={`View photo ${index + 1}`}
+                                                aria-pressed={activeIndex === index}
+                                            >
+                                                <img src={image} alt="" />
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+
+                                <button
+                                    type="button"
+                                    className="property-gallery__view-all-corner-btn"
+                                    onClick={() => openLightbox()}
+                                    aria-label="View all photos"
+                                    title="View all photos"
+                                >
+                                    <Expand size={18} strokeWidth={2.2} />
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -170,26 +196,6 @@ function PropertyGallery({ images = [], title = "Property" }) {
                         </div>
                     )}
                 </div>
-
-                {validImages.length > 1 && (
-                    <div className="property-gallery__thumbnails">
-                        {validImages.map((image, index) => (
-                            <button
-                                type="button"
-                                key={`${image}-${index}`}
-                                className={`property-gallery__thumbnail ${activeIndex === index
-                                        ? "property-gallery__thumbnail--active"
-                                        : ""
-                                    }`}
-                                onClick={() => setActiveIndex(index)}
-                                aria-label={`View photo ${index + 1}`}
-                                aria-pressed={activeIndex === index}
-                            >
-                                <img src={image} alt="" />
-                            </button>
-                        ))}
-                    </div>
-                )}
             </section>
 
             {lightboxOpen && (

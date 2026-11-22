@@ -49,6 +49,42 @@
     margin: 0;
 }
 
+.similar-properties__header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Horizontal Scroll Arrow Buttons */
+.similar-properties__scroll-arrows {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.similar-scroll-arrow-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1.2px solid #e2d8cd;
+    color: #0f172a;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+}
+
+.similar-scroll-arrow-btn:hover {
+    background: #0e382f;
+    border-color: #0e382f;
+    color: #ffffff;
+    transform: scale(1.06);
+}
+
 .similar-properties__view-all {
     display: inline-flex;
     align-items: center;
@@ -57,7 +93,7 @@
     font-weight: 700;
     color: #ad7c48;
     text-decoration: none;
-    padding: 8px 16px;
+    padding: 7px 14px;
     border-radius: 999px;
     border: 1px solid #ad7c48;
     transition: all 0.2s ease;
@@ -70,14 +106,39 @@
     box-shadow: 0 4px 14px rgba(173, 124, 72, 0.25);
 }
 
-/* Cards Grid */
-.similar-properties__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+/* Horizontal Manual Scroll Track */
+.similar-properties__track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    padding: 6px 2px 18px;
+    margin: 0 -4px;
+    scrollbar-width: thin;
+    scrollbar-color: #d6b36a #f1ede7;
+}
+
+.similar-properties__track::-webkit-scrollbar {
+    height: 6px;
+}
+
+.similar-properties__track::-webkit-scrollbar-track {
+    background: #f1ede7;
+    border-radius: 9999px;
+}
+
+.similar-properties__track::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #d6b36a, #ad7c48);
+    border-radius: 9999px;
 }
 
 .similar-card {
+    flex: 0 0 290px;
+    width: 290px;
+    max-width: 85vw;
+    scroll-snap-align: start;
     background: #ffffff;
     border: 1px solid #e9e5df;
     border-radius: 16px;
@@ -85,6 +146,14 @@
     transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
     display: flex;
     flex-direction: column;
+}
+
+.similar-properties__swipe-hint {
+    text-align: center;
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 6px;
+    letter-spacing: 0.3px;
 }
 
 .similar-card:hover {
@@ -229,25 +298,29 @@
 
 .similar-card__footer {
     margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
 }
 
+.similar-card__cta,
 .similar-card__action-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
     width: 100%;
-    padding: 9px 14px;
+    padding: 8px 14px;
     border-radius: 8px;
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     color: #0f172a;
-    font-size: 12.5px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 700;
     text-decoration: none;
     transition: all 0.2s ease;
 }
 
+.similar-card__cta:hover,
 .similar-card__action-btn:hover {
     background: #ad7c48;
     border-color: #ad7c48;

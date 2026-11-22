@@ -11,8 +11,17 @@ export const EnquiryService = {
         return await EnquiryRepository.findAll();
     },
 
+    async getEnquiryById(id) {
+        const item = await EnquiryRepository.findById(id);
+        if (!item) {
+            const error = new Error(`Lead/Enquiry with ID '${id}' not found`);
+            error.statusCode = 404;
+            throw error;
+        }
+        return item;
+    },
+
     async submitEnquiry(enquiryDTO) {
-        // Business logic: Add lead priority and tags
         const enrichedLead = {
             ...enquiryDTO,
             priority: enquiryDTO.leadType === "Site Visit" ? "High" : "Standard",
@@ -21,20 +30,27 @@ export const EnquiryService = {
         };
 
         const created = await EnquiryRepository.create(enrichedLead);
-
-        // Webhook hook point for WhatsApp / Email notification
-        console.log(`🔔 New Lead Received [${created.leadType}] from ${created.name} (${created.phone})`);
-
+        console.log(`🔔 New Lead Received [${created?.type || "Lead"}] from ${created?.name} (${created?.phone})`);
         return created;
     },
 
-    async updateStatus(id, statusDTO) {
-        const updated = await EnquiryRepository.updateStatus(id, statusDTO.status);
+    async updateEnquiry(id, updateData) {
+        const updated = await EnquiryRepository.update(id, updateData);
         if (!updated) {
-            const error = new Error(`Enquiry with ID '${id}' not found`);
+            const error = new Error(`Lead with ID '${id}' not found`);
             error.statusCode = 404;
             throw error;
         }
         return updated;
+    },
+
+    async updateStatus(id, statusDTO) {
+        const status = typeof statusDTO === "string" ? statusDTO : statusDTO?.status;
+        return await this.updateEnquiry(id, { status });
+    },
+
+    async deleteEnquiry(id) {
+        const success = await EnquiryRepository.delete(id);
+        return { success, id };
     }
 };

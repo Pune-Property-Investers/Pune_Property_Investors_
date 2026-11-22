@@ -5,7 +5,15 @@
 
 const PHONE_REGEX = /^[6-9]\d{9}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const VALID_STATUSES = ["New", "Contacted", "Follow-Up", "Closed"];
+const VALID_STATUSES = [
+    "New",
+    "Contacted",
+    "Site Visit Scheduled",
+    "Follow-up",
+    "Follow Up",
+    "Closed",
+    "Archived"
+];
 
 export const validateEnquiryDTO = (data) => {
     const errors = [];

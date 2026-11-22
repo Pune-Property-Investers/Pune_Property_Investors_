@@ -16,6 +16,7 @@ import Workflow from "../home/Workflow";
 import DeveloperLogos from "../home/DeveloperLogos";
 import Testimonials from "../home/Testimonials";
 import HomeContact from "../home/HomeContact";
+import SmartCalculator from "../home/SmartCalculator";
 import CustomContainersRenderer from "../home/CustomContainersRenderer";
 import { usePublishedCms } from "../../services/liveContent";
 
@@ -77,6 +78,8 @@ function renderPublishedSection(section, activeTab, setActiveTab, published) {
             );
         case "home-contact":
             return <HomeContact key={section.id} previewData={data} />;
+        case "smart-calculator":
+            return <SmartCalculator key={section.id} />;
         case "trust-stats":
             return <TrustStats key={section.id} previewData={data} />;
         case "custom-containers":
@@ -136,6 +139,9 @@ function Home() {
                         )}
                     </div>
 
+                    {/* Interactive Smart Home Loan & Investment ROI Calculator */}
+                    <SmartCalculator />
+
                     {fullWidthBottom.map((sec) =>
                         renderPublishedSection(sec, activeTab, setActiveTab, published)
                     )}
@@ -180,6 +186,9 @@ function Home() {
                         <AdvertisementSidebar />
                     </aside>
                 </div>
+
+                {/* Interactive Smart Home Loan & Investment ROI Calculator */}
+                <SmartCalculator />
 
                 <Workflow />
                 <DeveloperLogos />

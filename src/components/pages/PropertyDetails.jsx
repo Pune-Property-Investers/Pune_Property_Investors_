@@ -34,8 +34,6 @@ import PropertyMap from "../property-details/PropertyMap";
 import SimilarProperties from "../property-details/SimilarProperties";
 import BuilderProperties from "../property-details/BuilderProperties";
 import PropertyEnquiry from "../property-details/PropertyEnquiry";
-
-import AdvertisementSidebar from "../common/AdvertisementSidebar";
 import { extractYouTubeVideoId } from "../../lib/youtube";
 
 const WHATSAPP_NUMBER = "917398174444";
@@ -83,6 +81,76 @@ function formatConfiguration(value, propertyType) {
     }
 
     return text;
+}
+
+function getDeveloperLogo(property) {
+    if (!property) return null;
+    if (property.developerLogo) return property.developerLogo;
+    if (property.logo) return property.logo;
+    if (property.builderLogo) return property.builderLogo;
+
+    const combined = `${property.developer || ""} ${property.builder || ""} ${property.projectName || ""} ${property.title || ""} ${property.name || ""}`.toLowerCase();
+
+    if (combined.includes("godrej")) return "/images/logos/godrej.png";
+    if (combined.includes("kohinoor")) return "/images/logos/kohinoor.png";
+    if (combined.includes("kolte") || combined.includes("patil") || combined.includes("life republic")) return "/images/logos/kolte-patil.jpg";
+    if (combined.includes("vtp")) return "/images/logos/vtp.png";
+    if (combined.includes("sobha")) return "/images/logos/sobha.png";
+    if (combined.includes("shapoorji") || combined.includes("joyville")) return "/images/logos/shapoorji.svg";
+    if (combined.includes("lodha")) return "/images/logos/lodha.png";
+    if (combined.includes("paras")) return "/images/logos/paras-emperor.png";
+    if (combined.includes("mantra")) return "https://www.google.com/s2/favicons?domain=mantraproperties.in&sz=128";
+    if (combined.includes("kumar")) return "https://www.google.com/s2/favicons?domain=kumarworld.com&sz=128";
+    if (combined.includes("pride")) return "https://www.google.com/s2/favicons?domain=pridepurpleproperties.com&sz=128";
+    if (combined.includes("gera")) return "https://www.google.com/s2/favicons?domain=gera.in&sz=128";
+    if (combined.includes("vilas") || combined.includes("javdekar")) return "https://www.google.com/s2/favicons?domain=vilasjavdekar.com&sz=128";
+    if (combined.includes("urban") || combined.includes("crest")) return "/images/logo.png";
+
+    return "/images/logo.png";
+}
+
+function getAvailableFlats(property) {
+    if (!property) return "1, 2 & 3 BHK Flats";
+    if (property.availableFlats) return property.availableFlats;
+
+    // Check description for e.g. "Smartly planned 1, 2 & 3 BHK residences"
+    const desc = property.description || "";
+    const descMatch = desc.match(/(\d+(?:\s*,\s*\d+)*(?:\s*(?:&|and)\s*\d+)?\s*BHK)/i);
+    if (descMatch) {
+        return `${descMatch[1]} Flats`;
+    }
+
+    // Check floorPlans array if present
+    if (Array.isArray(property.floorPlans) && property.floorPlans.length > 0) {
+        const categories = Array.from(new Set(property.floorPlans.map((p) => p.bhk || p.bhkCategory))).filter(Boolean);
+        if (categories.length > 0) {
+            return `${categories.join(", ")} Flats`;
+        }
+    }
+
+    // Property configuration or category
+    const category = String(property.category || property.propertyType || "").toLowerCase();
+    if (category.includes("commercial") || category.includes("office") || category.includes("shop")) {
+        return "Boutique Offices & Commercial Suites";
+    }
+    if (category.includes("villa") || category.includes("bungalow") || category.includes("row house")) {
+        return "3 & 4 BHK Luxury Villas";
+    }
+
+    if (property.availableBhk) {
+        return /flats?/i.test(property.availableBhk) ? property.availableBhk : `${property.availableBhk} Flats`;
+    }
+
+    const rawBhk = property.bhk || property.bedrooms;
+    if (rawBhk) {
+        const b = String(rawBhk);
+        if (/bhk/i.test(b)) return `${b} Flats`;
+        if (Number(rawBhk) === 2) return "1, 2 & 3 BHK Flats";
+        if (Number(rawBhk) === 3) return "2, 3 & 4 BHK Flats";
+        return `${rawBhk} BHK Flats`;
+    }
+
+    return "1, 2 & 3 BHK Flats";
 }
 
 import { findProperty } from "../../lib/propertyUtils";
@@ -149,23 +217,19 @@ function PropertyDetails({ propertyId, propertySlug }) {
 
     const price = formatPrice(property);
 
-    const locationParts = [
+    const rawTokens = [
         property.locality,
         property.location,
         property.city || "Pune",
     ]
         .filter(Boolean)
-        .map((value) => String(value).trim())
-        .filter((value, index, array) => {
-            return (
-                value &&
-                array.findIndex(
-                    (item) => item.toLowerCase() === value.toLowerCase()
-                ) === index
-            );
-        });
+        .flatMap((s) => String(s).split(","))
+        .map((s) => s.trim())
+        .filter(Boolean);
 
-    const location = locationParts.join(", ");
+    const location = Array.from(new Set(rawTokens.map((t) => t.toLowerCase())))
+        .map((lower) => rawTokens.find((t) => t.toLowerCase() === lower))
+        .join(", ");
 
     const images = [
         ...(Array.isArray(property.images) ? property.images : []),
@@ -180,6 +244,9 @@ function PropertyDetails({ propertyId, propertySlug }) {
         bedrooms,
         property.propertyType
     );
+
+    const logoUrl = getDeveloperLogo(property);
+    const availableFlats = getAvailableFlats(property);
 
     const area = property.area
         ? `${Number(property.area).toLocaleString("en-IN")} ${property.areaUnit || "sq.ft."
@@ -265,6 +332,10 @@ function PropertyDetails({ propertyId, propertySlug }) {
                                     </span>
                                 )}
 
+                                {property.verified && property.featured && (
+                                    <span className="property-details__badge-divider">•</span>
+                                )}
+
                                 {property.featured && (
                                     <span className="property-details__badge property-details__badge--featured">
                                         Featured Property
@@ -272,12 +343,42 @@ function PropertyDetails({ propertyId, propertySlug }) {
                                 )}
                             </div>
 
-                            <h1>{title}</h1>
+                            <div className="property-details__title-row">
+                                {logoUrl ? (
+                                    <div className="property-details__brand-logo-container">
+                                        <img
+                                            src={logoUrl}
+                                            alt={property.developer || property.projectName || "Developer Logo"}
+                                            className="property-details__brand-logo-img"
+                                            onError={(e) => {
+                                                e.currentTarget.style.display = "none";
+                                                const fallback = e.currentTarget.parentElement?.querySelector(".property-details__brand-logo-fallback");
+                                                if (fallback) fallback.style.display = "flex";
+                                            }}
+                                        />
+                                        <div className="property-details__brand-logo-fallback" style={{ display: "none" }}>
+                                            <Building2 size={22} />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="property-details__brand-logo-fallback">
+                                        <Building2 size={22} />
+                                    </div>
+                                )}
+                                <h1>{title}</h1>
+                            </div>
 
                             <p className="property-details__location">
                                 <MapPin size={17} />
                                 <span>{location || "Pune, Maharashtra"}</span>
                             </p>
+
+                            {availableFlats && (
+                                <p className="property-details__flats-row">
+                                    <Building2 size={16} />
+                                    <span>Available Flats: <strong>{availableFlats}</strong></span>
+                                </p>
+                            )}
 
                             {property.projectName &&
                                 property.projectName !== title && (
@@ -314,42 +415,42 @@ function PropertyDetails({ propertyId, propertySlug }) {
                     {/* 1. Project Specifications directly below Enquire Now */}
                     <ProjectSpecifications property={property} />
 
-                    {/* 2. Floor Plans & Architectural Layouts directly below Specifications */}
+                    {/* About this property section — Moved directly on top of floor plan */}
+                    <section id="video-tour" className="property-details__section property-details__description-card property-details__about-card">
+                        <div className="property-details__section-heading">
+                            <div>
+                                <span className="property-details__eyebrow">
+                                    PROPERTY OVERVIEW
+                                </span>
+                                <h2>About this property</h2>
+                            </div>
+                        </div>
+                        {property.description && (
+                            <div className="property-details__description-body">
+                                <p>{property.description}</p>
+                            </div>
+                        )}
+
+                        {/* Video Frame Container with curved sides and continuous autoplay */}
+                        <div className="property-details__video-frame-container">
+                            <iframe
+                                src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&playsinline=1&controls=1&modestbranding=1&rel=0`}
+                                title={`${title} - Video Tour`}
+                                className="property-details__video-iframe"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                                loading="lazy"
+                            />
+                        </div>
+                    </section>
+
+                    {/* 2. Floor Plans & Architectural Layouts directly below About Property */}
                     <PropertyFloorPlans property={property} onEnquire={() => setIsEnquiryModalOpen(true)} />
 
                     {/* Main content and ad sidebar layout */}
                     <div className="property-details__layout">
                         {/* CENTER: Property information */}
                         <div className="property-details__main">
-                            {/* Merged Property Overview & Video Container */}
-                            <section id="video-tour" className="property-details__section property-details__description-card">
-                                <div className="property-details__section-heading">
-                                    <div>
-                                        <span className="property-details__eyebrow">
-                                            PROPERTY OVERVIEW
-                                        </span>
-                                        <h2>About this property</h2>
-                                    </div>
-                                </div>
-                                {property.description && (
-                                    <div className="property-details__description-body">
-                                        <p>{property.description}</p>
-                                    </div>
-                                )}
-
-                                {/* Video Frame Container with curved sides and continuous autoplay */}
-                                <div className="property-details__video-frame-container">
-                                    <iframe
-                                        src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&playsinline=1&controls=1&modestbranding=1&rel=0`}
-                                        title={`${title} - Video Tour`}
-                                        className="property-details__video-iframe"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                        allowFullScreen
-                                        loading="lazy"
-                                    />
-                                </div>
-                            </section>
-
                             {/* 2. Amenities (Internal Amenities & Outdoor Amenities) */}
                             <PropertyAmenities
                                 amenities={property.amenities}
@@ -386,19 +487,14 @@ function PropertyDetails({ propertyId, propertySlug }) {
                             </section>
                         </div>
 
-                        {/* RIGHT: Existing advertisement component */}
+                        {/* RIGHT: Similar Properties & More Landmark Properties */}
                         <aside className="property-details__ad-sidebar">
                             <div className="property-details__ad-sticky">
-                                <AdvertisementSidebar />
+                                <SimilarProperties currentProperty={property} />
+                                <BuilderProperties property={property} />
                             </div>
                         </aside>
                     </div>
-
-                    {/* 4. Similar Projects / Budgets & Area Cards */}
-                    <SimilarProperties currentProperty={property} />
-
-                    {/* 5. More Builder Properties Available */}
-                    <BuilderProperties property={property} />
 
                     {/* Back to listings */}
                     <div className="property-details__bottom-link">
