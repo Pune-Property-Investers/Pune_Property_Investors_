@@ -1,0 +1,18 @@
+{
+  "name": "pune-property-investors-monorepo",
+  "version": "2.0.0",
+  "private": true,
+  "workspaces": [
+    "Pune_Property_Investors_Frontend",
+    "Pune_Properties_Investors_Backend"
+  ],
+  "scripts": {
+    "dev": "npm run dev --prefix Pune_Property_Investors_Frontend",
+    "build": "npm run build --prefix Pune_Property_Investors_Frontend",
+    "start": "npm run start --prefix Pune_Property_Investors_Frontend",
+    "lint": "npm run lint --prefix Pune_Property_Investors_Frontend",
+    "dev:frontend": "npm run dev --prefix Pune_Property_Investors_Frontend",
+    "dev:backend": "npm run dev --prefix Pune_Properties_Investors_Backend",
+    "start:backend": "npm run start --prefix Pune_Properties_Investors_Backend"
+  }
+}
