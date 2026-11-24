@@ -32,7 +32,7 @@ const nextConfig = {
   ],
   ...(basePath ? { basePath, assetPrefix: basePath } : {}),
   turbopack: {
-    root: __dirname,
+    root: path.resolve(__dirname, ".."),
   },
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,

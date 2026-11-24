@@ -27,3 +27,9 @@ pnpm-debug.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# Local Root Junctions for Monorepo IDE Support
+/src
+/public
+/next-env.d.ts
+/tsconfig.tsbuildinfo
