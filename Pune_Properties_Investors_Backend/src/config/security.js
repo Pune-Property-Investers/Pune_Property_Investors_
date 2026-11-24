@@ -9,13 +9,20 @@ import cors from "cors";
 export const securityConfig = {
     cors: {
         origin: (origin, callback) => {
+            const rawOrigins = process.env.FRONTEND_URL 
+                ? process.env.FRONTEND_URL.split(",").map(o => o.trim())
+                : ["http://localhost:3000"];
+
             const allowedOrigins = [
-                process.env.FRONTEND_URL || "http://localhost:3000",
+                ...rawOrigins,
+                "http://localhost:3000",
                 "http://127.0.0.1:3000",
-                "http://localhost:3001"
+                "http://localhost:3001",
+                "http://127.0.0.1:3001"
             ];
-            // Allow requests with no origin (like mobile apps or curl requests)
-            if (!origin || allowedOrigins.includes(origin)) {
+
+            // Allow requests with no origin (mobile apps, server-to-server, curl)
+            if (!origin || allowedOrigins.includes(origin) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
                 return callback(null, true);
             }
             return callback(new Error("CORS policy violation: Access denied"), false);

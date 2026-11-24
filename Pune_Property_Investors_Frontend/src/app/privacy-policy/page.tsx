@@ -5,6 +5,16 @@ export const metadata: Metadata = {
     title: "Privacy Policy | Pune Property Investors",
     description:
         "Your privacy is important to us. Learn how Pune Property Investors handles and protects client data.",
+    keywords: [
+        "privacy policy",
+        "data protection",
+        "client privacy Pune Property Investors",
+        "real estate advisory terms"
+    ],
+    robots: {
+        index: false,
+        follow: true,
+    },
     alternates: {
         canonical: "/privacy-policy",
     },
@@ -18,4 +28,3 @@ export default function PrivacyPolicyPage() {
         />
     );
 }
-

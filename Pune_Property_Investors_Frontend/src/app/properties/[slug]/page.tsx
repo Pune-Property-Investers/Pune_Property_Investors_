@@ -39,9 +39,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         property.image,
     ].filter(Boolean);
 
+    const keywords = [
+        title,
+        property.locality ? `${title} ${property.locality}` : "",
+        property.developer ? `${property.developer} Pune` : "",
+        property.locality ? `properties in ${property.locality}` : "",
+        "floor plans",
+        "price list",
+        "RERA registered",
+        "buy flat in Pune",
+        "Pune Property Investors"
+    ].filter(Boolean) as string[];
+
     return {
         title: `${title} | Pune Property Investors`,
         description,
+        keywords,
         alternates: {
             canonical: `/properties/${slug}`,
         },

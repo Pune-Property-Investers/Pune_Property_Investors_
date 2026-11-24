@@ -2,11 +2,18 @@ import type { Metadata } from "next";
 import Contact from "../../components/pages/Contact";
 
 export const metadata: Metadata = {
-    title: "Contact Us | Pune Property Investors",
+    title: "Contact Us | Schedule Site Visit & Expert Advisory | PPI Infra",
     description:
-        "Connect with Pune Property Investors for verified residential, commercial, and luxury properties in Pune. Fast-track property consultation within 24 hours.",
+        "Get in touch with certified Pune property advisors for instant WhatsApp consultations, site visit bookings, and customized real estate recommendations.",
+    keywords: [
+        "contact Pune Property Investors",
+        "property enquiry Pune",
+        "schedule site visit Pune",
+        "real estate phone number Pune",
+        "PPI Infra office Kharadi"
+    ],
     alternates: {
-        canonical: "/contact",
+        canonical: "/contact-us",
     },
 };
 

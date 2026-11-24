@@ -1,30 +1,35 @@
-"use client";
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import BuyProperties from "../../components/pages/BuyProperties";
 
-import { useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+export const metadata: Metadata = {
+    title: "Search Properties & Projects in Pune | Pune Property Investors",
+    description:
+        "Find your ideal home or investment in Pune using intelligent real estate search by locality, budget, configuration, and possession timeline.",
+    keywords: [
+        "search properties Pune",
+        "property finder Pune",
+        "find flat in Pune",
+        "Pune real estate search",
+        "properties by budget Pune",
+        "properties by locality Pune"
+    ],
+    alternates: {
+        canonical: "/search",
+    },
+    openGraph: {
+        title: "Search Properties & Projects in Pune | Pune Property Investors",
+        description: "Filter and find verified Pune homes, flats, and plots matching your exact budget.",
+        url: "https://punepropertyinvestor.com/search",
+        siteName: "Pune Property Investors",
+        type: "website",
+    },
+};
 
-function SearchRedirect() {
-    const router = useRouter();
-    const searchParams = useSearchParams();
-
-    useEffect(() => {
-        const params = new URLSearchParams(searchParams ? searchParams.toString() : "");
-            if (!params.has("focus")) {
-                params.set("focus", "search");
-            }
-            params.delete("filter");
-            const queryString = params.toString();
-            router.replace(queryString ? `/properties?${queryString}#property-search` : "/properties?focus=search#property-search");
-        }, [router, searchParams]);
-
-    return null;
-}
-
-export default function SearchRedirectPage() {
+export default function SearchPage() {
     return (
-        <Suspense fallback={null}>
-            <SearchRedirect />
+        <Suspense fallback={<div className="page-loading-fallback">Loading search results...</div>}>
+            <BuyProperties pageTitle="Search Properties in Pune" />
         </Suspense>
     );
 }
-

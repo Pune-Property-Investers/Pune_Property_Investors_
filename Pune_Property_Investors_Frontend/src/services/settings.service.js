@@ -31,5 +31,32 @@ export const settingsService = {
             }
         );
     },
+
+    async updatePageSeo(pageKey, payload) {
+        return withMockFallback(
+            () =>
+                apiRequest(`/settings/pages-seo/${pageKey}`, {
+                    method: "PUT",
+                    body: JSON.stringify(payload),
+                }),
+            () => {
+                const store = getStore();
+                const currentPages = store.settings.pagesSeo || {};
+                store.settings = {
+                    ...store.settings,
+                    pagesSeo: {
+                        ...currentPages,
+                        [pageKey]: {
+                            ...(currentPages[pageKey] || {}),
+                            ...payload,
+                        },
+                    },
+                };
+                saveStore(store);
+                addActivity(`Updated SEO metadata for page "${pageKey}"`, "update");
+                return store.settings.pagesSeo[pageKey];
+            }
+        );
+    },
 };
 

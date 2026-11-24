@@ -218,7 +218,103 @@ async function initializeSchema() {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         `);
 
-        console.log("🛡️ MySQL Tables initialized successfully (admins, properties, enquiries, floor_plans, floor_plan_enquiries).");
+        // 6. Settings Table (Website, Global SEO, Page-by-Page SEO, Profile)
+        await pool.execute(`
+            CREATE TABLE IF NOT EXISTS settings (
+                section_key VARCHAR(64) PRIMARY KEY,
+                section_data JSON NOT NULL,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        `);
+
+        // 7. Projects Table
+        await pool.execute(`
+            CREATE TABLE IF NOT EXISTS projects (
+                id VARCHAR(64) PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                slug VARCHAR(191) NOT NULL UNIQUE,
+                developer VARCHAR(150),
+                location VARCHAR(200),
+                locality VARCHAR(100),
+                price VARCHAR(100),
+                status VARCHAR(50) DEFAULT 'Under Construction',
+                publication_status VARCHAR(50) DEFAULT 'Published',
+                configurations VARCHAR(100),
+                possession_date VARCHAR(50),
+                featured BOOLEAN DEFAULT FALSE,
+                image TEXT,
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        `);
+
+        // 8. Locations Table
+        await pool.execute(`
+            CREATE TABLE IF NOT EXISTS locations (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                slug VARCHAR(100) NOT NULL UNIQUE,
+                name VARCHAR(100) NOT NULL,
+                tagline VARCHAR(200),
+                avg_price_per_sqft INT DEFAULT 0,
+                price_growth_rate VARCHAR(50),
+                landmarks JSON,
+                image TEXT,
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        `);
+
+        // 9. Developers Table
+        await pool.execute(`
+            CREATE TABLE IF NOT EXISTS developers (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(150) NOT NULL,
+                domain VARCHAR(100),
+                logo_url TEXT,
+                website TEXT,
+                phone VARCHAR(50),
+                email VARCHAR(191),
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        `);
+
+        // 10. Articles Table
+        await pool.execute(`
+            CREATE TABLE IF NOT EXISTS articles (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                type VARCHAR(50) DEFAULT 'blog',
+                title VARCHAR(255) NOT NULL,
+                slug VARCHAR(191) NOT NULL UNIQUE,
+                category VARCHAR(100),
+                author VARCHAR(100),
+                date VARCHAR(50),
+                read_time VARCHAR(50),
+                status VARCHAR(50) DEFAULT 'Published',
+                image TEXT,
+                excerpt TEXT,
+                content LONGTEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        `);
+
+        // 11. Careers Table
+        await pool.execute(`
+            CREATE TABLE IF NOT EXISTS jobs (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                category VARCHAR(100),
+                location VARCHAR(100),
+                experience VARCHAR(100),
+                type VARCHAR(50) DEFAULT 'Full Time',
+                status VARCHAR(50) DEFAULT 'Open',
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        `);
+
+        console.log("🛡️ MySQL Tables initialized successfully (admins, properties, enquiries, floor_plans, floor_plan_enquiries, settings, projects, locations, developers, articles, jobs).");
     } catch (err) {
         console.error("Schema initialization error:", err.message);
     }

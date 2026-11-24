@@ -3,11 +3,28 @@ import { Suspense } from "react";
 import BuyProperties from "../../components/pages/BuyProperties";
 
 export const metadata: Metadata = {
-    title: "Plots & Land in Pune | NA Residential Plots & Gated Communities",
+    title: "NA Villa Plots & Gated Land for Sale in Pune | Clear Title Land",
     description:
-        "Explore clear-title residential plots, gated community layouts, and NA land opportunities in growing Pune corridors.",
+        "Clear title, PMRDA-sanctioned residential NA villa plots in luxury gated communities with clubhouse amenities around Hinjewadi, Wagholi, and Pune.",
+    keywords: [
+        "plots for sale Pune",
+        "villa plots Pune",
+        "NA plots Hinjewadi",
+        "gated community plots Pune",
+        "residential land Pune",
+        "PMRDA plots Pune",
+        "investment plots Pune",
+        "agricultural NA land Pune"
+    ],
     alternates: {
         canonical: "/plots",
+    },
+    openGraph: {
+        title: "NA Residential Villa Plots in Pune | Gated Communities",
+        description: "Verified clear-title NA plots with lifestyle amenities and high appreciation.",
+        url: "https://punepropertyinvestor.com/plots",
+        siteName: "Pune Property Investors",
+        type: "website",
     },
 };
 
