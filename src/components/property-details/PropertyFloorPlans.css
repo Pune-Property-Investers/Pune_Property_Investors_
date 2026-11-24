@@ -1161,3 +1161,131 @@
         box-sizing: border-box;
     }
 }
+
+/* =============================================================
+   TOWER DETAILS & FLOOR PLAN CONFIGURATION SUB-SECTION
+   ============================================================= */
+.property-floor-plans__towers-section {
+    margin-top: 26px;
+    padding-top: 20px;
+    border-top: 1px solid #edf2f7;
+}
+
+.floor-plans__tower-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.floor-plans__tower-heading {
+    font-size: 17px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.01em;
+    margin: 0;
+    font-family: inherit;
+}
+
+.floor-plans__tower-count {
+    font-size: 11px;
+    font-weight: 600;
+    color: #ba874a;
+    background: rgba(186, 135, 74, 0.08);
+    border: 1px solid rgba(186, 135, 74, 0.2);
+    padding: 2px 8px;
+    border-radius: 9999px;
+}
+
+.floor-plans__towers-track {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 2px 10px;
+    box-sizing: border-box;
+}
+
+.floor-plans__towers-track::-webkit-scrollbar {
+    display: none;
+}
+
+.floor-plans__tower-card {
+    flex: 0 0 195px;
+    min-width: 195px;
+    width: 195px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 13px 15px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.floor-plans__tower-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(18, 24, 22, 0.06);
+    border-color: #cbd5e1;
+}
+
+.tower-card__top {
+    margin-bottom: 8px;
+}
+
+.tower-card__name {
+    margin: 0 0 2px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.tower-card__config {
+    margin: 0;
+    font-size: 12.5px;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.tower-card__divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin-bottom: 8px;
+}
+
+.tower-card__bottom {
+    margin: 0;
+}
+
+.tower-card__completion {
+    margin: 0 0 2px;
+    font-size: 12px;
+    color: #1f2937;
+    font-weight: 500;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tower-card__floors {
+    margin: 0;
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+@media (max-width: 640px) {
+    .floor-plans__tower-card {
+        flex: 0 0 180px;
+        min-width: 180px;
+        width: 180px;
+        padding: 12px 14px;
+        border-radius: 16px;
+    }
+}
+

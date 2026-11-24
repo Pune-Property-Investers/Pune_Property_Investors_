@@ -1,6 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import {
+    Play,
+    ChevronRight,
+    ChevronLeft,
+} from "lucide-react";
 import {
     FaElevator,
     FaSquareParking,
@@ -46,6 +51,7 @@ import {
     FaFilm,
 } from "react-icons/fa6";
 import { getPropertyCategory } from "./ProjectSpecifications";
+import { extractYouTubeVideoId } from "../../lib/youtube";
 import "./PropertyAmenities.css";
 
 // ============================================================================
@@ -53,7 +59,7 @@ import "./PropertyAmenities.css";
 // ============================================================================
 const residentialOutdoor = [
     { name: "Swimming Pool & Lap Pool", icon: FaPersonSwimming },
-    { name: "Kids Play Area", icon: FaChildren },
+    { name: "Kids Play Area & Creche", icon: FaChildren },
     { name: "Acupressure Jogging Track", icon: FaPersonRunning },
     { name: "Senior Citizen Area", icon: FaPersonCane },
     { name: "Squash Court & Sports Arena", icon: FaTableTennisPaddleBall },
@@ -62,7 +68,7 @@ const residentialOutdoor = [
     { name: "Herbal Garden & Zen Park", icon: FaSeedling },
     { name: "Dedicated Cycling Track", icon: FaBicycle },
     { name: "Futsal Court", icon: FaFutbol },
-    { name: "Party Lawn & Gazebo", icon: FaChampagneGlasses },
+    { name: "Amphitheatre & Party Lawn", icon: FaChampagneGlasses },
     { name: "Mini Theatre & AV Lounge", icon: FaFilm },
     { name: "Grand Multi-Storey Clubhouse", icon: FaHouseUser },
     { name: "Fully Equipped Fitness Centre", icon: FaDumbbell },
@@ -172,6 +178,7 @@ const amenityIcons = {
     play: FaChildren,
     kid: FaChildren,
     children: FaChildren,
+    creche: FaChildren,
     jog: FaPersonRunning,
     run: FaPersonRunning,
     track: FaPersonRunning,
@@ -180,7 +187,8 @@ const amenityIcons = {
     skat: FaPersonSkating,
     cricket: FaBaseballBatBall,
     herb: FaSeedling,
-    garden: FaSeedling,
+    garden: FaTree,
+    landscape: FaTree,
     park: FaTree,
     tree: FaTree,
     cycle: FaBicycle,
@@ -189,6 +197,7 @@ const amenityIcons = {
     football: FaFutbol,
     party: FaChampagneGlasses,
     lawn: FaChampagneGlasses,
+    amphi: FaChampagneGlasses,
     theatre: FaFilm,
     theater: FaFilm,
     cinema: FaFilm,
@@ -203,6 +212,9 @@ const amenityIcons = {
     lift: FaElevator,
     elevator: FaElevator,
     parking: FaSquareParking,
+    ev: FaSolarPanel,
+    charger: FaSolarPanel,
+    charging: FaSolarPanel,
     car: FaCar,
     power: FaBolt,
     backup: FaBolt,
@@ -225,8 +237,150 @@ function getAmenityIcon(amenity) {
     return match ? amenityIcons[match] : FaCircleCheck;
 }
 
-export default function PropertyAmenities({ amenities = [], showHeader = false, property = null }) {
+// ============================================================================
+// CURATED FEATURED SLIDES POOL (HIGH RESOLUTION IMAGERY WITH OVERLAPPING LABELS)
+// ============================================================================
+const featuredSlidesPool = {
+    residential: [
+        {
+            key: "amphi",
+            name: "Amphitheatre",
+            image: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=80",
+            icon: FaChampagneGlasses,
+        },
+        {
+            key: "gym",
+            name: "Gymnasium",
+            image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=80",
+            icon: FaDumbbell,
+        },
+        {
+            key: "pool",
+            name: "Swimming Pool",
+            image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=900&q=80",
+            icon: FaPersonSwimming,
+        },
+        {
+            key: "creche",
+            name: "Creche / Day Care",
+            image: "https://images.unsplash.com/photo-1596464716127-f2a829822301?auto=format&fit=crop&w=900&q=80",
+            icon: FaChildren,
+        },
+        {
+            key: "garden",
+            name: "Landscape Garden",
+            image: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=900&q=80",
+            icon: FaTree,
+        },
+        {
+            key: "ev",
+            name: "EV Charging Station",
+            image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=900&q=80",
+            icon: FaSolarPanel,
+        },
+        {
+            key: "club",
+            name: "Grand Clubhouse",
+            image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=900&q=80",
+            icon: FaHouseUser,
+        },
+    ],
+    commercial: [
+        {
+            key: "lobby",
+            name: "Grand Corporate Lobby",
+            image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=80",
+            icon: FaBuilding,
+        },
+        {
+            key: "conference",
+            name: "Conference & Meeting Suites",
+            image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=80",
+            icon: FaBriefcase,
+        },
+        {
+            key: "cafeteria",
+            name: "Cafeteria & Dining Hub",
+            image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=900&q=80",
+            icon: FaHouseUser,
+        },
+        {
+            key: "lifts",
+            name: "High-Speed Smart Elevators",
+            image: "https://images.unsplash.com/photo-1541888946425-d0fbb186156f?auto=format&fit=crop&w=900&q=80",
+            icon: FaElevator,
+        },
+        {
+            key: "ev",
+            name: "EV Fast-Charging Facility",
+            image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=900&q=80",
+            icon: FaSolarPanel,
+        },
+    ],
+    plot: [
+        {
+            key: "arch",
+            name: "Grand Entrance Arch",
+            image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
+            icon: FaShieldHalved,
+        },
+        {
+            key: "road",
+            name: "Wide Internal Concrete Roads",
+            image: "https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=900&q=80",
+            icon: FaRoad,
+        },
+        {
+            key: "park",
+            name: "Central Landscaped Park",
+            image: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=900&q=80",
+            icon: FaTree,
+        },
+        {
+            key: "pavilion",
+            name: "Community Pavilion & Gazebo",
+            image: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=80",
+            icon: FaHouseUser,
+        },
+    ],
+    villa: [
+        {
+            key: "pool",
+            name: "Private Swimming Pool",
+            image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=900&q=80",
+            icon: FaPersonSwimming,
+        },
+        {
+            key: "lawn",
+            name: "Private Landscape Garden",
+            image: "https://images.unsplash.com/photo-1558293842-c0fd3db86157?auto=format&fit=crop&w=900&q=80",
+            icon: FaTree,
+        },
+        {
+            key: "club",
+            name: "Resort Clubhouse & Spa",
+            image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=900&q=80",
+            icon: FaHouseUser,
+        },
+        {
+            key: "gym",
+            name: "Exclusive Fitness Studio",
+            image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=80",
+            icon: FaDumbbell,
+        },
+    ],
+};
+
+export default function PropertyAmenities({
+    amenities = [],
+    showHeader = true,
+    property = null,
+    onEnquire = null,
+}) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
     const category = getPropertyCategory(property);
 
@@ -304,9 +458,71 @@ export default function PropertyAmenities({ amenities = [], showHeader = false, 
 
     const allList = [...outdoorList, ...internalList];
 
-    // Take 3 top preview amenities to display in a single clean row on the page
-    const previewList = outdoorList.slice(0, 3);
-    const remainingCount = Math.max(0, allList.length - previewList.length);
+    // Carousel slides list
+    const pool = featuredSlidesPool[category] || featuredSlidesPool.residential;
+    const slides = pool.slice(0, 6);
+
+    // Auto-advance slides every 5s when not hovered
+    useEffect(() => {
+        if (isHovered) return;
+        const timer = setInterval(() => {
+            setActiveSlideIndex((prev) => (prev + 1) % slides.length);
+        }, 5000);
+        return () => clearInterval(timer);
+    }, [isHovered, slides.length]);
+
+    const activeSlide = slides[activeSlideIndex] || slides[0];
+
+    const prevSlide = () => {
+        setActiveSlideIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    };
+
+    const nextSlide = () => {
+        setActiveSlideIndex((prev) => (prev + 1) % slides.length);
+    };
+
+    // Quick highlight amenities (4-item grid below hero photo matching the reference)
+    const quickItems = [
+        {
+            key: "gym",
+            name: "Gymnasium",
+            icon: FaDumbbell,
+            slideIndex: slides.findIndex((s) => s.key === "gym"),
+        },
+        {
+            key: "creche",
+            name: "Creche/Day Care",
+            icon: FaChildren,
+            slideIndex: slides.findIndex((s) => s.key === "creche"),
+        },
+        {
+            key: "ev",
+            name: "EV Charging Stat...",
+            icon: FaSolarPanel,
+            slideIndex: slides.findIndex((s) => s.key === "ev"),
+        },
+        {
+            key: "garden",
+            name: "Landscape Garden",
+            icon: FaTree,
+            slideIndex: slides.findIndex((s) => s.key === "garden"),
+        },
+    ];
+
+    // Interactive flip: clicking on quick item switches the hero photo to that amenity
+    const handleQuickSelect = (item) => {
+        if (item.slideIndex !== -1) {
+            setActiveSlideIndex(item.slideIndex);
+        }
+    };
+
+    // Subtitle text with ...more toggle
+    const projectName = property?.projectName || property?.title || "This premium project";
+    const fullDescription = `${projectName} presents an exclusive opportunity to indulge in world-class lifestyle amenities, serene open greens, and state-of-the-art recreation spaces.`;
+    const shortDescription = `${projectName} presents an exclusive opportunity to...`;
+
+    // Video Tour ID
+    const videoId = extractYouTubeVideoId(property?.videoUrl || property?.youtubeUrl || "");
 
     // Body scroll lock & Escape key handling when modal is open
     useEffect(() => {
@@ -330,61 +546,146 @@ export default function PropertyAmenities({ amenities = [], showHeader = false, 
 
     return (
         <section className="property-amenities">
-            {showHeader && (
-                <div className="property-amenities__heading">
-                    <span className="property-amenities__eyebrow">
-                        {category === "commercial"
-                            ? "BUSINESS INFRASTRUCTURE & AMENITIES"
-                            : category === "plot"
-                            ? "LAYOUT & GATED INFRASTRUCTURE"
-                            : category === "villa"
-                            ? "LUXURY VILLA LIFESTYLE & AMENITIES"
-                            : "COMFORT & LIFESTYLE"}
-                    </span>
-                    <h2>Amenities</h2>
-                    <p>
-                        {category === "commercial"
-                            ? "Enterprise-grade office specifications and corporate tech park amenities."
-                            : category === "plot"
-                            ? "Pre-installed on-plot utilities and premium gated layout infrastructure."
-                            : category === "villa"
-                            ? "Bespoke private villa amenities alongside world-class gated enclave leisure."
-                            : "Thoughtfully planned internal fixtures and world-class community amenities."}
+            {/* 1. Header with Video Tour Badge */}
+            <div className="property-amenities__card-header">
+                <div className="property-amenities__header-text">
+                    <h3 className="property-amenities__title">Amenities</h3>
+                    <p className="property-amenities__subtitle">
+                        {isExpanded ? fullDescription : shortDescription}
+                        <button
+                            type="button"
+                            className="property-amenities__more-btn"
+                            onClick={() => setIsExpanded(!isExpanded)}
+                        >
+                            {isExpanded ? " less" : "more"}
+                        </button>
                     </p>
                 </div>
-            )}
 
-            {/* 3 Preview Amenities Cards (3 in a Row) */}
-            <div className="property-amenities__preview-grid">
-                {previewList.map((item, idx) => {
+                {videoId ? (
+                    <a
+                        href="#video-tour"
+                        className="property-amenities__video-badge"
+                        title="Watch Property Video Tour"
+                    >
+                        <img
+                            src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+                            alt="Video Tour"
+                            className="property-amenities__video-badge-thumb"
+                        />
+                        <span className="property-amenities__video-badge-play">
+                            <Play size={11} fill="#ffffff" color="#ffffff" />
+                        </span>
+                    </a>
+                ) : (
+                    <div className="property-amenities__count-pill">
+                        <span>{allList.length}+ Amenities</span>
+                    </div>
+                )}
+            </div>
+
+            {/* 2. Hero Featured Photo Card with Overlapping Name & Pagination Dots */}
+            <div
+                className="property-amenities__hero-card"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+            >
+                <div className="property-amenities__hero-media">
+                    <img
+                        src={activeSlide.image}
+                        alt={activeSlide.name}
+                        className="property-amenities__hero-image"
+                        loading="lazy"
+                    />
+
+                    {/* Left & Right Subtle Navigation Arrows on Hover */}
+                    <button
+                        type="button"
+                        className="property-amenities__hero-nav property-amenities__hero-nav--prev"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            prevSlide();
+                        }}
+                        aria-label="Previous amenity photo"
+                    >
+                        <ChevronLeft size={16} />
+                    </button>
+                    <button
+                        type="button"
+                        className="property-amenities__hero-nav property-amenities__hero-nav--next"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            nextSlide();
+                        }}
+                        aria-label="Next amenity photo"
+                    >
+                        <ChevronRight size={16} />
+                    </button>
+
+                    {/* Gradient Overlay with Overlapping Name at Bottom Left */}
+                    <div className="property-amenities__hero-overlay">
+                        <div className="property-amenities__hero-bottom">
+                            <h4 className="property-amenities__hero-name">
+                                {activeSlide.name}
+                            </h4>
+
+                            {/* Centered Pagination Dots */}
+                            <div className="property-amenities__hero-dots">
+                                {slides.map((_, dotIdx) => (
+                                    <button
+                                        key={dotIdx}
+                                        type="button"
+                                        className={`property-amenities__hero-dot ${
+                                            dotIdx === activeSlideIndex ? "active" : ""
+                                        }`}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveSlideIndex(dotIdx);
+                                        }}
+                                        aria-label={`Amenity photo ${dotIdx + 1}`}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* 3. Quick 4 Amenity Highlights (Interactive Switcher) */}
+            <div className="property-amenities__quick-grid">
+                {quickItems.map((item, idx) => {
                     const Icon = item.icon;
+                    const isSelected = activeSlide.key === item.key;
                     return (
                         <div
                             key={idx}
-                            className="property-amenities__preview-card"
-                            onClick={() => setIsModalOpen(true)}
+                            className={`property-amenities__quick-item ${isSelected ? "selected" : ""}`}
+                            onClick={() => handleQuickSelect(item)}
                             role="button"
                             tabIndex={0}
-                            title={`Click to view all amenities including ${item.name}`}
+                            title={`Click to view ${item.name} photo`}
                         >
-                            <span className="property-amenities__preview-icon">
-                                <Icon size={22} />
+                            <span className="property-amenities__quick-icon">
+                                <Icon size={16} />
                             </span>
-                            <span className="property-amenities__preview-name">{item.name}</span>
+                            <span className="property-amenities__quick-name">
+                                {item.name}
+                            </span>
                         </div>
                     );
                 })}
             </div>
 
-            {/* View More CTA Button */}
-            <div className="property-amenities__action">
+            {/* 4. Action Button (View All Amenities) */}
+            <div className="property-amenities__action-buttons">
+                {/* Luxury Outlined Pill: View all X amenities */}
                 <button
                     type="button"
-                    className="amenities-view-more-btn"
+                    className="property-amenities__view-all-pill"
                     onClick={() => setIsModalOpen(true)}
                 >
-                    <FaPlus className="amenities-view-more-icon" />
-                    <span>View More Amenities (+{remainingCount} More)</span>
+                    <span>View all {allList.length} amenities</span>
+                    <ChevronRight size={16} className="property-amenities__btn-arrow" />
                 </button>
             </div>
 

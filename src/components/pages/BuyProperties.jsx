@@ -365,19 +365,7 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                     {/* Sticky Search Bar with Quick Filter Chips */}
                     <div className="buy-properties-sticky-header" id="property-search">
                         <div className="buy-properties-container">
-                            {/* Explore Properties Badge (Above search bar) */}
-                            <div className="buy-properties-explore-badge-wrap">
-                                <div className="buy-properties-curated-badge">
-                                    <span className="buy-properties-curated-badge__line" />
-                                    <span className="buy-properties-curated-badge__sparkle">✦</span>
-                                    <span className="buy-properties-curated-badge__text">
-                                        EXPLORE PROPERTIES
-                                    </span>
-                                    <span className="buy-properties-curated-badge__line" />
-                                </div>
-                            </div>
-
-                            {/* Search Filter Bar (Search input + BHK ▾, Price ▾, Area ▾, New Projects, Filters, ⇅) */}
+                            {/* Search Filter Bar (Search input + BHK ▾, Area ▾, Property Type ▾, New Projects, Filters, ⇅) */}
                             <div className="buy-properties-search-filter-box">
                                 <PropertyFlightSearchBar
                                     filters={filters}
@@ -386,12 +374,25 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                                     onSearchQueryChange={setSearchQuery}
                                     onOpenFilterDrawer={() => setMobileFiltersOpen(true)}
                                     totalResults={filteredProperties.length}
+                                    showBack={true}
                                 />
                             </div>
                         </div>
                     </div>
 
                     <div className="buy-properties-container">
+                        {/* Explore Properties Badge (Scrollable below sticky search bar) */}
+                        <div className="buy-properties-explore-badge-wrap buy-properties-explore-badge-wrap--scrollable">
+                            <div className="buy-properties-curated-badge">
+                                <span className="buy-properties-curated-badge__line" />
+                                <span className="buy-properties-curated-badge__sparkle">✦</span>
+                                <span className="buy-properties-curated-badge__text">
+                                    EXPLORE PROPERTIES
+                                </span>
+                                <span className="buy-properties-curated-badge__line" />
+                            </div>
+                        </div>
+
                         {/* Three-column layout */}
                         <div className="buy-properties-layout">
                             {/* Left: filters (desktop sticky sidebar / mobile slide drawer) */}

@@ -389,6 +389,64 @@ export default function PropertyFloorPlans({ property, onEnquire }) {
 
     const propertyTitle = property.title || property.name || "Pune Luxury Property";
 
+    // Tower details configuration and floor plan amenities
+    const towerDetails = useMemo(() => {
+        if (Array.isArray(property.towersList) && property.towersList.length > 0) {
+            return property.towersList;
+        }
+
+        const configLabel = property.bhk
+            ? `${property.bhk} BHK Apartment`
+            : property.configuration || "2, 3 BHK Apartment";
+
+        const possessionText = property.possession
+            ? `Completion in ${property.possession}, Phase 1`
+            : "Completion in Mar, 2030, Phase 1";
+
+        const baseFloors = Number(String(property.floors || "33").replace(/\D/g, "")) || 33;
+
+        const propAmenities = Array.isArray(property.amenities) && property.amenities.length > 0
+            ? property.amenities.map((a) => (typeof a === "string" ? a : a.name || a.title)).filter(Boolean)
+            : [];
+
+        return [
+            {
+                id: "tower-3",
+                name: "Tower 3",
+                config: configLabel,
+                completion: possessionText,
+                floors: `${baseFloors} floors`,
+                amenities: propAmenities.length >= 3
+                    ? propAmenities.slice(0, 3)
+                    : ["Sky Lounge", "3 High-Speed Lifts", "Terrace Garden", "Vastu Compliant"]
+            },
+            {
+                id: "tower-2",
+                name: "Tower 2",
+                config: configLabel,
+                completion: possessionText,
+                floors: `${Math.max(baseFloors - 1, 28)} floors`,
+                amenities: ["Double Height Lobby", "Smart Video Door Access", "Rooftop Yoga Deck", "100% Power Backup"]
+            },
+            {
+                id: "tower-1",
+                name: "Tower 1",
+                config: configLabel,
+                completion: possessionText,
+                floors: `${Math.max(baseFloors - 3, 26)} floors`,
+                amenities: ["EV Charging Bays", "Panoramic Viewing Deck", "Dedicated Service Lift", "Fire Sprinklers"]
+            },
+            {
+                id: "tower-4",
+                name: "Tower 4",
+                config: configLabel.replace("2, 3", "3, 4"),
+                completion: property.possession ? `Completion in ${property.possession}, Phase 2` : "Completion in Dec, 2030, Phase 2",
+                floors: `${baseFloors + 2} floors`,
+                amenities: ["Infinity Pool Access", "Private Sun Deck", "Clubhouse Connectivity", "Podium Parking"]
+            }
+        ];
+    }, [property]);
+
     const convertArea = (sqft) => {
         if (!sqft) return 0;
         if (unitMeasure === "sq.m") {
@@ -676,6 +734,32 @@ export default function PropertyFloorPlans({ property, onEnquire }) {
             {/* Manual Swipe & Scroll Hint for Mobile Users */}
             <div className="floor-plans__swipe-hint">
                 <span>← Swipe horizontally to explore all floor plans →</span>
+            </div>
+
+            {/* Tower Details Sub-section */}
+            <div className="property-floor-plans__towers-section">
+                <div className="floor-plans__tower-header">
+                    <h3 className="floor-plans__tower-heading">Tower details</h3>
+                    <span className="floor-plans__tower-count">{towerDetails.length} Towers</span>
+                </div>
+
+                <div className="floor-plans__towers-track">
+                    {towerDetails.map((tower) => (
+                        <div key={tower.id} className="floor-plans__tower-card">
+                            <div className="tower-card__top">
+                                <h4 className="tower-card__name">{tower.name}</h4>
+                                <p className="tower-card__config">{tower.config}</p>
+                            </div>
+
+                            <div className="tower-card__divider" />
+
+                            <div className="tower-card__bottom">
+                                <p className="tower-card__completion" title={tower.completion}>{tower.completion}</p>
+                                <p className="tower-card__floors">{tower.floors}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
 
             {/* MANDATORY LEAD MODAL: Required to preview layout or connect on WhatsApp */}

@@ -37,80 +37,29 @@
     pointer-events: none !important;
 }
 
-/* Dedicated Transparent Header (never turns black or white on scroll) */
+/* Dedicated Header for Property Details (same background color as outer search bar in explore properties: #fbfaf7) */
 .site-header--transparent,
 .site-header--transparent.site-header--scrolled,
 .site-header--transparent.site-header--black {
-    background: transparent !important;
-    border-bottom: 1px solid transparent !important;
-    box-shadow: none !important;
+    background: #fbfaf7 !important;
+    border: none !important;
+    border-bottom: none !important;
+    box-shadow: 0 4px 16px rgba(18, 24, 22, 0.04) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
 }
 
-/* Property Details Header (Circular back button & Pill search bar) */
+/* Property Details Header (Search panel with Back button) */
 .property-header-container {
-    display: flex;
-    align-items: center;
-    gap: 12px;
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 14px 20px;
+    padding: 10px 20px 8px;
     box-sizing: border-box;
-    pointer-events: none;
 }
 
-.property-header__back-btn,
-.property-header__search-form {
-    pointer-events: auto;
-}
-
-.property-header__back-btn {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    border-radius: 50%;
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #1e293b;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    padding: 0;
-    flex-shrink: 0;
-}
-
-.property-header__back-btn:hover {
-    background: #f8fafc;
-    color: #ad7c48;
-    transform: scale(1.05);
-}
-
-.property-header__back-btn:active {
-    transform: scale(0.96);
-}
-
-.property-header__search-form {
-    flex: 1;
-    max-width: 600px;
-    height: 44px;
-    border-radius: 9999px;
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    transition: all 0.2s ease;
-}
-
-.property-header__search-form:focus-within {
-    border-color: #ad7c48;
-    box-shadow: 0 4px 18px rgba(173, 124, 72, 0.28);
+.property-header-container .property-search-filter-wrapper {
+    width: 100%;
 }
 
 .property-header__search-input {

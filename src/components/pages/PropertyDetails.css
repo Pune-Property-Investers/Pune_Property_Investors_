@@ -11,7 +11,7 @@
     --pd-background: #f8f8f5;
 
     min-height: 100vh;
-    padding: 0 0 70px;
+    padding: 112px 0 70px;
     background: var(--pd-background);
     color: var(--pd-text);
     overflow-x: clip;
@@ -1030,7 +1030,7 @@
 
 @media (max-width: 900px) {
     .property-details {
-        padding-top: 0;
+        padding-top: 108px;
     }
 
     .property-details__project-header {
@@ -1094,7 +1094,7 @@
 
 @media (max-width: 650px) {
     .property-details {
-        padding: 0 0 45px;
+        padding: 104px 0 45px;
     }
 
     .property-details__container {
@@ -1453,5 +1453,411 @@
         max-width: 95%;
         padding: 20px 18px;
         border-radius: 16px;
+    }
+}
+
+/* =============================================================
+   EXACT PHOTO THEME REPLICA (VTP HiLife Smart Towers Theme)
+   ============================================================= */
+
+.property-details--vtp-theme {
+    padding-top: 0 !important;
+    background: #f8fafc;
+}
+
+/* 1. CINEMATIC HERO VIEWPORT */
+.vtp-hero-viewport {
+    position: relative;
+    width: 100%;
+    height: min(65vh, 600px);
+    min-height: 440px;
+    background: #0c1523;
+    overflow: hidden;
+}
+
+.vtp-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.6s ease;
+}
+
+.vtp-hero-viewport:hover .vtp-hero-img {
+    transform: scale(1.02);
+}
+
+/* Floating Circular Controls at Top of Image */
+.vtp-hero-top-bar {
+    position: absolute;
+    top: 76px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 15;
+}
+
+.vtp-hero-top-bar__right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.vtp-circle-btn {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1e293b;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.vtp-circle-btn:hover {
+    background: #ffffff;
+    transform: scale(1.06);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+    color: #0c1523;
+}
+
+.vtp-circle-btn--active {
+    background: #ffffff;
+}
+
+/* Corner Photo Count Pill */
+.vtp-hero-photos-pill {
+    position: absolute;
+    bottom: 64px;
+    right: 20px;
+    z-index: 15;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 9999px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.vtp-hero-photos-pill:hover {
+    background: rgba(15, 23, 42, 0.95);
+    border-color: #d4af37;
+    color: #ffffff;
+}
+
+.vtp-share-toast {
+    position: absolute;
+    bottom: 64px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 25;
+    background: rgba(15, 23, 42, 0.95);
+    color: #ffffff;
+    padding: 8px 18px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 500;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 2. FLOATING OVERLAPPING HERO CARD */
+.vtp-floating-card-wrapper {
+    position: relative;
+    z-index: 20;
+    margin-top: -50px;
+    margin-bottom: 18px;
+}
+
+.vtp-floating-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 22px 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-sizing: border-box;
+}
+
+.vtp-card-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #162033;
+    color: #ffffff;
+    border-radius: 9999px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    margin-bottom: 12px;
+}
+
+.vtp-card-badge__dot {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.vtp-card-badge__status {
+    color: #d4af37;
+    font-weight: 700;
+}
+
+.vtp-card-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.vtp-card-title-col {
+    flex: 1;
+    min-width: 0;
+}
+
+.vtp-card-title {
+    font-family: var(--font-serif), Georgia, serif;
+    font-size: clamp(24px, 3vw, 30px);
+    font-weight: 700;
+    color: #0c1523;
+    line-height: 1.15;
+    margin: 0 0 6px;
+    letter-spacing: -0.3px;
+}
+
+.vtp-card-location {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13.5px;
+    color: #64748b;
+    font-weight: 500;
+    margin: 0;
+}
+
+.vtp-card-location svg {
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.vtp-card-price-col {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-shrink: 0;
+}
+
+.vtp-card-price-main {
+    font-size: clamp(22px, 2.5vw, 26px);
+    font-weight: 800;
+    color: #0c1523;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+}
+
+.vtp-card-price-sub {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0c1523;
+    line-height: 1.25;
+    margin-top: 2px;
+    white-space: nowrap;
+}
+
+/* 3. TABS BAR */
+.vtp-tabs-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1.5px solid #edf2f7;
+    margin-bottom: 22px;
+    padding: 0 6px;
+}
+
+.vtp-tab-btn {
+    border: none;
+    background: transparent;
+    padding: 12px 6px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #475569;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.vtp-tab-btn:hover {
+    color: #0c1523;
+}
+
+.vtp-tab-btn--active {
+    color: #0c1523;
+    font-weight: 700;
+}
+
+.vtp-tab-btn--active::after {
+    content: "";
+    position: absolute;
+    bottom: -1.5px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #0c1523;
+    border-radius: 9999px;
+}
+
+/* 4. 3-COLUMN STATS ROW */
+.vtp-stats-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 6px;
+    margin-bottom: 28px;
+}
+
+.vtp-stat-item {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.vtp-stat-value {
+    font-size: 19px;
+    font-weight: 800;
+    color: #0c1523;
+    line-height: 1.2;
+}
+
+.vtp-stat-label {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.vtp-stat-divider {
+    width: 1px;
+    height: 38px;
+    background: #e2e8f0;
+    flex-shrink: 0;
+}
+
+/* 6. PHOTO GALLERY MODAL */
+.vtp-gallery-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(10, 15, 24, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.vtp-gallery-modal-content {
+    position: relative;
+    width: min(94vw, 1200px);
+    max-height: 90vh;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #0c1523;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.vtp-gallery-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.vtp-gallery-modal-close:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .vtp-hero-viewport {
+        height: 54vh;
+        min-height: 380px;
+    }
+
+    .vtp-hero-top-bar {
+        top: 72px;
+        left: 16px;
+        right: 16px;
+    }
+
+    .vtp-circle-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .vtp-floating-card-wrapper {
+        margin-top: -45px;
+    }
+
+    .vtp-floating-card {
+        padding: 16px 18px;
+        border-radius: 18px;
+    }
+
+    .vtp-card-title {
+        font-size: 22px;
+    }
+
+    .vtp-card-price-main {
+        font-size: 20px;
+    }
+
+    .vtp-card-price-sub {
+        font-size: 14px;
+    }
+
+    .vtp-tab-btn {
+        font-size: 14px;
+        padding: 10px 4px;
+    }
+
+    .vtp-stat-value {
+        font-size: 16px;
+    }
+
+    .vtp-stat-label {
+        font-size: 11px;
     }
 }

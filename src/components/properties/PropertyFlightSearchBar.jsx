@@ -5,6 +5,7 @@ import {
     Search,
     MapPin,
     ChevronDown,
+    ChevronLeft,
     SlidersHorizontal,
     X,
     Building2,
@@ -64,7 +65,6 @@ const PROPERTY_TYPE_OPTIONS = [
     { label: "Luxury Villas", value: "Villa" },
     { label: "Commercial Spaces", value: "Commercial" },
     { label: "Residential Plots", value: "Plot" },
-    { label: "New Launches", value: "new-launch" },
 ];
 
 const SORT_OPTIONS = [
@@ -73,18 +73,88 @@ const SORT_OPTIONS = [
     { label: "Price: High to Low", value: "price-high-low" },
 ];
 
+const TYPING_PLACEHOLDER_OPTIONS = [
+    "Search location, builder, or project...",
+    "Search 'Kharadi', 'Baner', 'Hinjewadi'...",
+    "Search 2 & 3 BHK luxury flats...",
+    "Search Godrej, Kohinoor, Panchshil...",
+];
+
 export default function PropertyFlightSearchBar({
     filters = {},
     onFilterChange,
     searchQuery = "",
     onSearchQueryChange,
+    onSearchSubmit,
     onOpenFilterDrawer,
     totalResults = 0,
+    showBack = false,
+    onBack,
 }) {
     const [activeDropdown, setActiveDropdown] = useState(null); // 'bhk' | 'price' | 'area' | 'type' | 'sort'
     const [areaSearch, setAreaSearch] = useState("");
     const barRef = useRef(null);
     const searchInputRef = useRef(null);
+
+    // Typing effect for search placeholder with 4 rotating real-estate options
+    const [animatedPlaceholder, setAnimatedPlaceholder] = useState(
+        TYPING_PLACEHOLDER_OPTIONS[0]
+    );
+
+    useEffect(() => {
+        let phraseIdx = 0;
+        let charIdx = TYPING_PLACEHOLDER_OPTIONS[0].length;
+        let isDeleting = true;
+        let timeoutId;
+
+        const typeSpeed = 55;
+        const deleteSpeed = 28;
+        const pauseEnd = 1900;
+        const pauseStart = 350;
+
+        function tick() {
+            const currentPhrase = TYPING_PLACEHOLDER_OPTIONS[phraseIdx];
+
+            if (isDeleting) {
+                charIdx--;
+                setAnimatedPlaceholder(currentPhrase.substring(0, charIdx));
+
+                if (charIdx === 0) {
+                    isDeleting = false;
+                    phraseIdx = (phraseIdx + 1) % TYPING_PLACEHOLDER_OPTIONS.length;
+                    timeoutId = setTimeout(tick, pauseStart);
+                    return;
+                }
+                timeoutId = setTimeout(tick, deleteSpeed);
+            } else {
+                charIdx++;
+                setAnimatedPlaceholder(currentPhrase.substring(0, charIdx));
+
+                if (charIdx === currentPhrase.length) {
+                    isDeleting = true;
+                    timeoutId = setTimeout(tick, pauseEnd);
+                    return;
+                }
+                timeoutId = setTimeout(tick, typeSpeed);
+            }
+        }
+
+        timeoutId = setTimeout(tick, pauseEnd);
+
+        return () => clearTimeout(timeoutId);
+    }, []);
+
+    const handleBackClick = () => {
+        if (onBack) {
+            onBack();
+        } else if (typeof window !== "undefined") {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = "/properties";
+            }
+        }
+    };
 
     // Close dropdown on outside click
     useEffect(() => {
@@ -103,11 +173,7 @@ export default function PropertyFlightSearchBar({
     const selectedMaxPrice = filters.maxPrice || "";
     const selectedSort = filters.sortBy || "recommended";
 
-    const isNewProjectsActive =
-        selectedCategory === "new-launch" ||
-        String(selectedCategory).toLowerCase().includes("new");
-
-    // Active filters count for purple badge
+    // Active filters count
     const activeFilterCount = useMemo(() => {
         let count = 0;
         if (selectedLocation && selectedLocation !== "all") count++;
@@ -143,14 +209,6 @@ export default function PropertyFlightSearchBar({
         setActiveDropdown(null);
     };
 
-    const handleToggleNewProjects = () => {
-        if (isNewProjectsActive) {
-            onFilterChange("propertyType", "all");
-        } else {
-            onFilterChange("propertyType", "new-launch");
-        }
-    };
-
     // Chip labels
     const bhkChipLabel =
         selectedBhk === "all"
@@ -168,6 +226,11 @@ export default function PropertyFlightSearchBar({
             ? "Area"
             : selectedLocation;
 
+    const typeChipLabel =
+        selectedCategory === "all"
+            ? "Property Type"
+            : PROPERTY_TYPE_OPTIONS.find((t) => t.value === selectedCategory)?.label || selectedCategory;
+
     // Filtered localities for Area popup
     const filteredLocalities = useMemo(() => {
         if (!areaSearch.trim()) return POPULAR_PUNE_LOCALITIES;
@@ -177,16 +240,38 @@ export default function PropertyFlightSearchBar({
 
     return (
         <div className="property-search-filter-wrapper" ref={barRef}>
-            {/* 1. MAIN SEARCH BAR (Matches Screenshot 1) */}
+            {/* 1. MAIN SEARCH BAR */}
             <div className="property-search-bar-row">
+                {showBack && (
+                    <button
+                        type="button"
+                        onClick={handleBackClick}
+                        className="property-search-bar__back-btn"
+                        aria-label="Go back"
+                        title="Go back"
+                    >
+                        <ChevronLeft size={20} strokeWidth={2.4} />
+                    </button>
+                )}
+
                 <div className="property-search-bar-input-box">
                     <Search size={18} className="property-search-bar__icon" />
                     <input
                         ref={searchInputRef}
                         type="text"
-                        placeholder="Search location, builder, or project..."
+                        placeholder={animatedPlaceholder}
                         value={searchQuery}
                         onChange={(e) => onSearchQueryChange(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                e.preventDefault();
+                                if (onSearchSubmit) {
+                                    onSearchSubmit(e);
+                                } else if (typeof window !== "undefined" && searchQuery.trim()) {
+                                    window.location.href = `/properties?search=${encodeURIComponent(searchQuery.trim())}`;
+                                }
+                            }
+                        }}
                         className="property-search-bar__input"
                         aria-label="Search location, builder, or project"
                     />
@@ -200,16 +285,26 @@ export default function PropertyFlightSearchBar({
                             <X size={15} />
                         </button>
                     )}
-                </div>
 
-                <div className="property-search-results-pill">
-                    <strong>{totalResults}</strong> properties
+                    {/* Filter icon button with border on right side */}
+                    <button
+                        type="button"
+                        onClick={onOpenFilterDrawer}
+                        className={`property-search-bar__filter-btn ${activeFilterCount > 0 ? "is-active" : ""}`}
+                        aria-label="Open advanced property filters"
+                        title="Open filters"
+                    >
+                        <SlidersHorizontal size={16} className="property-search-bar__filter-icon" />
+                        {activeFilterCount > 0 && (
+                            <span className="property-search-bar__filter-count">{activeFilterCount}</span>
+                        )}
+                    </button>
                 </div>
             </div>
 
-            {/* 2. QUICK FILTER CHIPS ROW DIRECTLY BELOW (Matches Screenshot 2: BHK ▾, Price ▾, Area ▾, New Projects, Filters, ⇅) */}
+            {/* 2. QUICK FILTER CHIPS ROW: BHK ▾, Area ▾, Property Type ▾, ✦ New Projects, Filters, ⇅ */}
             <div className="property-filter-chips-row">
-                {/* CHIP 1: BHK ▾ */}
+                {/* CHIP 1: BHK ▾ (In front of Area) */}
                 <div className="property-chip-anchor">
                     <button
                         type="button"
@@ -246,44 +341,7 @@ export default function PropertyFlightSearchBar({
                     )}
                 </div>
 
-                {/* CHIP 2: Price ▾ */}
-                <div className="property-chip-anchor">
-                    <button
-                        type="button"
-                        className={`property-chip-btn ${selectedMaxPrice ? "is-selected" : ""} ${
-                            activeDropdown === "price" ? "is-active" : ""
-                        }`}
-                        onClick={() =>
-                            setActiveDropdown((prev) => (prev === "price" ? null : "price"))
-                        }
-                    >
-                        <span>{priceChipLabel}</span>
-                        <ChevronDown size={13} className="property-chip-chevron" />
-                    </button>
-
-                    {activeDropdown === "price" && (
-                        <div className="property-chip-menu">
-                            <div className="property-chip-menu__header">Maximum Budget</div>
-                            {BUDGET_OPTIONS.map((opt) => (
-                                <button
-                                    key={opt.value}
-                                    type="button"
-                                    className={`property-chip-menu__item ${
-                                        selectedMaxPrice === opt.value ? "is-active" : ""
-                                    }`}
-                                    onClick={() => handleBudgetSelect(opt.value)}
-                                >
-                                    <span>{opt.label}</span>
-                                    {selectedMaxPrice === opt.value && (
-                                        <Check size={14} className="property-check-icon" />
-                                    )}
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                {/* CHIP 3: Area ▾ (Locality in Pune) */}
+                {/* CHIP 2: Area ▾ (Locality in Pune) */}
                 <div className="property-chip-anchor">
                     <button
                         type="button"
@@ -339,22 +397,18 @@ export default function PropertyFlightSearchBar({
                     )}
                 </div>
 
-                {/* CHIP 4: Property Type ▾ (Optional extra helper chip) */}
+                {/* CHIP 3: Property Type ▾ */}
                 <div className="property-chip-anchor">
                     <button
                         type="button"
                         className={`property-chip-btn ${
-                            selectedCategory !== "all" && !isNewProjectsActive ? "is-selected" : ""
+                            selectedCategory !== "all" ? "is-selected" : ""
                         } ${activeDropdown === "type" ? "is-active" : ""}`}
                         onClick={() =>
                             setActiveDropdown((prev) => (prev === "type" ? null : "type"))
                         }
                     >
-                        <span>
-                            {selectedCategory === "all" || isNewProjectsActive
-                                ? "Property Type"
-                                : selectedCategory}
-                        </span>
+                        <span>{typeChipLabel}</span>
                         <ChevronDown size={13} className="property-chip-chevron" />
                     </button>
 
@@ -380,35 +434,38 @@ export default function PropertyFlightSearchBar({
                     )}
                 </div>
 
-                {/* CHIP 5: New Projects (Toggle chip from Screenshot 2) */}
-                <button
-                    type="button"
-                    className={`property-chip-btn property-chip-btn--toggle ${
-                        isNewProjectsActive ? "is-selected" : ""
-                    }`}
-                    onClick={handleToggleNewProjects}
-                    title="Filter new launch projects"
-                >
-                    <span className="property-chip-bullet">✦</span>
-                    <span>New Projects</span>
-                </button>
+                {/* Optional active BHK chip if filtered in drawer */}
+                {selectedBhk !== "all" && (
+                    <div className="property-chip-anchor">
+                        <button
+                            type="button"
+                            className="property-chip-btn is-selected"
+                            onClick={() => handleBhkClick("all")}
+                            title="Remove BHK filter"
+                        >
+                            <span>{bhkChipLabel}</span>
+                            <X size={12} className="property-chip-remove" />
+                        </button>
+                    </div>
+                )}
 
-                {/* CHIP 6: Filters (Soft Lavender / Purple Pill from Screenshot 2) */}
-                <button
-                    type="button"
-                    className="property-chip-btn property-chip-btn--purple"
-                    onClick={onOpenFilterDrawer}
-                    aria-label="Open advanced property filters"
-                >
-                    <SlidersHorizontal size={13} />
-                    <span>Filters</span>
-                    {activeFilterCount > 0 && (
-                        <span className="property-chip-purple-count">{activeFilterCount}</span>
-                    )}
-                </button>
+                {/* Optional active Price chip if filtered in drawer */}
+                {selectedMaxPrice !== "" && (
+                    <div className="property-chip-anchor">
+                        <button
+                            type="button"
+                            className="property-chip-btn is-selected"
+                            onClick={() => handleBudgetSelect("")}
+                            title="Remove Budget filter"
+                        >
+                            <span>{priceChipLabel}</span>
+                            <X size={12} className="property-chip-remove" />
+                        </button>
+                    </div>
+                )}
 
-                {/* CHIP 7: Sort ⇅ (Sort button from Screenshot 2) */}
-                <div className="property-chip-anchor">
+                {/* CHIP 4: Sort ⇅ (Sort button matching reference) */}
+                <div className="property-chip-anchor property-chip-anchor--icon">
                     <button
                         type="button"
                         className={`property-chip-btn property-chip-btn--icon ${

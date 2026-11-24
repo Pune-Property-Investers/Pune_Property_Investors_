@@ -19,6 +19,7 @@ import {
     Film,
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
+import PropertyFlightSearchBar from "../properties/PropertyFlightSearchBar";
 import "./Header.css";
 
 function ShortsIcon({ size = 20, className = "" }) {
@@ -290,172 +291,159 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                 >
                     {transparentAtTop ? (
                         <div className="property-header-container">
-                            <button
-                                type="button"
-                                onClick={handleGoBack}
-                                className="property-header__back-btn"
-                                aria-label="Go back"
-                            >
-                                <ChevronLeft size={22} strokeWidth={2.4} />
-                            </button>
-
-                            <form onSubmit={handleSearchSubmit} className="property-header__search-form">
-                                <input
-                                    type="text"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Search City/Locality/Project..."
-                                    className="property-header__search-input"
-                                    aria-label="Search City, Locality, or Project"
-                                />
-                                <button
-                                    type="submit"
-                                    className="property-header__search-btn"
-                                    aria-label="Search"
-                                >
-                                    <Search size={18} strokeWidth={2.2} />
-                                </button>
-                            </form>
+                            <PropertyFlightSearchBar
+                                searchQuery={searchQuery}
+                                onSearchQueryChange={setSearchQuery}
+                                onSearchSubmit={handleSearchSubmit}
+                                onFilterChange={(key, val) => {
+                                    router.push(`/properties?${key}=${encodeURIComponent(val)}`);
+                                }}
+                                onOpenFilterDrawer={() => {
+                                    router.push("/properties?focus=filters");
+                                }}
+                                showBack={true}
+                                onBack={handleGoBack}
+                            />
                         </div>
                     ) : (
                         <div className="header-container">
-                        {/* Company Logo and Brand Name */}
-                        <Link
-                            href="/"
-                            className="header-brand"
-                            aria-label="Pune Property Investor home"
-                            onClick={closeMenu}
-                        >
-                            <Image
-                                src={`${basePath}/images/logo.png`}
-                                alt="Pune Property Investor logo"
-                                className="header-brand__image"
-                                width={68}
-                                height={68}
-                                priority
-                            />
+                            {/* Company Logo and Brand Name */}
+                            <Link
+                                href="/"
+                                className="header-brand"
+                                aria-label="Pune Property Investor home"
+                                onClick={closeMenu}
+                            >
+                                <Image
+                                    src={`${basePath}/images/logo.png`}
+                                    alt="Pune Property Investor logo"
+                                    className="header-brand__image"
+                                    width={68}
+                                    height={68}
+                                    priority
+                                />
 
-                            <span className="header-brand__text">
-                                <span className="header-brand__name">
-                                    PUNE PROPERTY
+                                <span className="header-brand__text">
+                                    <span className="header-brand__name">
+                                        PUNE PROPERTY
+                                    </span>
+                                    <span className="header-brand__subtitle">
+                                        INVESTOR
+                                    </span>
                                 </span>
-                                <span className="header-brand__subtitle">
-                                    INVESTOR
-                                </span>
-                            </span>
-                        </Link>
+                            </Link>
 
-                        {/* Desktop Horizontal Navigation (Hidden on Mobile) */}
-                        <nav
-                            className="header-navigation desktop-only"
-                            aria-label="Main navigation"
-                        >
-                            {navigationItems.map((item) => {
-                                const isDropdownOpen = openDropdown === item.label;
+                            {/* Desktop Horizontal Navigation (Hidden on Mobile) */}
+                            <nav
+                                className="header-navigation desktop-only"
+                                aria-label="Main navigation"
+                            >
+                                {navigationItems.map((item) => {
+                                    const isDropdownOpen = openDropdown === item.label;
 
-                                return (
-                                    <div
-                                        key={item.label}
-                                        className={`header-nav-item ${isDropdownOpen
-                                            ? "header-nav-item--open"
-                                            : ""
-                                            }`}
-                                    >
-                                        <div className="header-nav-item__main">
-                                            <Link
-                                                href={item.href}
-                                                className={`header-nav-link ${item.label === "Home"
-                                                    ? "header-nav-link--home"
-                                                    : ""
-                                                    }`}
-                                            >
-                                                <span>{item.label}</span>
-                                            </Link>
+                                    return (
+                                        <div
+                                            key={item.label}
+                                            className={`header-nav-item ${isDropdownOpen
+                                                ? "header-nav-item--open"
+                                                : ""
+                                                }`}
+                                        >
+                                            <div className="header-nav-item__main">
+                                                <Link
+                                                    href={item.href}
+                                                    className={`header-nav-link ${item.label === "Home"
+                                                        ? "header-nav-link--home"
+                                                        : ""
+                                                        }`}
+                                                >
+                                                    <span>{item.label}</span>
+                                                </Link>
+
+                                                {item.dropdown && (
+                                                    <button
+                                                        type="button"
+                                                        className="header-dropdown-toggle"
+                                                        aria-label={`Toggle ${item.label} submenu`}
+                                                        aria-expanded={isDropdownOpen}
+                                                        onClick={() =>
+                                                            toggleDropdown(item.label)
+                                                        }
+                                                    >
+                                                        <ChevronDown size={17} />
+                                                    </button>
+                                                )}
+                                            </div>
 
                                             {item.dropdown && (
-                                                <button
-                                                    type="button"
-                                                    className="header-dropdown-toggle"
-                                                    aria-label={`Toggle ${item.label} submenu`}
-                                                    aria-expanded={isDropdownOpen}
-                                                    onClick={() =>
-                                                        toggleDropdown(item.label)
-                                                    }
+                                                <div
+                                                    className={`header-dropdown ${isDropdownOpen
+                                                        ? "header-dropdown--visible"
+                                                        : ""
+                                                        }`}
                                                 >
-                                                    <ChevronDown size={17} />
-                                                </button>
+                                                    {item.dropdown.map((subItem) => (
+                                                        <Link
+                                                            key={subItem.label}
+                                                            href={subItem.href}
+                                                            className="header-dropdown__link"
+                                                        >
+                                                            {subItem.label}
+                                                        </Link>
+                                                    ))}
+                                                </div>
                                             )}
                                         </div>
+                                    );
+                                })}
 
-                                        {item.dropdown && (
-                                            <div
-                                                className={`header-dropdown ${isDropdownOpen
-                                                    ? "header-dropdown--visible"
-                                                    : ""
-                                                    }`}
+                                {/* Search Link for Desktop/Laptop View (Hidden on Home page) */}
+                                {!isHome && (
+                                    <div className="header-nav-item">
+                                        <div className="header-nav-item__main">
+                                            <Link
+                                                href="/properties?focus=search#property-search"
+                                                onClick={handleSearchClick}
+                                                className="header-nav-link header-nav-link--search"
+                                                aria-label="Search properties"
                                             >
-                                                {item.dropdown.map((subItem) => (
-                                                    <Link
-                                                        key={subItem.label}
-                                                        href={subItem.href}
-                                                        className="header-dropdown__link"
-                                                    >
-                                                        {subItem.label}
-                                                    </Link>
-                                                ))}
-                                            </div>
-                                        )}
+                                                <Search size={15} style={{ display: "inline-block", marginRight: "6px", verticalAlign: "-2px" }} />
+                                                <span>Search</span>
+                                            </Link>
+                                        </div>
                                     </div>
-                                );
-                            })}
+                                )}
+                            </nav>
 
-                            {/* Search Link for Desktop/Laptop View (Hidden on Home page) */}
-                            {!isHome && (
-                                <div className="header-nav-item">
-                                    <div className="header-nav-item__main">
-                                        <Link
-                                            href="/properties?focus=search#property-search"
-                                            onClick={handleSearchClick}
-                                            className="header-nav-link header-nav-link--search"
-                                            aria-label="Search properties"
-                                        >
-                                            <Search size={15} style={{ display: "inline-block", marginRight: "6px", verticalAlign: "-2px" }} />
-                                            <span>Search</span>
-                                        </Link>
-                                    </div>
-                                </div>
-                            )}
-                        </nav>
+                            {/* Mobile Header Actions (Right corner in logo row) */}
+                            <div className="header-mobile-actions">
+                                {!isHome && (
+                                    <Link
+                                        href="/properties?focus=search#property-search"
+                                        onClick={handleSearchClick}
+                                        className="header-mobile-search-btn"
+                                        aria-label="Search properties"
+                                    >
+                                        <Search size={22} strokeWidth={2.1} />
+                                    </Link>
+                                )}
 
-                        {/* Mobile Header Actions (Right corner in logo row) */}
-                        <div className="header-mobile-actions">
-                            {!isHome && (
-                                <Link
-                                    href="/properties?focus=search#property-search"
-                                    onClick={handleSearchClick}
-                                    className="header-mobile-search-btn"
-                                    aria-label="Search properties"
+                                {/* Mobile Hamburger Menu Toggle Button (matches Image 2 on tablet) */}
+                                <button
+                                    type="button"
+                                    className="header-mobile-hamburger"
+                                    onClick={() => setMenuOpen((prev) => !prev)}
+                                    aria-label={menuOpen ? "Close menu" : "Open menu"}
+                                    aria-expanded={menuOpen}
                                 >
-                                    <Search size={22} strokeWidth={2.1} />
-                                </Link>
-                            )}
-
-                            {/* Mobile Hamburger Menu Toggle Button (matches Image 2 on tablet) */}
-                            <button
-                                type="button"
-                                className="header-mobile-hamburger"
-                                onClick={() => setMenuOpen((prev) => !prev)}
-                                aria-label={menuOpen ? "Close menu" : "Open menu"}
-                                aria-expanded={menuOpen}
-                            >
-                                <span className="header-mobile-hamburger__bar" />
-                                <span className="header-mobile-hamburger__bar" />
-                                <span className="header-mobile-hamburger__bar" />
-                            </button>
+                                    <span className="header-mobile-hamburger__bar" />
+                                    <span className="header-mobile-hamburger__bar" />
+                                    <span className="header-mobile-hamburger__bar" />
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                )}
-            </header>
+                    )}
+                </header>
             )}
 
             {/* Backdrop Overlay for Mobile Drawer */}

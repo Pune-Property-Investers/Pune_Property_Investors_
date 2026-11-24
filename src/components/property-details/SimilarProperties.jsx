@@ -6,7 +6,6 @@ import {
     MapPin,
     BedDouble,
     Ruler,
-    CalendarDays,
     ArrowRight,
     Sparkles,
     ShieldCheck,
@@ -143,63 +142,60 @@ export default function SimilarProperties({ currentProperty }) {
 
                     return (
                         <article className="similar-card" key={item.id}>
-                            <Link href={itemUrl} className="similar-card__media-link">
-                                <div className="similar-card__media">
-                                    <img
-                                        src={item.image || (item.images && item.images[0])}
-                                        alt={item.title || item.name}
-                                        className="similar-card__image"
-                                        loading="lazy"
-                                    />
-                                    <div className="similar-card__badges">
-                                        <span className="similar-card__badge similar-card__badge--status">
-                                            {item.possession && !/\b202\d\b/i.test(item.possession) ? item.possession : "Under Construction"}
+                            <Link href={itemUrl} className="similar-card__link">
+                                <img
+                                    src={item.image || (item.images && item.images[0])}
+                                    alt={item.title || item.name}
+                                    className="similar-card__image"
+                                    loading="lazy"
+                                />
+
+                                {/* Top Badges */}
+                                <div className="similar-card__badges">
+                                    {item.rera ? (
+                                        <span className="similar-card__badge similar-card__badge--rera">
+                                            <ShieldCheck size={12} />
+                                            {item.rera}
                                         </span>
-                                        {item.verified !== false && (
-                                            <span className="similar-card__badge similar-card__badge--verified">
-                                                <ShieldCheck size={12} />
-                                                Verified
-                                            </span>
-                                        )}
-                                    </div>
-                                    <div className="similar-card__price-tag">
-                                        {priceFormatted}
+                                    ) : item.verified !== false ? (
+                                        <span className="similar-card__badge similar-card__badge--verified">
+                                            <ShieldCheck size={12} />
+                                            Verified
+                                        </span>
+                                    ) : null}
+                                </div>
+
+                                {/* Dark Gradient Overlay with content at the bottom */}
+                                <div className="similar-card__overlay">
+                                    <div className="similar-card__bottom">
+                                        <p className="similar-card__location">
+                                            <MapPin size={13} className="text-gold" />
+                                            <span>{item.location || item.locality || "Pune"}</span>
+                                        </p>
+
+                                        <div className="similar-card__title-row">
+                                            <h3 className="similar-card__title">
+                                                {item.title || item.name}
+                                            </h3>
+                                            <div className="similar-card__price-tag">
+                                                {priceFormatted}
+                                            </div>
+                                        </div>
+
+                                        <div className="similar-card__specs">
+                                            <div className="similar-spec">
+                                                <BedDouble size={14} />
+                                                <span>{item.bhk || 2} BHK</span>
+                                            </div>
+                                            <span className="similar-spec__dot">•</span>
+                                            <div className="similar-spec">
+                                                <Ruler size={14} />
+                                                <span>{rawArea}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </Link>
-
-                            <div className="similar-card__content">
-                                <p className="similar-card__location">
-                                    <MapPin size={13} className="text-gold" />
-                                    <span>{item.location || item.locality || "Pune"}</span>
-                                </p>
-
-                                <h3 className="similar-card__title">
-                                    <Link href={itemUrl}>{item.title || item.name}</Link>
-                                </h3>
-
-                                <div className="similar-card__specs">
-                                    <div className="similar-spec">
-                                        <BedDouble size={14} />
-                                        <span>{item.bhk || 2} BHK</span>
-                                    </div>
-                                    <div className="similar-spec">
-                                        <Ruler size={14} />
-                                        <span>{rawArea}</span>
-                                    </div>
-                                    <div className="similar-spec">
-                                        <CalendarDays size={14} />
-                                        <span>{item.possession || "2026"}</span>
-                                    </div>
-                                </div>
-
-                                <div className="similar-card__footer">
-                                    <Link href={itemUrl} className="similar-card__cta">
-                                        <span>View Details</span>
-                                        <ArrowRight size={13} />
-                                    </Link>
-                                </div>
-                            </div>
                         </article>
                     );
                 })}

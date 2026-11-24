@@ -804,8 +804,9 @@
     z-index: 100;
     width: 100%;
     background: #fbfaf7;
-    /* Solid non-transparent background with distinct divider line below search bar */
-    border-bottom: 1px solid #e2ddd3;
+    /* Solid non-transparent background without borders */
+    border: none !important;
+    border-bottom: none !important;
     box-shadow: 0 4px 16px rgba(18, 24, 22, 0.04);
     padding: 10px 0 8px;
     margin-bottom: 16px;
@@ -830,6 +831,12 @@
     padding-top: 2px;
 }
 
+.buy-properties-explore-badge-wrap--scrollable {
+    margin-top: 14px;
+    margin-bottom: 12px;
+    padding-top: 0;
+}
+
 .buy-properties-intro {
     display: none;
 }
@@ -844,24 +851,26 @@
     min-width: 0;
 }
 
-/* Curated Badge with Flanking Lines (Matches User Reference Image 3) */
+/* Curated Badge with Flanking Lines (Matches User Reference Image) */
 .buy-properties-curated-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     margin: 0 auto;
 }
 
 .buy-properties-curated-badge__line {
     display: inline-block;
-    width: 36px;
+    width: 44px;
     height: 1px;
-    background: linear-gradient(90deg, rgba(186, 135, 74, 0.05), rgba(186, 135, 74, 0.9));
+    background: #ba874a;
+    opacity: 0.75;
 }
 
 .buy-properties-curated-badge .buy-properties-curated-badge__line:last-child {
-    background: linear-gradient(90deg, rgba(186, 135, 74, 0.9), rgba(186, 135, 74, 0.05));
+    background: #ba874a;
+    opacity: 0.75;
 }
 
 .buy-properties-curated-badge__sparkle {
@@ -872,11 +881,11 @@
 
 .buy-properties-curated-badge__text {
     color: #ba874a;
-    font-size: 11px;
+    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
+    font-size: 11.5px;
     font-weight: 750;
     letter-spacing: 2.8px;
     text-transform: uppercase;
-    font-family: inherit;
 }
 
 .buy-properties-section-label {
