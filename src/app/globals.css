@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+/* Design Tokens & Theme Variables (Updated 2026-11-20T16:16:00) */
+@import "../styles/variables.css";
+
+/* Core Global & Typography Styles */
+@import "../styles/global.css";
+@import "../styles/responsive.css";
+
+/* Layout Styles */
+@import "../components/layouts/Header.css";
+@import "../components/layouts/Footer.css";
+
+/* Page Styles */
+@import "../components/pages/Home.css";
+@import "../components/pages/BuyProperties.css";
+@import "../components/pages/PropertyDetails.css";
+@import "../components/pages/About.css";
+@import "../components/about/AboutHeroStudio.css";
+@import "../components/pages/Blog.css";
+@import "../components/pages/Career.css";
+@import "../components/pages/Contact.css";
+@import "./not-found.css";
+
+/* Section & Component Styles (Active) */
+@import "../components/home/HeroSection.css";
+@import "../components/home/TrustHighlights.css";
+@import "../components/home/PropertySearch.css";
+@import "../components/home/FeaturedProperties.css";
+@import "../components/home/FeaturedProjects.css";
+@import "../components/home/FeaturedProp.css";
+@import "../components/home/ScrollStoryProperties.css";
+@import "../components/home/PropertyTypes.css";
+@import "../components/home/UpcomingProjects.css";
+@import "../components/home/BrowseLocations.css";
+@import "../components/home/NewLaunchProjects.css";
+@import "../components/home/TrendingProjects.css";
+@import "../components/home/PuneRealEstateContent.css";
+@import "../components/home/AboutSection.css";
+@import "../components/home/TrustStats.css";
+@import "../components/home/Testimonials.css";
+@import "../components/home/WhyChooseUs.css";
+@import "../components/home/HomeContact.css";
+@import "../components/properties/PropertyCard.css";
+@import "../components/properties/PropertyFilters.css";
+@import "../components/properties/PropertyListingCard.css";
+@import "../components/properties/PropertyFlightSearchBar.css";
+@import "../components/common/AdvertisementSidebar.css";
+@import "../components/property-details/PropertyHeroHead.css";
+@import "../components/property-details/PropertyOverview.css";
+@import "../components/property-details/PropertyGallery.css";
+@import "../components/property-details/PropertyAmenities.css";
+@import "../components/property-details/ProjectSpecifications.css";
+@import "../components/property-details/PropertyFloorPlans.css";
+
+@import "../components/property-details/PropertyEnquiry.css";
+@import "../components/common/PageHeroBanner.css";
+@import "../components/common/PlaceholderPage.css";
+
+@theme {
+    --font-serif: "Playfair Display", Georgia, serif;
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* cache-bust: 1795168000000 */
