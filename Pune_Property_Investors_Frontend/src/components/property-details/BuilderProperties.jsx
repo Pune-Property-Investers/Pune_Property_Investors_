@@ -218,7 +218,7 @@ const BUILDER_PROFILES = {
     },
 };
 
-function resolveBuilderProfile(rawDeveloper, property) {
+export function resolveBuilderProfile(rawDeveloper, property) {
     const raw = String(
         rawDeveloper ||
             property.developer ||

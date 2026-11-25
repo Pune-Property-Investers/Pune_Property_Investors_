@@ -36,7 +36,7 @@ import PropertyFloorPlans from "../property-details/PropertyFloorPlans";
 import PropertyAmenities from "../property-details/PropertyAmenities";
 import PropertyMap from "../property-details/PropertyMap";
 import SimilarProperties from "../property-details/SimilarProperties";
-import BuilderProperties from "../property-details/BuilderProperties";
+import BuilderProperties, { resolveBuilderProfile } from "../property-details/BuilderProperties";
 import PropertyEnquiry from "../property-details/PropertyEnquiry";
 import { extractYouTubeVideoId } from "../../lib/youtube";
 
@@ -409,6 +409,62 @@ function PropertyDetails({ propertyId, propertySlug }) {
 
     const possessionText = property.possession || "Dec 2028";
     const developerName = property.developer || property.builder || "Leading Developer";
+    const builderProfile = resolveBuilderProfile(
+        property.developer || property.builder || property.projectName || title,
+        property
+    );
+    const baseAssetPrefix =
+        process.env.NEXT_PUBLIC_BASE_PATH ||
+        (typeof window !== "undefined" && window.location.pathname.startsWith("/Pune_Property_Investors_")
+            ? "/Pune_Property_Investors_"
+            : "");
+
+    const SAVED_BUILDER_LOGOS = {
+        godrej: "/images/logos/godrej.png",
+        kohinoor: "/images/logos/kohinoor.png",
+        kolte: "/images/logos/kolte-patil.jpg",
+        lodha: "/images/logos/lodha.png",
+        macrotech: "/images/logos/lodha.png",
+        paras: "/images/logos/paras-emperor.png",
+        shapoorji: "/images/logos/shapoorji.svg",
+        joyville: "/images/logos/shapoorji.svg",
+        sobha: "/images/logos/sobha.png",
+        vtp: "/images/logos/vtp.png",
+    };
+
+    const builderSearchText = `${property.developer || ""} ${property.builder || ""} ${property.projectName || ""} ${title || ""} ${builderProfile?.name || ""}`.toLowerCase();
+    const matchedSavedLogoKey = Object.keys(SAVED_BUILDER_LOGOS).find((key) =>
+        builderSearchText.includes(key)
+    );
+
+    const explicitLogo =
+        (typeof property.developerLogo === "string" &&
+            (property.developerLogo.startsWith("/") || property.developerLogo.startsWith("http")) &&
+            property.developerLogo) ||
+        (typeof property.logo === "string" &&
+            (property.logo.startsWith("/") || property.logo.startsWith("http")) &&
+            property.logo) ||
+        "";
+
+    const rawBuilderLogoPath =
+        explicitLogo ||
+        (matchedSavedLogoKey ? SAVED_BUILDER_LOGOS[matchedSavedLogoKey] : "") ||
+        (builderProfile?.logo && builderProfile.logo.startsWith("/images/logos/")
+            ? builderProfile.logo
+            : "");
+
+    const builderLogoSrc = rawBuilderLogoPath
+        ? rawBuilderLogoPath.startsWith("/")
+            ? `${baseAssetPrefix}${rawBuilderLogoPath}`
+            : rawBuilderLogoPath
+        : "";
+
+    const builderInitials = (builderProfile?.name || developerName || title || "PP")
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((w) => w[0].toUpperCase())
+        .join("");
 
     return (
         <>
@@ -423,44 +479,6 @@ function PropertyDetails({ propertyId, propertySlug }) {
                         className="vtp-hero-img"
                     />
 
-                    {/* Floating Circular Controls at Top of Image */}
-                    <div className="vtp-hero-top-bar" onClick={(e) => e.stopPropagation()}>
-                        <Link
-                            href="/buy"
-                            className="vtp-circle-btn"
-                            aria-label="Back to properties"
-                            title="Back"
-                        >
-                            <ChevronLeft size={22} />
-                        </Link>
-
-                        <div className="vtp-hero-top-bar__right">
-                            <button
-                                type="button"
-                                className={`vtp-circle-btn ${isFavorite ? "vtp-circle-btn--active" : ""}`}
-                                onClick={handleToggleFavorite}
-                                aria-label="Favorite property"
-                                title={isFavorite ? "Saved" : "Save property"}
-                            >
-                                <Heart
-                                    size={19}
-                                    fill={isFavorite ? "#ef4444" : "none"}
-                                    color={isFavorite ? "#ef4444" : "#1e293b"}
-                                />
-                            </button>
-
-                            <button
-                                type="button"
-                                className="vtp-circle-btn"
-                                onClick={handleShare}
-                                aria-label="Share property"
-                                title="Share"
-                            >
-                                <Share2 size={19} />
-                            </button>
-                        </div>
-                    </div>
-
                     {/* Corner Photo Count Pill */}
                     <button
                         type="button"
@@ -474,12 +492,6 @@ function PropertyDetails({ propertyId, propertySlug }) {
                         <ImageIcon size={14} />
                         <span>{uniqueImages.length} Photos</span>
                     </button>
-
-                    {shareToast && (
-                        <div className="vtp-share-toast">
-                            Link copied to clipboard!
-                        </div>
-                    )}
                 </div>
 
                 <div className="property-details__container">
@@ -493,7 +505,7 @@ function PropertyDetails({ propertyId, propertySlug }) {
                                 <span className="vtp-card-badge__status">{possessionBadge}</span>
                             </div>
 
-                            {/* Main Title & Price Row */}
+                            {/* Main Title & Builder Logo Row */}
                             <div className="vtp-card-title-row">
                                 <div className="vtp-card-title-col">
                                     <h1 className="vtp-card-title">{title}</h1>
@@ -503,9 +515,26 @@ function PropertyDetails({ propertyId, propertySlug }) {
                                     </p>
                                 </div>
 
-                                <div className="vtp-card-price-col">
-                                    <div className="vtp-card-price-main">{priceMain}</div>
-                                    <div className="vtp-card-price-sub">{priceSub}</div>
+                                <div className="vtp-card-builder-logo-col" title={builderProfile?.name || developerName}>
+                                    {builderLogoSrc ? (
+                                        <img
+                                            src={builderLogoSrc}
+                                            alt={builderProfile?.name || developerName}
+                                            className="vtp-card-builder-logo-img"
+                                            onError={(e) => {
+                                                e.currentTarget.style.display = "none";
+                                                if (e.currentTarget.nextSibling) {
+                                                    e.currentTarget.nextSibling.style.display = "flex";
+                                                }
+                                            }}
+                                        />
+                                    ) : null}
+                                    <span
+                                        className="vtp-card-builder-logo-fallback"
+                                        style={{ display: builderLogoSrc ? "none" : "flex" }}
+                                    >
+                                        {builderInitials}
+                                    </span>
                                 </div>
                             </div>
                         </section>
@@ -532,7 +561,7 @@ function PropertyDetails({ propertyId, propertySlug }) {
                         ))}
                     </nav>
 
-                    {/* 4. 3-COLUMN STATS ROW: Carpet Area | Possession | RERA Verified (EXACT PHOTO REPLICA) */}
+                    {/* 4. 3-COLUMN STATS ROW: Carpet Area | Possession | Property Price */}
                     <div className="vtp-stats-row">
                         <div className="vtp-stat-item">
                             <div className="vtp-stat-value">{carpetAreaText}</div>
@@ -549,8 +578,8 @@ function PropertyDetails({ propertyId, propertySlug }) {
                         <div className="vtp-stat-divider" />
 
                         <div className="vtp-stat-item">
-                            <div className="vtp-stat-value">Verified</div>
-                            <div className="vtp-stat-label">RERA Verified</div>
+                            <div className="vtp-stat-value">{priceClean}</div>
+                            <div className="vtp-stat-label">Property Price</div>
                         </div>
                     </div>
 

@@ -90,9 +90,11 @@ export default function PropertyFlightSearchBar({
     totalResults = 0,
     showBack = false,
     onBack,
+    showFilterChips = true,
 }) {
     const [activeDropdown, setActiveDropdown] = useState(null); // 'bhk' | 'price' | 'area' | 'type' | 'sort'
     const [areaSearch, setAreaSearch] = useState("");
+    const [isChipsHidden, setIsChipsHidden] = useState(false);
     const barRef = useRef(null);
     const searchInputRef = useRef(null);
 
@@ -167,6 +169,36 @@ export default function PropertyFlightSearchBar({
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    // Collapse BHK / Area / Property Type row when scrolling down (swiping page up)
+    useEffect(() => {
+        if (!showFilterChips) return;
+        let ticking = false;
+        let lastScrollY = typeof window !== "undefined" ? window.scrollY : 0;
+
+        const handleScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const currentScrollY = window.scrollY;
+                    if (currentScrollY <= 24) {
+                        setIsChipsHidden(false);
+                    } else if (currentScrollY > lastScrollY + 4) {
+                        setIsChipsHidden(true);
+                        setActiveDropdown(null);
+                    } else if (currentScrollY < lastScrollY - 12) {
+                        setIsChipsHidden(false);
+                    }
+                    lastScrollY = Math.max(0, currentScrollY);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
+        handleScroll();
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [showFilterChips]);
+
     const selectedCategory = filters.propertyType || "all";
     const selectedBhk = filters.bhk || "all";
     const selectedLocation = filters.location || "all";
@@ -219,7 +251,7 @@ export default function PropertyFlightSearchBar({
         selectedMaxPrice === ""
             ? "Price"
             : BUDGET_OPTIONS.find((b) => b.value === selectedMaxPrice)?.label?.replace("Under ", "") ||
-              `₹ ${Number(selectedMaxPrice) / 100000}L`;
+            `₹ ${Number(selectedMaxPrice) / 100000}L`;
 
     const areaChipLabel =
         selectedLocation === "all"
@@ -239,7 +271,12 @@ export default function PropertyFlightSearchBar({
     }, [areaSearch]);
 
     return (
-        <div className="property-search-filter-wrapper" ref={barRef}>
+        <div
+            className={`property-search-filter-wrapper ${
+                !showFilterChips || isChipsHidden ? "property-search-filter-wrapper--chips-hidden" : ""
+            } ${!showFilterChips ? "property-search-filter-wrapper--compact-rounded" : ""}`}
+            ref={barRef}
+        >
             {/* 1. MAIN SEARCH BAR */}
             <div className="property-search-bar-row">
                 {showBack && (
@@ -286,222 +323,237 @@ export default function PropertyFlightSearchBar({
                         </button>
                     )}
 
-                    {/* Filter icon button with border on right side */}
+                    {/* Filter icon inside box for full listing bar */}
+                    {showFilterChips && (
+                        <button
+                            type="button"
+                            onClick={onOpenFilterDrawer}
+                            className={`property-search-bar__filter-btn ${activeFilterCount > 0 ? "is-active" : ""}`}
+                            aria-label="Open advanced property filters"
+                            title="Open filters"
+                        >
+                            <SlidersHorizontal size={16} className="property-search-bar__filter-icon" />
+                            {activeFilterCount > 0 && (
+                                <span className="property-search-bar__filter-count">{activeFilterCount}</span>
+                            )}
+                        </button>
+                    )}
+                </div>
+
+                {/* Transparent filter icon outside rounded rectangle on detailed property header */}
+                {!showFilterChips && (
                     <button
                         type="button"
                         onClick={onOpenFilterDrawer}
-                        className={`property-search-bar__filter-btn ${activeFilterCount > 0 ? "is-active" : ""}`}
+                        className={`property-search-bar__filter-btn property-search-bar__filter-btn--transparent ${activeFilterCount > 0 ? "is-active" : ""}`}
                         aria-label="Open advanced property filters"
                         title="Open filters"
                     >
-                        <SlidersHorizontal size={16} className="property-search-bar__filter-icon" />
+                        <SlidersHorizontal size={17} className="property-search-bar__filter-icon" />
                         {activeFilterCount > 0 && (
                             <span className="property-search-bar__filter-count">{activeFilterCount}</span>
                         )}
                     </button>
-                </div>
+                )}
             </div>
 
             {/* 2. QUICK FILTER CHIPS ROW: BHK ▾, Area ▾, Property Type ▾, ✦ New Projects, Filters, ⇅ */}
-            <div className="property-filter-chips-row">
-                {/* CHIP 1: BHK ▾ (In front of Area) */}
-                <div className="property-chip-anchor">
-                    <button
-                        type="button"
-                        className={`property-chip-btn ${selectedBhk !== "all" ? "is-selected" : ""} ${
-                            activeDropdown === "bhk" ? "is-active" : ""
+            {showFilterChips && (
+                <div
+                    className={`property-filter-chips-row ${isChipsHidden ? "property-filter-chips-row--hidden" : ""
                         }`}
-                        onClick={() =>
-                            setActiveDropdown((prev) => (prev === "bhk" ? null : "bhk"))
-                        }
-                    >
-                        <span>{bhkChipLabel}</span>
-                        <ChevronDown size={13} className="property-chip-chevron" />
-                    </button>
+                >
+                    {/* CHIP 1: BHK ▾ (In front of Area) */}
+                    <div className="property-chip-anchor">
+                        <button
+                            type="button"
+                            className={`property-chip-btn ${selectedBhk !== "all" ? "is-selected" : ""} ${activeDropdown === "bhk" ? "is-active" : ""
+                                }`}
+                            onClick={() =>
+                                setActiveDropdown((prev) => (prev === "bhk" ? null : "bhk"))
+                            }
+                        >
+                            <span>{bhkChipLabel}</span>
+                            <ChevronDown size={13} className="property-chip-chevron" />
+                        </button>
 
-                    {activeDropdown === "bhk" && (
-                        <div className="property-chip-menu">
-                            <div className="property-chip-menu__header">Select Configuration</div>
-                            {BHK_OPTIONS.map((bhk) => (
-                                <button
-                                    key={bhk.value}
-                                    type="button"
-                                    className={`property-chip-menu__item ${
-                                        selectedBhk === bhk.value ? "is-active" : ""
-                                    }`}
-                                    onClick={() => handleBhkClick(bhk.value)}
-                                >
-                                    <span>{bhk.label}</span>
-                                    {selectedBhk === bhk.value && (
-                                        <Check size={14} className="property-check-icon" />
-                                    )}
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                {/* CHIP 2: Area ▾ (Locality in Pune) */}
-                <div className="property-chip-anchor">
-                    <button
-                        type="button"
-                        className={`property-chip-btn ${selectedLocation !== "all" ? "is-selected" : ""} ${
-                            activeDropdown === "area" ? "is-active" : ""
-                        }`}
-                        onClick={() =>
-                            setActiveDropdown((prev) => (prev === "area" ? null : "area"))
-                        }
-                    >
-                        <span>{areaChipLabel}</span>
-                        <ChevronDown size={13} className="property-chip-chevron" />
-                    </button>
-
-                    {activeDropdown === "area" && (
-                        <div className="property-chip-menu property-chip-menu--wide">
-                            <div className="property-chip-search-box">
-                                <Search size={13} className="property-chip-search-icon" />
-                                <input
-                                    type="text"
-                                    placeholder="Search locality..."
-                                    value={areaSearch}
-                                    onChange={(e) => setAreaSearch(e.target.value)}
-                                    className="property-chip-search-input"
-                                    autoFocus
-                                />
-                            </div>
-                            <div className="property-chip-menu__list">
-                                {filteredLocalities.map((loc) => (
+                        {activeDropdown === "bhk" && (
+                            <div className="property-chip-menu">
+                                <div className="property-chip-menu__header">Select Configuration</div>
+                                {BHK_OPTIONS.map((bhk) => (
                                     <button
-                                        key={loc}
+                                        key={bhk.value}
                                         type="button"
-                                        className={`property-chip-menu__item ${
-                                            (loc === "All Pune" && selectedLocation === "all") ||
-                                            loc === selectedLocation
-                                                ? "is-active"
-                                                : ""
-                                        }`}
-                                        onClick={() => {
-                                            handleLocationSelect(loc);
-                                            setAreaSearch("");
-                                        }}
+                                        className={`property-chip-menu__item ${selectedBhk === bhk.value ? "is-active" : ""
+                                            }`}
+                                        onClick={() => handleBhkClick(bhk.value)}
                                     >
-                                        <span>{loc}</span>
-                                        {((loc === "All Pune" && selectedLocation === "all") ||
-                                            loc === selectedLocation) && (
+                                        <span>{bhk.label}</span>
+                                        {selectedBhk === bhk.value && (
                                             <Check size={14} className="property-check-icon" />
                                         )}
                                     </button>
                                 ))}
                             </div>
-                        </div>
-                    )}
-                </div>
+                        )}
+                    </div>
 
-                {/* CHIP 3: Property Type ▾ */}
-                <div className="property-chip-anchor">
-                    <button
-                        type="button"
-                        className={`property-chip-btn ${
-                            selectedCategory !== "all" ? "is-selected" : ""
-                        } ${activeDropdown === "type" ? "is-active" : ""}`}
-                        onClick={() =>
-                            setActiveDropdown((prev) => (prev === "type" ? null : "type"))
-                        }
-                    >
-                        <span>{typeChipLabel}</span>
-                        <ChevronDown size={13} className="property-chip-chevron" />
-                    </button>
-
-                    {activeDropdown === "type" && (
-                        <div className="property-chip-menu">
-                            <div className="property-chip-menu__header">Property Type</div>
-                            {PROPERTY_TYPE_OPTIONS.map((opt) => (
-                                <button
-                                    key={opt.value}
-                                    type="button"
-                                    className={`property-chip-menu__item ${
-                                        selectedCategory === opt.value ? "is-active" : ""
-                                    }`}
-                                    onClick={() => handleTypeSelect(opt.value)}
-                                >
-                                    <span>{opt.label}</span>
-                                    {selectedCategory === opt.value && (
-                                        <Check size={14} className="property-check-icon" />
-                                    )}
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                {/* Optional active BHK chip if filtered in drawer */}
-                {selectedBhk !== "all" && (
+                    {/* CHIP 2: Area ▾ (Locality in Pune) */}
                     <div className="property-chip-anchor">
                         <button
                             type="button"
-                            className="property-chip-btn is-selected"
-                            onClick={() => handleBhkClick("all")}
-                            title="Remove BHK filter"
+                            className={`property-chip-btn ${selectedLocation !== "all" ? "is-selected" : ""} ${activeDropdown === "area" ? "is-active" : ""
+                                }`}
+                            onClick={() =>
+                                setActiveDropdown((prev) => (prev === "area" ? null : "area"))
+                            }
                         >
-                            <span>{bhkChipLabel}</span>
-                            <X size={12} className="property-chip-remove" />
+                            <span>{areaChipLabel}</span>
+                            <ChevronDown size={13} className="property-chip-chevron" />
                         </button>
-                    </div>
-                )}
 
-                {/* Optional active Price chip if filtered in drawer */}
-                {selectedMaxPrice !== "" && (
+                        {activeDropdown === "area" && (
+                            <div className="property-chip-menu property-chip-menu--wide">
+                                <div className="property-chip-search-box">
+                                    <Search size={13} className="property-chip-search-icon" />
+                                    <input
+                                        type="text"
+                                        placeholder="Search locality..."
+                                        value={areaSearch}
+                                        onChange={(e) => setAreaSearch(e.target.value)}
+                                        className="property-chip-search-input"
+                                        autoFocus
+                                    />
+                                </div>
+                                <div className="property-chip-menu__list">
+                                    {filteredLocalities.map((loc) => (
+                                        <button
+                                            key={loc}
+                                            type="button"
+                                            className={`property-chip-menu__item ${(loc === "All Pune" && selectedLocation === "all") ||
+                                                loc === selectedLocation
+                                                ? "is-active"
+                                                : ""
+                                                }`}
+                                            onClick={() => {
+                                                handleLocationSelect(loc);
+                                                setAreaSearch("");
+                                            }}
+                                        >
+                                            <span>{loc}</span>
+                                            {((loc === "All Pune" && selectedLocation === "all") ||
+                                                loc === selectedLocation) && (
+                                                    <Check size={14} className="property-check-icon" />
+                                                )}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* CHIP 3: Property Type ▾ */}
                     <div className="property-chip-anchor">
                         <button
                             type="button"
-                            className="property-chip-btn is-selected"
-                            onClick={() => handleBudgetSelect("")}
-                            title="Remove Budget filter"
+                            className={`property-chip-btn ${selectedCategory !== "all" ? "is-selected" : ""
+                                } ${activeDropdown === "type" ? "is-active" : ""}`}
+                            onClick={() =>
+                                setActiveDropdown((prev) => (prev === "type" ? null : "type"))
+                            }
                         >
-                            <span>{priceChipLabel}</span>
-                            <X size={12} className="property-chip-remove" />
+                            <span>{typeChipLabel}</span>
+                            <ChevronDown size={13} className="property-chip-chevron" />
                         </button>
+
+                        {activeDropdown === "type" && (
+                            <div className="property-chip-menu">
+                                <div className="property-chip-menu__header">Property Type</div>
+                                {PROPERTY_TYPE_OPTIONS.map((opt) => (
+                                    <button
+                                        key={opt.value}
+                                        type="button"
+                                        className={`property-chip-menu__item ${selectedCategory === opt.value ? "is-active" : ""
+                                            }`}
+                                        onClick={() => handleTypeSelect(opt.value)}
+                                    >
+                                        <span>{opt.label}</span>
+                                        {selectedCategory === opt.value && (
+                                            <Check size={14} className="property-check-icon" />
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                )}
 
-                {/* CHIP 4: Sort ⇅ (Sort button matching reference) */}
-                <div className="property-chip-anchor property-chip-anchor--icon">
-                    <button
-                        type="button"
-                        className={`property-chip-btn property-chip-btn--icon ${
-                            selectedSort !== "recommended" ? "is-selected" : ""
-                        } ${activeDropdown === "sort" ? "is-active" : ""}`}
-                        onClick={() =>
-                            setActiveDropdown((prev) => (prev === "sort" ? null : "sort"))
-                        }
-                        title="Sort Properties"
-                        aria-label="Sort Properties"
-                    >
-                        <ArrowUpDown size={14} />
-                    </button>
-
-                    {activeDropdown === "sort" && (
-                        <div className="property-chip-menu property-chip-menu--right">
-                            <div className="property-chip-menu__header">Sort Properties</div>
-                            {SORT_OPTIONS.map((opt) => (
-                                <button
-                                    key={opt.value}
-                                    type="button"
-                                    className={`property-chip-menu__item ${
-                                        selectedSort === opt.value ? "is-active" : ""
-                                    }`}
-                                    onClick={() => handleSortSelect(opt.value)}
-                                >
-                                    <span>{opt.label}</span>
-                                    {selectedSort === opt.value && (
-                                        <Check size={14} className="property-check-icon" />
-                                    )}
-                                </button>
-                            ))}
+                    {/* Optional active BHK chip if filtered in drawer */}
+                    {selectedBhk !== "all" && (
+                        <div className="property-chip-anchor">
+                            <button
+                                type="button"
+                                className="property-chip-btn is-selected"
+                                onClick={() => handleBhkClick("all")}
+                                title="Remove BHK filter"
+                            >
+                                <span>{bhkChipLabel}</span>
+                                <X size={12} className="property-chip-remove" />
+                            </button>
                         </div>
                     )}
+
+                    {/* Optional active Price chip if filtered in drawer */}
+                    {selectedMaxPrice !== "" && (
+                        <div className="property-chip-anchor">
+                            <button
+                                type="button"
+                                className="property-chip-btn is-selected"
+                                onClick={() => handleBudgetSelect("")}
+                                title="Remove Budget filter"
+                            >
+                                <span>{priceChipLabel}</span>
+                                <X size={12} className="property-chip-remove" />
+                            </button>
+                        </div>
+                    )}
+
+                    {/* CHIP 4: Sort ⇅ (Sort button matching reference) */}
+                    <div className="property-chip-anchor property-chip-anchor--icon">
+                        <button
+                            type="button"
+                            className={`property-chip-btn property-chip-btn--icon ${selectedSort !== "recommended" ? "is-selected" : ""
+                                } ${activeDropdown === "sort" ? "is-active" : ""}`}
+                            onClick={() =>
+                                setActiveDropdown((prev) => (prev === "sort" ? null : "sort"))
+                            }
+                            title="Sort Properties"
+                            aria-label="Sort Properties"
+                        >
+                            <ArrowUpDown size={14} />
+                        </button>
+
+                        {activeDropdown === "sort" && (
+                            <div className="property-chip-menu property-chip-menu--right">
+                                <div className="property-chip-menu__header">Sort Properties</div>
+                                {SORT_OPTIONS.map((opt) => (
+                                    <button
+                                        key={opt.value}
+                                        type="button"
+                                        className={`property-chip-menu__item ${selectedSort === opt.value ? "is-active" : ""
+                                            }`}
+                                        onClick={() => handleSortSelect(opt.value)}
+                                    >
+                                        <span>{opt.label}</span>
+                                        {selectedSort === opt.value && (
+                                            <Check size={14} className="property-check-icon" />
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }

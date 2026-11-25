@@ -1469,8 +1469,8 @@
 .vtp-hero-viewport {
     position: relative;
     width: 100%;
-    height: min(65vh, 600px);
-    min-height: 440px;
+    height: min(72vh, 660px);
+    min-height: 484px;
     background: #0c1523;
     overflow: hidden;
 }
@@ -1486,53 +1486,6 @@
 
 .vtp-hero-viewport:hover .vtp-hero-img {
     transform: scale(1.02);
-}
-
-/* Floating Circular Controls at Top of Image */
-.vtp-hero-top-bar {
-    position: absolute;
-    top: 76px;
-    left: 20px;
-    right: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 15;
-}
-
-.vtp-hero-top-bar__right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.vtp-circle-btn {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.72);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #1e293b;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
-}
-
-.vtp-circle-btn:hover {
-    background: #ffffff;
-    transform: scale(1.06);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
-    color: #0c1523;
-}
-
-.vtp-circle-btn--active {
-    background: #ffffff;
 }
 
 /* Corner Photo Count Pill */
@@ -1621,10 +1574,50 @@
 }
 
 .vtp-card-title-row {
+    width: 100%;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 20px;
+}
+
+.vtp-card-builder-logo-col {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px;
+    flex-shrink: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.vtp-card-builder-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+    display: block;
+}
+
+.vtp-card-builder-logo-fallback {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #162033;
+    color: #d4af37;
+    font-family: var(--font-serif), Georgia, serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .vtp-card-title-col {
@@ -1812,8 +1805,8 @@
 /* Responsive adjustments */
 @media (max-width: 640px) {
     .vtp-hero-viewport {
-        height: 54vh;
-        min-height: 380px;
+        height: 60vh;
+        min-height: 418px;
     }
 
     .vtp-hero-top-bar {

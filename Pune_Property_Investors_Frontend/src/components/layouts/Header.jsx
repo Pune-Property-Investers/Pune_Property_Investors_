@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import PropertyFlightSearchBar from "../properties/PropertyFlightSearchBar";
+import PropertyFilters from "../properties/PropertyFilters";
+import propertiesData from "../../data/properties";
 import "./Header.css";
 
 function ShortsIcon({ size = 20, className = "" }) {
@@ -87,10 +89,85 @@ function isKnownLocality(term = "") {
     return PUNE_LOCALITIES.some((loc) => lower.includes(loc) || loc.includes(lower));
 }
 
-function Header({ transparentAtTop = false, forceDark = false, theme = "default", hideTopHeader = false }) {
+const DEFAULT_DRAWER_FILTERS = {
+    location: "all",
+    bhk: "all",
+    minPrice: "",
+    maxPrice: "",
+    propertyType: "all",
+    sortBy: "recommended",
+};
+
+function Header({
+    transparentAtTop = false,
+    forceDark = false,
+    theme = "default",
+    hideTopHeader = false,
+    showFilterChips = true,
+}) {
     const router = useRouter();
     const pathname = usePathname();
     const [searchQuery, setSearchQuery] = useState("");
+    const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+    const [drawerFilters, setDrawerFilters] = useState(DEFAULT_DRAWER_FILTERS);
+
+    const handleDrawerFilterChange = (key, value) => {
+        setDrawerFilters((prev) => ({ ...prev, [key]: value }));
+    };
+
+    const handleResetDrawerFilters = () => {
+        setDrawerFilters(DEFAULT_DRAWER_FILTERS);
+        setSearchQuery("");
+    };
+
+    const drawerMatchingCount = useMemo(() => {
+        const list = Array.isArray(propertiesData) ? propertiesData : [];
+        const q = (searchQuery || "").toLowerCase().trim();
+        return list.filter((p) => {
+            if (q) {
+                const hay = `${p.title || ""} ${p.location || ""} ${p.developer || ""} ${p.builder || ""}`.toLowerCase();
+                if (!hay.includes(q)) return false;
+            }
+            if (drawerFilters.location !== "all") {
+                const loc = (p.location || "").toLowerCase();
+                if (!loc.includes(drawerFilters.location.toLowerCase())) return false;
+            }
+            if (drawerFilters.bhk !== "all") {
+                const bhkStr = `${p.bhk || ""} ${p.configuration || ""} ${p.availableFlats || ""}`.toLowerCase();
+                if (drawerFilters.bhk === "4+") {
+                    if (!/(4|5|6)\s*bhk/i.test(bhkStr)) return false;
+                } else if (!bhkStr.includes(drawerFilters.bhk)) {
+                    return false;
+                }
+            }
+            if (drawerFilters.propertyType !== "all") {
+                const typeStr = `${p.propertyType || ""} ${p.category || ""} ${p.type || ""}`.toLowerCase();
+                if (!typeStr.includes(drawerFilters.propertyType.toLowerCase())) return false;
+            }
+            const priceVal = Number(p.priceValue || p.numericPrice || 0);
+            if (priceVal > 0) {
+                if (drawerFilters.minPrice && priceVal < Number(drawerFilters.minPrice)) return false;
+                if (drawerFilters.maxPrice && priceVal > Number(drawerFilters.maxPrice)) return false;
+            }
+            return true;
+        }).length;
+    }, [drawerFilters, searchQuery]);
+
+    const handleApplyDrawerFilters = () => {
+        setIsFilterDrawerOpen(false);
+        const params = new URLSearchParams();
+        if (searchQuery.trim()) params.set("search", searchQuery.trim());
+        if (drawerFilters.location !== "all") params.set("location", drawerFilters.location);
+        if (drawerFilters.bhk !== "all") params.set("bhk", drawerFilters.bhk);
+        if (drawerFilters.minPrice) params.set("minPrice", drawerFilters.minPrice);
+        if (drawerFilters.maxPrice) params.set("maxPrice", drawerFilters.maxPrice);
+        if (drawerFilters.propertyType !== "all") params.set("propertyType", drawerFilters.propertyType);
+        if (drawerFilters.sortBy && drawerFilters.sortBy !== "recommended") {
+            params.set("sortBy", drawerFilters.sortBy);
+        }
+        const qs = params.toString();
+        router.push(qs ? `/properties?${qs}#property-search` : "/properties#property-search");
+    };
 
     const handleGoBack = () => {
         if (typeof window !== "undefined" && window.history.length > 1) {
@@ -290,8 +367,15 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                         } ${menuOpen ? "site-header--open" : ""} ${(theme === "black" || forceDark || (normalizedPath.startsWith("/property") && !transparentAtTop)) && (!isTransparent || isScrolled) && !transparentAtTop ? "site-header--black" : ""} ${isHeaderHidden && !menuOpen ? "site-header--hidden" : ""} ${isHome ? "site-header--is-home" : ""}`}
                 >
                     {transparentAtTop ? (
-                        <div className="property-header-container">
+                        <div
+                            className={`property-header-container ${
+                                !(showFilterChips && !normalizedPath.startsWith("/property"))
+                                    ? "property-header-container--compact"
+                                    : ""
+                            }`}
+                        >
                             <PropertyFlightSearchBar
+                                filters={drawerFilters}
                                 searchQuery={searchQuery}
                                 onSearchQueryChange={setSearchQuery}
                                 onSearchSubmit={handleSearchSubmit}
@@ -299,10 +383,11 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                                     router.push(`/properties?${key}=${encodeURIComponent(val)}`);
                                 }}
                                 onOpenFilterDrawer={() => {
-                                    router.push("/properties?focus=filters");
+                                    setIsFilterDrawerOpen(true);
                                 }}
                                 showBack={true}
                                 onBack={handleGoBack}
+                                showFilterChips={showFilterChips && !normalizedPath.startsWith("/property")}
                             />
                         </div>
                     ) : (
@@ -759,6 +844,30 @@ function Header({ transparentAtTop = false, forceDark = false, theme = "default"
                     <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
                 </button>
             </nav>
+
+            {/* In-Page Property Filter Drawer (Opened from Header Filter Icon) */}
+            {isFilterDrawerOpen && (
+                <div className="header-filter-drawer-wrapper" role="dialog" aria-modal="true" aria-label="Property filters">
+                    <div
+                        className="header-filter-drawer-backdrop"
+                        onClick={() => setIsFilterDrawerOpen(false)}
+                        aria-hidden="true"
+                    />
+                    <div className="header-filter-drawer-content">
+                        <PropertyFilters
+                            filters={drawerFilters}
+                            onFilterChange={handleDrawerFilterChange}
+                            onReset={handleResetDrawerFilters}
+                            resultCount={drawerMatchingCount}
+                            onCloseMobile={() => setIsFilterDrawerOpen(false)}
+                            onApply={handleApplyDrawerFilters}
+                            properties={propertiesData}
+                            searchQuery={searchQuery}
+                            onSearchQueryChange={setSearchQuery}
+                        />
+                    </div>
+                </div>
+            )}
         </>
     );
 }

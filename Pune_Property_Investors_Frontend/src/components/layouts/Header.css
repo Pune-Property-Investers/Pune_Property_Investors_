@@ -37,14 +37,14 @@
     pointer-events: none !important;
 }
 
-/* Dedicated Header for Property Details (same background color as outer search bar in explore properties: #fbfaf7) */
+/* Dedicated Transparent Header for Property Details */
 .site-header--transparent,
 .site-header--transparent.site-header--scrolled,
 .site-header--transparent.site-header--black {
-    background: #fbfaf7 !important;
+    background: transparent !important;
     border: none !important;
     border-bottom: none !important;
-    box-shadow: 0 4px 16px rgba(18, 24, 22, 0.04) !important;
+    box-shadow: none !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
 }
@@ -56,6 +56,10 @@
     margin: 0 auto;
     padding: 10px 20px 8px;
     box-sizing: border-box;
+}
+
+.property-header-container--compact {
+    padding: 5px 16px 6px !important;
 }
 
 .property-header-container .property-search-filter-wrapper {
@@ -1433,4 +1437,34 @@
         bottom: 6px;
         font-size: 8px;
     }
+}
+
+/* ==========================================================================
+   IN-PAGE PROPERTY FILTER DRAWER (Opened from Header Filter Icon)
+   ========================================================================== */
+
+.header-filter-drawer-wrapper {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.header-filter-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.header-filter-drawer-content {
+    position: relative;
+    z-index: 1;
+    width: min(400px, 92vw);
+    height: 100%;
+    background: #ffffff;
+    overflow-y: auto;
+    box-shadow: -8px 0 32px rgba(15, 23, 42, 0.18);
 }

@@ -9,7 +9,6 @@ import {
     Ruler,
     CalendarDays,
     ShieldCheck,
-    CheckCircle2,
     ExternalLink,
     Zap,
     Car,
@@ -301,6 +300,11 @@ export default function ProjectSpecifications({ property }) {
         ];
     }
 
+    const reraPortalUrl =
+        property.reraUrl ||
+        property.reraLink ||
+        `https://maharerait.maharashtra.gov.in/projects-search-result?project_name=${encodeURIComponent(reraNumber)}`;
+
     return (
         <section className="project-specifications">
             <div className="project-specifications__header">
@@ -309,14 +313,26 @@ export default function ProjectSpecifications({ property }) {
                     <h2 className="project-specifications__title">{title}</h2>
                 </div>
 
-                {/* Compact MahaRERA Badge */}
-                <div className="project-specifications__rera-badge">
+                {/* Compact MahaRERA Direct Portal Link Badge */}
+                <a
+                    href={reraPortalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="project-specifications__rera-badge project-specifications__rera-badge--link"
+                    title={`Verify ${reraNumber} on MahaRERA Portal`}
+                    onClick={() => {
+                        if (typeof navigator !== "undefined" && navigator.clipboard && reraNumber) {
+                            navigator.clipboard.writeText(reraNumber).catch(() => {});
+                        }
+                    }}
+                >
                     <ShieldCheck size={18} className="text-gold" />
                     <div>
                         <span className="rera-badge__label">MahaRERA</span>
                         <strong className="rera-badge__number">{reraNumber}</strong>
                     </div>
-                </div>
+                    <ExternalLink size={14} className="rera-badge__ext-icon" />
+                </a>
             </div>
 
             {/* Clean Specifications Grid (3 in Row Horizontal) */}
@@ -330,25 +346,6 @@ export default function ProjectSpecifications({ property }) {
                         <strong className="spec-card__value">{item.value}</strong>
                     </div>
                 ))}
-            </div>
-
-            {/* Bottom Clean MahaRERA Bar */}
-            <div className="project-specifications__rera-footer">
-                <div className="rera-footer__info">
-                    <CheckCircle2 size={16} className="text-gold" />
-                    <span>
-                        MahaRERA Registered: <strong>{reraNumber}</strong> • 100% Verified Project
-                    </span>
-                </div>
-                <a
-                    href="https://maharera.mahaonline.gov.in"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rera-footer__link"
-                >
-                    <span>Verify on MahaRERA</span>
-                    <ExternalLink size={13} />
-                </a>
             </div>
         </section>
     );

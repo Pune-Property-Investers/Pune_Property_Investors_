@@ -98,6 +98,7 @@ function PropertyFilters({
     onReset,
     resultCount,
     onCloseMobile,
+    onApply,
     properties = [],
     searchQuery = "",
     onSearchQueryChange,
@@ -888,7 +889,7 @@ function PropertyFilters({
                         <button
                             type="button"
                             className="property-filters__apply-btn"
-                            onClick={onCloseMobile}
+                            onClick={onApply || onCloseMobile}
                         >
                             <Check size={16} />
                             <span>Show {resultCount} Properties</span>
