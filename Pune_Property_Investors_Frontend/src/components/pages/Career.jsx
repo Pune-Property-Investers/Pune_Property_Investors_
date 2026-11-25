@@ -419,7 +419,7 @@ export default function Career() {
 
     return (
         <div className="career-luxury-page">
-            <Header transparentAtTop={true} />
+            <Header />
 
             <main>
                 {/* 1. FLAGSHIP EDITORIAL HERO */}
