@@ -291,6 +291,7 @@ function PropertyDetails({ propertyId, propertySlug }) {
     const [shareToast, setShareToast] = useState(false);
     const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
     const [heroSlideIndex, setHeroSlideIndex] = useState(0);
+    const [isHeroInstant, setIsHeroInstant] = useState(false);
     const [isHeroPaused, setIsHeroPaused] = useState(false);
     const heroTouchStartX = useRef(null);
 
@@ -504,12 +505,14 @@ function PropertyDetails({ propertyId, propertySlug }) {
     useEffect(() => {
         if (heroImages.length <= 1 || isHeroPaused || isGalleryModalOpen) return;
         const timer = setInterval(() => {
-            setHeroSlideIndex((prev) => (prev + 1) % heroImages.length);
+            setIsHeroInstant(false);
+            setHeroSlideIndex((prev) => (prev >= heroImages.length ? 1 : prev + 1));
         }, 2800);
         return () => clearInterval(timer);
     }, [heroImages.length, isHeroPaused, isGalleryModalOpen]);
 
     const safeHeroIndex = heroImages.length > 0 ? heroSlideIndex % heroImages.length : 0;
+    const trackImages = heroImages.length > 1 ? [...heroImages, heroImages[0]] : heroImages;
 
     return (
         <>
@@ -531,11 +534,13 @@ function PropertyDetails({ propertyId, propertySlug }) {
                         if (startX !== null && endX !== null && heroImages.length > 1) {
                             const diff = startX - endX;
                             if (Math.abs(diff) > 35) {
-                                setHeroSlideIndex((prev) =>
-                                    diff > 0
-                                        ? (prev + 1) % heroImages.length
-                                        : (prev - 1 + heroImages.length) % heroImages.length
-                                );
+                                setIsHeroInstant(false);
+                                setHeroSlideIndex((prev) => {
+                                    const current = prev % heroImages.length;
+                                    return diff > 0
+                                        ? current + 1
+                                        : (current - 1 + heroImages.length) % heroImages.length;
+                                });
                             }
                         }
                         heroTouchStartX.current = null;
@@ -543,14 +548,23 @@ function PropertyDetails({ propertyId, propertySlug }) {
                     }}
                 >
                     <div
-                        className="vtp-hero-slider-track"
-                        style={{ transform: `translateX(-${safeHeroIndex * 100}%)` }}
+                        className={`vtp-hero-slider-track ${isHeroInstant ? "vtp-hero-slider-track--instant" : ""}`}
+                        style={{ transform: `translate3d(-${heroSlideIndex * 100}%, 0, 0)` }}
+                        onTransitionEnd={() => {
+                            if (heroImages.length > 1 && heroSlideIndex >= heroImages.length) {
+                                setIsHeroInstant(true);
+                                setHeroSlideIndex(0);
+                                requestAnimationFrame(() => {
+                                    requestAnimationFrame(() => setIsHeroInstant(false));
+                                });
+                            }
+                        }}
                     >
-                        {heroImages.map((imgSrc, imgIdx) => (
+                        {trackImages.map((imgSrc, imgIdx) => (
                             <div className="vtp-hero-slide" key={`${imgSrc}-${imgIdx}`}>
                                 <img
                                     src={imgSrc}
-                                    alt={`${title} - Photo ${imgIdx + 1}`}
+                                    alt={`${title} - Photo ${(imgIdx % heroImages.length) + 1}`}
                                     className="vtp-hero-img"
                                 />
                             </div>

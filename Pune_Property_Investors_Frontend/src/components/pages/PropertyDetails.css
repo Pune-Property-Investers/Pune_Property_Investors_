@@ -1479,8 +1479,14 @@
     display: flex;
     width: 100%;
     height: 100%;
-    transition: transform 0.42s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.vtp-hero-slider-track--instant {
+    transition: none !important;
 }
 
 .vtp-hero-slide {
@@ -1488,6 +1494,8 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .vtp-hero-img {
@@ -1496,11 +1504,6 @@
     object-fit: cover;
     object-position: center;
     display: block;
-    transition: transform 0.6s ease;
-}
-
-.vtp-hero-viewport:hover .vtp-hero-img {
-    transform: scale(1.02);
 }
 
 /* Small Photo Thumbnails Strip just above Floating Card */
