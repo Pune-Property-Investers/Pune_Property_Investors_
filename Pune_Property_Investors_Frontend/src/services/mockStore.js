@@ -73,11 +73,23 @@ const DEFAULT_HOMEPAGE_SECTIONS = [
         },
     },
     {
+        id: "property-reels",
+        type: "property-reels",
+        label: "Property Shorts & Video Reels",
+        enabled: true,
+        order: 5,
+        data: {
+            eyebrow: "PROPERTY SHORTS",
+            heading: "Explore Pune Projects Through Reels",
+            subtitle: "Streets • Amenities • Lifestyle • Walkthroughs",
+        },
+    },
+    {
         id: "browse-locations",
         type: "browse-locations",
         label: "Browse by Location Marquee",
         enabled: true,
-        order: 5,
+        order: 6,
         data: {
             eyebrow: "EXPLORE PUNE",
             heading: "Browse by Prime Localities",

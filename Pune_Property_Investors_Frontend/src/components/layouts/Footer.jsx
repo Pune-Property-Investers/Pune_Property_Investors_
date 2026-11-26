@@ -30,6 +30,38 @@ const propertyLinks = [
     { label: "Plots & Land", path: "/plots" },
 ];
 
+const offices = [
+    {
+        city: "Pune, Maharashtra",
+        label: "Headquarters",
+        addressLines: [
+            "3rd Floor, Suite 904, Gera Imperium Alpha,",
+            "Grant Road, Vitthal Nagar, Kharadi,",
+            "Pune, Maharashtra - 411014",
+        ],
+        mapUrl: "https://maps.app.goo.gl/49jQdRiP4CCgNMCP7",
+    },
+    {
+        city: "Narhe, Pune",
+        label: "Branch Office",
+        addressLines: [
+            "Vishwa Arcade, Navale Bridge,",
+            "Vadgaon bk, Narhe,",
+            "Pune, Maharashtra - 411041",
+        ],
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=Vishwa+Arcade+Navale+Bridge+Vadgaon+bk+Narhe+Pune+411041",
+    },
+    {
+        city: "Dighi, Pune",
+        label: "Branch Office",
+        addressLines: [
+            "Rajnandini Tower, Parande Nagar,",
+            "Dighi, Pune, Maharashtra - 411015",
+        ],
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=Rajnandini+Tower+Parande+Nagar+Dighi+Pune+411015",
+    },
+];
+
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 function Footer() {
@@ -151,52 +183,50 @@ function Footer() {
                             connect.
                         </p>
 
-                        <a
-                            href="https://maps.app.goo.gl/49jQdRiP4CCgNMCP7"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="footer-contact__item"
-                        >
-                            <FaMapMarkerAlt />
-                            <span> 3rd Floor (also listed as Suite 904 in some directory records), Gera Imperium Alpha, Grant Road, Vitthal Nagar, Kharadi, Pune, Maharashtra 411014, India (Headquarters)</span>
-                        </a>
+                        <div className="footer-addresses-list">
+                            {offices.map((office) => (
+                                <a
+                                    key={office.city}
+                                    href={office.mapUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="footer-address-card"
+                                    aria-label={`View ${office.city} location on Google Maps`}
+                                >
+                                    <div className="footer-address-card__icon-box">
+                                        <FaMapMarkerAlt className="footer-address-card__icon" />
+                                    </div>
 
-                        <div className="footer-branches-row">
-                            <a
-                                href="https://www.google.com/maps/search/?api=1&query=Vishwa+Arcade+Navale+Bridge+Vadgaon+bk+Narhe+Pune+411041"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="footer-branch-item"
-                            >
-                                <FaMapMarkerAlt />
-                                <span>Narhe / Vadgaon bk Office</span>
-                            </a>
-                            <a
-                                href="https://www.google.com/maps/search/?api=1&query=Rajnandini+Tower+Parande+Nagar+Dighi+Pune+411015"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="footer-branch-item"
-                            >
-                                <FaMapMarkerAlt />
-                                <span>Dighi Office</span>
-                            </a>
+                                    <h4 className="footer-address-card__city">
+                                        {office.city}
+                                    </h4>
+
+                                    <div className="footer-address-card__details">
+                                        {office.addressLines.map((line, idx) => (
+                                            <p key={idx}>{line}</p>
+                                        ))}
+                                    </div>
+                                </a>
+                            ))}
                         </div>
 
-                        <a
-                            href="tel:+917398174444"
-                            className="footer-contact__item"
-                        >
-                            <FaPhoneAlt />
-                            <span>+91 73981 74444</span>
-                        </a>
+                        <div className="footer-contact-actions">
+                            <a
+                                href="tel:+917398174444"
+                                className="footer-contact__item"
+                            >
+                                <FaPhoneAlt />
+                                <span>+91 73981 74444</span>
+                            </a>
 
-                        <a
-                            href="mailto:info@punepropertyinvestor.com"
-                            className="footer-contact__item"
-                        >
-                            <FaEnvelope />
-                            <span>info@punepropertyinvestor.com</span>
-                        </a>
+                            <a
+                                href="mailto:info@punepropertyinvestor.com"
+                                className="footer-contact__item"
+                            >
+                                <FaEnvelope />
+                                <span>info@punepropertyinvestor.com</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

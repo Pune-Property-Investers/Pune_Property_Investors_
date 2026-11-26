@@ -6,10 +6,12 @@ import HeroSection from "../home/HeroSection";
 import TrustHighlights from "../home/TrustHighlights";
 import FeaturedProperties from "../home/FeaturedProperties";
 import Footer from "../layouts/Footer";
+import PropertyReels from "../property-details/PropertyReels";
 import BrowseLocations from "../home/BrowseLocations";
 import NewLaunchProjects from "../home/NewLaunchProjects";
 import UpcomingProjects from "../home/UpcomingProjects";
 import AdvertisementSidebar from "../common/AdvertisementSidebar";
+import AdvertisementPopup from "../common/AdvertisementPopup";
 import TrustStats from "../home/TrustStats";
 import FeaturedProjects from "../home/FeaturedProjects";
 import Workflow from "../home/Workflow";
@@ -24,6 +26,7 @@ const MAIN_COLUMN_TYPES = new Set([
     "trust-highlights",
     "featured-properties",
     "new-launches",
+    "property-reels",
     "browse-locations",
     "featured-projects",
     "upcoming-projects",
@@ -49,6 +52,10 @@ function renderPublishedSection(section, activeTab, setActiveTab, published) {
             return <FeaturedProperties key={section.id} filters={{ projectType: activeTab }} previewData={data} />;
         case "new-launches":
             return <NewLaunchProjects key={section.id} previewData={data} />;
+        case "property-reels":
+        case "shorts":
+        case "reels":
+            return <PropertyReels key={section.id} previewData={data} />;
         case "browse-locations":
             return <BrowseLocations key={section.id} customLocations={published?.locations} previewData={data} />;
         case "featured-projects":
@@ -102,11 +109,31 @@ function Home() {
     const [activeTab, setActiveTab] = useState("projects");
     const published = usePublishedCms();
 
-    const sections = Array.isArray(published?.homepage?.sections)
+    let sections = Array.isArray(published?.homepage?.sections)
         ? [...published.homepage.sections].sort((a, b) => (a.order || 0) - (b.order || 0))
         : null;
 
     if (sections && sections.length > 0) {
+        const hasReels = sections.some((s) => s.type === "property-reels" || s.type === "shorts" || s.type === "reels");
+        if (!hasReels) {
+            const browseIdx = sections.findIndex((s) => s.type === "browse-locations");
+            const reelsSection = {
+                id: "property-reels",
+                type: "property-reels",
+                enabled: true,
+                order: browseIdx !== -1 ? (sections[browseIdx].order || 5) - 0.5 : 4.5,
+                data: {},
+            };
+            if (browseIdx !== -1) {
+                sections = [
+                    ...sections.slice(0, browseIdx),
+                    reelsSection,
+                    ...sections.slice(browseIdx),
+                ];
+            } else {
+                sections = [...sections, reelsSection];
+            }
+        }
         const adSection = sections.find((s) => s.type === "advertisements");
         const showSidebar = adSection ? adSection.enabled : true;
 
@@ -148,6 +175,7 @@ function Home() {
                 </main>
 
                 <Footer />
+                <AdvertisementPopup customAds={published?.advertisements} />
             </>
         );
     }
@@ -175,6 +203,7 @@ function Home() {
                         />
 
                         <NewLaunchProjects />
+                        <PropertyReels />
                         <BrowseLocations />
 
                         {/* 3. Upcoming Projects & Pre-Launch Milestones */}
@@ -200,6 +229,7 @@ function Home() {
             </main>
 
             <Footer />
+            <AdvertisementPopup />
         </>
     );
 }

@@ -117,9 +117,54 @@
     align-items: center;
     flex: 1;
     z-index: 3;
+    overflow: visible;
 }
 
-/* ── Overlapping Circular Company Logo (sits on top edge of inner card) ──── */
+/* ── Running Line Effect around Inner Container ─────────────────────────── */
+
+.property-card__border-runner {
+    position: absolute;
+    inset: -1.5px;
+    border-radius: 16px;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.property-card__border-runner::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 340%;
+    aspect-ratio: 1 / 1;
+    transform: translate(-50%, -50%);
+    background: conic-gradient(from 0deg,
+            transparent 0deg,
+            transparent 280deg,
+            rgba(167, 122, 72, 0) 280deg,
+            rgba(167, 122, 72, 0.45) 308deg,
+            #a77a48 328deg,
+            #f59e0b 344deg,
+            #06b6d4 354deg,
+            #ffffff 360deg);
+    animation: property-card-line-run 4s linear infinite;
+}
+
+.property-card__border-runner::after {
+    content: "";
+    position: absolute;
+    inset: 1.5px;
+    background: #ffffff;
+    border-radius: 14.5px;
+    z-index: 1;
+}
+
+.property-card:hover .property-card__border-runner::before {
+    animation-duration: 2.2s;
+}
+
+/* ── Overlapping Circular Company Logo (with RGB Effect) ─────────────────── */
 
 .property-card__logo-wrap {
     position: absolute;
@@ -129,17 +174,51 @@
     width: 66px;
     height: 66px;
     border-radius: 50%;
-    background: #ffffff;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-    border: 3px solid #ffffff;
+    padding: 1.5px;
+    background: transparent;
     z-index: 5;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    animation: rgb-pulse-shadow 4s ease-in-out infinite;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.property-card__logo-wrap::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 240%;
+    aspect-ratio: 1 / 1;
+    transform: translate(-50%, -50%);
+    background: conic-gradient(from 0deg,
+            #ff0055,
+            #ff5500,
+            #ffcc00,
+            #00ff66,
+            #00f0ff,
+            #0066ff,
+            #8a2be2,
+            #ff00aa,
+            #ff0055);
+    animation: rgb-rotate 3s linear infinite;
+    z-index: 1;
+}
+
+.property-card:hover .property-card__logo-wrap {
+    transform: translate(-50%, -50%) scale(1.06);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15), 0 0 10px rgba(0, 240, 255, 0.45);
+}
+
+.property-card:hover .property-card__logo-wrap::before {
+    animation-duration: 1.6s;
 }
 
 .property-card__logo-badge {
+    position: relative;
+    z-index: 2;
     width: 100%;
     height: 100%;
     border-radius: 50%;
@@ -150,6 +229,62 @@
     text-align: center;
     padding: 6px;
     background: #ffffff;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Keyframe Animations ─────────────────────────────────────────────────── */
+
+@keyframes property-card-line-run {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes rgb-rotate {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes rgb-pulse-shadow {
+
+    0%,
+    100% {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1),
+            0 0 6px rgba(255, 0, 85, 0.3);
+    }
+
+    25% {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1),
+            0 0 6px rgba(255, 204, 0, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1),
+            0 0 6px rgba(0, 255, 102, 0.3);
+    }
+
+    75% {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1),
+            0 0 6px rgba(0, 240, 255, 0.3);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .property-card__border-runner::before,
+    .property-card__logo-wrap::before,
+    .property-card__logo-wrap {
+        animation: none;
+    }
 }
 
 .property-card__brand-logo-box,
@@ -204,6 +339,8 @@
 /* ── Inner Card Text Body ─────────────────────────────────────────────────── */
 
 .property-card__body {
+    position: relative;
+    z-index: 2;
     width: 100%;
     padding: 42px 16px 16px;
     text-align: left;
@@ -365,8 +502,9 @@
     }
 
     .property-card__logo-wrap {
-        width: 64px;
-        height: 64px;
+        width: 62px;
+        height: 62px;
+        padding: 1.5px;
     }
 
     .property-card__body {

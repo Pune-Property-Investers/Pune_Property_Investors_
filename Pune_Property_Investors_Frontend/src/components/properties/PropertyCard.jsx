@@ -119,7 +119,10 @@ function PropertyCard({ property }) {
 
                 {/* ── INNER CARD (smaller, sits inside the outer card's bottom) ── */}
                 <div className="property-card__inner">
-                    {/* Overlapping Circular Company Logo */}
+                    {/* Animated running border line effect */}
+                    <div className="property-card__border-runner" aria-hidden="true" />
+
+                    {/* Overlapping Circular Company Logo with RGB Effect */}
                     <div className="property-card__logo-wrap">
                         <div className="property-card__logo-badge">
                             {!logoFailed && logoSrc ? (
