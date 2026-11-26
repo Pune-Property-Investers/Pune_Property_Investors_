@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
@@ -290,6 +290,9 @@ function PropertyDetails({ propertyId, propertySlug }) {
     const [isFavorite, setIsFavorite] = useState(false);
     const [shareToast, setShareToast] = useState(false);
     const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
+    const [heroSlideIndex, setHeroSlideIndex] = useState(0);
+    const [isHeroPaused, setIsHeroPaused] = useState(false);
+    const heroTouchStartX = useRef(null);
 
     // Favorite handler with localStorage
     useEffect(() => {
@@ -481,32 +484,116 @@ function PropertyDetails({ propertyId, propertySlug }) {
         : carpetAreaText;
     const displayPropertyPrice = selectedBhkItem?.price || priceClean;
 
+    const heroImages = useMemo(() => {
+        const list = uniqueImages.length > 0 ? [...uniqueImages] : ["/images/properties/default.jpg"];
+        if (selectedBhkItem?.image && !list.includes(selectedBhkItem.image)) {
+            list.unshift(selectedBhkItem.image);
+        }
+        return list;
+    }, [uniqueImages, selectedBhkItem]);
+
+    useEffect(() => {
+        if (selectedBhkIndex >= 0 && heroImages.length > 0) {
+            const targetIdx = selectedBhkItem?.image
+                ? heroImages.indexOf(selectedBhkItem.image)
+                : selectedBhkIndex % heroImages.length;
+            setHeroSlideIndex(targetIdx >= 0 ? targetIdx : 0);
+        }
+    }, [selectedBhkIndex, selectedBhkItem, heroImages]);
+
+    useEffect(() => {
+        if (heroImages.length <= 1 || isHeroPaused || isGalleryModalOpen) return;
+        const timer = setInterval(() => {
+            setHeroSlideIndex((prev) => (prev + 1) % heroImages.length);
+        }, 2800);
+        return () => clearInterval(timer);
+    }, [heroImages.length, isHeroPaused, isGalleryModalOpen]);
+
+    const safeHeroIndex = heroImages.length > 0 ? heroSlideIndex % heroImages.length : 0;
+
     return (
         <>
             <Header transparentAtTop={true} showFilterChips={false} />
 
             <main className="property-details property-details--vtp-theme">
-                {/* 1. CINEMATIC HERO IMAGE WITH TOP CONTROLS (EXACT PHOTO REPLICA) */}
-                <div className="vtp-hero-viewport">
-                    <img
-                        src={activeHeroImage}
-                        alt={title}
-                        className="vtp-hero-img"
-                    />
-
-                    {/* Corner Photo Count Pill */}
-                    <button
-                        type="button"
-                        className="vtp-hero-photos-pill"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setIsGalleryModalOpen(true);
-                        }}
-                        title="View photo gallery"
+                {/* 1. CINEMATIC SLIDING HERO VIEWPORT WITH SMALL PHOTO THUMBNAILS */}
+                <div
+                    className="vtp-hero-viewport"
+                    onMouseEnter={() => setIsHeroPaused(true)}
+                    onMouseLeave={() => setIsHeroPaused(false)}
+                    onTouchStart={(e) => {
+                        heroTouchStartX.current = e.touches?.[0]?.clientX ?? null;
+                        setIsHeroPaused(true);
+                    }}
+                    onTouchEnd={(e) => {
+                        const startX = heroTouchStartX.current;
+                        const endX = e.changedTouches?.[0]?.clientX ?? null;
+                        if (startX !== null && endX !== null && heroImages.length > 1) {
+                            const diff = startX - endX;
+                            if (Math.abs(diff) > 35) {
+                                setHeroSlideIndex((prev) =>
+                                    diff > 0
+                                        ? (prev + 1) % heroImages.length
+                                        : (prev - 1 + heroImages.length) % heroImages.length
+                                );
+                            }
+                        }
+                        heroTouchStartX.current = null;
+                        setIsHeroPaused(false);
+                    }}
+                >
+                    <div
+                        className="vtp-hero-slider-track"
+                        style={{ transform: `translateX(-${safeHeroIndex * 100}%)` }}
                     >
-                        <ImageIcon size={14} />
-                        <span>{uniqueImages.length} Photos</span>
-                    </button>
+                        {heroImages.map((imgSrc, imgIdx) => (
+                            <div className="vtp-hero-slide" key={`${imgSrc}-${imgIdx}`}>
+                                <img
+                                    src={imgSrc}
+                                    alt={`${title} - Photo ${imgIdx + 1}`}
+                                    className="vtp-hero-img"
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Small Photo Thumbnails Strip at Corner Count Position */}
+                    <div className="vtp-hero-thumbs-bar" aria-label="Property photos">
+                        {heroImages.map((imgSrc, imgIdx) => {
+                            const isActiveThumb = imgIdx === safeHeroIndex;
+                            return (
+                                <button
+                                    key={`thumb-${imgSrc}-${imgIdx}`}
+                                    type="button"
+                                    className={`vtp-hero-thumb-btn ${isActiveThumb ? "vtp-hero-thumb-btn--active" : ""}`}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setHeroSlideIndex(imgIdx);
+                                    }}
+                                    aria-label={`Show photo ${imgIdx + 1}`}
+                                    aria-current={isActiveThumb ? "true" : undefined}
+                                >
+                                    <img
+                                        src={imgSrc}
+                                        alt={`${title} thumbnail ${imgIdx + 1}`}
+                                        className="vtp-hero-thumb-img"
+                                    />
+                                </button>
+                            );
+                        })}
+                        <button
+                            type="button"
+                            className="vtp-hero-thumb-expand"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsGalleryModalOpen(true);
+                            }}
+                            title="Open full gallery"
+                            aria-label="Open full photo gallery"
+                        >
+                            <ImageIcon size={13} />
+                        </button>
+                    </div>
                 </div>
 
                 <div className="property-details__container">
