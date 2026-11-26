@@ -10,6 +10,7 @@ import BrowseLocations from "../home/BrowseLocations";
 import NewLaunchProjects from "../home/NewLaunchProjects";
 import UpcomingProjects from "../home/UpcomingProjects";
 import AdvertisementSidebar from "../common/AdvertisementSidebar";
+import AdvertisementPopup from "../common/AdvertisementPopup";
 import TrustStats from "../home/TrustStats";
 import FeaturedProjects from "../home/FeaturedProjects";
 import Workflow from "../home/Workflow";
@@ -148,6 +149,7 @@ function Home() {
                 </main>
 
                 <Footer />
+                <AdvertisementPopup customAds={published?.advertisements} />
             </>
         );
     }
@@ -200,6 +202,7 @@ function Home() {
             </main>
 
             <Footer />
+            <AdvertisementPopup />
         </>
     );
 }
