@@ -56,7 +56,12 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
     });
     const [searchQuery, setSearchQuery] = useState(initialProject);
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+    const [visibleCount, setVisibleCount] = useState(10);
     const searchInputRef = useRef(null);
+
+    useEffect(() => {
+        setVisibleCount(10);
+    }, [filters, searchQuery]);
 
     // Sync filters and search box if searchParams change dynamically
     useEffect(() => {
@@ -449,14 +454,29 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                                 </div>
 
                                 {filteredProperties.length > 0 ? (
-                                    <div className="buy-properties-grid">
-                                        {filteredProperties.map((property) => (
-                                            <PropertyListingCard
-                                                key={property.id}
-                                                property={property}
-                                            />
-                                        ))}
-                                    </div>
+                                    <>
+                                        <div className="buy-properties-grid">
+                                            {filteredProperties.slice(0, visibleCount).map((property) => (
+                                                <PropertyListingCard
+                                                    key={property.id}
+                                                    property={property}
+                                                />
+                                            ))}
+                                        </div>
+
+                                        {filteredProperties.length > visibleCount && (
+                                            <div className="buy-properties-view-more-wrap">
+                                                <button
+                                                    type="button"
+                                                    className="buy-properties-view-more-btn"
+                                                    onClick={() => setVisibleCount((prev) => prev + 10)}
+                                                >
+                                                    <span>View More</span>
+                                                    <ArrowRight size={16} />
+                                                </button>
+                                            </div>
+                                        )}
+                                    </>
                                 ) : (
                                     <div className="buy-properties-empty">
                                         <div className="buy-properties-empty__icon">

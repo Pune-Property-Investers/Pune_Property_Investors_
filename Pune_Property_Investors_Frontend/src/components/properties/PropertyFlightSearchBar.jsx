@@ -169,34 +169,9 @@ export default function PropertyFlightSearchBar({
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    // Collapse BHK / Area / Property Type row when scrolling down (swiping page up)
+    // Keep BHK / Area / Property Type row static (always visible when showFilterChips is true)
     useEffect(() => {
-        if (!showFilterChips) return;
-        let ticking = false;
-        let lastScrollY = typeof window !== "undefined" ? window.scrollY : 0;
-
-        const handleScroll = () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const currentScrollY = window.scrollY;
-                    if (currentScrollY <= 24) {
-                        setIsChipsHidden(false);
-                    } else if (currentScrollY > lastScrollY + 4) {
-                        setIsChipsHidden(true);
-                        setActiveDropdown(null);
-                    } else if (currentScrollY < lastScrollY - 12) {
-                        setIsChipsHidden(false);
-                    }
-                    lastScrollY = Math.max(0, currentScrollY);
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        };
-
-        handleScroll();
-        window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
+        setIsChipsHidden(false);
     }, [showFilterChips]);
 
     const selectedCategory = filters.propertyType || "all";
@@ -272,9 +247,8 @@ export default function PropertyFlightSearchBar({
 
     return (
         <div
-            className={`property-search-filter-wrapper ${
-                !showFilterChips || isChipsHidden ? "property-search-filter-wrapper--chips-hidden" : ""
-            } ${!showFilterChips ? "property-search-filter-wrapper--compact-rounded" : ""}`}
+            className={`property-search-filter-wrapper ${!showFilterChips || isChipsHidden ? "property-search-filter-wrapper--chips-hidden" : ""
+                } ${!showFilterChips ? "property-search-filter-wrapper--compact-rounded" : ""}`}
             ref={barRef}
         >
             {/* 1. MAIN SEARCH BAR */}

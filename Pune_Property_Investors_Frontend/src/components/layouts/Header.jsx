@@ -369,7 +369,7 @@ function Header({
                     {transparentAtTop ? (
                         <div
                             className={`property-header-container ${
-                                !(showFilterChips && !normalizedPath.startsWith("/property"))
+                                !(showFilterChips && !normalizedPath.startsWith("/property") && !/^\/properties\/.+/.test(normalizedPath))
                                     ? "property-header-container--compact"
                                     : ""
                             }`}
@@ -387,7 +387,7 @@ function Header({
                                 }}
                                 showBack={true}
                                 onBack={handleGoBack}
-                                showFilterChips={showFilterChips && !normalizedPath.startsWith("/property")}
+                                showFilterChips={showFilterChips && !normalizedPath.startsWith("/property") && !/^\/properties\/.+/.test(normalizedPath)}
                             />
                         </div>
                     ) : (
