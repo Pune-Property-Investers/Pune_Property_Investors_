@@ -2223,70 +2223,99 @@
     }
 
     .nl-hero-mobile-search .hero-search-card {
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: stretch;
         width: 100%;
         max-width: 100%;
-        padding: 10px;
-        gap: 6px;
-        border-radius: 16px;
+        padding: 4px 5px;
+        gap: 4px;
+        border-radius: 13px;
         background: rgba(14, 11, 9, 0.78);
         backdrop-filter: blur(22px);
         -webkit-backdrop-filter: blur(22px);
         border: 1px solid rgba(196, 152, 102, 0.35);
         box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
         margin: 0 auto;
+        overflow: hidden;
     }
 
     .nl-hero-mobile-search .hero-search-card__field {
-        width: 100%;
-        flex: none;
-        min-height: auto;
-        padding: 6px 10px 7px;
-        border-radius: 11px;
+        width: auto;
+        flex: 1.05 1 0;
+        min-width: 0;
+        min-height: 38px;
+        padding: 4px 5px;
+        border-radius: 9px;
+        gap: 1px;
+    }
+
+    .nl-hero-mobile-search .hero-search-card__field:first-of-type {
+        flex: 1.25 1 0;
+        min-width: 0;
     }
 
     .nl-hero-mobile-search .hero-search-card__label {
-        font-size: 9px;
+        font-size: 6.5px;
+        letter-spacing: 0.2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .nl-hero-mobile-search .hero-search-card__input-row {
+        gap: 3px;
+    }
+
+    .nl-hero-mobile-search .hero-search-card__icon {
+        width: 11px;
+        height: 11px;
+    }
+
+    .nl-hero-mobile-search .hero-search-card__chevron {
+        display: none;
     }
 
     .nl-hero-mobile-search .hero-search-card__select {
-        font-size: 15px;
+        font-size: 10px;
+        font-weight: 600;
     }
 
     .nl-hero-mobile-search .hero-search-card__bottom-row {
-        display: grid;
-        grid-template-columns: 0.95fr 1.25fr;
-        gap: 8px;
-        width: 100%;
-        align-items: stretch;
+        display: contents;
     }
 
     .nl-hero-mobile-search .hero-search-card__field--half {
-        width: 100% !important;
-        max-width: 100% !important;
-        min-height: 48px;
-        border-radius: 12px;
-        padding: 6px 10px 7px;
+        width: auto !important;
+        max-width: none !important;
+        flex: 0.72 1 0;
+        min-width: 0;
+        min-height: 38px;
+        border-radius: 9px;
+        padding: 4px 5px;
     }
 
     .nl-hero-mobile-search .hero-search-card__submit-btn {
-        width: 100% !important;
-        max-width: 100% !important;
-        min-height: 48px;
-        height: 100%;
-        padding: 0 16px;
-        background: linear-gradient(135deg, #ba874a 0%, #a4733b 100%);
+        width: auto !important;
+        max-width: none !important;
+        flex: 0 0 auto;
+        min-width: 0;
+        min-height: 38px;
+        height: auto;
+        padding: 0 9px;
+        background: linear-gradient(135deg, #c49866 0%, #a77a48 100%);
         border: none;
-        border-radius: 14px;
+        border-radius: 9px;
         color: #ffffff;
         font-weight: 700;
-        font-size: 14px;
+        font-size: 10.5px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 4px;
         cursor: pointer;
-        box-shadow: 0 4px 14px rgba(186, 134, 74, 0.4);
+        box-shadow: 0 4px 12px rgba(167, 122, 72, 0.4);
+        white-space: nowrap;
     }
 
     .nl-hero__footer {
