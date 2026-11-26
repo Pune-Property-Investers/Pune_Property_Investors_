@@ -1,26 +1,31 @@
-
-    /* ========================================
-       FOOTER — MAIN
-    ======================================== */
+/* ==========================================================================
+   FOOTER — MAIN (Rich Sapphire Ocean Blue Theme)
+   ========================================================================== */
 
 .site-footer {
     position: relative;
     width: 100%;
     overflow: hidden;
-    background: #201923;
-    color: #f5f0ed;
+    background: #1b4263;
+    color: #f1f7fc;
     font-family: var(--font-sans);
+    border-top: 1px solid rgba(217, 180, 119, 0.3);
 }
 
 .footer-main {
     padding: 72px 0 58px;
     background:
-            radial-gradient(
-                    circle at 12% 20%,
-                    rgba(197, 151, 86, 0.08),
-                    transparent 30%
-            ),
-            #201923;
+        radial-gradient(
+            circle at 10% 15%,
+            rgba(217, 180, 119, 0.14),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 90% 85%,
+            rgba(72, 148, 204, 0.16),
+            transparent 35%
+        ),
+        #1b4263;
 }
 
 .footer-container {
@@ -31,9 +36,9 @@
     margin: 0 auto;
 }
 
-/* ========================================
+/* ==========================================================================
    BRAND
-======================================== */
+   ========================================================================== */
 
 .footer-company {
     min-width: 0;
@@ -67,14 +72,14 @@
 
 .footer-brand__name {
     font-family: var(--font-serif);
-    color: var(--text-white, #ffffff);
+    color: #ffffff;
     font-size: 17px;
     font-weight: 800;
     letter-spacing: 0.4px;
 }
 
 .footer-brand__subtitle {
-    color: #d9b477;
+    color: #e5c285;
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 4px;
@@ -87,15 +92,15 @@
     font-family: var(--font-sans);
     max-width: 370px;
     margin: 0 0 25px;
-    color: var(--text-white-muted, #c4bbc5);
+    color: #cddfe9;
     font-size: 14px;
     line-height: 1.9;
     overflow-wrap: break-word;
 }
 
-/* ========================================
+/* ==========================================================================
    SOCIAL MEDIA — REACT ICONS
-======================================== */
+   ========================================================================== */
 
 .footer-socials {
     display: flex;
@@ -111,24 +116,27 @@
     width: 40px;
     height: 40px;
     flex-shrink: 0;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.04);
-    color: #e2c18c;
+    background: rgba(255, 255, 255, 0.08);
+    color: #e5c285;
     font-size: 17px;
     text-decoration: none;
+    box-shadow: 0 2px 8px rgba(10, 25, 40, 0.15);
     transition:
-            background 0.25s ease,
-            color 0.25s ease,
-            border-color 0.25s ease,
-            transform 0.25s ease;
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
 .footer-socials a:hover {
     transform: translateY(-3px);
     border-color: #d9b477;
     background: #d9b477;
-    color: #201923;
+    color: #14334d;
+    box-shadow: 0 6px 16px rgba(217, 180, 119, 0.35);
 }
 
 .footer-socials a:focus-visible {
@@ -136,9 +144,9 @@
     outline-offset: 4px;
 }
 
-/* ========================================
+/* ==========================================================================
    FOOTER COLUMNS
-======================================== */
+   ========================================================================== */
 
 .footer-column {
     min-width: 0;
@@ -164,9 +172,9 @@
     content: "";
 }
 
-/* ========================================
+/* ==========================================================================
    FOOTER LINKS
-======================================== */
+   ========================================================================== */
 
 .footer-links {
     display: flex;
@@ -186,14 +194,14 @@
     display: inline-flex;
     align-items: flex-start;
     gap: 9px;
-    color: #c4bbc5;
-    font-size: 13px;
+    color: #cddfe9;
+    font-size: 13.5px;
     line-height: 1.7;
     text-decoration: none;
     overflow-wrap: anywhere;
     transition:
-            color 0.2s ease,
-            gap 0.2s ease;
+        color 0.2s ease,
+        gap 0.2s ease;
 }
 
 .footer-links a svg {
@@ -201,11 +209,16 @@
     margin-top: 4px;
     color: #d9b477;
     font-size: 12px;
+    transition: transform 0.2s ease;
 }
 
 .footer-links a:hover {
     gap: 12px;
-    color: #e4c58f;
+    color: #e5c285;
+}
+
+.footer-links a:hover svg {
+    transform: translateX(2px);
 }
 
 .footer-links a:focus-visible,
@@ -214,20 +227,21 @@
     outline-offset: 4px;
 }
 
-/* ========================================
+/* ==========================================================================
    CONTACT INFORMATION
-======================================== */
+   ========================================================================== */
 
 .footer-contact__intro {
     margin: 0 0 20px;
-    color: #c4bbc5;
-    font-size: 13px;
+    color: #cddfe9;
+    font-size: 13.5px;
     line-height: 1.8;
 }
 
-/* ========================================
+/* ==========================================================================
    ADDRESS CARDS (Location Pin Box + City + Multi-line Address)
-======================================== */
+   Matches User Reference Screenshot in media_1795687767729_296bbb5e.png
+   ========================================================================== */
 
 .footer-addresses-list {
     display: flex;
@@ -243,13 +257,13 @@
     flex-direction: column;
     align-items: flex-start;
     text-decoration: none;
-    color: #c4bbc5;
+    color: #cddfe9;
     transition: transform 0.2s ease;
 }
 
 .footer-address-card:hover {
     transform: translateY(-2px);
-    color: #e4c58f;
+    color: #e5c285;
 }
 
 .footer-address-card:focus-visible {
@@ -263,14 +277,15 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.24);
     margin-bottom: 12px;
-    color: #d9b477;
-    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+    color: #e5c285;
+    box-shadow: 0 2px 6px rgba(10, 25, 40, 0.15);
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .footer-address-card__icon {
@@ -278,10 +293,11 @@
 }
 
 .footer-address-card:hover .footer-address-card__icon-box {
-    background: rgba(196, 152, 102, 0.24);
-    border-color: rgba(196, 152, 102, 0.6);
-    color: #e4c58f;
+    background: rgba(217, 180, 119, 0.25);
+    border-color: #d9b477;
+    color: #ffffff;
     transform: scale(1.06);
+    box-shadow: 0 4px 12px rgba(217, 180, 119, 0.3);
 }
 
 /* Bold City / Region Title */
@@ -297,12 +313,12 @@
 }
 
 .footer-address-card:hover .footer-address-card__city {
-    color: #e4c58f;
+    color: #e5c285;
 }
 
-/* Multi-line Address matching the exact font color of footer links */
+/* Multi-line Address */
 .footer-address-card__details {
-    color: #c4bbc5;
+    color: #cddfe9;
     font-size: 13px;
     line-height: 1.7;
     font-family: var(--font-sans), Inter, sans-serif;
@@ -311,7 +327,7 @@
 
 .footer-address-card__details p {
     margin: 0 0 2px 0;
-    color: #c4bbc5;
+    color: #cddfe9;
     transition: color 0.2s ease;
 }
 
@@ -321,7 +337,7 @@
 
 .footer-address-card:hover .footer-address-card__details,
 .footer-address-card:hover .footer-address-card__details p {
-    color: #e4c58f;
+    color: #e5c285;
 }
 
 /* Direct Contacts (Phone & Email) */
@@ -330,14 +346,14 @@
     flex-direction: column;
     gap: 12px;
     padding-top: 14px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .footer-contact__item {
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #c4bbc5;
+    color: #cddfe9;
     font-size: 13px;
     line-height: 1.5;
     text-decoration: none;
@@ -352,7 +368,7 @@
 }
 
 .footer-contact__item:hover {
-    color: #e4c58f;
+    color: #e5c285;
 }
 
 .footer-contact__item:focus-visible {
@@ -360,13 +376,13 @@
     outline-offset: 4px;
 }
 
-/* ========================================
+/* ==========================================================================
    BOTTOM BAR
-======================================== */
+   ========================================================================== */
 
 .footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    background: #19131c;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    background: #14334d;
 }
 
 .footer-bottom__container {
@@ -375,15 +391,15 @@
     justify-content: space-between;
     gap: 20px;
     width: min(92%, 1400px);
-    min-height: 76px;
+    min-height: 70px;
     margin: 0 auto;
-    padding: 18px 0;
+    padding: 16px 0;
 }
 
 .footer-bottom__container p {
     margin: 0;
-    color: #a99eaa;
-    font-size: 12px;
+    color: #9cbacf;
+    font-size: 12.5px;
     line-height: 1.8;
 }
 
@@ -395,20 +411,20 @@
 }
 
 .footer-legal-links a {
-    color: #a99eaa;
-    font-size: 12px;
+    color: #9cbacf;
+    font-size: 12.5px;
     line-height: 1.8;
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
 .footer-legal-links a:hover {
-    color: #e4c58f;
+    color: #e5c285;
 }
 
-/* ========================================
+/* ==========================================================================
    TABLET AND SMALL LAPTOPS
-======================================== */
+   ========================================================================== */
 
 @media (max-width: 1100px) {
     .footer-container {
@@ -421,9 +437,9 @@
     }
 }
 
-/* ========================================
+/* ==========================================================================
    MOBILE
-======================================== */
+   ========================================================================== */
 
 @media (max-width: 600px) {
     .footer-main {
@@ -499,9 +515,9 @@
     }
 }
 
-/* ========================================
+/* ==========================================================================
    SMALL MOBILE DEVICES
-======================================== */
+   ========================================================================== */
 
 @media (max-width: 360px) {
     .footer-brand__logo {
@@ -535,9 +551,9 @@
     }
 }
 
-/* ========================================
+/* ==========================================================================
    REDUCED MOTION ACCESSIBILITY
-======================================== */
+   ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
     .footer-socials a,
