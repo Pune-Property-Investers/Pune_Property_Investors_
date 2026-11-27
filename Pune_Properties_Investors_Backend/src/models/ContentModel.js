@@ -1,19 +1,4 @@
 import { query, isDBConnected } from "../config/db.js";
-import { LocationModel } from "./LocationModel.js";
-import { ProjectModel } from "./ProjectModel.js";
-import { PropertyModel } from "./PropertyModel.js";
-import { ArticleModel } from "./ArticleModel.js";
-import { DeveloperModel } from "./DeveloperModel.js";
-import { CareerModel } from "./CareerModel.js";
-
-const KEYS = {
-    homepageDraft: "cms_homepage_draft",
-    homepagePublished: "cms_homepage_published",
-    festivalPopup: "cms_festival_popup",
-    shorts: "cms_shorts",
-    testimonials: "cms_testimonials",
-    advertisements: "cms_advertisements"
-};
 
 let memoryContent = {
     homepageDraft: {
@@ -45,177 +30,68 @@ let memoryContent = {
     ]
 };
 
-async function readSetting(sectionKey, fallback) {
-    if (!isDBConnected()) return Array.isArray(fallback) ? [] : null;
-    try {
-        const rows = await query("SELECT section_data FROM settings WHERE section_key = ? LIMIT 1", [sectionKey]);
-        if (rows && rows.length > 0 && rows[0].section_data !== undefined) {
-            const raw = rows[0].section_data;
-            return typeof raw === "string" ? JSON.parse(raw) : raw;
-        }
-    } catch (_) {
-        return Array.isArray(fallback) ? [] : null;
-    }
-    return Array.isArray(fallback) ? [] : null;
-}
-
-async function writeSetting(sectionKey, data) {
-    if (!isDBConnected()) return;
-    try {
-        await query(
-            `INSERT INTO settings (section_key, section_data)
-             VALUES (?, ?)
-             ON DUPLICATE KEY UPDATE section_data = VALUES(section_data), updated_at = CURRENT_TIMESTAMP`,
-            [sectionKey, JSON.stringify(data)]
-        );
-    } catch (_) {
-        // Keep in-memory state if DB write fails
-    }
-}
-
 export const ContentModel = {
     async getHomepage() {
-        const [draft, published] = await Promise.all([
-            readSetting(KEYS.homepageDraft, memoryContent.homepageDraft),
-            readSetting(KEYS.homepagePublished, memoryContent.homepagePublished)
-        ]);
-        return { draft, published };
+        return {
+            draft: memoryContent.homepageDraft,
+            published: memoryContent.homepagePublished
+        };
     },
 
     async saveHomepageDraft(draft) {
         memoryContent.homepageDraft = { ...draft, status: "Draft", updatedAt: new Date().toISOString() };
-        await writeSetting(KEYS.homepageDraft, memoryContent.homepageDraft);
         return memoryContent.homepageDraft;
     },
 
     async publishHomepage(payload) {
-        const base = payload || (await readSetting(KEYS.homepageDraft, memoryContent.homepageDraft));
         memoryContent.homepagePublished = {
-            ...base,
+            ...(payload || memoryContent.homepageDraft),
             status: "Published",
             publishedAt: new Date().toISOString()
         };
         memoryContent.homepageDraft = { ...memoryContent.homepagePublished };
-        await Promise.all([
-            writeSetting(KEYS.homepagePublished, memoryContent.homepagePublished),
-            writeSetting(KEYS.homepageDraft, memoryContent.homepageDraft)
-        ]);
         return memoryContent.homepagePublished;
     },
 
     async getFestivalPopup() {
-        return readSetting(KEYS.festivalPopup, memoryContent.festivalPopup);
+        return memoryContent.festivalPopup;
     },
 
     async updateFestivalPopup(payload) {
-        const current = await readSetting(KEYS.festivalPopup, memoryContent.festivalPopup);
-        memoryContent.festivalPopup = { ...current, ...payload };
-        await writeSetting(KEYS.festivalPopup, memoryContent.festivalPopup);
+        memoryContent.festivalPopup = { ...memoryContent.festivalPopup, ...payload };
         return memoryContent.festivalPopup;
     },
 
     async getShorts() {
-        return readSetting(KEYS.shorts, memoryContent.shorts);
+        return memoryContent.shorts;
     },
 
     async updateShorts(payload) {
-        const list = Array.isArray(payload) ? payload : (Array.isArray(payload?.shorts) ? payload.shorts : null);
-        if (list) {
-            memoryContent.shorts = list;
-            await writeSetting(KEYS.shorts, memoryContent.shorts);
+        if (Array.isArray(payload)) {
+            memoryContent.shorts = payload;
         }
         return memoryContent.shorts;
     },
 
     async getTestimonials() {
-        return readSetting(KEYS.testimonials, memoryContent.testimonials);
+        return memoryContent.testimonials;
     },
 
     async updateTestimonials(payload) {
-        const list = Array.isArray(payload) ? payload : (Array.isArray(payload?.testimonials) ? payload.testimonials : null);
-        if (list) {
-            memoryContent.testimonials = list;
-            await writeSetting(KEYS.testimonials, memoryContent.testimonials);
+        if (Array.isArray(payload)) {
+            memoryContent.testimonials = payload;
         }
         return memoryContent.testimonials;
     },
 
     async getAdvertisements() {
-        return readSetting(KEYS.advertisements, memoryContent.advertisements);
-    },
-
-    async updateAdvertisements(payload) {
-        const list = Array.isArray(payload) ? payload : (Array.isArray(payload?.advertisements) ? payload.advertisements : null);
-        if (list) {
-            memoryContent.advertisements = list;
-            await writeSetting(KEYS.advertisements, memoryContent.advertisements);
-        }
         return memoryContent.advertisements;
     },
 
-    async getPublicContent() {
-        const [homepage, festivalPopup, shorts, testimonials, advertisements, locations, projects, properties, articles, developers, jobs] =
-            await Promise.all([
-                readSetting(KEYS.homepagePublished, memoryContent.homepagePublished),
-                readSetting(KEYS.festivalPopup, memoryContent.festivalPopup),
-                readSetting(KEYS.shorts, memoryContent.shorts),
-                readSetting(KEYS.testimonials, memoryContent.testimonials),
-                readSetting(KEYS.advertisements, memoryContent.advertisements),
-                LocationModel.list().catch(() => []),
-                ProjectModel.list().catch(() => []),
-                PropertyModel.findAll().catch(() => []),
-                ArticleModel.list().catch(() => []),
-                DeveloperModel.list().catch(() => []),
-                CareerModel.listJobs().catch(() => [])
-            ]);
-
-        return {
-            homepage,
-            festivalPopup,
-            shorts: Array.isArray(shorts) ? shorts.filter((s) => s.visible !== false) : [],
-            testimonials: Array.isArray(testimonials) ? testimonials.filter((t) => t.visible !== false) : [],
-            advertisements: Array.isArray(advertisements) ? advertisements.filter((a) => a.visible !== false) : [],
-            locations,
-            projects,
-            properties,
-            articles: Array.isArray(articles) ? articles.filter((a) => (a.status || "Published") !== "Draft") : [],
-            developers,
-            jobs: Array.isArray(jobs) ? jobs.filter((j) => j.status === "Open") : []
-        };
-    },
-
-    async publishSection(sectionKey) {
-        if (sectionKey === "homepage") {
-            return this.publishHomepage();
+    async updateAdvertisements(payload) {
+        if (Array.isArray(payload)) {
+            memoryContent.advertisements = payload;
         }
-        const publicData = await this.getPublicContent();
-        await writeSetting(`cms_section_published_${sectionKey}`, {
-            sectionKey,
-            publishedAt: new Date().toISOString()
-        });
-        return {
-            sectionKey,
-            publishedAt: new Date().toISOString(),
-            data: publicData[sectionKey] ?? publicData
-        };
-    },
-
-    async retrieveSection(sectionKey, mode = "original") {
-        const publicData = await this.getPublicContent();
-        return {
-            sectionKey,
-            mode,
-            restoredAt: new Date().toISOString(),
-            data: publicData[sectionKey] ?? publicData
-        };
-    },
-
-    async revertHomepage(mode = "original") {
-        const published = await readSetting(KEYS.homepagePublished, memoryContent.homepagePublished);
-        return {
-            mode,
-            revertedAt: new Date().toISOString(),
-            homepage: published
-        };
+        return memoryContent.advertisements;
     }
 };

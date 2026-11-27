@@ -73,15 +73,23 @@ let memoryProjects = [
 
 export const ProjectModel = {
     async list(filters = {}) {
-        if (!isDBConnected()) return [];
-        const rows = await query("SELECT * FROM projects ORDER BY created_at DESC");
-        return Array.isArray(rows) ? rows : [];
+        if (isDBConnected()) {
+            try {
+                const rows = await query("SELECT * FROM projects ORDER BY created_at DESC");
+                if (rows && rows.length > 0) return rows;
+            } catch (_) {}
+        }
+        return [...memoryProjects];
     },
 
     async getById(id) {
-        if (!isDBConnected()) return null;
-        const rows = await query("SELECT * FROM projects WHERE id = ? OR slug = ? LIMIT 1", [id, id]);
-        return rows && rows.length > 0 ? rows[0] : null;
+        if (isDBConnected()) {
+            try {
+                const rows = await query("SELECT * FROM projects WHERE id = ? OR slug = ? LIMIT 1", [id, id]);
+                if (rows && rows.length > 0) return rows[0];
+            } catch (_) {}
+        }
+        return memoryProjects.find(p => String(p.id) === String(id) || p.slug === id) || null;
     },
 
     async create(payload) {
@@ -96,24 +104,9 @@ export const ProjectModel = {
         if (isDBConnected()) {
             try {
                 await query(
-                    `INSERT INTO projects (id, name, slug, developer, location, locality, price, status, publication_status, configurations, possession_date, featured, image, description)
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                    [
-                        created.id,
-                        created.name,
-                        created.slug || created.name.toLowerCase().replace(/\s+/g, "-"),
-                        created.developer || "",
-                        created.location || "",
-                        created.locality || "",
-                        created.price || "",
-                        created.status || "Under Construction",
-                        created.publicationStatus || "Published",
-                        created.configurations || "",
-                        created.possessionDate || "",
-                        created.featured ? 1 : 0,
-                        created.image || "",
-                        created.description || ""
-                    ]
+                    `INSERT INTO projects (id, name, slug, developer, location, locality, price, status, publication_status, image, description)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    [created.id, created.name, created.slug || created.name.toLowerCase().replace(/\s+/g, "-"), created.developer || "", created.location || "", created.locality || "", created.price || "", created.status || "New", created.publicationStatus || "Published", created.image || "", created.description || ""]
                 );
             } catch (_) {}
         }
@@ -127,36 +120,10 @@ export const ProjectModel = {
         }
         if (isDBConnected()) {
             try {
-                const fieldMap = {
-                    name: "name",
-                    slug: "slug",
-                    developer: "developer",
-                    location: "location",
-                    locality: "locality",
-                    price: "price",
-                    status: "status",
-                    publicationStatus: "publication_status",
-                    configurations: "configurations",
-                    possessionDate: "possession_date",
-                    featured: "featured",
-                    image: "image",
-                    description: "description"
-                };
-                const updates = [];
-                const values = [];
-                for (const [key, col] of Object.entries(fieldMap)) {
-                    if (payload[key] !== undefined) {
-                        updates.push(`${col} = ?`);
-                        values.push(key === "featured" ? (payload[key] ? 1 : 0) : payload[key]);
-                    }
-                }
-                if (updates.length > 0) {
-                    values.push(id);
-                    await query(`UPDATE projects SET ${updates.join(", ")} WHERE id = ?`, values);
-                }
+                await query("UPDATE projects SET ? WHERE id = ?", [payload, id]);
             } catch (_) {}
         }
-        return memoryProjects[idx] || { id, ...payload };
+        return memoryProjects[idx] || null;
     },
 
     async delete(id) {

@@ -1,40 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Star, Quote } from "lucide-react";
 import { testimonials } from "../../data/testimonials.js";
-import { apiRequest, isBackendConfigured } from "../../services/api";
 import "./Testimonials.css";
 
 export default function Testimonials({ previewData, customTestimonials }) {
-    const [fetchedTestimonials, setFetchedTestimonials] = useState(null);
-
-    const backendActive = isBackendConfigured();
-
-    useEffect(() => {
-        if ((Array.isArray(previewData?.items) && previewData.items.length > 0) ||
-            Array.isArray(customTestimonials) ||
-            !backendActive) {
-            return;
-        }
-        let cancelled = false;
-        apiRequest("/content/testimonials").then((res) => {
-            const list = res?.data || res;
-            if (!cancelled && Array.isArray(list)) {
-                setFetchedTestimonials(list.filter((t) => t.visible !== false));
-            }
-        }).catch(() => {
-            if (!cancelled) setFetchedTestimonials([]);
-        });
-        return () => { cancelled = true; };
-    }, [customTestimonials, previewData, backendActive]);
-
     const items =
         Array.isArray(previewData?.items) && previewData.items.length > 0
             ? previewData.items
-            : (Array.isArray(customTestimonials)
-                ? customTestimonials.filter((t) => t.visible !== false)
-                : (fetchedTestimonials || []));
+            : (Array.isArray(customTestimonials) ? customTestimonials.filter((t) => t.visible !== false) : testimonials);
     const sectionRef = useRef(null);
 
     useEffect(() => {

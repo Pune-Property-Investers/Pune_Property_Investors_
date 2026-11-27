@@ -5,8 +5,6 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
 import PropertyCard from "../properties/PropertyCard";
 import { projects } from "../../data/projects";
-import { projectService } from "../../services/project.service";
-import { isBackendConfigured } from "../../services/api";
 import "./FeaturedProjects.css";
 
 export default function FeaturedProjects({ previewData, customProjects }) {
@@ -15,34 +13,12 @@ export default function FeaturedProjects({ previewData, customProjects }) {
     const [isVisible, setIsVisible] = useState(false);
     const [activeSlideIndex, setActiveSlideIndex] = useState(0);
     const [isGrabbing, setIsGrabbing] = useState(false);
-    const [fetchedProjects, setFetchedProjects] = useState(null);
-
-    const backendActive = isBackendConfigured();
-
-    useEffect(() => {
-        if ((Array.isArray(previewData?.items) && previewData.items.length > 0) ||
-            Array.isArray(customProjects)) {
-            return;
-        }
-        let cancelled = false;
-        projectService.list().then((res) => {
-            const list = res?.data || res;
-            if (!cancelled && Array.isArray(list)) {
-                setFetchedProjects(list);
-            }
-        }).catch(() => {
-            if (!cancelled && backendActive) setFetchedProjects([]);
-        });
-        return () => { cancelled = true; };
-    }, [customProjects, previewData, backendActive]);
 
     const projectList =
         Array.isArray(previewData?.items) && previewData.items.length > 0
             ? previewData.items
-            : (Array.isArray(previewData) && previewData.length > 0
-                ? previewData
-                : (fetchedProjects || []));
-    const filteredProjects = Array.isArray(customProjects) ? customProjects : projectList;
+            : (Array.isArray(previewData) && previewData.length > 0 ? previewData : projects);
+    const filteredProjects = Array.isArray(customProjects) && customProjects.length > 0 ? customProjects : projectList;
 
     // Mouse drag support for desktop slider
     const isMouseDownRef = useRef(false);

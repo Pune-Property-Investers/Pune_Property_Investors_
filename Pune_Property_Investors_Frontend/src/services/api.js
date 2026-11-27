@@ -119,10 +119,27 @@ export async function apiRequest(endpoint, options = {}) {
 }
 
 /**
- * Helper that calls the live Express API.
- * When database/backend is not connected, it does NOT fall back to mock data.
+ * Helper that calls the live Express API when NEXT_PUBLIC_API_URL is configured,
+ * and falls back to the mock handler only when no backend URL is configured (or on network failure in demo mode).
  */
-export async function withMockFallback(apiCall, _mockCall) {
-    return await apiCall();
+export async function withMockFallback(apiCall, mockCall) {
+    if (!isBackendConfigured()) {
+        await new Promise((resolve) => setTimeout(resolve, 120));
+        return mockCall();
+    }
+
+    try {
+        return await apiCall();
+    } catch (error) {
+        // Re-throw genuine auth or validation errors from a live backend
+        if (error instanceof ApiError && error.status >= 400 && error.status < 500) {
+            throw error;
+        }
+        // If backend server is offline locally, allow seamless demo fallback
+        if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+            return mockCall();
+        }
+        throw error;
+    }
 }
 

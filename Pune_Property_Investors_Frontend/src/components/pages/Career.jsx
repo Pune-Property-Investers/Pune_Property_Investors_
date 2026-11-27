@@ -234,7 +234,7 @@ const FAQS = [
 ];
 
 export default function Career() {
-    const [jobs, setJobs] = useState([]);
+    const [jobs, setJobs] = useState(DEFAULT_JOBS);
     const [loading, setLoading] = useState(true);
 
     const statsRef = useRef(null);

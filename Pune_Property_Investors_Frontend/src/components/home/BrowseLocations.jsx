@@ -4,8 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import locationsData from "../../data/locationsData";
-import { locationService } from "../../services/location.service";
-import { isBackendConfigured } from "../../services/api";
 import "./BrowseLocations.css";
 
 // Individual Locality Card in the Track or Grid
@@ -77,11 +75,10 @@ function LocalityCard({
     );
 
     // Desktop uses direct Next.js Link
-    const searchLoc = location.searchLocation || location.name || "";
     if (isDesktop) {
         return (
             <Link
-                href={`/buy?location=${encodeURIComponent(searchLoc)}`}
+                href={`/buy?location=${encodeURIComponent(location.searchLocation)}`}
                 className={`locality-card ${location.isFeatured ? "locality-card--featured" : ""}`}
                 key={`${keyPrefix}${location.id}`}
                 aria-label={`Explore properties in ${location.name}, ${location.zone}`}
@@ -186,39 +183,11 @@ function LocalitySpotlightCard({ location, position = "top" }) {
 
 export default function BrowseLocations({ customLocations, previewData }) {
     const [isPaused, setIsPaused] = useState(false);
-    const [fetchedLocations, setFetchedLocations] = useState(null);
-
-    const backendActive = isBackendConfigured();
-
-    useEffect(() => {
-        if ((Array.isArray(previewData?.items) && previewData.items.length > 0) ||
-            Array.isArray(customLocations)) {
-            return;
-        }
-        let cancelled = false;
-        locationService.list().then((res) => {
-            const list = res?.data || res;
-            if (!cancelled && Array.isArray(list)) {
-                setFetchedLocations(list.map((loc) => ({
-                    ...loc,
-                    searchLocation: loc.searchLocation || loc.name,
-                    description: loc.description || loc.subtitle || loc.tagline || "",
-                    avgRate: loc.avgRate || (loc.avg_price_per_sqft ? `₹${loc.avg_price_per_sqft.toLocaleString("en-IN")} / sq.ft` : "On Request"),
-                    listingsCount: loc.listingsCount || loc.price_growth_rate || "Verified",
-                })));
-            }
-        }).catch(() => {
-            if (!cancelled && backendActive) setFetchedLocations([]);
-        });
-        return () => { cancelled = true; };
-    }, [customLocations, previewData, backendActive]);
 
     const activeLocations =
         Array.isArray(previewData?.items) && previewData.items.length > 0
             ? previewData.items
-            : (Array.isArray(customLocations)
-                ? customLocations
-                : (fetchedLocations || []));
+            : (Array.isArray(customLocations) && customLocations.length > 0 ? customLocations : locationsData);
 
     // Split locations into Left Column (even index) & Right Column (odd index)
     const leftColumn = activeLocations.filter((_, idx) => idx % 2 === 0);

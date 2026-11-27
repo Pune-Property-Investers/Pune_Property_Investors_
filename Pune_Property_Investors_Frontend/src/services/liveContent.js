@@ -317,32 +317,25 @@ export function usePublishedCms() {
     const [snapshot, setSnapshot] = useState(null);
 
     useEffect(() => {
-        const backendActive = isBackendConfigured();
+        const syncFromStorage = () => {
+            setSnapshot(readLiveSnapshot());
+        };
 
-        const syncFromBackend = () => {
-            if (!backendActive) return;
-            fetch(`${getApiBaseUrl()}/content/public`, { cache: "no-store" })
+        syncFromStorage();
+
+        if (isBackendConfigured()) {
+            fetch(`${getApiBaseUrl()}/content/public`)
                 .then((res) => (res.ok ? res.json() : null))
                 .then((payload) => {
                     const data = payload?.data || payload;
-                    if (data && typeof data === "object") {
+                    if (data && (data.homepage || data.sections)) {
                         setSnapshot(data);
                     }
                 })
                 .catch(() => {
-                    setSnapshot(null);
+                    // Keep local snapshot fallback cleanly
                 });
-        };
-
-        const syncFromStorage = () => {
-            if (backendActive) {
-                syncFromBackend();
-            } else {
-                setSnapshot(readLiveSnapshot());
-            }
-        };
-
-        syncFromStorage();
+        }
 
         const handleStorage = (e) => {
             if (!e.key || e.key === LIVE_SNAPSHOT_KEY) {

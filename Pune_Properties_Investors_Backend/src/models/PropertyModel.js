@@ -132,67 +132,59 @@ let memoryProperties = [
 
 function formatRow(row) {
     if (!row) return null;
-    const parsedBhk = typeof row.bhk === "string" ? JSON.parse(row.bhk || "[]") : row.bhk || [];
-    const numericPrice = Number(row.numeric_price || row.numericPrice || 0);
-    const bedrooms = Array.isArray(parsedBhk) ? Number(parsedBhk[0]) || 0 : Number(parsedBhk) || 0;
     return {
         id: String(row.id),
         slug: row.slug,
         title: row.title,
         developer: row.developer,
-        projectName: row.developer,
         location: row.location,
         locality: row.locality,
         city: row.city,
         propertyCategory: row.property_category || row.propertyCategory,
         propertyType: row.property_type || row.propertyType,
         purpose: row.purpose,
-        price: numericPrice > 0 ? numericPrice : row.price,
-        priceLabel: row.price,
-        numericPrice,
-        bhk: Array.isArray(parsedBhk) && parsedBhk.length === 1 ? parsedBhk[0] : parsedBhk,
-        bedrooms,
+        price: row.price,
+        numericPrice: Number(row.numeric_price || row.numericPrice || 0),
+        bhk: typeof row.bhk === "string" ? JSON.parse(row.bhk) : row.bhk || [],
         area: row.area,
         status: row.status,
         possession: row.possession,
         isNewLaunch: Boolean(row.is_new_launch || row.isNewLaunch),
         isFeatured: Boolean(row.is_featured || row.isFeatured),
-        featured: Boolean(row.is_featured || row.isFeatured),
         isTrending: Boolean(row.is_trending || row.isTrending),
         verified: Boolean(row.verified),
         badge: row.badge,
         image: row.image,
-        images: (() => {
-            try {
-                if (typeof row.images === "string") {
-                    return row.images.startsWith("[") ? JSON.parse(row.images) : row.images.split(",").map((s) => s.trim()).filter(Boolean);
-                }
-                return Array.isArray(row.images) ? row.images : (row.image ? [row.image] : []);
-            } catch {
-                return row.image ? [row.image] : [];
-            }
-        })(),
+        images: typeof row.images === "string" ? JSON.parse(row.images) : row.images || [],
         videoUrl: row.video_url || row.videoUrl,
         description: row.description,
-        amenities: typeof row.amenities === "string" ? JSON.parse(row.amenities || "[]") : row.amenities || [],
+        amenities: typeof row.amenities === "string" ? JSON.parse(row.amenities) : row.amenities || [],
         createdAt: row.created_at || row.createdAt
     };
 }
 
 export const PropertyModel = {
     async findAll() {
-        if (!isDBConnected()) return [];
-        const rows = await query("SELECT * FROM properties ORDER BY created_at DESC");
-        return Array.isArray(rows) ? rows.map(formatRow) : [];
+        if (isDBConnected()) {
+            const rows = await query("SELECT * FROM properties ORDER BY created_at DESC");
+            if (rows && rows.length > 0) {
+                return rows.map(formatRow);
+            }
+        }
+        return [...memoryProperties];
     },
 
     async findBySlugOrId(identifier) {
-        if (!isDBConnected()) return null;
-        const rows = await query(
-            "SELECT * FROM properties WHERE slug = ? OR id = ? LIMIT 1",
-            [identifier, identifier]
-        );
-        return rows && rows.length > 0 ? formatRow(rows[0]) : null;
+        if (isDBConnected()) {
+            const rows = await query(
+                "SELECT * FROM properties WHERE slug = ? OR id = ? LIMIT 1",
+                [identifier, identifier]
+            );
+            if (rows && rows.length > 0) {
+                return formatRow(rows[0]);
+            }
+        }
+        return memoryProperties.find(p => p.slug === identifier || p.id === identifier) || null;
     },
 
     async create(propertyData) {
