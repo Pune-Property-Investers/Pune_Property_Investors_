@@ -105,11 +105,6 @@ export default function ProjectSpecifications({ property }) {
                 value: unitTypes,
             },
             {
-                icon: <Ruler size={20} className="spec-card__icon" />,
-                label: "Carpet Area",
-                value: leasableArea,
-            },
-            {
                 icon: <Zap size={20} className="spec-card__icon" />,
                 label: "Power Backup",
                 value: powerHvac,
@@ -205,19 +200,9 @@ export default function ProjectSpecifications({ property }) {
                 value: plotParcel,
             },
             {
-                icon: <Ruler size={20} className="spec-card__icon" />,
-                label: "Carpet Area",
-                value: usableArea,
-            },
-            {
                 icon: <Layers size={20} className="spec-card__icon" />,
                 label: "Structure",
                 value: storeys,
-            },
-            {
-                icon: <BedDouble size={20} className="spec-card__icon" />,
-                label: "Configuration",
-                value: config,
             },
             {
                 icon: <Sparkles size={20} className="spec-card__icon" />,
@@ -281,21 +266,6 @@ export default function ProjectSpecifications({ property }) {
                 icon: <Layers size={20} className="spec-card__icon" />,
                 label: "Total Floors",
                 value: floorCount,
-            },
-            {
-                icon: <BedDouble size={20} className="spec-card__icon" />,
-                label: "Configuration",
-                value: configuration,
-            },
-            {
-                icon: <Ruler size={20} className="spec-card__icon" />,
-                label: "Carpet Area",
-                value: carpetArea,
-            },
-            {
-                icon: <CalendarDays size={20} className="spec-card__icon" />,
-                label: "Possession",
-                value: possessionDate,
             },
         ];
     }

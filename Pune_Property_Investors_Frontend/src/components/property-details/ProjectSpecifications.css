@@ -92,8 +92,8 @@
    ========================================================================== */
 .project-specifications__grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
     margin: 20px 0 24px 0;
 }
 
