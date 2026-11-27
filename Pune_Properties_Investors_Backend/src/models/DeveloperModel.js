@@ -10,20 +10,38 @@ let memoryDevelopers = [
 
 export const DeveloperModel = {
     async list() {
-        if (isDBConnected()) {
-            try {
-                const rows = await query("SELECT * FROM developers");
-                if (rows && rows.length > 0) return rows;
-            } catch (_) {}
-        }
-        return [...memoryDevelopers];
+        if (!isDBConnected()) return [];
+        const rows = await query("SELECT * FROM developers ORDER BY id DESC");
+        return Array.isArray(rows) ? rows.map((r) => ({ ...r, logoUrl: r.logo_url || r.logoUrl })) : [];
     },
 
     async getById(id) {
-        return memoryDevelopers.find(d => String(d.id) === String(id) || d.name?.toLowerCase() === String(id).toLowerCase()) || null;
+        if (!isDBConnected()) return null;
+        const rows = await query("SELECT * FROM developers WHERE id = ? LIMIT 1", [id]);
+        return rows && rows.length > 0 ? { ...rows[0], logoUrl: rows[0].logo_url || rows[0].logoUrl } : null;
     },
 
     async create(payload) {
+        if (isDBConnected()) {
+            try {
+                const result = await query(
+                    `INSERT INTO developers (name, domain, logo_url, website, phone, email, description)
+                     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                    [
+                        payload.name || "Developer",
+                        payload.domain || "",
+                        payload.logoUrl || payload.logo_url || "",
+                        payload.website || "",
+                        payload.phone || "",
+                        payload.email || "",
+                        payload.description || ""
+                    ]
+                );
+                if (result?.insertId) {
+                    return { id: result.insertId, ...payload };
+                }
+            } catch (_) {}
+        }
         const nextId = memoryDevelopers.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0) + 1;
         const created = { id: nextId, ...payload };
         memoryDevelopers.push(created);
@@ -31,14 +49,46 @@ export const DeveloperModel = {
     },
 
     async update(id, payload) {
+        if (isDBConnected()) {
+            try {
+                const map = {
+                    name: "name",
+                    domain: "domain",
+                    logoUrl: "logo_url",
+                    logo_url: "logo_url",
+                    website: "website",
+                    phone: "phone",
+                    email: "email",
+                    description: "description"
+                };
+                const updates = [];
+                const values = [];
+                for (const [k, col] of Object.entries(map)) {
+                    if (payload[k] !== undefined) {
+                        updates.push(`${col} = ?`);
+                        values.push(payload[k]);
+                    }
+                }
+                if (updates.length > 0) {
+                    values.push(id);
+                    await query(`UPDATE developers SET ${updates.join(", ")} WHERE id = ?`, values);
+                }
+            } catch (_) {}
+        }
         const idx = memoryDevelopers.findIndex(d => String(d.id) === String(id));
         if (idx !== -1) {
             memoryDevelopers[idx] = { ...memoryDevelopers[idx], ...payload };
+            return memoryDevelopers[idx];
         }
-        return memoryDevelopers[idx] || null;
+        return { id, ...payload };
     },
 
     async delete(id) {
+        if (isDBConnected()) {
+            try {
+                await query("DELETE FROM developers WHERE id = ?", [id]);
+            } catch (_) {}
+        }
         memoryDevelopers = memoryDevelopers.filter(d => String(d.id) !== String(id));
         return true;
     }

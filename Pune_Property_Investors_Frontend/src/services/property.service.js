@@ -1,27 +1,114 @@
 import { apiRequest, withMockFallback } from "./api";
 import { getStore, saveStore, addActivity } from "./mockStore";
 
+const LIST_CACHE_KEY = "ppi_props_cache_v1";
+let memoryListCache = null;
+const memoryItemCache = new Map();
+let inflightListPromise = null;
+
+function indexItems(list) {
+    if (!Array.isArray(list)) return;
+    memoryListCache = list;
+    for (const item of list) {
+        if (item?.id !== undefined) memoryItemCache.set(String(item.id), item);
+        if (item?.slug) memoryItemCache.set(String(item.slug), item);
+    }
+    try {
+        if (typeof window !== "undefined") {
+            sessionStorage.setItem(LIST_CACHE_KEY, JSON.stringify(list));
+        }
+    } catch {
+        // Ignore storage quota errors
+    }
+}
+
+function hydrateFromSession() {
+    if (memoryListCache) return memoryListCache;
+    if (typeof window === "undefined") return null;
+    try {
+        const raw = sessionStorage.getItem(LIST_CACHE_KEY);
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+                indexItems(parsed);
+                return parsed;
+            }
+        }
+    } catch {
+        // Ignore parse errors
+    }
+    return null;
+}
+
 export const propertyService = {
+    getCachedList() {
+        return hydrateFromSession();
+    },
+
+    getCachedById(identifier) {
+        if (!identifier) return null;
+        const key = String(identifier);
+        if (memoryItemCache.has(key)) return memoryItemCache.get(key);
+        const list = hydrateFromSession();
+        if (Array.isArray(list)) {
+            return list.find((p) => String(p.id) === key || p.slug === key) || null;
+        }
+        return null;
+    },
+
+    invalidateCache() {
+        memoryListCache = null;
+        memoryItemCache.clear();
+        try {
+            if (typeof window !== "undefined") {
+                sessionStorage.removeItem(LIST_CACHE_KEY);
+            }
+        } catch {
+            // Ignore
+        }
+    },
+
     async list(params = {}) {
         const query = new URLSearchParams(params).toString();
-        return withMockFallback(
+        if (!query && inflightListPromise) {
+            return inflightListPromise;
+        }
+        const reqPromise = withMockFallback(
             () => apiRequest(`/properties${query ? `?${query}` : ""}`),
             () => {
                 const { properties } = getStore();
                 return [...properties];
             }
-        );
+        ).then((res) => {
+            const list = res?.data || res;
+            if (!query && Array.isArray(list)) {
+                indexItems(list);
+            }
+            return res;
+        }).finally(() => {
+            if (!query) inflightListPromise = null;
+        });
+
+        if (!query) inflightListPromise = reqPromise;
+        return reqPromise;
     },
 
     async getById(id) {
         return withMockFallback(
             () => apiRequest(`/properties/${id}`),
             () => getStore().properties.find((p) => String(p.id) === String(id)) || null
-        );
+        ).then((res) => {
+            const item = res?.data || res;
+            if (item && (item.id || item.slug)) {
+                if (item.id !== undefined) memoryItemCache.set(String(item.id), item);
+                if (item.slug) memoryItemCache.set(String(item.slug), item);
+            }
+            return res;
+        });
     },
 
     async create(payload) {
-        return withMockFallback(
+        const res = await withMockFallback(
             () =>
                 apiRequest("/properties", {
                     method: "POST",
@@ -42,10 +129,12 @@ export const propertyService = {
                 return created;
             }
         );
+        this.invalidateCache();
+        return res;
     },
 
     async update(id, payload) {
-        return withMockFallback(
+        const res = await withMockFallback(
             () =>
                 apiRequest(`/properties/${id}`, {
                     method: "PATCH",
@@ -68,10 +157,12 @@ export const propertyService = {
                 return updated;
             }
         );
+        this.invalidateCache();
+        return res;
     },
 
     async remove(id) {
-        return withMockFallback(
+        const res = await withMockFallback(
             () => apiRequest(`/properties/${id}`, { method: "DELETE" }),
             () => {
                 const store = getStore();
@@ -84,6 +175,7 @@ export const propertyService = {
                 return { success: true };
             }
         );
+        this.invalidateCache();
+        return res;
     },
 };
-

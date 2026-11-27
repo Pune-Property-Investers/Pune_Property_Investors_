@@ -39,3 +39,13 @@ export const handleUpload = async (req, res, next) => {
         next(err);
     }
 };
+
+export const deleteMedia = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        mediaStore = mediaStore.filter((m) => String(m.id) !== String(id));
+        return renderSuccess(res, null, "Media deleted successfully");
+    } catch (err) {
+        next(err);
+    }
+};
