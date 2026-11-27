@@ -22,6 +22,8 @@ import AdvertisementSidebar from "../common/AdvertisementSidebar";
 
 import propertyListingsData from "../../data/propertyListingsData.js";
 import { usePublishedCms } from "../../services/liveContent";
+import { propertyService } from "../../services/property.service";
+import { isBackendConfigured } from "../../services/api";
 import "./BuyProperties.css";
 
 const DEFAULT_FILTERS = {
@@ -35,10 +37,28 @@ const DEFAULT_FILTERS = {
 
 function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
     const published = usePublishedCms();
-    const sourceProperties =
-        Array.isArray(published?.properties) && published.properties.length > 0
-            ? published.properties
-            : propertyListingsData;
+    const cachedList = propertyService.getCachedList();
+    const [apiProperties, setApiProperties] = useState(cachedList);
+    const [loadingList, setLoadingList] = useState(!cachedList);
+
+    useEffect(() => {
+        let cancelled = false;
+        propertyService.list().then((res) => {
+            const list = res?.data || res;
+            if (!cancelled && Array.isArray(list)) {
+                setApiProperties(list);
+            }
+        }).catch(() => {
+            if (!cancelled && !cachedList) setApiProperties([]);
+        }).finally(() => {
+            if (!cancelled) setLoadingList(false);
+        });
+        return () => { cancelled = true; };
+    }, []);
+
+    const sourceProperties = Array.isArray(apiProperties)
+        ? apiProperties
+        : (Array.isArray(published?.properties) ? published.properties : []);
 
     const searchParams = useSearchParams();
     const rawSearch = searchParams?.get("search") || searchParams?.get("q") || "";
@@ -453,13 +473,27 @@ function BuyPropertiesContent({ defaultPropertyType = "", pageTitle = "" }) {
                                     )}
                                 </div>
 
-                                {filteredProperties.length > 0 ? (
+                                {loadingList && filteredProperties.length === 0 ? (
+                                    <div className="buy-properties-grid">
+                                        {[1, 2, 3, 4].map((n) => (
+                                            <div
+                                                key={n}
+                                                style={{
+                                                    height: "600px",
+                                                    borderRadius: "20px",
+                                                    background: "linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%)",
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
+                                ) : filteredProperties.length > 0 ? (
                                     <>
                                         <div className="buy-properties-grid">
-                                            {filteredProperties.slice(0, visibleCount).map((property) => (
+                                            {filteredProperties.slice(0, visibleCount).map((property, idx) => (
                                                 <PropertyListingCard
                                                     key={property.id}
                                                     property={property}
+                                                    priority={idx < 4}
                                                 />
                                             ))}
                                         </div>

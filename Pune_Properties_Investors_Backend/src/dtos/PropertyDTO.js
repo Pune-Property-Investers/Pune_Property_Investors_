@@ -3,17 +3,17 @@
  * Validates, sanitizes, and normalizes inputs/outputs for property operations.
  */
 
-const VALID_CATEGORIES = ["residential", "commercial", "plot"];
-const VALID_TYPES = [
-    "Apartment",
-    "Villa",
-    "Penthouse",
-    "Commercial",
-    "Commercial Office",
-    "Retail Showroom",
-    "Plot",
-    "Plots & Land"
-];
+const VALID_CATEGORIES = ["residential", "commercial", "plot", "luxury"];
+const VALID_STATUSES = ["Under Construction", "Ready to Move", "New Launch"];
+
+function normalizeStatus(status, possession = "") {
+    const s = String(status || "").trim();
+    if (VALID_STATUSES.includes(s)) return s;
+    const p = String(possession || "").toLowerCase();
+    if (p.includes("ready") || p.includes("immediate")) return "Ready to Move";
+    if (p.includes("new")) return "New Launch";
+    return "Under Construction";
+}
 
 /**
  * Validates and sanitizes incoming property creation / update payloads
@@ -33,10 +33,10 @@ export const validatePropertyDTO = (data, isUpdate = false) => {
         }
     }
 
-    if (!isUpdate || data.price !== undefined) {
-        const numeric = Number(data.numericPrice || data.price);
-        if (isNaN(numeric) || numeric <= 0) {
-            errors.push("A valid positive price is required");
+    if (!isUpdate || (data.price !== undefined && data.numericPrice === undefined)) {
+        const numeric = Number(data.numericPrice ?? data.price);
+        if (data.price !== undefined && (isNaN(numeric) || numeric < 0)) {
+            errors.push("A valid price is required");
         }
     }
 
@@ -54,27 +54,71 @@ export const validatePropertyDTO = (data, isUpdate = false) => {
         throw error;
     }
 
-    // Sanitized DTO Output
+    if (isUpdate) {
+        const patch = {};
+        if (data.title !== undefined) patch.title = data.title.trim();
+        if (data.developer !== undefined || data.projectName !== undefined) {
+            patch.developer = (data.developer || data.projectName || "").trim();
+        }
+        if (data.location !== undefined) patch.location = data.location.trim();
+        if (data.locality !== undefined) patch.locality = data.locality.trim();
+        if (data.city !== undefined) patch.city = data.city.trim();
+        if (data.propertyCategory !== undefined) patch.propertyCategory = String(data.propertyCategory).toLowerCase();
+        if (data.propertyType !== undefined) patch.propertyType = data.propertyType;
+        if (data.purpose !== undefined) patch.purpose = String(data.purpose).toLowerCase();
+        if (data.priceLabel !== undefined || data.priceDisplay !== undefined || data.price !== undefined) {
+            patch.price = String(data.priceLabel || data.priceDisplay || data.price);
+        }
+        if (data.numericPrice !== undefined || data.price !== undefined) {
+            const num = Number(data.numericPrice ?? data.price);
+            if (!isNaN(num)) patch.numericPrice = num;
+        }
+        if (data.area !== undefined) patch.area = String(data.area);
+        if (data.bhk !== undefined) patch.bhk = Array.isArray(data.bhk) ? data.bhk : [data.bhk];
+        if (data.status !== undefined) patch.status = normalizeStatus(data.status, data.possession);
+        if (data.possession !== undefined) patch.possession = data.possession;
+        if (data.isNewLaunch !== undefined) patch.isNewLaunch = Boolean(data.isNewLaunch);
+        if (data.isFeatured !== undefined || data.featured !== undefined) {
+            patch.isFeatured = Boolean(data.isFeatured ?? data.featured);
+        }
+        if (data.isTrending !== undefined) patch.isTrending = Boolean(data.isTrending);
+        if (data.verified !== undefined) patch.verified = Boolean(data.verified);
+        if (data.badge !== undefined) patch.badge = data.badge;
+        if (data.image !== undefined) patch.image = data.image;
+        if (data.images !== undefined) patch.images = Array.isArray(data.images) ? data.images : [];
+        if (data.videoUrl !== undefined) patch.videoUrl = data.videoUrl;
+        if (data.amenities !== undefined) patch.amenities = Array.isArray(data.amenities) ? data.amenities : [];
+        if (data.description !== undefined) patch.description = String(data.description).trim();
+        return patch;
+    }
+
+    const numericPrice = Number(data.numericPrice ?? data.price ?? 0) || 0;
+    const priceStr = data.priceLabel || data.priceDisplay || (numericPrice > 0 ? `₹${numericPrice.toLocaleString("en-IN")}` : String(data.price || "On Request"));
+
     return {
         title: data.title?.trim(),
-        developer: data.developer?.trim() || "Independent Developer",
+        slug: data.slug || `${String(data.title || "property").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}-${Date.now()}`,
+        developer: (data.developer || data.projectName || "Independent Developer").trim(),
         location: data.location?.trim(),
         locality: data.locality?.trim() || data.location?.split(",")[0]?.trim(),
+        city: data.city?.trim() || "Pune",
         propertyCategory: (data.propertyCategory || "residential").toLowerCase(),
         propertyType: data.propertyType || "Apartment",
-        price: data.priceDisplay || data.price,
-        numericPrice: Number(data.numericPrice || data.price),
-        area: data.area || "",
-        bhk: data.bhk || [],
-        status: data.status || "Under Construction",
-        possession: data.possession || "Immediate",
+        purpose: (data.purpose || "buy").toLowerCase(),
+        price: priceStr,
+        numericPrice,
+        area: data.area ? String(data.area) : "",
+        bhk: Array.isArray(data.bhk) ? data.bhk : (data.bhk !== undefined ? [data.bhk] : []),
+        status: normalizeStatus(data.status, data.possession),
+        possession: data.possession || "Under Construction",
         isNewLaunch: Boolean(data.isNewLaunch),
-        isFeatured: Boolean(data.isFeatured),
+        isFeatured: Boolean(data.isFeatured ?? data.featured),
         isTrending: Boolean(data.isTrending),
         verified: data.verified !== undefined ? Boolean(data.verified) : true,
+        badge: data.badge || "",
         image: data.image || "",
         images: Array.isArray(data.images) ? data.images : (data.image ? [data.image] : []),
-        videoUrl: data.videoUrl || "https://www.youtube.com/watch?v=M1sDYNUJQrY&t=2s",
+        videoUrl: data.videoUrl || "",
         amenities: Array.isArray(data.amenities) ? data.amenities : [],
         description: data.description?.trim() || ""
     };

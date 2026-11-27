@@ -1,43 +1,53 @@
 /* ==========================================================================
-   EXPLORE PROPERTIES FULL-BLEED OVERLAY CARD (Single Row Editorial Style)
+   EXPLORE PROPERTIES FULL-BLEED EDITORIAL CARD
    ========================================================================== */
 
 .explore-overlay-card {
     position: relative;
     width: 100%;
-    border-radius: 18px;
+    border-radius: 20px;
     overflow: hidden;
     background: #0f172a;
-    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.14);
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
     transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
 }
 
 .explore-overlay-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.22);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.25);
 }
 
 .explore-overlay-card__link {
     position: relative;
     display: block;
     width: 100%;
-    height: 520px;
+    height: 600px;
     text-decoration: none;
     color: #ffffff;
 }
 
-.explore-overlay-card__img {
+.explore-overlay-card__track {
     position: absolute;
     inset: 0;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+
+.explore-overlay-card__img {
+    flex: 0 0 100%;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.55s ease;
+    filter: brightness(1.12) contrast(1.03);
+    transition: transform 0.55s ease, filter 0.35s ease;
 }
 
 .explore-overlay-card:hover .explore-overlay-card__img {
-    transform: scale(1.04);
+    transform: scale(1.03);
 }
 
 .explore-overlay-card__gradient {
@@ -45,188 +55,371 @@
     inset: 0;
     background: linear-gradient(
         180deg,
-        rgba(12, 18, 28, 0.18) 0%,
-        rgba(12, 18, 28, 0.06) 40%,
-        rgba(10, 15, 24, 0.82) 74%,
-        rgba(10, 15, 24, 0.96) 100%
+        rgba(10, 15, 24, 0.08) 0%,
+        rgba(10, 15, 24, 0) 30%,
+        rgba(10, 15, 24, 0) 52%,
+        rgba(8, 12, 20, 0.68) 74%,
+        rgba(6, 9, 15, 0.92) 100%
     );
     pointer-events: none;
 }
 
-/* Top Badges Row — Small Font Size for RERA & Possession */
-.explore-overlay-card__top-badges {
+/* ── Top Bar: RERA | Zero Brokerage + Heart & Share ── */
+.explore-overlay-card__top-bar {
     position: absolute;
-    top: 14px;
-    left: 14px;
-    right: 14px;
-    z-index: 2;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 3;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 8px;
+    gap: 12px;
 }
 
 .explore-overlay-card__rera-pill {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    background: rgba(15, 23, 42, 0.82);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    color: #e2e8f0;
+    gap: 8px;
+    background: rgba(18, 28, 45, 0.58);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #ffffff;
     border-radius: 9999px;
-    padding: 4px 10px;
-    font-size: 10px;
+    padding: 6px 14px;
+    font-size: 12px;
     font-weight: 600;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
     line-height: 1.2;
 }
 
 .explore-overlay-card__rera-icon {
-    color: #d4af37;
+    color: #ffffff;
     flex-shrink: 0;
 }
 
-.explore-overlay-card__status-pill {
-    display: inline-flex;
-    align-items: center;
-    border-radius: 9999px;
-    padding: 4px 10px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-    line-height: 1.2;
+.explore-overlay-card__rera-divider {
+    width: 1px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.explore-overlay-card__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.explore-overlay-card__icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(15, 23, 42, 0.52);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: #ffffff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.explore-overlay-card__status-pill.is-construction {
-    background: #10b981;
+.explore-overlay-card__icon-btn:hover {
+    background: rgba(15, 23, 42, 0.8);
+    transform: scale(1.06);
 }
 
-.explore-overlay-card__status-pill.is-ready {
-    background: #059669;
+.explore-overlay-card__icon-btn.is-favorited {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.5);
 }
 
-/* Bottom Overlay Content */
+/* ── Desktop Carousel Arrows ── */
+.explore-overlay-card__nav {
+    position: absolute;
+    top: 44%;
+    transform: translateY(-50%);
+    z-index: 3;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(6px);
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.explore-overlay-card:hover .explore-overlay-card__nav {
+    opacity: 1;
+}
+
+.explore-overlay-card__nav:hover {
+    background: rgba(15, 23, 42, 0.85);
+}
+
+.explore-overlay-card__nav--prev {
+    left: 14px;
+}
+
+.explore-overlay-card__nav--next {
+    right: 14px;
+}
+
+/* ── Bottom Overlay Content ── */
 .explore-overlay-card__content {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 2;
-    padding: 18px;
+    padding: 12px 16px 14px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
 }
 
-.explore-overlay-card__location {
+/* Dots + Counter Pill */
+.explore-overlay-card__dots-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.explore-overlay-card__dots-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    background: rgba(15, 23, 42, 0.62);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.explore-overlay-card__dots {
     display: flex;
     align-items: center;
     gap: 5px;
-    font-size: 12.5px;
-    font-weight: 500;
-    color: #e2e8f0;
 }
 
-.explore-overlay-card__loc-icon {
-    color: #cbd5e1;
-    flex-shrink: 0;
+.explore-overlay-card__dot {
+    width: 6px;
+    height: 6px;
+    padding: 0;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
 }
 
-.explore-overlay-card__title-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+.explore-overlay-card__dot.is-active {
+    background: #ffffff;
+    transform: scale(1.2);
 }
 
+.explore-overlay-card__slide-count {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #f8fafc;
+    line-height: 1;
+}
+
+/* Title & Subtitle */
 .explore-overlay-card__title {
     margin: 0;
-    font-family: var(--font-serif), Georgia, serif;
-    font-size: clamp(19px, 2.2vw, 23px);
+    font-family: var(--font-sans), Inter, sans-serif;
+    font-size: clamp(20px, 2.3vw, 24px);
     font-weight: 700;
     color: #ffffff;
     line-height: 1.2;
-    flex: 1;
-    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.explore-overlay-card__price {
-    flex-shrink: 0;
-    background: rgba(15, 23, 42, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 10px;
-    padding: 6px 12px;
-    font-size: 14px;
-    font-weight: 700;
-    color: #ffffff;
-    white-space: nowrap;
+.explore-overlay-card__subtitle {
+    margin: 0;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: #cbd5e1;
+    line-height: 1.35;
 }
 
-.explore-overlay-card__specs {
+/* Row: White Price Bar + Carpet Area beside it */
+.explore-overlay-card__price-row {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-wrap: nowrap;
     gap: 8px;
     margin-top: 2px;
-    font-size: 12.5px;
-    font-weight: 500;
-    color: #cbd5e1;
 }
 
-.explore-overlay-card__spec-item {
+.explore-overlay-card__carpet-inline {
+    font-size: 11.5px;
+    font-weight: 400;
+    color: #e2e8f0;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
+}
+
+/* Faded White Frosted Price Pill Bar */
+.explore-overlay-card__price-bar {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    white-space: nowrap;
+    gap: 6px;
+    padding: 5px 9px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.12));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.explore-overlay-card__bhk-group {
     display: inline-flex;
     align-items: center;
     gap: 5px;
 }
 
-.explore-overlay-card__spec-icon {
-    color: #ba874a;
-    flex-shrink: 0;
+.explore-overlay-card__bhk-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.2px;
 }
 
-.explore-overlay-card__spec-dot {
-    color: rgba(255, 255, 255, 0.45);
+.explore-overlay-card__price-val {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.explore-overlay-card__bar-divider {
+    width: 1px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.35);
+    margin-right: 2px;
+}
+
+/* Meta Line */
+.explore-overlay-card__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 2px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+.explore-overlay-card__meta-dot {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+/* Description + Expand Chevron */
+.explore-overlay-card__desc-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.explore-overlay-card__desc {
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: #cbd5e1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.explore-overlay-card__desc.is-expanded {
+    white-space: normal;
+}
+
+.explore-overlay-card__desc-toggle {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #e2e8f0;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+}
+
+.explore-overlay-card__desc-toggle:hover {
+    background: rgba(255, 255, 255, 0.14);
 }
 
 @media (max-width: 640px) {
     .explore-overlay-card__link {
-        height: 460px;
+        height: 540px;
     }
 
-    .explore-overlay-card__top-badges {
-        top: 12px;
-        left: 12px;
-        right: 12px;
+    .explore-overlay-card__top-bar {
+        top: 14px;
+        left: 14px;
+        right: 14px;
     }
 
-    .explore-overlay-card__rera-pill,
-    .explore-overlay-card__status-pill {
-        font-size: 9.5px;
-        padding: 3.5px 8.5px;
+    .explore-overlay-card__rera-pill {
+        font-size: 11px;
+        padding: 5px 11px;
+        gap: 6px;
+    }
+
+    .explore-overlay-card__icon-btn {
+        width: 36px;
+        height: 36px;
     }
 
     .explore-overlay-card__content {
-        padding: 15px 14px;
+        padding: 16px 15px 15px;
+        gap: 6px;
     }
 
     .explore-overlay-card__title {
-        font-size: 18px;
+        font-size: 20px;
     }
 
-    .explore-overlay-card__price {
+    .explore-overlay-card__subtitle {
         font-size: 13px;
-        padding: 5px 10px;
     }
 
-    .explore-overlay-card__specs {
+    .explore-overlay-card__price-bar {
+        padding: 4px 9px;
+    }
+
+    .explore-overlay-card__price-val {
+        font-size: 12.5px;
+    }
+
+    .explore-overlay-card__meta {
         font-size: 11.5px;
-        gap: 6px;
     }
 }

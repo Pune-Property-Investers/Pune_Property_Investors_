@@ -145,12 +145,10 @@ function getAvailableFlats(property) {
         return /flats?/i.test(property.availableBhk) ? property.availableBhk : `${property.availableBhk} Flats`;
     }
 
-    const rawBhk = property.bhk || property.bedrooms;
-    if (rawBhk) {
+    const rawBhk = Array.isArray(property.bhk) ? property.bhk[0] : property.bhk || property.bedrooms;
+    if (rawBhk && Number(rawBhk) !== 0) {
         const b = String(rawBhk);
         if (/bhk/i.test(b)) return `${b} Flats`;
-        if (Number(rawBhk) === 2) return "1, 2 & 3 BHK Flats";
-        if (Number(rawBhk) === 3) return "2, 3 & 4 BHK Flats";
         return `${rawBhk} BHK Flats`;
     }
 
@@ -158,6 +156,8 @@ function getAvailableFlats(property) {
 }
 
 import { findProperty } from "../../lib/propertyUtils";
+import { propertyService } from "../../services/property.service";
+import { isBackendConfigured } from "../../services/api";
 
 /**
  * @param {{ propertyId?: string | number | null; propertySlug?: string | null }} props
@@ -165,8 +165,51 @@ import { findProperty } from "../../lib/propertyUtils";
 function PropertyDetails({ propertyId, propertySlug }) {
     const params = useParams();
     const identifier = propertyId || propertySlug || params?.id || params?.slug;
+    const cachedProperty = propertyService.getCachedById(identifier);
+    const [apiProperty, setApiProperty] = useState(cachedProperty);
+    const [loadingApi, setLoadingApi] = useState(!cachedProperty && Boolean(identifier));
 
-    const property = findProperty(identifier);
+    useEffect(() => {
+        if (!identifier) return;
+        let cancelled = false;
+        propertyService.getById(identifier).then((res) => {
+            const item = res?.data || res;
+            if (!cancelled && item && (item.id || item.slug || item.title)) {
+                setApiProperty(item);
+            }
+        }).catch(() => {
+            if (!cancelled && !cachedProperty) setApiProperty(null);
+        }).finally(() => {
+            if (!cancelled) setLoadingApi(false);
+        });
+        return () => { cancelled = true; };
+    }, [identifier]);
+
+    const property = apiProperty;
+
+    if (!property && loadingApi) {
+        return (
+            <>
+                <Header transparentAtTop={true} showFilterChips={false} />
+                <main className="property-details__not-found" style={{ minHeight: "70vh" }}>
+                    <div
+                        style={{
+                            width: "100%",
+                            maxWidth: "1100px",
+                            margin: "0 auto",
+                            display: "grid",
+                            gap: "18px",
+                        }}
+                    >
+                        <div style={{ height: "380px", borderRadius: "18px", background: "linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%)", backgroundSize: "200% 100%" }} />
+                        <div style={{ height: "32px", width: "60%", borderRadius: "8px", background: "#e2e8f0" }} />
+                        <div style={{ height: "20px", width: "40%", borderRadius: "8px", background: "#f1f5f9" }} />
+                    </div>
+                </main>
+                <Footer />
+            </>
+        );
+    }
 
     if (!property) {
         return (
@@ -212,6 +255,11 @@ function PropertyDetails({ propertyId, propertySlug }) {
             </>
         );
     }
+
+    return <PropertyDetailsContent property={property} />;
+}
+
+function PropertyDetailsContent({ property }) {
 
     const title =
         property.title ||

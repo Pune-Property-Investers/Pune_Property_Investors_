@@ -20,6 +20,7 @@ import {
 import { FaWhatsapp } from "react-icons/fa";
 import { propertyShorts, extractYouTubeId } from "../../data/shortsData";
 import { usePublishedCms } from "../../services/liveContent";
+import { isBackendConfigured } from "../../services/api";
 import Header from "../layouts/Header";
 import "./Shorts.css";
 
@@ -27,10 +28,12 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export default function Shorts() {
     const published = usePublishedCms();
-    const publishedShorts = Array.isArray(published?.shorts)
+    const backendActive = isBackendConfigured();
+    const hasPublishedShorts = Array.isArray(published?.shorts);
+    const publishedShorts = hasPublishedShorts
         ? published.shorts.filter((s) => s.visible !== false)
         : [];
-    const activeShorts = publishedShorts.length > 0 ? publishedShorts : propertyShorts;
+    const activeShorts = hasPublishedShorts ? publishedShorts : [];
 
     const containerRef = useRef(null);
 

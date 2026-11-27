@@ -99,3 +99,43 @@ export const updateAdvertisements = async (req, res, next) => {
         next(err);
     }
 };
+
+export const getPublicContent = async (req, res, next) => {
+    try {
+        const data = await ContentModel.getPublicContent();
+        return renderSuccess(res, data, "Public CMS content retrieved successfully");
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const publishSection = async (req, res, next) => {
+    try {
+        const { sectionKey } = req.params;
+        const data = await ContentModel.publishSection(sectionKey);
+        return renderSuccess(res, data, `Section ${sectionKey} published successfully`);
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const retrieveSection = async (req, res, next) => {
+    try {
+        const { sectionKey } = req.params;
+        const { mode } = req.body || {};
+        const data = await ContentModel.retrieveSection(sectionKey, mode);
+        return renderSuccess(res, data, `Section ${sectionKey} retrieved successfully`);
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const revertHomepage = async (req, res, next) => {
+    try {
+        const { mode } = req.body || {};
+        const data = await ContentModel.revertHomepage(mode);
+        return renderSuccess(res, data, "Homepage reverted successfully");
+    } catch (err) {
+        next(err);
+    }
+};
