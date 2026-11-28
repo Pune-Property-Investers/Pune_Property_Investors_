@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import {
     ArrowUpRight,
@@ -15,6 +15,7 @@ import {
 
 import advertisementData from "../../data/advertisementData.js";
 import { usePublishedCms } from "../../services/liveContent";
+import { advertisementService } from "../../services/advertisement.service";
 import { extractYouTubeVideoId } from "../../lib/youtube";
 
 const WHATSAPP_NUMBER = "917398174444";
@@ -225,15 +226,39 @@ function ContactAdvertisement() {
 
 export default function AdvertisementSidebar({ customAds }) {
     const published = usePublishedCms();
-    const resolvedAds =
-        Array.isArray(customAds) && customAds.length > 0
-            ? customAds
-            : Array.isArray(published?.advertisements) && published.advertisements.length > 0
-              ? published.advertisements
-              : advertisementData;
-    const visibleAds = resolvedAds.filter(
-        (ad) => ad.type !== "sell" && ad.visible !== false
-    );
+    const [fetchedAds, setFetchedAds] = useState([]);
+
+    useEffect(() => {
+        let isMounted = true;
+        const loadAds = async () => {
+            try {
+                const res = await advertisementService.list();
+                const list = Array.isArray(res) ? res : res?.data;
+                if (isMounted && Array.isArray(list) && list.length > 0) {
+                    setFetchedAds(list);
+                }
+            } catch (err) {
+                console.error("Failed to load advertisements from DB:", err);
+            }
+        };
+        loadAds();
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    const resolvedAds = useMemo(() => {
+        if (Array.isArray(customAds) && customAds.length > 0) return customAds;
+        if (fetchedAds.length > 0) return fetchedAds;
+        if (Array.isArray(published?.advertisements) && published.advertisements.length > 0) return published.advertisements;
+        return advertisementData;
+    }, [customAds, fetchedAds, published?.advertisements]);
+
+    const visibleAds = useMemo(() => {
+        return resolvedAds.filter(
+            (ad) => ad.type !== "sell" && ad.visible !== false && ad.isActive !== false
+        );
+    }, [resolvedAds]);
 
     return (
         <aside className="partner-spotlight-sidebar">

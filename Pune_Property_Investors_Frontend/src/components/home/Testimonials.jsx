@@ -1,62 +1,66 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { Star, Quote } from "lucide-react";
-import { testimonials } from "../../data/testimonials.js";
-import { apiRequest, isBackendConfigured } from "../../services/api";
+import { testimonialService } from "../../services/testimonial.service";
+import { testimonials as staticTestimonials } from "../../data/testimonials.js";
 import "./Testimonials.css";
 
 export default function Testimonials({ previewData, customTestimonials }) {
-    const [fetchedTestimonials, setFetchedTestimonials] = useState(null);
-
-    const backendActive = isBackendConfigured();
-
-    useEffect(() => {
-        if ((Array.isArray(previewData?.items) && previewData.items.length > 0) ||
-            Array.isArray(customTestimonials) ||
-            !backendActive) {
-            return;
-        }
-        let cancelled = false;
-        apiRequest("/content/testimonials").then((res) => {
-            const list = res?.data || res;
-            if (!cancelled && Array.isArray(list)) {
-                setFetchedTestimonials(list.filter((t) => t.visible !== false));
-            }
-        }).catch(() => {
-            if (!cancelled) setFetchedTestimonials([]);
-        });
-        return () => { cancelled = true; };
-    }, [customTestimonials, previewData, backendActive]);
-
-    const items =
-        Array.isArray(previewData?.items) && previewData.items.length > 0
-            ? previewData.items
-            : (Array.isArray(customTestimonials)
-                ? customTestimonials.filter((t) => t.visible !== false)
-                : (fetchedTestimonials || []));
+    const [dbTestimonials, setDbTestimonials] = useState([]);
     const sectionRef = useRef(null);
+
+    // Fetch live testimonials from MySQL database
+    useEffect(() => {
+        let isMounted = true;
+        const fetchTestimonials = async () => {
+            try {
+                const res = await testimonialService.list();
+                const list = Array.isArray(res) ? res : res?.data;
+                if (isMounted && Array.isArray(list) && list.length > 0) {
+                    setDbTestimonials(list);
+                }
+            } catch (err) {
+                console.error("Failed to load testimonials from database:", err);
+            }
+        };
+
+        fetchTestimonials();
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    // Priority: previewData.items > customTestimonials > dbTestimonials > staticTestimonials
+    const items = useMemo(() => {
+        if (Array.isArray(previewData?.items) && previewData.items.length > 0) {
+            return previewData.items;
+        }
+        if (Array.isArray(customTestimonials) && customTestimonials.length > 0) {
+            return customTestimonials.filter((t) => t.visible !== false);
+        }
+        if (dbTestimonials.length > 0) {
+            return dbTestimonials.filter((t) => t.isActive !== false);
+        }
+        return staticTestimonials;
+    }, [previewData?.items, customTestimonials, dbTestimonials]);
 
     useEffect(() => {
         const section = sectionRef.current;
-
         if (!section) return;
 
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
                     section.classList.add("testimonials--visible");
-                } else {
-                    section.classList.remove("testimonials--visible");
                 }
             },
             {
-                threshold: 0.15,
+                threshold: 0.05,
             }
         );
 
         observer.observe(section);
-
         return () => {
             observer.disconnect();
         };
@@ -89,8 +93,8 @@ export default function Testimonials({ previewData, customTestimonials }) {
                         className="testimonials-animate"
                         style={{ "--card-index": 2 }}
                     >
-                        Every property journey is different. Hear from
-                        customers about their experiences with us.
+                        {previewData?.subtitle ??
+                            "Every property journey is different. Hear from verified homebuyers and investors about their experiences with Pune Property Investors."}
                     </p>
                 </div>
 
@@ -99,7 +103,7 @@ export default function Testimonials({ previewData, customTestimonials }) {
                     {items.map((testimonial, index) => (
                         <article
                             className="testimonial-card testimonials-animate"
-                            key={testimonial.id}
+                            key={testimonial.id || index}
                             style={{ "--card-index": index + 3 }}
                         >
                             <Quote
@@ -111,11 +115,11 @@ export default function Testimonials({ previewData, customTestimonials }) {
                             {/* STAR RATING */}
                             <div
                                 className="testimonial-card__rating"
-                                aria-label={`${testimonial.rating} out of 5 stars`}
+                                aria-label={`${testimonial.rating || 5} out of 5 stars`}
                                 role="img"
                             >
                                 {Array.from(
-                                    { length: testimonial.rating },
+                                    { length: Number(testimonial.rating || 5) },
                                     (_, starIndex) => (
                                         <Star
                                             key={starIndex}
@@ -134,21 +138,38 @@ export default function Testimonials({ previewData, customTestimonials }) {
 
                             {/* CUSTOMER DETAILS */}
                             <div className="testimonial-card__author">
-                                <div
-                                    className="testimonial-card__avatar"
-                                    aria-hidden="true"
-                                >
-                                    {testimonial.name
-                                        .charAt(0)
-                                        .toUpperCase()}
-                                </div>
+                                {testimonial.avatarUrl ? (
+                                    <img
+                                        src={testimonial.avatarUrl}
+                                        alt={testimonial.name}
+                                        className="testimonial-card__avatar-img"
+                                        style={{
+                                            width: 44,
+                                            height: 44,
+                                            borderRadius: "50%",
+                                            objectFit: "cover",
+                                        }}
+                                        onError={(e) => {
+                                            e.currentTarget.style.display = "none";
+                                        }}
+                                    />
+                                ) : (
+                                    <div
+                                        className="testimonial-card__avatar"
+                                        aria-hidden="true"
+                                    >
+                                        {testimonial.name
+                                            ?.charAt(0)
+                                            ?.toUpperCase() || "C"}
+                                    </div>
+                                )}
 
                                 <div>
                                     <h3>{testimonial.name}</h3>
 
                                     <span>
-                                        {testimonial.role},{" "}
-                                        {testimonial.location}
+                                        {testimonial.role}
+                                        {testimonial.location ? `, ${testimonial.location}` : ""}
                                     </span>
                                 </div>
                             </div>

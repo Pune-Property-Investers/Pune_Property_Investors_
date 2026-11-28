@@ -173,17 +173,20 @@
 }
 
 /* ==========================================================================
-   FLOATING FORM CARD (MATCHING REFERENCE DESIGN 1-TO-1)
+   FLOATING FORM CARD (FROSTED GLASS WITH 100% CONTENT VISIBILITY)
    ========================================================================== */
 .home-form-card {
     width: 100%;
     max-width: 335px;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.95);
     border-radius: 22px;
     padding: 20px 22px 18px 22px;
     box-shadow:
-        0 18px 42px rgba(0, 0, 0, 0.14),
-        0 2px 8px rgba(0, 0, 0, 0.04);
+        0 20px 48px rgba(0, 0, 0, 0.16),
+        0 4px 12px rgba(0, 0, 0, 0.05);
     position: relative;
     z-index: 2;
     box-sizing: border-box;
@@ -211,9 +214,10 @@
 }
 
 .home-form__subtitle {
-    font-size: 10.5px;
-    color: #64748b;
-    line-height: 1.38;
+    font-size: 11px;
+    color: #334155;
+    font-weight: 500;
+    line-height: 1.4;
     margin: 0 0 12px 0;
 }
 
@@ -240,7 +244,7 @@
     color: #991b1b;
 }
 
-/* Underline Input Fields (Minimal Elegant Style) */
+/* Underline Input Fields (Minimal Elegant Style for Transparent Card) */
 .home-contact-form {
     display: flex;
     flex-direction: column;
@@ -248,44 +252,55 @@
 
 .home-form__input-group {
     position: relative;
-    margin-bottom: 6px;
+    margin-bottom: 7px;
 }
 
 .home-form__underline-input {
     width: 100%;
     border: none;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1.5px solid #cbd5e1;
     background: transparent;
-    padding: 5px 0 4px;
-    font-size: 12px;
-    font-weight: 400;
+    padding: 6px 0 5px;
+    font-size: 13px;
+    font-weight: 600;
     color: #0f172a;
     font-family: inherit;
     outline: none;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease, border-width 0.2s ease;
     box-sizing: border-box;
     border-radius: 0;
 }
 
 .home-form__underline-input::placeholder {
-    color: #94a3b8;
-    font-weight: 400;
+    color: #475569;
+    font-weight: 500;
+    font-size: 12.5px;
+    opacity: 1;
 }
 
 .home-form__underline-input:focus {
     border-bottom-color: #0f172a;
+    border-bottom-width: 2px;
+}
+
+.home-form__underline-input:-webkit-autofill,
+.home-form__underline-input:-webkit-autofill:hover,
+.home-form__underline-input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #0f172a;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.45) inset;
+    transition: background-color 5000s ease-in-out 0s;
 }
 
 .home-form__input-group.has-error .home-form__underline-input {
-    border-bottom-color: #ef4444;
+    border-bottom-color: #dc2626;
 }
 
 .home-form__field-error {
     display: block;
     font-size: 10px;
-    color: #ef4444;
+    color: #dc2626;
     margin-top: 2px;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 /* Privacy Checkbox */
@@ -311,19 +326,20 @@
 
 .home-form__checkbox-text {
     font-size: 10.5px;
-    color: #475569;
+    color: #334155;
+    font-weight: 500;
     line-height: 1.35;
 }
 
 .home-form__privacy-link {
     color: #0f172a;
     text-decoration: underline;
-    font-weight: 600;
+    font-weight: 700;
     text-underline-offset: 2px;
 }
 
 .home-form__privacy-link:hover {
-    color: #ad7c48;
+    color: #8c5a24;
 }
 
 /* Submit Pill Button */
@@ -344,13 +360,13 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.22s ease;
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.26);
 }
 
 .home-form__submit-btn:hover {
     background: #1e293b;
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25);
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.32);
 }
 
 .home-form__submit-btn:disabled {
@@ -418,130 +434,233 @@
     }
 }
 
+/* ==========================================================================
+   MOBILE VIEW CONTACT CARD (EXACT 1-TO-1 MATCH TO REFERENCE SCREENSHOT)
+   ========================================================================== */
+.home-contact-mobile-only {
+    display: none;
+}
+
 @media (max-width: 768px) {
     .editorial-contact-section {
-        padding: 14px 0 24px;
+        padding: 16px 0 24px;
     }
 
     .editorial-contact-header {
-        margin-bottom: 12px;
-        padding: 0 8px;
-    }
-
-    .editorial-contact-header__eyebrow {
-        font-size: 9.5px;
-        letter-spacing: 1.6px;
-        margin-bottom: 3px;
-    }
-
-    .editorial-contact-header__title {
-        font-size: 21px;
-        margin-bottom: 3px;
-    }
-
-    .editorial-contact-header__subtitle {
-        font-size: 12px;
-    }
-
-    .editorial-showcase-frame {
-        border-radius: 18px;
-        padding: 14px 12px;
-        background-position: center 30%;
-    }
-
-    .home-showcase__tag--top {
-        position: static;
-        margin-bottom: 10px;
-        align-self: flex-start;
-        font-size: 11px;
-        padding: 5px 12px;
-    }
-
-    .home-showcase__tag--bottom {
-        position: static;
-        margin-top: 14px;
-        align-self: stretch;
-        justify-content: center;
-        font-size: 11.5px;
-        padding: 9px 14px;
-    }
-
-    .home-form-card {
-        border-radius: 16px;
-        padding: 18px 16px 16px;
-        margin-top: 0;
-        margin-bottom: 0;
-        max-width: 100%;
-    }
-
-    .home-form__title {
-        font-size: 18px;
-        margin-bottom: 4px;
-    }
-
-    .home-form__subtitle {
-        font-size: 11.5px;
         margin-bottom: 14px;
+        padding: 0 4px;
     }
 
-    /* 16px prevents iOS Safari auto-zoom on input focus */
-    .home-form__underline-input {
-        font-size: 16px;
-        padding: 8px 0 6px;
-        min-height: 40px;
+    /* Hide desktop frame on mobile */
+    .home-contact-desktop-only {
+        display: none !important;
     }
 
-    .home-form__checkbox-label {
-        font-size: 11px;
+    /* Show mobile card */
+    .home-contact-mobile-only {
+        display: grid !important;
+    }
+
+    .home-contact-mobile-card {
+        width: 100%;
+        max-width: 520px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 12px;
+        display: grid;
+        grid-template-columns: 1fr 1.15fr;
+        gap: 14px;
+        align-items: stretch;
+        box-shadow: 0 14px 40px rgba(15, 23, 42, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        box-sizing: border-box;
+    }
+
+    /* Left Visual Panel with Villa Image & Overlay Typography */
+    .home-contact-mobile-card__visual {
+        position: relative;
+        border-radius: 14px;
+        overflow: hidden;
+        min-height: 280px;
+        background: #1e293b;
+    }
+
+    .home-contact-mobile-card__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 30%;
+        display: block;
+    }
+
+    .home-contact-mobile-card__img-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            180deg,
+            rgba(18, 24, 22, 0.48) 0%,
+            rgba(18, 24, 22, 0.15) 45%,
+            rgba(18, 24, 22, 0.38) 100%
+        );
+        pointer-events: none;
+    }
+
+    .home-contact-mobile-card__title {
+        position: absolute;
+        top: 16px;
+        left: 14px;
+        right: 14px;
+        margin: 0;
+        color: #ffffff;
+        font-family: var(--font-sans), Inter, sans-serif;
+        font-size: clamp(18px, 4.2vw, 24px);
+        font-weight: 700;
+        line-height: 1.14;
+        letter-spacing: -0.3px;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .home-contact-mobile-card__title-italic {
+        font-family: var(--font-serif), "Playfair Display", Georgia, serif;
+        font-style: italic;
+        font-weight: 400;
+        font-size: 1.06em;
+        letter-spacing: 0;
+    }
+
+    /* Right Form Pane */
+    .home-contact-mobile-card__form-pane {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 4px 4px 4px 0;
+        min-width: 0;
+    }
+
+    .home-contact-mobile-card__sub {
+        margin: 0 0 10px;
+        font-size: 11.5px;
+        font-weight: 500;
+        color: #1e293b;
+        line-height: 1.36;
+        letter-spacing: -0.1px;
+    }
+
+    .home-contact-mobile-form {
+        display: flex;
+        flex-direction: column;
         gap: 8px;
     }
 
-    .home-form__checkbox {
-        width: 14px;
-        height: 14px;
+    .home-contact-mobile-field {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
     }
 
-    .home-form__submit-btn {
+    .home-contact-mobile-field label {
+        font-size: 10.5px;
+        font-weight: 700;
+        color: #0f172a;
+        letter-spacing: 0.1px;
+    }
+
+    .home-contact-mobile-field input {
         width: 100%;
-        justify-content: space-between;
-        padding: 8px 10px 8px 18px;
-        font-size: 13.5px;
+        border: none;
+        border-bottom: 1px solid #cbd5e1;
+        background: transparent;
+        padding: 3px 0 4px;
+        font-size: 12px;
+        font-weight: 500;
+        color: #0f172a;
+        font-family: inherit;
+        outline: none;
+        border-radius: 0;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease;
     }
 
-    .home-form__btn-arrow {
-        width: 24px;
-        height: 24px;
+    .home-contact-mobile-field input::placeholder {
+        color: #94a3b8;
+        font-weight: 400;
+        font-size: 11px;
+    }
+
+    .home-contact-mobile-field input:focus {
+        border-bottom-color: #0f172a;
+    }
+
+    .home-contact-mobile-field.has-error input {
+        border-bottom-color: #ef4444;
+    }
+
+    .home-contact-mobile-btn {
+        width: 100%;
+        background: #111827;
+        color: #ffffff;
+        border: none;
+        border-radius: 9px;
+        padding: 10px 14px;
+        font-size: 12.5px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        margin-top: 6px;
+        box-shadow: 0 4px 12px rgba(17, 24, 39, 0.2);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .home-contact-mobile-btn:hover {
+        background: #1e293b;
+        transform: translateY(-1px);
+    }
+
+    .home-contact-mobile-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
     }
 }
 
-@media (max-width: 480px) {
-    .editorial-contact-header {
-        margin-bottom: 10px;
+/* Very narrow devices (below 400px) */
+@media (max-width: 400px) {
+    .home-contact-mobile-card {
+        padding: 8px;
+        gap: 8px;
     }
 
-    .editorial-contact-header__title {
-        font-size: 19px;
+    .home-contact-mobile-card__title {
+        font-size: 16px;
+        top: 10px;
+        left: 10px;
+        right: 10px;
     }
 
-    .editorial-contact-header__subtitle {
+    .home-contact-mobile-card__sub {
+        font-size: 10.5px;
+        margin-bottom: 6px;
+    }
+
+    .home-contact-mobile-field label {
+        font-size: 9.5px;
+    }
+
+    .home-contact-mobile-field input {
+        font-size: 11px;
+        padding: 2px 0 3px;
+    }
+
+    .home-contact-mobile-btn {
         font-size: 11.5px;
-    }
-
-    .editorial-showcase-frame {
-        border-radius: 16px;
-        padding: 12px 10px;
-    }
-
-    .home-form-card {
-        padding: 15px 12px 14px;
-        border-radius: 14px;
-    }
-
-    .home-form__title {
-        font-size: 17px;
-    }
-
-    .home-form__submit-btn {
-        padding: 7px 8px 7px 16px;
+        padding: 8px 10px;
     }
 }

@@ -86,7 +86,7 @@ function renderPublishedSection(section, activeTab, setActiveTab, published) {
         case "home-contact":
             return <HomeContact key={section.id} previewData={data} />;
         case "smart-calculator":
-            return <SmartCalculator key={section.id} />;
+            return null;
         case "trust-stats":
             return <TrustStats key={section.id} previewData={data} />;
         case "custom-containers":
@@ -134,6 +134,26 @@ function Home() {
                 sections = [...sections, reelsSection];
             }
         }
+        // Ensure Testimonials section is enabled
+        const testIdx = sections.findIndex((s) => s.type === "testimonials");
+        if (testIdx !== -1) {
+            sections[testIdx] = { ...sections[testIdx], enabled: true };
+        } else {
+            sections = [
+                ...sections,
+                {
+                    id: "testimonials",
+                    type: "testimonials",
+                    enabled: true,
+                    order: 12,
+                    data: {},
+                },
+            ];
+        }
+
+        // Hide smart-calculator for now per user request
+        sections = sections.filter((s) => s.type !== "smart-calculator");
+
         const adSection = sections.find((s) => s.type === "advertisements");
         const showSidebar = adSection ? adSection.enabled : true;
 
@@ -165,9 +185,6 @@ function Home() {
                             </aside>
                         )}
                     </div>
-
-                    {/* Interactive Smart Home Loan & Investment ROI Calculator */}
-                    <SmartCalculator />
 
                     {fullWidthBottom.map((sec) =>
                         renderPublishedSection(sec, activeTab, setActiveTab, published)
@@ -216,11 +233,9 @@ function Home() {
                     </aside>
                 </div>
 
-                {/* Interactive Smart Home Loan & Investment ROI Calculator */}
-                <SmartCalculator />
-
                 <Workflow />
                 <DeveloperLogos />
+                <Testimonials />
 
                 {/* Full-width Architectural Contact Us section */}
                 <HomeContact />

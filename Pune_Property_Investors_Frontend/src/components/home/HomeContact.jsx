@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
     ArrowRight,
@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa6";
 import { leadService } from "../../services/lead.service";
+import { contactSettingService } from "../../services/contactSetting.service";
 import "./HomeContact.css";
 
 const WHATSAPP_NUMBER = "917398174444";
@@ -18,6 +19,38 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const VILLA_BG_IMAGE = `${BASE_PATH}/images/luxury-villa-bg.jpg`;
 
 export default function HomeContact({ previewData }) {
+    const [dbContact, setDbContact] = useState(null);
+
+    useEffect(() => {
+        let isMounted = true;
+        contactSettingService
+            .get()
+            .then((res) => {
+                const data = res?.data || res;
+                if (isMounted && data) {
+                    setDbContact(data);
+                }
+            })
+            .catch((err) => console.error("Failed to load contact settings:", err));
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    const sectionEyebrow = previewData?.sectionEyebrow || dbContact?.eyebrow || "GET IN TOUCH";
+    const sectionTitle = previewData?.sectionTitle || dbContact?.title || "Connect With Our Property Advisors";
+    const cardEyebrow = previewData?.eyebrow || dbContact?.cardEyebrow || "PUNE PROPERTY INVESTORS";
+    const cardTitle = previewData?.heading || dbContact?.cardTitle || "Start your Pune property journey today";
+    const cardSubtitle =
+        previewData?.subtitle ||
+        dbContact?.cardSubtitle ||
+        "Complete the form and get a personalized list of verified properties within 24 hours.";
+    const officeLocation = previewData?.officeLocation || dbContact?.officeLocation || "Gera Imperium Alpha, Kharadi";
+    const phoneNumber = previewData?.phoneNumber || dbContact?.phoneNumber || "+91 73981 74444";
+    const whatsappNum = (previewData?.whatsappNumber || dbContact?.whatsappNumber || WHATSAPP_NUMBER).replace(/\D/g, "");
+    const bgImage = previewData?.backgroundImage || dbContact?.backgroundImage || VILLA_BG_IMAGE;
+
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -99,7 +132,7 @@ export default function HomeContact({ previewData }) {
                 `*Preferred Locality & Budget:* ${formData.localityBudget.trim() || "Pune General"}`,
                 `*Requirement:* ${formData.message.trim() || "Assistance requested"}`,
             ];
-            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+            const waUrl = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(
                 messageLines.join("\n")
             )}`;
 
@@ -135,29 +168,36 @@ export default function HomeContact({ previewData }) {
                 {/* 1. Section Heading at Top */}
                 <div className="editorial-contact-header">
                     <span className="editorial-contact-header__eyebrow">
-                        GET IN TOUCH
+                        {sectionEyebrow}
                     </span>
                     <h2 className="editorial-contact-header__title">
-                        Connect With Our <span>Property Advisors</span>
+                        {sectionTitle.includes("Property Advisors") ? (
+                            <>
+                                {sectionTitle.replace("Property Advisors", "")}
+                                <span>Property Advisors</span>
+                            </>
+                        ) : (
+                            sectionTitle
+                        )}
                     </h2>
                     <div className="editorial-contact-header__divider" aria-hidden="true" />
                 </div>
 
-                {/* 2. Outer Showcase Frame with Background Image */}
+                {/* 2. Outer Showcase Frame with Background Image (Desktop Only) */}
                 <div
-                    className="editorial-showcase-frame"
-                    style={{ backgroundImage: `url(${VILLA_BG_IMAGE})` }}
+                    className="editorial-showcase-frame home-contact-desktop-only"
+                    style={{ backgroundImage: `url(${bgImage})` }}
                 >
                     {/* Top-Right Badge: Office Location */}
                     <div className="home-showcase__tag home-showcase__tag--top">
                         <span className="home-tag-dot" aria-hidden="true" />
                         <Building2 size={14} className="home-tag-icon" />
-                        <span>Gera Imperium Alpha, Kharadi</span>
+                        <span>{officeLocation}</span>
                     </div>
 
                     {/* Bottom-Right Badge: Fast-Track Hotline */}
                     <a
-                        href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                        href={`https://wa.me/${whatsappNum}?text=${encodeURIComponent(
                             "Hello Pune Property Investors, I would like to consult with a property advisor."
                         )}`}
                         target="_blank"
@@ -166,20 +206,19 @@ export default function HomeContact({ previewData }) {
                         aria-label="Fast-Track Hotline on WhatsApp"
                     >
                         <FaWhatsapp size={15} className="home-tag-icon-wa" />
-                        <span>Fast-Track Hotline: +91 73981 74444</span>
+                        <span>Fast-Track Hotline: {phoneNumber}</span>
                     </a>
 
-                    {/* Decreased Compact Floating Form Card */}
+                    {/* Compact Floating Form Card */}
                     <div className="home-form-card">
                         <span className="home-form__eyebrow">
-                            {previewData?.eyebrow || "PUNE PROPERTY INVESTORS"}
+                            {cardEyebrow}
                         </span>
                         <h3 className="home-form__title">
-                            {previewData?.heading || "Start your Pune property journey today"}
+                            {cardTitle}
                         </h3>
                         <p className="home-form__subtitle">
-                            {previewData?.subtitle ||
-                                "Complete the form and get a personalized list of verified properties within 24 hours."}
+                            {cardSubtitle}
                         </p>
 
                         {/* Success Notification */}
@@ -329,6 +368,126 @@ export default function HomeContact({ previewData }) {
                                     )}
                                 </button>
                             </div>
+                        </form>
+                    </div>
+                </div>
+
+                {/* 3. Mobile View Contact Card (Matching Exact Reference Screenshot 1-to-1) */}
+                <div className="home-contact-mobile-card home-contact-mobile-only">
+                    {/* Left Visual Panel with Villa Image & Overlay Typography */}
+                    <div className="home-contact-mobile-card__visual">
+                        <img
+                            src={bgImage}
+                            alt="Luxury Property in Pune"
+                            className="home-contact-mobile-card__img"
+                        />
+                        <div className="home-contact-mobile-card__img-overlay" />
+                        <h3 className="home-contact-mobile-card__title">
+                            <span>Tell us</span><br />
+                            <span>about</span><br />
+                            <span className="home-contact-mobile-card__title-italic">the right</span><br />
+                            <span>property</span>
+                        </h3>
+                    </div>
+
+                    {/* Right Form Pane */}
+                    <div className="home-contact-mobile-card__form-pane">
+                        <p className="home-contact-mobile-card__sub">
+                            What you&apos;re looking for, and we&apos;ll guide you to the best options
+                        </p>
+
+                        {isSuccess && (
+                            <div className="home-contact-alert home-contact-alert--success">
+                                <CheckCircle2 size={13} />
+                                <span>Redirecting to WhatsApp...</span>
+                            </div>
+                        )}
+
+                        <form onSubmit={handleSubmit} className="home-contact-mobile-form" noValidate>
+                            {/* Full Name */}
+                            <div className={`home-contact-mobile-field ${errors.name ? "has-error" : ""}`}>
+                                <label htmlFor="mob-name">Full Name</label>
+                                <input
+                                    id="mob-name"
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder="John Smit"
+                                    required
+                                    disabled={isSubmitting}
+                                />
+                                {errors.name && (
+                                    <span className="home-form__field-error">{errors.name}</span>
+                                )}
+                            </div>
+
+                            {/* Email */}
+                            <div className={`home-contact-mobile-field ${errors.email ? "has-error" : ""}`}>
+                                <label htmlFor="mob-email">Email</label>
+                                <input
+                                    id="mob-email"
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    placeholder="mail@example.com"
+                                    disabled={isSubmitting}
+                                />
+                                {errors.email && (
+                                    <span className="home-form__field-error">{errors.email}</span>
+                                )}
+                            </div>
+
+                            {/* Your Phone */}
+                            <div className={`home-contact-mobile-field ${errors.phone ? "has-error" : ""}`}>
+                                <label htmlFor="mob-phone">Your Phone</label>
+                                <input
+                                    id="mob-phone"
+                                    type="tel"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    placeholder="+1 (555) 123 - 4567"
+                                    required
+                                    disabled={isSubmitting}
+                                />
+                                {errors.phone && (
+                                    <span className="home-form__field-error">{errors.phone}</span>
+                                )}
+                            </div>
+
+                            {/* Message */}
+                            <div className="home-contact-mobile-field">
+                                <label htmlFor="mob-message">Message</label>
+                                <input
+                                    id="mob-message"
+                                    type="text"
+                                    name="message"
+                                    value={formData.message}
+                                    onChange={handleChange}
+                                    placeholder="Preferred locality & budget"
+                                    disabled={isSubmitting}
+                                />
+                            </div>
+
+                            {/* Submit Button */}
+                            <button
+                                type="submit"
+                                className="home-contact-mobile-btn"
+                                disabled={isSubmitting || isSuccess}
+                            >
+                                {isSubmitting ? (
+                                    <>
+                                        <Loader2 size={13} className="home-form-spinner" />
+                                        <span>Connecting...</span>
+                                    </>
+                                ) : isSuccess ? (
+                                    <span>Options Requested!</span>
+                                ) : (
+                                    <span>Get My Options</span>
+                                )}
+                            </button>
                         </form>
                     </div>
                 </div>
