@@ -18,10 +18,10 @@ import "./PropertyFloorPlans.css";
 /**
  * Derives realistic floor plan configurations based on property specs
  */
-function getFloorPlansData(property = {}) {
-    if (Array.isArray(property.floorPlans) && property.floorPlans.length > 0) {
-        return property.floorPlans;
-    }
+export function getFloorPlansData(property = {}) {
+    const customPlans = Array.isArray(property.floorPlans) && property.floorPlans.length > 0
+        ? property.floorPlans
+        : null;
 
     const bhkNum = Number(property.bhk) || Number(property.bedrooms) || 2;
     const baseArea = Number(String(property.area || property.carpetArea || "850").replace(/\D/g, "")) || 850;
@@ -133,31 +133,123 @@ function getFloorPlansData(property = {}) {
         ];
     }
 
-    // 3. Residential Apartments (1 BHK, 2 BHK, 3 BHK)
+    // 3. Residential Apartments — return only BHKs available for this property
     const basePrice = priceNum || 8500000;
 
-    return [
+    const allResidentialPlans = [
+        // 1 BHK — 4 Carpet Area & Floor Plan Variants
         {
             id: "plan-1bhk-smart",
             bhk: "1 BHK",
             bhkCategory: "1 BHK",
             name: "1 BHK Smart Compact",
             config: "1 BHK Urban Residence",
-            carpetArea: Math.round(baseArea * 0.62) || 485,
-            superArea: Math.round(baseArea * 0.82) || 640,
-            balconyArea: 55,
+            carpetArea: Math.round(baseArea * 0.56) || 465,
+            superArea: Math.round(baseArea * 0.74) || 615,
+            balconyArea: 45,
             facing: "East Facing (Vastu)",
-            price: formatPrice(basePrice * 0.62),
+            price: formatPrice(basePrice * 0.56),
             priceLabel: "Starting from",
             description: "Ergonomically designed 1 BHK layout with maximum carpet efficiency, modular kitchen, and private sun balcony.",
             rooms: [
-                { name: "Living & Dining", size: "16'0\" × 10'6\"" },
-                { name: "Master Bedroom", size: "12'0\" × 10'0\"" },
-                { name: "Kitchen & Utility", size: "8'6\" × 7'6\"" },
-                { name: "Sun Balcony", size: "10'0\" × 4'0\"" },
+                { name: "Living & Dining", size: "15'0\" × 10'0\"" },
+                { name: "Master Bedroom", size: "11'6\" × 9'6\"" },
+                { name: "Kitchen & Utility", size: "8'0\" × 7'0\"" },
+                { name: "Sun Balcony", size: "9'0\" × 4'0\"" },
                 { name: "Bathroom", size: "7'0\" × 4'6\"" }
             ],
             tag: "High Rental Yield"
+        },
+        {
+            id: "plan-1bhk-comfort",
+            bhk: "1 BHK",
+            bhkCategory: "1 BHK",
+            name: "1 BHK Comfort Suite",
+            config: "1 BHK Spacious Layout",
+            carpetArea: Math.round(baseArea * 0.62) || 515,
+            superArea: Math.round(baseArea * 0.82) || 680,
+            balconyArea: 55,
+            facing: "North-East Facing",
+            price: formatPrice(basePrice * 0.62),
+            priceLabel: "Starting from",
+            description: "Well-proportioned 1 BHK home featuring an extended living lounge, utility dry balcony, and airy master suite.",
+            rooms: [
+                { name: "Living & Dining", size: "16'0\" × 10'6\"" },
+                { name: "Master Bedroom", size: "12'0\" × 10'0\"" },
+                { name: "Kitchen & Dry Balcony", size: "8'6\" × 7'6\"" },
+                { name: "Sun Balcony", size: "10'0\" × 4'0\"" },
+                { name: "Bathroom", size: "7'0\" × 4'6\"" }
+            ],
+            tag: "Value Pick"
+        },
+        {
+            id: "plan-1bhk-deluxe",
+            bhk: "1 BHK",
+            bhkCategory: "1 BHK",
+            name: "1 BHK Deluxe Deck",
+            config: "1 BHK Balcony Residence",
+            carpetArea: Math.round(baseArea * 0.68) || 560,
+            superArea: Math.round(baseArea * 0.90) || 740,
+            balconyArea: 65,
+            facing: "East Facing (Vastu)",
+            price: formatPrice(basePrice * 0.68),
+            priceLabel: "Starting from",
+            description: "Upgraded 1 BHK residence with dedicated dining niche, wide sit-out deck, and dual washroom access.",
+            rooms: [
+                { name: "Living & Dining", size: "17'0\" × 11'0\"" },
+                { name: "Master Bedroom", size: "12'6\" × 10'6\"" },
+                { name: "Modular Kitchen", size: "9'0\" × 7'6\"" },
+                { name: "Sit-Out Deck", size: "10'6\" × 4'6\"" },
+                { name: "Bathroom", size: "7'6\" × 4'6\"" }
+            ],
+            tag: "Corner Deck"
+        },
+        {
+            id: "plan-1bhk-grand",
+            bhk: "1 BHK",
+            bhkCategory: "1 BHK",
+            name: "1.5 BHK Study Edition",
+            config: "1 BHK + WFH Alcove",
+            carpetArea: Math.round(baseArea * 0.74) || 610,
+            superArea: Math.round(baseArea * 0.96) || 795,
+            balconyArea: 72,
+            facing: "North-East Facing",
+            price: formatPrice(basePrice * 0.74),
+            priceLabel: "Starting from",
+            description: "Expansive 1 BHK plan with a versatile home-office alcove, generous storage, and panoramic garden views.",
+            rooms: [
+                { name: "Living & Dining", size: "18'0\" × 11'0\"" },
+                { name: "Master Bedroom", size: "13'0\" × 10'6\"" },
+                { name: "WFH Study Alcove", size: "7'6\" × 6'0\"" },
+                { name: "Kitchen & Utility", size: "9'0\" × 8'0\"" },
+                { name: "Garden Balcony", size: "11'0\" × 4'6\"" }
+            ],
+            tag: "WFH Ready"
+        },
+
+        // 2 BHK — 4 Carpet Area & Floor Plan Variants
+        {
+            id: "plan-2bhk-smart",
+            bhk: "2 BHK",
+            bhkCategory: "2 BHK",
+            name: "2 BHK Smart Optima",
+            config: "2 BHK Efficient Layout",
+            carpetArea: Math.round(baseArea * 0.86) || 720,
+            superArea: Math.round(baseArea * 1.12) || 940,
+            balconyArea: 68,
+            facing: "East Facing (Vastu)",
+            price: formatPrice(basePrice * 0.88),
+            priceLabel: "Starting from",
+            description: "Zero-wastage 2 BHK floor plan engineered for natural light, cross ventilation, and functional family living.",
+            rooms: [
+                { name: "Living & Dining", size: "18'0\" × 11'0\"" },
+                { name: "Master Suite + Bath", size: "13'0\" × 10'6\"" },
+                { name: "Bedroom 2", size: "11'0\" × 10'0\"" },
+                { name: "Kitchen & Dry Balcony", size: "9'6\" × 7'6\"" },
+                { name: "Sun Balcony", size: "10'0\" × 4'6\"" },
+                { name: "Common Washroom", size: "7'0\" × 4'6\"" }
+            ],
+            tag: "Smart Choice"
         },
         {
             id: "plan-2bhk-comfort",
@@ -165,7 +257,7 @@ function getFloorPlansData(property = {}) {
             bhkCategory: "2 BHK",
             name: "2 BHK Comfort Suite",
             config: "2 BHK Premium Layout",
-            carpetArea: Math.round(baseArea * 0.95) || 780,
+            carpetArea: Math.round(baseArea * 0.95) || 785,
             superArea: Math.round(baseArea * 1.25) || 1030,
             balconyArea: 80,
             facing: "East Facing (Vastu)",
@@ -183,12 +275,35 @@ function getFloorPlansData(property = {}) {
             tag: "Most Popular"
         },
         {
+            id: "plan-2bhk-luxury",
+            bhk: "2 BHK",
+            bhkCategory: "2 BHK",
+            name: "2 BHK Luxury Horizon",
+            config: "2 BHK Wide-Deck Layout",
+            carpetArea: Math.round(baseArea * 1.04) || 855,
+            superArea: Math.round(baseArea * 1.36) || 1120,
+            balconyArea: 92,
+            facing: "North-East Facing",
+            price: formatPrice(basePrice * 1.05),
+            priceLabel: "Starting from",
+            description: "Elevated 2 BHK layout featuring a grand living-dining expanse, walk-in wardrobe space, and wide sunset deck.",
+            rooms: [
+                { name: "Living & Dining", size: "20'6\" × 12'0\"" },
+                { name: "Master Suite + Bath", size: "14'0\" × 11'0\"" },
+                { name: "Bedroom 2", size: "12'0\" × 10'6\"" },
+                { name: "Kitchen & Utility", size: "10'0\" × 8'6\"" },
+                { name: "Sunset Deck", size: "11'6\" × 5'0\"" },
+                { name: "Common Washroom", size: "7'6\" × 4'6\"" }
+            ],
+            tag: "Best Seller"
+        },
+        {
             id: "plan-2bhk-grande",
             bhk: "2 BHK",
             bhkCategory: "2 BHK",
             name: "2.5 BHK Royale Living",
             config: "2.5 BHK with Study Niche",
-            carpetArea: Math.round(baseArea * 1.12) || 915,
+            carpetArea: Math.round(baseArea * 1.12) || 920,
             superArea: Math.round(baseArea * 1.48) || 1210,
             balconyArea: 100,
             facing: "North-East Facing",
@@ -204,6 +319,31 @@ function getFloorPlansData(property = {}) {
                 { name: "Dual Balconies", size: "12'0\" × 5'0\"" }
             ],
             tag: "WFH Optimized"
+        },
+
+        // 3 BHK — 4 Carpet Area & Floor Plan Variants
+        {
+            id: "plan-3bhk-optima",
+            bhk: "3 BHK",
+            bhkCategory: "3 BHK",
+            name: "3 BHK Smart Royale",
+            config: "3 BHK Family Layout",
+            carpetArea: Math.round(baseArea * 1.26) || 1050,
+            superArea: Math.round(baseArea * 1.66) || 1380,
+            balconyArea: 110,
+            facing: "East Facing (Vastu)",
+            price: formatPrice(basePrice * 1.28),
+            priceLabel: "Starting from",
+            description: "Well-balanced 3 BHK family residence offering three private bedrooms, spacious dining hall, and dry utility.",
+            rooms: [
+                { name: "Living & Dining", size: "22'0\" × 13'0\"" },
+                { name: "Master Suite", size: "15'0\" × 12'0\"" },
+                { name: "Guest Bedroom", size: "12'6\" × 11'0\"" },
+                { name: "Kids Bedroom", size: "12'0\" × 10'6\"" },
+                { name: "Kitchen & Utility", size: "10'6\" × 8'6\"" },
+                { name: "Sun Deck", size: "12'6\" × 5'6\"" }
+            ],
+            tag: "Family Favorite"
         },
         {
             id: "plan-3bhk-luxury",
@@ -229,6 +369,29 @@ function getFloorPlansData(property = {}) {
             tag: "Spacious Luxury"
         },
         {
+            id: "plan-3bhk-grand",
+            bhk: "3 BHK",
+            bhkCategory: "3 BHK",
+            name: "3 BHK Grand Imperial",
+            config: "3 BHK Dual-Deck Suite",
+            carpetArea: Math.round(baseArea * 1.52) || 1265,
+            superArea: Math.round(baseArea * 2.02) || 1680,
+            balconyArea: 155,
+            facing: "East Facing (Vastu)",
+            price: formatPrice(basePrice * 1.54),
+            priceLabel: "Starting from",
+            description: "Signature 3 BHK residence with private foyer entry, maid/utility room, and dual balconies overlooking landscaped greens.",
+            rooms: [
+                { name: "Imperial Living & Dining", size: "25'0\" × 14'6\"" },
+                { name: "Master Suite", size: "16'6\" × 13'6\"" },
+                { name: "Bedroom 2", size: "13'6\" × 12'0\"" },
+                { name: "Bedroom 3", size: "13'0\" × 11'6\"" },
+                { name: "Chef's Kitchen + Utility", size: "11'6\" × 9'0\"" },
+                { name: "Dual Panoramic Decks", size: "16'0\" × 6'0\"" }
+            ],
+            tag: "Private Foyer"
+        },
+        {
             id: "plan-3bhk-sky",
             bhk: "3 BHK",
             bhkCategory: "3 BHK",
@@ -250,8 +413,139 @@ function getFloorPlansData(property = {}) {
                 { name: "Wraparound Deck", size: "18'0\" × 6'6\"" }
             ],
             tag: "Corner Unit"
+        },
+
+        // 4 BHK — 4 Carpet Area & Floor Plan Variants
+        {
+            id: "plan-4bhk-estate",
+            bhk: "4 BHK",
+            bhkCategory: "4 BHK",
+            name: "4 BHK Estate Classic",
+            config: "4 BHK Executive Suite",
+            carpetArea: Math.round(baseArea * 1.72) || 1540,
+            superArea: Math.round(baseArea * 2.22) || 1980,
+            balconyArea: 195,
+            facing: "East Facing (Vastu)",
+            price: formatPrice(basePrice * 1.80),
+            priceLabel: "Starting from",
+            description: "Refined 4 BHK layout with private entrance vestibule, formal dining, and four generously sized bedrooms.",
+            rooms: [
+                { name: "Living & Formal Dining", size: "27'0\" × 15'0\"" },
+                { name: "Master Suite", size: "17'0\" × 13'6\"" },
+                { name: "Bedroom 2", size: "13'6\" × 12'0\"" },
+                { name: "Bedroom 3", size: "13'0\" × 11'6\"" },
+                { name: "Guest Suite", size: "12'6\" × 11'0\"" },
+                { name: "Sun Terrace Deck", size: "18'0\" × 6'0\"" }
+            ],
+            tag: "Executive Suite"
+        },
+        {
+            id: "plan-4bhk-penthouse",
+            bhk: "4 BHK",
+            bhkCategory: "4 BHK",
+            name: "4 BHK Presidential Suite",
+            config: "4 BHK Grand Sky Villa",
+            carpetArea: Math.round(baseArea * 1.85) || 1680,
+            superArea: Math.round(baseArea * 2.35) || 2200,
+            balconyArea: 220,
+            facing: "East Facing (Vastu)",
+            price: formatPrice(basePrice * 1.95),
+            priceLabel: "Starting from",
+            description: "Ultra-spacious 4 BHK residence with private foyer, expansive wrap-around deck, and premium Italian marble finishes.",
+            rooms: [
+                { name: "Grand Living & Dining", size: "28'0\" × 16'0\"" },
+                { name: "Master Suite", size: "18'0\" × 14'0\"" },
+                { name: "Bedroom 2", size: "14'0\" × 12'6\"" },
+                { name: "Bedroom 3", size: "13'6\" × 12'0\"" },
+                { name: "Guest Suite", size: "13'0\" × 11'6\"" },
+                { name: "Wraparound Sun Deck", size: "20'0\" × 6'6\"" }
+            ],
+            tag: "Ultra Luxury"
+        },
+        {
+            id: "plan-4bhk-sovereign",
+            bhk: "4 BHK",
+            bhkCategory: "4 BHK",
+            name: "4 BHK Sovereign Manor",
+            config: "4 BHK Duplex Lounge",
+            carpetArea: Math.round(baseArea * 2.02) || 1820,
+            superArea: Math.round(baseArea * 2.58) || 2360,
+            balconyArea: 250,
+            facing: "North-East (Panoramic)",
+            price: formatPrice(basePrice * 2.15),
+            priceLabel: "Starting from",
+            description: "Palatial 4 BHK residence featuring double-height living volume, walk-in closets, staff quarters, and sky lounge.",
+            rooms: [
+                { name: "Double-Height Living", size: "30'0\" × 16'6\"" },
+                { name: "Master Suite + Walk-In", size: "19'0\" × 14'6\"" },
+                { name: "Bedroom 2", size: "14'6\" × 13'0\"" },
+                { name: "Bedroom 3", size: "14'0\" × 12'6\"" },
+                { name: "Guest Wing", size: "13'6\" × 12'0\"" },
+                { name: "Private Sky Lounge", size: "22'0\" × 7'0\"" }
+            ],
+            tag: "Sky Lounge"
+        },
+        {
+            id: "plan-4bhk-crown",
+            bhk: "4 BHK",
+            bhkCategory: "4 BHK",
+            name: "4 BHK Crown Penthouse",
+            config: "4 BHK Private Terrace",
+            carpetArea: Math.round(baseArea * 2.20) || 1990,
+            superArea: Math.round(baseArea * 2.82) || 2580,
+            balconyArea: 290,
+            facing: "East Facing (Vastu)",
+            price: formatPrice(basePrice * 2.35),
+            priceLabel: "Starting from",
+            description: "Crown-floor 4 BHK residence with private elevator lobby, entertainer's island kitchen, and panoramic sky terrace.",
+            rooms: [
+                { name: "Grand Entertainer Hall", size: "32'0\" × 17'0\"" },
+                { name: "Master Sanctuary", size: "20'0\" × 15'0\"" },
+                { name: "Junior Master Suite", size: "15'0\" × 13'0\"" },
+                { name: "Bedroom 3", size: "14'0\" × 12'6\"" },
+                { name: "Bedroom 4 / Study", size: "13'6\" × 12'0\"" },
+                { name: "Private Sky Terrace", size: "24'0\" × 7'6\"" }
+            ],
+            tag: "Crown Floor"
         }
     ];
+
+    const bhkSourceText = `${property.configuration || ""} ${property.availableFlats || ""} ${property.bhk || ""} ${property.bedrooms || ""}`;
+    const parsedNums = Array.from(new Set((bhkSourceText.match(/\b[1-5]\b/g) || []).map(Number))).sort((a, b) => a - b);
+    let allowedBhks;
+    if (parsedNums.length >= 2) {
+        allowedBhks = parsedNums;
+    } else {
+        const startBhk = Math.min(Math.max(parsedNums[0] || bhkNum || 2, 1), 4);
+        allowedBhks = [1, 2, 3, 4].filter((n) => n >= startBhk);
+    }
+    const filteredResidential = allResidentialPlans.filter((p) => {
+        const planNum = Number(String(p.bhk || "").match(/\d+/)?.[0]);
+        return allowedBhks.includes(planNum);
+    });
+    const generatedPlans = filteredResidential.length > 0 ? filteredResidential : allResidentialPlans;
+
+    if (customPlans) {
+        const merged = [...customPlans];
+        const customBhks = Array.from(new Set(customPlans.map((p) => p.bhkCategory || p.bhk).filter(Boolean)));
+        for (const bhkLabel of customBhks) {
+            const existingForBhk = merged.filter((p) => (p.bhkCategory || p.bhk) === bhkLabel);
+            if (existingForBhk.length < 3) {
+                const extras = allResidentialPlans.filter(
+                    (p) =>
+                        (p.bhkCategory === bhkLabel || p.bhk === bhkLabel) &&
+                        !existingForBhk.some((ex) => Number(ex.carpetArea) === Number(p.carpetArea))
+                );
+                for (const extra of extras) {
+                    if (merged.filter((p) => (p.bhkCategory || p.bhk) === bhkLabel).length >= 4) break;
+                    merged.push(extra);
+                }
+            }
+        }
+        return merged;
+    }
+
+    return generatedPlans;
 }
 
 /**
@@ -328,11 +622,15 @@ function BlueprintSvg({ plan }) {
     );
 }
 
-export default function PropertyFloorPlans({ property, onEnquire }) {
+export default function PropertyFloorPlans({ property, onEnquire, selectedBhk = null, onSelectBhk }) {
     if (!property) return null;
 
     const floorPlans = useMemo(() => getFloorPlansData(property), [property]);
-    const [activeFilter, setActiveFilter] = useState("All");
+    const [activeFilter, setActiveFilter] = useState(selectedBhk || "All");
+
+    useEffect(() => {
+        setActiveFilter(selectedBhk || "All");
+    }, [selectedBhk]);
     const [selectedModalPlan, setSelectedModalPlan] = useState(null);
     const [whatsappModalPlan, setWhatsappModalPlan] = useState(null);
     const [leadModalIntent, setLeadModalIntent] = useState("preview"); // 'preview' | 'whatsapp'
@@ -372,7 +670,7 @@ export default function PropertyFloorPlans({ property, onEnquire }) {
                     }));
                 }
             }
-        } catch (_) {}
+        } catch (_) { }
     }, []);
 
     // Compute unique BHK categories for filter buttons
@@ -389,10 +687,20 @@ export default function PropertyFloorPlans({ property, onEnquire }) {
 
     const propertyTitle = property.title || property.name || "Pune Luxury Property";
 
-    // Tower details configuration and floor plan amenities
+    // Tower details configuration and floor plan amenities (sorted Tower 1 to last)
     const towerDetails = useMemo(() => {
+        const sortTowersAsc = (list) =>
+            [...list].sort((a, b) => {
+                const numA = Number(String(a?.name || a?.id || "").match(/\d+/)?.[0]);
+                const numB = Number(String(b?.name || b?.id || "").match(/\d+/)?.[0]);
+                if (!Number.isNaN(numA) && !Number.isNaN(numB) && numA !== numB) {
+                    return numA - numB;
+                }
+                return String(a?.name || "").localeCompare(String(b?.name || ""), undefined, { numeric: true });
+            });
+
         if (Array.isArray(property.towersList) && property.towersList.length > 0) {
-            return property.towersList;
+            return sortTowersAsc(property.towersList);
         }
 
         const configLabel = property.bhk
@@ -409,7 +717,23 @@ export default function PropertyFloorPlans({ property, onEnquire }) {
             ? property.amenities.map((a) => (typeof a === "string" ? a : a.name || a.title)).filter(Boolean)
             : [];
 
-        return [
+        return sortTowersAsc([
+            {
+                id: "tower-1",
+                name: "Tower 1",
+                config: configLabel,
+                completion: possessionText,
+                floors: `${Math.max(baseFloors - 3, 26)} floors`,
+                amenities: ["EV Charging Bays", "Panoramic Viewing Deck", "Dedicated Service Lift", "Fire Sprinklers"]
+            },
+            {
+                id: "tower-2",
+                name: "Tower 2",
+                config: configLabel,
+                completion: possessionText,
+                floors: `${Math.max(baseFloors - 1, 28)} floors`,
+                amenities: ["Double Height Lobby", "Smart Video Door Access", "Rooftop Yoga Deck", "100% Power Backup"]
+            },
             {
                 id: "tower-3",
                 name: "Tower 3",
@@ -421,22 +745,6 @@ export default function PropertyFloorPlans({ property, onEnquire }) {
                     : ["Sky Lounge", "3 High-Speed Lifts", "Terrace Garden", "Vastu Compliant"]
             },
             {
-                id: "tower-2",
-                name: "Tower 2",
-                config: configLabel,
-                completion: possessionText,
-                floors: `${Math.max(baseFloors - 1, 28)} floors`,
-                amenities: ["Double Height Lobby", "Smart Video Door Access", "Rooftop Yoga Deck", "100% Power Backup"]
-            },
-            {
-                id: "tower-1",
-                name: "Tower 1",
-                config: configLabel,
-                completion: possessionText,
-                floors: `${Math.max(baseFloors - 3, 26)} floors`,
-                amenities: ["EV Charging Bays", "Panoramic Viewing Deck", "Dedicated Service Lift", "Fire Sprinklers"]
-            },
-            {
                 id: "tower-4",
                 name: "Tower 4",
                 config: configLabel.replace("2, 3", "3, 4"),
@@ -444,7 +752,7 @@ export default function PropertyFloorPlans({ property, onEnquire }) {
                 floors: `${baseFloors + 2} floors`,
                 amenities: ["Infinity Pool Access", "Private Sun Deck", "Clubhouse Connectivity", "Podium Parking"]
             }
-        ];
+        ]);
     }, [property]);
 
     const convertArea = (sqft) => {
@@ -520,7 +828,7 @@ export default function PropertyFloorPlans({ property, onEnquire }) {
                     localStorage.setItem("ppi_user_name", nameTrimmed);
                     localStorage.setItem("ppi_user_phone", phoneDigits);
                 }
-            } catch (_) {}
+            } catch (_) { }
 
             // Detailed Sanctioned Room Dimensions Report for WhatsApp
             const roomReport = Array.isArray(whatsappModalPlan?.rooms) && whatsappModalPlan.rooms.length > 0
@@ -629,7 +937,12 @@ export default function PropertyFloorPlans({ property, onEnquire }) {
                                 key={f}
                                 type="button"
                                 className={`floor-plans__filter-btn ${activeFilter === f ? "floor-plans__filter-btn--active" : ""}`}
-                                onClick={() => setActiveFilter(f)}
+                                onClick={() => {
+                                    setActiveFilter(f);
+                                    if (typeof onSelectBhk === "function") {
+                                        onSelectBhk(f === "All" ? null : f);
+                                    }
+                                }}
                             >
                                 <span className="filter-btn__label">{f}</span>
                                 <span className="filter-btn__count">{count}</span>

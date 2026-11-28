@@ -1475,17 +1475,113 @@
     overflow: hidden;
 }
 
+.vtp-hero-slider-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.vtp-hero-slider-track--instant {
+    transition: none !important;
+}
+
+.vtp-hero-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
 .vtp-hero-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
     display: block;
-    transition: transform 0.6s ease;
 }
 
-.vtp-hero-viewport:hover .vtp-hero-img {
-    transform: scale(1.02);
+/* Small Photo Thumbnails Strip just above Floating Card */
+.vtp-hero-thumbs-bar {
+    position: absolute;
+    bottom: 57px;
+    right: 20px;
+    z-index: 15;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    max-width: calc(100% - 40px);
+    padding: 0;
+    background: transparent;
+    border: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.vtp-hero-thumbs-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.vtp-hero-thumb-btn {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 7px;
+    overflow: hidden;
+    border: 1.5px solid rgba(255, 255, 255, 0.75);
+    background: transparent;
+    cursor: pointer;
+    opacity: 0.85;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+    transition: all 0.2s ease;
+}
+
+.vtp-hero-thumb-btn:hover {
+    opacity: 1;
+    border-color: #ffffff;
+}
+
+.vtp-hero-thumb-btn--active {
+    opacity: 1;
+    border: 2px solid #d4af37;
+    transform: scale(1.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.vtp-hero-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.vtp-hero-thumb-expand {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 7px;
+    border: 1.5px solid rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.vtp-hero-thumb-expand:hover {
+    background: rgba(212, 175, 55, 0.35);
+    border-color: #d4af37;
 }
 
 /* Corner Photo Count Pill */
@@ -1553,23 +1649,24 @@
 .vtp-card-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    background: #162033;
-    color: #ffffff;
-    border-radius: 9999px;
-    padding: 5px 14px;
-    font-size: 12px;
+    flex-wrap: wrap;
+    gap: 6px;
+    background: transparent;
+    color: #334155;
+    border-radius: 0;
+    padding: 0;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.2px;
-    margin-bottom: 12px;
+    margin: 6px 0 8px;
 }
 
 .vtp-card-badge__dot {
-    color: rgba(255, 255, 255, 0.4);
+    color: #94a3b8;
 }
 
 .vtp-card-badge__status {
-    color: #d4af37;
+    color: #ad7c48;
     font-weight: 700;
 }
 
@@ -1618,6 +1715,149 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* BHK & Price Horizontal Row inside Floating Card */
+.vtp-bhk-price-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #f1f5f9;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.vtp-bhk-price-row::-webkit-scrollbar {
+    display: none;
+}
+
+.vtp-bhk-price-item {
+    flex: 1 0 auto;
+    min-width: 78px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 7px 10px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.vtp-bhk-price-item:hover {
+    border-color: #ad7c48;
+    background: #fdfaf5;
+}
+
+.vtp-bhk-price-item--active {
+    background: #ffffff;
+    border-color: #e2e8f0;
+    border-bottom: 2.5px solid #0c1523;
+    box-shadow: 0 2px 8px rgba(12, 21, 35, 0.08);
+}
+
+.vtp-bhk-price-item--active:hover {
+    background: #ffffff;
+    border-color: #e2e8f0;
+    border-bottom: 2.5px solid #0c1523;
+}
+
+.vtp-bhk-price-item--active .vtp-bhk-price-item__bhk {
+    color: #0c1523;
+}
+
+.vtp-bhk-price-item--active .vtp-bhk-price-item__price {
+    color: #ad7c48;
+}
+
+.vtp-bhk-price-item__bhk {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #0c1523;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.vtp-bhk-price-item__price {
+    font-size: 11px;
+    font-weight: 700;
+    color: #ad7c48;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/* Carpet Area Variants Row (shown when a BHK is selected) */
+.vtp-carpet-variants-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 8px;
+    margin-top: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.vtp-carpet-variants-row::-webkit-scrollbar {
+    display: none;
+}
+
+.vtp-carpet-variant-chip {
+    flex: 0 0 auto;
+    min-width: 86px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 6px 10px;
+    border-radius: 9px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.vtp-carpet-variant-chip:hover {
+    border-color: #ad7c48;
+    background: #fdfaf5;
+}
+
+.vtp-carpet-variant-chip--active {
+    background: #fdfaf5;
+    border-color: #ad7c48;
+    box-shadow: 0 2px 8px rgba(173, 124, 72, 0.16);
+}
+
+.vtp-carpet-variant-chip__area {
+    font-size: 11px;
+    font-weight: 700;
+    color: #0c1523;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.vtp-carpet-variant-chip__price {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #ad7c48;
+    line-height: 1.2;
+    white-space: nowrap;
 }
 
 .vtp-card-title-col {
@@ -1677,23 +1917,42 @@
 
 /* 3. TABS BAR */
 .vtp-tabs-bar {
+    position: sticky;
+    top: 52px;
+    z-index: 45;
+    background: #fbfaf7;
     display: flex;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
+    gap: 14px;
     border-bottom: 1.5px solid #edf2f7;
     margin-bottom: 22px;
-    padding: 0 6px;
+    padding: 4px 6px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.vtp-tabs-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.vtp-section-anchor {
+    scroll-margin-top: 112px;
 }
 
 .vtp-tab-btn {
     border: none;
     background: transparent;
     padding: 12px 6px;
-    font-size: 15px;
+    font-size: 14.5px;
     font-weight: 500;
     color: #475569;
     cursor: pointer;
     position: relative;
+    white-space: nowrap;
+    flex-shrink: 0;
     transition: all 0.2s ease;
 }
 
@@ -1822,6 +2081,11 @@
 
     .vtp-floating-card-wrapper {
         margin-top: -45px;
+    }
+
+    .vtp-hero-thumbs-bar {
+        bottom: 52px;
+        right: 16px;
     }
 
     .vtp-floating-card {

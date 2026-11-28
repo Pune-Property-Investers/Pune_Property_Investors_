@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
@@ -32,11 +32,11 @@ import PropertyGallery from "../property-details/PropertyGallery";
 import PropertyOverview from "../property-details/PropertyOverview";
 import ProjectSpecifications from "../property-details/ProjectSpecifications";
 import PropertyReels from "../property-details/PropertyReels";
-import PropertyFloorPlans from "../property-details/PropertyFloorPlans";
+import PropertyFloorPlans, { getFloorPlansData } from "../property-details/PropertyFloorPlans";
 import PropertyAmenities from "../property-details/PropertyAmenities";
 import PropertyMap from "../property-details/PropertyMap";
 import SimilarProperties from "../property-details/SimilarProperties";
-import BuilderProperties, { resolveBuilderProfile } from "../property-details/BuilderProperties";
+import BuilderProperties, { resolvePropertyBuilder } from "../property-details/BuilderProperties";
 import PropertyEnquiry from "../property-details/PropertyEnquiry";
 import { extractYouTubeVideoId } from "../../lib/youtube";
 
@@ -171,7 +171,7 @@ function PropertyDetails({ propertyId, propertySlug }) {
     if (!property) {
         return (
             <>
-                <Header transparentAtTop={true} />
+                <Header transparentAtTop={true} showFilterChips={false} />
 
                 <PageHeroBanner
                     title="Property"
@@ -285,10 +285,15 @@ function PropertyDetails({ propertyId, propertySlug }) {
     );
 
     const [isEnquiryModalOpen, setIsEnquiryModalOpen] = useState(false);
-    const [activeThemeTab, setActiveThemeTab] = useState("Gallery");
+    const [activeThemeTab, setActiveThemeTab] = useState("Overview");
+    const [selectedBhk, setSelectedBhk] = useState(null);
     const [isFavorite, setIsFavorite] = useState(false);
     const [shareToast, setShareToast] = useState(false);
     const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
+    const [heroSlideIndex, setHeroSlideIndex] = useState(0);
+    const [isHeroInstant, setIsHeroInstant] = useState(false);
+    const [isHeroPaused, setIsHeroPaused] = useState(false);
+    const heroTouchStartX = useRef(null);
 
     // Favorite handler with localStorage
     useEffect(() => {
@@ -342,24 +347,52 @@ function PropertyDetails({ propertyId, propertySlug }) {
         }
     };
 
+    const PROPERTY_TABS = [
+        { id: "Overview", label: "Overview", targetId: "overview" },
+        { id: "Floor Plan", label: "Floor Plan", targetId: "floor-plans" },
+        { id: "Amenities", label: "Amenities", targetId: "amenities-section" },
+        { id: "Similar Property", label: "Similar Property", targetId: "similar-properties" },
+    ];
+
     const handleTabClick = (tabId) => {
         setActiveThemeTab(tabId);
-        if (tabId === "Gallery") {
-            setIsGalleryModalOpen(true);
-        } else if (tabId === "Outdoors") {
-            const el = document.getElementById("amenities");
-            if (el) {
-                el.scrollIntoView({ behavior: "smooth" });
-            }
-        } else if (tabId === "Video") {
-            const el = document.getElementById("video-tour");
-            if (el) {
-                el.scrollIntoView({ behavior: "smooth" });
-            }
-        } else if (tabId === "Brochure") {
-            setIsEnquiryModalOpen(true);
+        const tab = PROPERTY_TABS.find((t) => t.id === tabId);
+        if (!tab) return;
+        const el = document.getElementById(tab.targetId);
+        if (el) {
+            const topOffset = 112;
+            const elementTop = el.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({
+                top: Math.max(0, elementTop - topOffset),
+                behavior: "smooth",
+            });
         }
     };
+
+    // Sync active tab underline as user scrolls across Overview -> Floor Plan -> Amenities -> Similar Property
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+        let ticking = false;
+        const handleScrollSpy = () => {
+            if (ticking) return;
+            ticking = true;
+            window.requestAnimationFrame(() => {
+                const triggerY = 155;
+                let currentTab = "Overview";
+                for (const tab of PROPERTY_TABS) {
+                    const el = document.getElementById(tab.targetId);
+                    if (el && el.getBoundingClientRect().top <= triggerY) {
+                        currentTab = tab.id;
+                    }
+                }
+                setActiveThemeTab((prev) => (prev === currentTab ? prev : currentTab));
+                ticking = false;
+            });
+        };
+
+        window.addEventListener("scroll", handleScrollSpy, { passive: true });
+        return () => window.removeEventListener("scroll", handleScrollSpy);
+    }, []);
 
     // Lock body scroll and handle Escape key for modals
     useEffect(() => {
@@ -408,110 +441,193 @@ function PropertyDetails({ propertyId, propertySlug }) {
             : "1,120 sq.ft";
 
     const possessionText = property.possession || "Dec 2028";
-    const developerName = property.developer || property.builder || "Leading Developer";
-    const builderProfile = resolveBuilderProfile(
-        property.developer || property.builder || property.projectName || title,
-        property
-    );
-    const baseAssetPrefix =
-        process.env.NEXT_PUBLIC_BASE_PATH ||
-        (typeof window !== "undefined" && window.location.pathname.startsWith("/Pune_Property_Investors_")
-            ? "/Pune_Property_Investors_"
-            : "");
+    const builderProfile = resolvePropertyBuilder(property);
+    const developerName = builderProfile.name;
+    const builderLogoSrc = builderProfile.logoSrc;
+    const builderInitials = builderProfile.initials;
 
-    const SAVED_BUILDER_LOGOS = {
-        godrej: "/images/logos/godrej.png",
-        kohinoor: "/images/logos/kohinoor.png",
-        kolte: "/images/logos/kolte-patil.jpg",
-        lodha: "/images/logos/lodha.png",
-        macrotech: "/images/logos/lodha.png",
-        paras: "/images/logos/paras-emperor.png",
-        shapoorji: "/images/logos/shapoorji.svg",
-        joyville: "/images/logos/shapoorji.svg",
-        sobha: "/images/logos/sobha.png",
-        vtp: "/images/logos/vtp.png",
-    };
+    const displayPropertyName = property.projectName || property.name || title;
 
-    const builderSearchText = `${property.developer || ""} ${property.builder || ""} ${property.projectName || ""} ${title || ""} ${builderProfile?.name || ""}`.toLowerCase();
-    const matchedSavedLogoKey = Object.keys(SAVED_BUILDER_LOGOS).find((key) =>
-        builderSearchText.includes(key)
-    );
+    const bhkPriceItems = (() => {
+        const plans = getFloorPlansData(property) || [];
+        const seen = new Set();
+        const items = [];
+        for (const p of plans) {
+            const label = p.bhk || p.bhkCategory || "";
+            if (!label || seen.has(label)) continue;
+            seen.add(label);
+            items.push({
+                label,
+                price: p.price || priceClean,
+                carpetArea: p.carpetArea,
+                image: p.image || "",
+            });
+            if (items.length >= 4) break;
+        }
+        if (items.length === 0) {
+            items.push({ label: bhkBadge, price: priceClean, carpetArea: null, image: "" });
+        }
+        return items;
+    })();
 
-    const explicitLogo =
-        (typeof property.developerLogo === "string" &&
-            (property.developerLogo.startsWith("/") || property.developerLogo.startsWith("http")) &&
-            property.developerLogo) ||
-        (typeof property.logo === "string" &&
-            (property.logo.startsWith("/") || property.logo.startsWith("http")) &&
-            property.logo) ||
-        "";
+    const selectedBhkIndex = selectedBhk
+        ? bhkPriceItems.findIndex((item) => item.label === selectedBhk)
+        : -1;
+    const selectedBhkItem = selectedBhkIndex >= 0 ? bhkPriceItems[selectedBhkIndex] : null;
+    const activeHeroImage =
+        selectedBhkItem?.image ||
+        (selectedBhkIndex >= 0 && uniqueImages.length > 0
+            ? uniqueImages[selectedBhkIndex % uniqueImages.length]
+            : uniqueImages[0]) ||
+        "/images/properties/default.jpg";
+    const displayCarpetArea = selectedBhkItem?.carpetArea
+        ? `${Number(selectedBhkItem.carpetArea).toLocaleString("en-IN")} sq.ft`
+        : carpetAreaText;
+    const displayPropertyPrice = selectedBhkItem?.price || priceClean;
 
-    const rawBuilderLogoPath =
-        explicitLogo ||
-        (matchedSavedLogoKey ? SAVED_BUILDER_LOGOS[matchedSavedLogoKey] : "") ||
-        (builderProfile?.logo && builderProfile.logo.startsWith("/images/logos/")
-            ? builderProfile.logo
-            : "");
+    const heroImages = useMemo(() => {
+        const list = uniqueImages.length > 0 ? [...uniqueImages] : ["/images/properties/default.jpg"];
+        if (selectedBhkItem?.image && !list.includes(selectedBhkItem.image)) {
+            list.unshift(selectedBhkItem.image);
+        }
+        return list;
+    }, [uniqueImages, selectedBhkItem]);
 
-    const builderLogoSrc = rawBuilderLogoPath
-        ? rawBuilderLogoPath.startsWith("/")
-            ? `${baseAssetPrefix}${rawBuilderLogoPath}`
-            : rawBuilderLogoPath
-        : "";
+    useEffect(() => {
+        if (selectedBhkIndex >= 0 && heroImages.length > 0) {
+            const targetIdx = selectedBhkItem?.image
+                ? heroImages.indexOf(selectedBhkItem.image)
+                : selectedBhkIndex % heroImages.length;
+            setHeroSlideIndex(targetIdx >= 0 ? targetIdx : 0);
+        }
+    }, [selectedBhkIndex, selectedBhkItem, heroImages]);
 
-    const builderInitials = (builderProfile?.name || developerName || title || "PP")
-        .split(/\s+/)
-        .filter(Boolean)
-        .slice(0, 2)
-        .map((w) => w[0].toUpperCase())
-        .join("");
+    useEffect(() => {
+        if (heroImages.length <= 1 || isHeroPaused || isGalleryModalOpen) return;
+        const timer = setInterval(() => {
+            setIsHeroInstant(false);
+            setHeroSlideIndex((prev) => (prev >= heroImages.length ? 1 : prev + 1));
+        }, 2800);
+        return () => clearInterval(timer);
+    }, [heroImages.length, isHeroPaused, isGalleryModalOpen]);
+
+    const safeHeroIndex = heroImages.length > 0 ? heroSlideIndex % heroImages.length : 0;
+    const trackImages = heroImages.length > 1 ? [...heroImages, heroImages[0]] : heroImages;
 
     return (
         <>
-            <Header transparentAtTop={true} />
+            <Header transparentAtTop={true} showFilterChips={false} />
 
             <main className="property-details property-details--vtp-theme">
-                {/* 1. CINEMATIC HERO IMAGE WITH TOP CONTROLS (EXACT PHOTO REPLICA) */}
-                <div className="vtp-hero-viewport">
-                    <img
-                        src={uniqueImages[0] || "/images/properties/default.jpg"}
-                        alt={title}
-                        className="vtp-hero-img"
-                    />
-
-                    {/* Corner Photo Count Pill */}
-                    <button
-                        type="button"
-                        className="vtp-hero-photos-pill"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setIsGalleryModalOpen(true);
+                {/* 1. CINEMATIC SLIDING HERO VIEWPORT WITH SMALL PHOTO THUMBNAILS */}
+                <div
+                    className="vtp-hero-viewport"
+                    onMouseEnter={() => setIsHeroPaused(true)}
+                    onMouseLeave={() => setIsHeroPaused(false)}
+                    onTouchStart={(e) => {
+                        heroTouchStartX.current = e.touches?.[0]?.clientX ?? null;
+                        setIsHeroPaused(true);
+                    }}
+                    onTouchEnd={(e) => {
+                        const startX = heroTouchStartX.current;
+                        const endX = e.changedTouches?.[0]?.clientX ?? null;
+                        if (startX !== null && endX !== null && heroImages.length > 1) {
+                            const diff = startX - endX;
+                            if (Math.abs(diff) > 35) {
+                                setIsHeroInstant(false);
+                                setHeroSlideIndex((prev) => {
+                                    const current = prev % heroImages.length;
+                                    return diff > 0
+                                        ? current + 1
+                                        : (current - 1 + heroImages.length) % heroImages.length;
+                                });
+                            }
+                        }
+                        heroTouchStartX.current = null;
+                        setIsHeroPaused(false);
+                    }}
+                >
+                    <div
+                        className={`vtp-hero-slider-track ${isHeroInstant ? "vtp-hero-slider-track--instant" : ""}`}
+                        style={{ transform: `translate3d(-${heroSlideIndex * 100}%, 0, 0)` }}
+                        onTransitionEnd={() => {
+                            if (heroImages.length > 1 && heroSlideIndex >= heroImages.length) {
+                                setIsHeroInstant(true);
+                                setHeroSlideIndex(0);
+                                requestAnimationFrame(() => {
+                                    requestAnimationFrame(() => setIsHeroInstant(false));
+                                });
+                            }
                         }}
-                        title="View photo gallery"
                     >
-                        <ImageIcon size={14} />
-                        <span>{uniqueImages.length} Photos</span>
-                    </button>
+                        {trackImages.map((imgSrc, imgIdx) => (
+                            <div className="vtp-hero-slide" key={`${imgSrc}-${imgIdx}`}>
+                                <img
+                                    src={imgSrc}
+                                    alt={`${title} - Photo ${(imgIdx % heroImages.length) + 1}`}
+                                    className="vtp-hero-img"
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Small Photo Thumbnails Strip at Corner Count Position */}
+                    <div className="vtp-hero-thumbs-bar" aria-label="Property photos">
+                        {heroImages.map((imgSrc, imgIdx) => {
+                            const isActiveThumb = imgIdx === safeHeroIndex;
+                            return (
+                                <button
+                                    key={`thumb-${imgSrc}-${imgIdx}`}
+                                    type="button"
+                                    className={`vtp-hero-thumb-btn ${isActiveThumb ? "vtp-hero-thumb-btn--active" : ""}`}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setHeroSlideIndex(imgIdx);
+                                    }}
+                                    aria-label={`Show photo ${imgIdx + 1}`}
+                                    aria-current={isActiveThumb ? "true" : undefined}
+                                >
+                                    <img
+                                        src={imgSrc}
+                                        alt={`${title} thumbnail ${imgIdx + 1}`}
+                                        className="vtp-hero-thumb-img"
+                                    />
+                                </button>
+                            );
+                        })}
+                        <button
+                            type="button"
+                            className="vtp-hero-thumb-expand"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsGalleryModalOpen(true);
+                            }}
+                            title="Open full gallery"
+                            aria-label="Open full photo gallery"
+                        >
+                            <ImageIcon size={13} />
+                        </button>
+                    </div>
                 </div>
 
                 <div className="property-details__container">
                     {/* 2. FLOATING OVERLAPPING HERO CARD (EXACT PHOTO REPLICA) */}
                     <div className="vtp-floating-card-wrapper">
                         <section className="vtp-floating-card" aria-label="Property summary">
-                            {/* Dark Badge: "2 & 3 BHK • Ready to Move" */}
-                            <div className="vtp-card-badge">
-                                <span>{bhkBadge}</span>
-                                <span className="vtp-card-badge__dot">•</span>
-                                <span className="vtp-card-badge__status">{possessionBadge}</span>
-                            </div>
-
-                            {/* Main Title & Builder Logo Row */}
+                            {/* Main Row: Property Name -> BHK Pill -> Location + Round Builder Logo */}
                             <div className="vtp-card-title-row">
                                 <div className="vtp-card-title-col">
-                                    <h1 className="vtp-card-title">{title}</h1>
+                                    <h1 className="vtp-card-title">{displayPropertyName}</h1>
+
+                                    <div className="vtp-card-badge">
+                                        <span>{selectedBhk || bhkBadge}</span>
+                                        <span className="vtp-card-badge__dot">•</span>
+                                        <span className="vtp-card-badge__status">{possessionBadge}</span>
+                                    </div>
+
                                     <p className="vtp-card-location">
                                         <MapPin size={15} />
-                                        <span>{location} • By {developerName}</span>
+                                        <span>{location}</span>
                                     </p>
                                 </div>
 
@@ -537,17 +653,33 @@ function PropertyDetails({ propertyId, propertySlug }) {
                                     </span>
                                 </div>
                             </div>
+
+                            {/* BHK & Price Horizontal Row (Top: BHK, Below: Price) */}
+                            <div className="vtp-bhk-price-row" aria-label="Configurations and prices">
+                                {bhkPriceItems.map((item, idx) => {
+                                    const isActive = selectedBhk === item.label;
+                                    return (
+                                        <button
+                                            type="button"
+                                            className={`vtp-bhk-price-item ${isActive ? "vtp-bhk-price-item--active" : ""}`}
+                                            key={`${item.label}-${idx}`}
+                                            onClick={() =>
+                                                setSelectedBhk((prev) => (prev === item.label ? null : item.label))
+                                            }
+                                            aria-pressed={isActive}
+                                        >
+                                            <span className="vtp-bhk-price-item__bhk">{item.label}</span>
+                                            <span className="vtp-bhk-price-item__price">{item.price}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
                         </section>
                     </div>
 
-                    {/* 3. TABS BAR: Gallery | Outdoors | Video | Brochure (EXACT PHOTO REPLICA) */}
-                    <nav className="vtp-tabs-bar" role="tablist">
-                        {[
-                            { id: "Gallery", label: "Gallery" },
-                            { id: "Outdoors", label: "Outdoors" },
-                            { id: "Video", label: "Video" },
-                            { id: "Brochure", label: "Brochure" },
-                        ].map((tab) => (
+                    {/* 3. TABS BAR: Overview | Floor Plan | Amenities | Similar Property */}
+                    <nav className="vtp-tabs-bar" role="tablist" aria-label="Property sections">
+                        {PROPERTY_TABS.map((tab) => (
                             <button
                                 key={tab.id}
                                 type="button"
@@ -564,7 +696,7 @@ function PropertyDetails({ propertyId, propertySlug }) {
                     {/* 4. 3-COLUMN STATS ROW: Carpet Area | Possession | Property Price */}
                     <div className="vtp-stats-row">
                         <div className="vtp-stat-item">
-                            <div className="vtp-stat-value">{carpetAreaText}</div>
+                            <div className="vtp-stat-value">{displayCarpetArea}</div>
                             <div className="vtp-stat-label">Carpet Area</div>
                         </div>
 
@@ -578,60 +710,70 @@ function PropertyDetails({ propertyId, propertySlug }) {
                         <div className="vtp-stat-divider" />
 
                         <div className="vtp-stat-item">
-                            <div className="vtp-stat-value">{priceClean}</div>
-                            <div className="vtp-stat-label">Property Price</div>
+                            <div className="vtp-stat-value">{displayPropertyPrice}</div>
+                            <div className="vtp-stat-label">Starting Price</div>
                         </div>
                     </div>
 
-                    {/* Project Specifications */}
-                    <ProjectSpecifications property={property} />
+                    {/* Overview Anchor: Project Specifications + About Property + Reels */}
+                    <div id="overview" className="vtp-section-anchor">
+                        {/* Project Specifications */}
+                        <ProjectSpecifications property={property} />
 
-                    {/* About this property section — Moved directly on top of floor plan */}
-                    <section id="video-tour" className="property-details__section property-details__description-card property-details__about-card">
-                        <div className="property-details__section-heading">
-                            <div>
-                                <span className="property-details__eyebrow">
-                                    PROPERTY OVERVIEW
-                                </span>
-                                <h2>About this property</h2>
+                        {/* About this property section — Moved directly on top of floor plan */}
+                        <section id="video-tour" className="property-details__section property-details__description-card property-details__about-card">
+                            <div className="property-details__section-heading">
+                                <div>
+                                    <span className="property-details__eyebrow">
+                                        PROPERTY OVERVIEW
+                                    </span>
+                                    <h2>About this property</h2>
+                                </div>
                             </div>
-                        </div>
-                        {property.description && (
-                            <div className="property-details__description-body">
-                                <p>{property.description}</p>
+                            {property.description && (
+                                <div className="property-details__description-body">
+                                    <p>{property.description}</p>
+                                </div>
+                            )}
+
+                            {/* Video Frame Container with curved sides and continuous autoplay */}
+                            <div className="property-details__video-frame-container">
+                                <iframe
+                                    src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&playsinline=1&controls=1&modestbranding=1&rel=0`}
+                                    title={`${title} - Video Tour`}
+                                    className="property-details__video-iframe"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowFullScreen
+                                    loading="lazy"
+                                />
                             </div>
-                        )}
+                        </section>
 
-                        {/* Video Frame Container with curved sides and continuous autoplay */}
-                        <div className="property-details__video-frame-container">
-                            <iframe
-                                src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&playsinline=1&controls=1&modestbranding=1&rel=0`}
-                                title={`${title} - Video Tour`}
-                                className="property-details__video-iframe"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowFullScreen
-                                loading="lazy"
-                            />
-                        </div>
-                    </section>
-
-                    {/* Reels / Shorts Slider directly below About Property Section */}
-                    <PropertyReels property={property} />
+                        {/* Reels / Shorts Slider directly below About Property Section */}
+                        <PropertyReels property={property} />
+                    </div>
 
                     {/* 2. Floor Plans & Architectural Layouts directly below About Property */}
-                    <PropertyFloorPlans property={property} onEnquire={() => setIsEnquiryModalOpen(true)} />
+                    <PropertyFloorPlans
+                        property={property}
+                        onEnquire={() => setIsEnquiryModalOpen(true)}
+                        selectedBhk={selectedBhk}
+                        onSelectBhk={setSelectedBhk}
+                    />
 
                     {/* Main content and ad sidebar layout */}
                     <div className="property-details__layout">
                         {/* CENTER: Property information */}
                         <div className="property-details__main">
                             {/* 2. Amenities (Internal Amenities & Outdoor Amenities) */}
-                            <PropertyAmenities
-                                amenities={property.amenities}
-                                showHeader={true}
-                                property={property}
-                                onEnquire={() => setIsEnquiryModalOpen(true)}
-                            />
+                            <div id="amenities-section" className="vtp-section-anchor">
+                                <PropertyAmenities
+                                    amenities={property.amenities}
+                                    showHeader={true}
+                                    property={property}
+                                    onEnquire={() => setIsEnquiryModalOpen(true)}
+                                />
+                            </div>
 
                             {/* 3. Location & Google Map with Connectivity */}
                             <PropertyMap property={property} />
@@ -669,7 +811,7 @@ function PropertyDetails({ propertyId, propertySlug }) {
                         </div>
 
                         {/* RIGHT: Similar Properties */}
-                        <aside className="property-details__ad-sidebar">
+                        <aside id="similar-properties" className="property-details__ad-sidebar vtp-section-anchor">
                             <div className="property-details__ad-sticky">
                                 <SimilarProperties currentProperty={property} />
                             </div>

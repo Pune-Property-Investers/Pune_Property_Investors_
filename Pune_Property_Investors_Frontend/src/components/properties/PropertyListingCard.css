@@ -1,372 +1,232 @@
 /* ==========================================================================
-   PROPERTY LISTING CARD (MODERN) — Properties Page
-   Two-Card Nested Design tailored for Properties Page
-   OUTER CARD  →  image (top) + white space (bottom)
-   INNER CARD  →  clean overlay text body without circular badge
+   EXPLORE PROPERTIES FULL-BLEED OVERLAY CARD (Single Row Editorial Style)
    ========================================================================== */
 
-/* ── OUTER CARD ───────────────────────────────────────────────────────────── */
-
-.property-listing-card-modern {
-    background: #ffffff;
-    border-radius: 20px;
-    overflow: visible;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
-    border: 1px solid rgba(15, 23, 42, 0.08);
-    transition: transform 0.28s ease, box-shadow 0.28s ease;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-}
-
-.property-listing-card-modern:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-}
-
-.property-listing-card-modern__link {
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-/* ── Top Media Area ───────────────────────────────────────────────────────── */
-
-.property-listing-card-modern__media {
+.explore-overlay-card {
     position: relative;
     width: 100%;
-    height: 290px;
+    border-radius: 18px;
     overflow: hidden;
-    background: #e2e8f0;
-    border-radius: 20px 20px 0 0;
+    background: #0f172a;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.14);
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
 }
 
-.property-listing-card-modern__img {
+.explore-overlay-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.22);
+}
+
+.explore-overlay-card__link {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 520px;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.explore-overlay-card__img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    -webkit-user-drag: none;
-    user-drag: none;
+    transition: transform 0.55s ease;
 }
 
-.property-listing-card-modern:hover .property-listing-card-modern__img {
+.explore-overlay-card:hover .explore-overlay-card__img {
     transform: scale(1.04);
 }
 
-/* Top-Left Featured Tag (Magenta Pill) */
-.property-listing-card-modern__badge {
+.explore-overlay-card__gradient {
     position: absolute;
-    top: 12px;
-    left: 12px;
-    background: #9d174d;
-    color: #ffffff;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 11px;
-    border-radius: 6px;
-    letter-spacing: 0.2px;
-    box-shadow: 0 2px 8px rgba(157, 23, 77, 0.35);
-    z-index: 2;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(12, 18, 28, 0.18) 0%,
+        rgba(12, 18, 28, 0.06) 40%,
+        rgba(10, 15, 24, 0.82) 74%,
+        rgba(10, 15, 24, 0.96) 100%
+    );
+    pointer-events: none;
 }
 
-/* Top-Right Star Favorite Button */
-.property-listing-card-modern__star-btn {
+/* Top Badges Row — Small Font Size for RERA & Possession */
+.explore-overlay-card__top-badges {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: rgba(30, 41, 59, 0.65);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    display: grid;
-    place-items: center;
-    color: #ffffff;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    top: 14px;
+    left: 14px;
+    right: 14px;
     z-index: 2;
-}
-
-.property-listing-card-modern__star-btn:hover {
-    background: rgba(15, 23, 42, 0.85);
-    transform: scale(1.08);
-}
-
-.property-listing-card-modern__star-btn--active {
-    background: rgba(255, 255, 255, 0.95);
-    border-color: #fbbf24;
-}
-
-/* ── INNER CARD (clean overlay details box) ───────────────────────────────── */
-
-.property-listing-card-modern__inner {
-    position: relative;
-    margin: -20px 10px 10px;
-    background: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(15, 23, 42, 0.06);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    flex: 1;
-    z-index: 3;
-}
-
-/* ── Inner Card Text Body ─────────────────────────────────────────────────── */
-
-.property-listing-card-modern__body {
-    width: 100%;
-    padding: 20px 18px 18px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex: 1;
-}
-
-/* Project Title — Serif Bold */
-.property-listing-card-modern__title {
-    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
-    font-size: 19px;
-    font-weight: 700;
-    color: #0f172a;
-    margin: 0 0 4px;
-    line-height: 1.3;
-}
-
-/* Configuration Subtitle */
-.property-listing-card-modern__sub {
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 13px;
-    color: #64748b;
-    font-weight: 400;
-    margin: 0 0 16px;
-    line-height: 1.4;
-    max-width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* ── Price & Status Row ───────────────────────────────────────────────────── */
-
-.property-listing-card-modern__price-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
-    margin-bottom: 14px;
+    gap: 8px;
 }
 
-.property-listing-card-modern__price {
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
+.explore-overlay-card__rera-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(15, 23, 42, 0.82);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: #e2e8f0;
+    border-radius: 9999px;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
     line-height: 1.2;
 }
 
-.property-listing-card-modern__price-amount {
-    font-family: var(--font-sans), Inter, -apple-system, sans-serif;
-    font-size: 20px;
-    font-weight: 800;
-    color: #0f172a;
-    letter-spacing: -0.3px;
-}
-
-.property-listing-card-modern__price-unit {
-    font-family: var(--font-sans), Inter, -apple-system, sans-serif;
-    font-size: 18px;
-    font-weight: 800;
-    color: #0f172a;
-    letter-spacing: -0.2px;
-}
-
-/* Possession / Status Pill */
-.property-listing-card-modern__status {
-    border-radius: 6px;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 5px 10px;
-    letter-spacing: 0.1px;
-    white-space: nowrap;
-    text-align: center;
-    line-height: 1.3;
+.explore-overlay-card__rera-icon {
+    color: #d4af37;
     flex-shrink: 0;
-    align-self: center;
 }
 
-.property-listing-card-modern__status--ready {
-    background: #ecfdf5;
-    color: #059669;
-    border: 1px solid #a7f3d0;
+.explore-overlay-card__status-pill {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    line-height: 1.2;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.property-listing-card-modern__status--possession {
-    background: #f0fdfa;
-    color: #0f766e;
-    border: 1px solid #99f6e4;
+.explore-overlay-card__status-pill.is-construction {
+    background: #10b981;
 }
 
-.property-listing-card-modern__status--ongoing {
-    background: #eff6ff;
-    color: #2563eb;
-    border: 1px solid #bfdbfe;
+.explore-overlay-card__status-pill.is-ready {
+    background: #059669;
 }
 
-/* ── Footer Row: RERA ID & View Project CTA ───────────────────────────────── */
+/* Bottom Overlay Content */
+.explore-overlay-card__content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
 
-.property-listing-card-modern__footer {
+.explore-overlay-card__location {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #e2e8f0;
+}
+
+.explore-overlay-card__loc-icon {
+    color: #cbd5e1;
+    flex-shrink: 0;
+}
+
+.explore-overlay-card__title-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
-    padding-top: 12px;
-    border-top: 1px solid #f1f5f9;
+    gap: 12px;
 }
 
-.property-listing-card-modern__rera {
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 11.5px;
-    color: #94a3b8;
-    font-weight: 500;
-    letter-spacing: 0.1px;
+.explore-overlay-card__title {
+    margin: 0;
+    font-family: var(--font-serif), Georgia, serif;
+    font-size: clamp(19px, 2.2vw, 23px);
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.property-listing-card-modern__cta {
-    color: #a77a48;
-    font-family: var(--font-sans), Inter, sans-serif;
+.explore-overlay-card__price {
+    flex-shrink: 0;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.explore-overlay-card__specs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 2px;
     font-size: 12.5px;
-    font-weight: 600;
+    font-weight: 500;
+    color: #cbd5e1;
+}
+
+.explore-overlay-card__spec-item {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    transition: color 0.2s ease, transform 0.2s ease;
+    gap: 5px;
 }
 
-.property-listing-card-modern:hover .property-listing-card-modern__cta {
-    color: #8c6031;
+.explore-overlay-card__spec-icon {
+    color: #ba874a;
+    flex-shrink: 0;
 }
 
-.property-listing-card-modern__cta-arrow {
-    transition: transform 0.2s ease;
+.explore-overlay-card__spec-dot {
+    color: rgba(255, 255, 255, 0.45);
 }
 
-.property-listing-card-modern:hover .property-listing-card-modern__cta-arrow {
-    transform: translate(2px, -2px);
-}
-
-/* ── Responsive Rules (Single Card per Row on Mobile) ─────────────────────── */
-
-@media (max-width: 768px) {
-    .property-listing-card-modern {
-        border-radius: 18px;
-        width: 100%;
-        max-width: none;
-        margin: 0;
-        min-height: auto;
+@media (max-width: 640px) {
+    .explore-overlay-card__link {
+        height: 460px;
     }
 
-    .property-listing-card-modern__media {
-        height: 210px;
-        border-radius: 18px 18px 0 0;
-    }
-
-    .property-listing-card-modern__badge {
-        font-size: 11px;
-        padding: 4px 10px;
+    .explore-overlay-card__top-badges {
         top: 12px;
         left: 12px;
-        border-radius: 6px;
-    }
-
-    .property-listing-card-modern__star-btn {
-        width: 34px;
-        height: 34px;
-        top: 12px;
         right: 12px;
     }
 
-    .property-listing-card-modern__inner {
-        margin: -18px 10px 10px;
-        border-radius: 16px;
+    .explore-overlay-card__rera-pill,
+    .explore-overlay-card__status-pill {
+        font-size: 9.5px;
+        padding: 3.5px 8.5px;
     }
 
-    .property-listing-card-modern__body {
-        padding: 18px 16px 16px;
+    .explore-overlay-card__content {
+        padding: 15px 14px;
     }
 
-    .property-listing-card-modern__title {
+    .explore-overlay-card__title {
         font-size: 18px;
-        margin-bottom: 4px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
     }
 
-    .property-listing-card-modern__sub {
+    .explore-overlay-card__price {
         font-size: 13px;
-        margin-bottom: 14px;
+        padding: 5px 10px;
     }
 
-    .property-listing-card-modern__price-row {
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 12px;
-    }
-
-    .property-listing-card-modern__price {
-        display: flex;
-        flex-direction: row;
-        align-items: baseline;
-        gap: 4px;
-    }
-
-    .property-listing-card-modern__price-amount {
-        font-size: 18.5px;
-    }
-
-    .property-listing-card-modern__price-unit {
-        font-size: 16px;
-    }
-
-    .property-listing-card-modern__status {
-        font-size: 11px;
-        padding: 4px 10px;
-        border-radius: 6px;
-    }
-
-    .property-listing-card-modern__footer {
-        padding-top: 12px;
-    }
-
-    .property-listing-card-modern__rera {
+    .explore-overlay-card__specs {
         font-size: 11.5px;
-        max-width: 55%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .property-listing-card-modern__cta {
-        font-size: 12.5px;
-        gap: 4px;
-    }
-}
-
-@media (max-width: 480px) {
-    .property-listing-card-modern__media {
-        height: 195px;
+        gap: 6px;
     }
 }

@@ -112,19 +112,20 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    min-height: 48px;
-    padding: 0 6px 0 12px;
-    border: none !important;
-    border-radius: 8px;
-    background: transparent;
-    box-shadow: none !important;
+    min-height: 46px;
+    padding: 0 10px 0 14px;
+    border: 1px solid #e2ddd3 !important;
+    border-radius: 9999px;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(18, 24, 22, 0.05) !important;
     box-sizing: border-box;
     transition: all 0.25s ease;
 }
 
 .property-search-bar-input-box:focus-within {
-    background: rgba(255, 255, 255, 0.45);
-    box-shadow: none !important;
+    background: #ffffff;
+    border-color: #ba874a !important;
+    box-shadow: 0 3px 12px rgba(186, 135, 74, 0.14) !important;
 }
 
 .property-search-bar__icon {

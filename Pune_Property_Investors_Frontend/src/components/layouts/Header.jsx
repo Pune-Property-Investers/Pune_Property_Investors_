@@ -368,10 +368,11 @@ function Header({
                 >
                     {transparentAtTop ? (
                         <div
-                            className={`property-header-container ${!(showFilterChips && !normalizedPath.startsWith("/property"))
-                                ? "property-header-container--compact"
-                                : ""
-                                }`}
+                            className={`property-header-container ${
+                                !(showFilterChips && !normalizedPath.startsWith("/property") && !/^\/properties\/.+/.test(normalizedPath))
+                                    ? "property-header-container--compact"
+                                    : ""
+                            }`}
                         >
                             <PropertyFlightSearchBar
                                 filters={drawerFilters}
@@ -386,7 +387,7 @@ function Header({
                                 }}
                                 showBack={true}
                                 onBack={handleGoBack}
-                                showFilterChips={showFilterChips && !normalizedPath.startsWith("/property")}
+                                showFilterChips={showFilterChips && !normalizedPath.startsWith("/property") && !/^\/properties\/.+/.test(normalizedPath)}
                             />
                         </div>
                     ) : (
