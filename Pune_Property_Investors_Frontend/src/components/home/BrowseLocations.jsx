@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import locationsData from "../../data/locationsData";
+import { locationService } from "../../services/location.service";
 import "./BrowseLocations.css";
 
 // Individual Locality Card in the Track or Grid
@@ -13,6 +14,7 @@ function LocalityCard({
     activeType = null, // "top" | "bottom" | null
     onCardClick = null,
     isDesktop = false,
+    isLive = false,
 }) {
     const cardContent = (
         <>
@@ -61,13 +63,13 @@ function LocalityCard({
                     </strong>
                 </div>
 
-                {/* Right: Demo Listings Pill */}
+                {/* Right: Listings Pill */}
                 <div className="locality-card__stat locality-card__stat--listings">
                     <span className="locality-card__stat-label">
-                        DEMO LISTINGS
+                        {isLive ? "PROPERTIES" : "DEMO LISTINGS"}
                     </span>
                     <span className="locality-card__listing-pill">
-                        {location.listingsCount}
+                        {location.listingsCount || "Verified"}
                     </span>
                 </div>
             </div>
@@ -112,7 +114,7 @@ function LocalityCard({
 }
 
 // Full-Size Spotlight Container (Top & Bottom) with Full-Size Image & Transparent Content
-function LocalitySpotlightCard({ location, position = "top" }) {
+function LocalitySpotlightCard({ location, position = "top", isLive = false }) {
     if (!location) return null;
 
     const isTop = position === "top";
@@ -163,8 +165,10 @@ function LocalitySpotlightCard({ location, position = "top" }) {
                     </div>
 
                     <div className="locality-spotlight-card__stat">
-                        <span className="locality-spotlight-card__label">DEMO LISTINGS</span>
-                        <span className="locality-spotlight-card__pill">{location.listingsCount}</span>
+                        <span className="locality-spotlight-card__label">
+                            {isLive ? "PROPERTIES" : "DEMO LISTINGS"}
+                        </span>
+                        <span className="locality-spotlight-card__pill">{location.listingsCount || "Verified"}</span>
                     </div>
 
                     <Link
@@ -183,11 +187,36 @@ function LocalitySpotlightCard({ location, position = "top" }) {
 
 export default function BrowseLocations({ customLocations, previewData }) {
     const [isPaused, setIsPaused] = useState(false);
+    const [fetchedLocations, setFetchedLocations] = useState(null);
+    const [isLive, setIsLive] = useState(false);
 
+    useEffect(() => {
+        let isCancelled = false;
+        locationService
+            .list()
+            .then((data) => {
+                if (!isCancelled && Array.isArray(data) && data.length > 0) {
+                    setFetchedLocations(data);
+                    setIsLive(true);
+                }
+            })
+            .catch(() => {
+                // Keep static fallback
+            });
+        return () => {
+            isCancelled = true;
+        };
+    }, []);
+
+    // Prioritize live MySQL database records as primary source of truth!
     const activeLocations =
-        Array.isArray(previewData?.items) && previewData.items.length > 0
-            ? previewData.items
-            : (Array.isArray(customLocations) && customLocations.length > 0 ? customLocations : locationsData);
+        Array.isArray(fetchedLocations) && fetchedLocations.length > 0
+            ? fetchedLocations
+            : (Array.isArray(previewData?.items) && previewData.items.length > 0
+                ? previewData.items
+                : (Array.isArray(customLocations) && customLocations.length > 0
+                    ? customLocations
+                    : locationsData));
 
     // Split locations into Left Column (even index) & Right Column (odd index)
     const leftColumn = activeLocations.filter((_, idx) => idx % 2 === 0);
@@ -207,6 +236,19 @@ export default function BrowseLocations({ customLocations, previewData }) {
     // Active location objects for Top & Bottom Spotlight panels
     const [activeLeftLocation, setActiveLeftLocation] = useState(leftColumn[0]);
     const [activeRightLocation, setActiveRightLocation] = useState(rightColumn[0]);
+
+    useEffect(() => {
+        if (leftColumn.length > 0) {
+            const currentId = activeLeftLocation?.id;
+            const matched = leftColumn.find((l) => String(l.id) === String(currentId));
+            setActiveLeftLocation(matched || leftColumn[0]);
+        }
+        if (rightColumn.length > 0) {
+            const currentId = activeRightLocation?.id;
+            const matched = rightColumn.find((l) => String(l.id) === String(currentId));
+            setActiveRightLocation(matched || rightColumn[0]);
+        }
+    }, [activeLocations]);
 
     // Boundary Touch Detection:
     // Top Panel updates strictly when a left scrolling card touches the TOP edge.
@@ -307,14 +349,16 @@ export default function BrowseLocations({ customLocations, previewData }) {
 
                         <p className="browse-locations__desc">
                             {previewData?.subtitle ||
-                                "Explore prominent residential and commercial destinations. Listing counts strictly reflect current demonstration dataset."}
+                                (isLive
+                                    ? "Explore prominent residential and commercial destinations across Pune."
+                                    : "Explore prominent residential and commercial destinations. Listing counts strictly reflect current demonstration dataset.")}
                         </p>
 
                         <Link
                             href="/buy"
                             className="browse-locations__explore-link"
                         >
-                            <span>Explore all 10 localities</span>
+                            <span>Explore all {activeLocations.length} localities</span>
                             <ArrowRight size={15} className="browse-locations__explore-arrow" />
                         </Link>
                     </div>
@@ -328,6 +372,7 @@ export default function BrowseLocations({ customLocations, previewData }) {
                             location={location}
                             keyPrefix="desktop-"
                             isDesktop={true}
+                            isLive={isLive}
                         />
                     ))}
                 </div>
@@ -345,7 +390,7 @@ export default function BrowseLocations({ customLocations, previewData }) {
                                 {String(activeLeftIdx + 1).padStart(2, "0")} / {String(leftColumn.length).padStart(2, "0")}
                             </span>
                         </div>
-                        <LocalitySpotlightCard location={activeLeftLocation} position="top" />
+                        <LocalitySpotlightCard location={activeLeftLocation} position="top" isLive={isLive} />
                     </div>
 
                     {/* 2. MIDDLE COUNTER-SCROLLING MARQUEE (Left UP, Right DOWN) */}
@@ -368,6 +413,7 @@ export default function BrowseLocations({ customLocations, previewData }) {
                                         keyPrefix={`left-${idx}-`}
                                         activeType={location.id === activeLeftLocation?.id ? "top" : null}
                                         onCardClick={() => setActiveLeftLocation(location)}
+                                        isLive={isLive}
                                     />
                                 ))}
                             </div>
@@ -383,6 +429,7 @@ export default function BrowseLocations({ customLocations, previewData }) {
                                         keyPrefix={`right-${idx}-`}
                                         activeType={location.id === activeRightLocation?.id ? "bottom" : null}
                                         onCardClick={() => setActiveRightLocation(location)}
+                                        isLive={isLive}
                                     />
                                 ))}
                             </div>
@@ -400,7 +447,7 @@ export default function BrowseLocations({ customLocations, previewData }) {
                                 {String(activeRightIdx + 1).padStart(2, "0")} / {String(rightColumn.length).padStart(2, "0")}
                             </span>
                         </div>
-                        <LocalitySpotlightCard location={activeRightLocation} position="bottom" />
+                        <LocalitySpotlightCard location={activeRightLocation} position="bottom" isLive={isLive} />
                     </div>
                 </div>
             </div>

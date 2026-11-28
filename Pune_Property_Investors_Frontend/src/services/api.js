@@ -91,6 +91,7 @@ export async function apiRequest(endpoint, options = {}) {
     const url = `${baseUrl}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
 
     const response = await fetch(url, {
+        cache: options.cache || "no-store",
         ...options,
         headers,
     });

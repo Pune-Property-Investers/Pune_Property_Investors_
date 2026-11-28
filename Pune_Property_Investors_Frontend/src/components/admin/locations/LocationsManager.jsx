@@ -109,12 +109,12 @@ export default function LocationsManager() {
                 featured: Boolean(form.isFeatured),
             };
             if (editingId) {
-                const updated = await locationService.update(editingId, payload);
-                setLocations((prev) => prev.map((l) => (String(l.id) === String(editingId) ? updated : l)));
+                await locationService.update(editingId, payload);
+                await load();
                 showToast("Location updated", "success");
             } else {
-                const created = await locationService.create(payload);
-                setLocations((prev) => [created, ...prev]);
+                await locationService.create(payload);
+                await load();
                 showToast("Location added", "success");
             }
             setModalOpen(false);
@@ -130,7 +130,7 @@ export default function LocationsManager() {
         setDeleting(true);
         try {
             await locationService.remove(deleteTarget.id);
-            setLocations((prev) => prev.filter((l) => String(l.id) !== String(deleteTarget.id)));
+            await load();
             showToast("Location deleted", "success");
             setDeleteTarget(null);
         } catch (err) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
     Sparkles,
     MapPin,
@@ -22,13 +22,37 @@ import {
 } from "lucide-react";
 import { FaYoutube, FaWhatsapp } from "react-icons/fa";
 import { leadService } from "../../services/lead.service";
+import { upcomingProjectService } from "../../services/upcomingProject.service";
 import "./UpcomingProjects.css";
 
-const youtubeUrl = "https://www.youtube.com/watch?v=yTzvQko2gYo&t=14s";
-const videoId = "yTzvQko2gYo";
-const startSeconds = 14;
+const DEFAULT_PROJECT = {
+    id: 1,
+    slug: "vtp-aurelia-new-kharadi",
+    title: "VTP Aurelia",
+    brandSubtext: "VTP REALTY • TOWNSHIP CODENAME PEGASUS",
+    developer: "VTP Realty",
+    location: "New Kharadi - Riverside Corridor, Pune",
+    locality: "New Kharadi",
+    badgeText: "GRAND PRE-LAUNCH",
+    reraStatus: "MahaRERA Applied",
+    youtubeUrl: "https://www.youtube.com/watch?v=yTzvQko2gYo&t=14s",
+    youtubeId: "yTzvQko2gYo",
+    videoStartSeconds: 14,
+    configurations: "2, 3 & 4.5 BHK",
+    configurationsSub: "Forest & River Views",
+    price: "Starting ₹ 85 Lacs*",
+    priceSub: "Zero Floor Rise in EOI",
+    launchTimeline: "Pre-Launch 2026–2027",
+    launchTimelineSub: "Early Bird Window",
+    eyebrow: "EXCLUSIVE PRE-LAUNCH PREVIEW 2026–2027",
+    heading: "Upcoming Project Showcase",
+    subtitle: "Experience the grand launch and exclusive first look of Pune’s next iconic landmark in New Kharadi. Lock in inaugural pre-registration privileges before public release.",
+    whatsappNumber: "917398174444",
+};
 
 export default function UpcomingProjects({ previewData }) {
+    const [fetchedProjects, setFetchedProjects] = useState([]);
+    const [activeIndex, setActiveIndex] = useState(0);
     const [isMuted, setIsMuted] = useState(true);
     const [isPlaying, setIsPlaying] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
@@ -37,9 +61,39 @@ export default function UpcomingProjects({ previewData }) {
     const [bhk, setBhk] = useState("3 BHK");
     const [submitted, setSubmitted] = useState(false);
 
-    const activeYoutubeUrl = previewData?.youtubeUrl || youtubeUrl;
+    useEffect(() => {
+        let isMounted = true;
+        const loadProjects = async () => {
+            try {
+                const res = await upcomingProjectService.list();
+                const list = Array.isArray(res) ? res : res?.data;
+                if (isMounted && Array.isArray(list) && list.length > 0) {
+                    setFetchedProjects(list);
+                }
+            } catch (err) {
+                console.error("Failed to load upcoming projects from DB:", err);
+            }
+        };
+        loadProjects();
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    // Active project selection
+    const projectsList = fetchedProjects.length > 0 ? fetchedProjects : [DEFAULT_PROJECT];
+    const currentProject = projectsList[activeIndex] || projectsList[0] || DEFAULT_PROJECT;
+
+    const activeYoutubeUrl = previewData?.youtubeUrl || currentProject.youtubeUrl || DEFAULT_PROJECT.youtubeUrl;
     const matchId = activeYoutubeUrl.match(/(?:v=|\/embed\/|youtu\.be\/|\/shorts\/)([a-zA-Z0-9_-]{11})/);
-    const activeVideoId = matchId ? matchId[1] : videoId;
+    const activeVideoId = currentProject.youtubeId || (matchId ? matchId[1] : DEFAULT_PROJECT.youtubeId);
+    const startSeconds = currentProject.videoStartSeconds ?? 14;
+
+    const eyebrowText = previewData?.eyebrow || currentProject.eyebrow || DEFAULT_PROJECT.eyebrow;
+    const headingText = previewData?.heading || currentProject.heading || DEFAULT_PROJECT.heading;
+    const subtitleText = previewData?.subtitle || currentProject.subtitle || DEFAULT_PROJECT.subtitle;
+
+    const whatsappNumber = currentProject.whatsappNumber || "917398174444";
 
     const handleRegisterSubmit = async (e) => {
         e.preventDefault();
@@ -48,8 +102,8 @@ export default function UpcomingProjects({ previewData }) {
                 type: "property",
                 name,
                 phone,
-                propertyTitle: "VTP Aurelia (New Kharadi)",
-                locality: "New Kharadi",
+                propertyTitle: `${currentProject.title} (${currentProject.locality || "Pune"})`,
+                locality: currentProject.locality || "Pune",
                 budget: bhk,
                 message:
                     "Pre-launch EOI privileges, inaugural price sheet, and early unit layouts.",
@@ -59,15 +113,15 @@ export default function UpcomingProjects({ previewData }) {
         }
         const msg = [
             `*Upcoming Project Pre-Registration*`,
-            `*Project:* VTP Aurelia (New Kharadi)`,
-            `*Developer:* VTP Realty`,
+            `*Project:* ${currentProject.title} (${currentProject.locality || "Pune"})`,
+            `*Developer:* ${currentProject.developer || "Developer Partner"}`,
             `*Configuration Interested:* ${bhk}`,
             `*Name:* ${name}`,
             `*Phone:* ${phone}`,
             `*Request:* Pre-launch EOI privileges, inaugural price sheet, and early unit layouts.`,
         ].join("\n");
 
-        const whatsappUrl = `https://wa.me/917398174444?text=${encodeURIComponent(msg)}`;
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
         window.open(whatsappUrl, "_blank", "noopener,noreferrer");
         setSubmitted(true);
         setTimeout(() => {
@@ -91,7 +145,7 @@ export default function UpcomingProjects({ previewData }) {
                         <div className="upcoming-eyebrow-wrap">
                             <span className="upcoming-eyebrow-line" />
                             <span className="upcoming-eyebrow">
-                                <Sparkles size={13} /> {previewData?.eyebrow ?? "EXCLUSIVE PRE-LAUNCH PREVIEW 2026–2027"}
+                                <Sparkles size={13} /> {eyebrowText}
                             </span>
                         </div>
 
@@ -100,19 +154,47 @@ export default function UpcomingProjects({ previewData }) {
                                 previewData.heading
                             ) : (
                                 <>
-                                    Upcoming <span>Project Showcase</span>
+                                    {headingText.includes("Showcase") ? (
+                                        <>
+                                            {headingText.replace("Showcase", "").trim()}{" "}
+                                            <span>Showcase</span>
+                                        </>
+                                    ) : (
+                                        headingText
+                                    )}
                                 </>
                             )}
                         </h2>
 
                         <p className="upcoming-subtitle">
-                            {previewData?.subtitle ??
-                                "Experience the grand launch and exclusive first look of Pune’s next iconic landmark in New Kharadi. Lock in inaugural pre-registration privileges before public release."}
+                            {subtitleText}
                         </p>
                     </div>
 
-                    {/* YouTube Channel & Direct Link CTA */}
+                    {/* YouTube Channel & Direct Link CTA + Multiple Projects Switcher */}
                     <div className="upcoming-header-actions">
+                        {projectsList.length > 1 && (
+                            <div className="upcoming-project-pills" role="tablist" aria-label="Select Upcoming Project">
+                                {projectsList.map((proj, idx) => (
+                                    <button
+                                        key={proj.id || proj.slug}
+                                        type="button"
+                                        role="tab"
+                                        aria-selected={idx === activeIndex}
+                                        className={`upcoming-project-pill ${
+                                            idx === activeIndex ? "upcoming-project-pill--active" : ""
+                                        }`}
+                                        onClick={() => {
+                                            setActiveIndex(idx);
+                                            setIsPlaying(true);
+                                        }}
+                                    >
+                                        <span>{proj.title}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
                         <a
                             href={activeYoutubeUrl}
                             target="_blank"
@@ -133,10 +215,11 @@ export default function UpcomingProjects({ previewData }) {
                         {/* Video Player */}
                         {isPlaying ? (
                             <iframe
+                                key={`${currentProject.id}-${activeVideoId}`}
                                 src={`https://www.youtube-nocookie.com/embed/${activeVideoId}?autoplay=1&mute=${
                                     isMuted ? 1 : 0
                                 }&loop=1&playlist=${activeVideoId}&controls=1&modestbranding=1&rel=0&playsinline=1&start=${startSeconds}`}
-                                title="Grand Launch Event of VTP Aurelia | New Kharadi"
+                                title={`Grand Launch Event of ${currentProject.title}`}
                                 className="upcoming-theater__iframe"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
@@ -144,8 +227,8 @@ export default function UpcomingProjects({ previewData }) {
                         ) : (
                             <div className="upcoming-theater__poster">
                                 <img
-                                    src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
-                                    alt="VTP Aurelia Grand Launch"
+                                    src={`https://img.youtube.com/vi/${activeVideoId}/maxresdefault.jpg`}
+                                    alt={`${currentProject.title} Grand Launch`}
                                     className="upcoming-theater__poster-img"
                                 />
                                 <button
@@ -163,13 +246,13 @@ export default function UpcomingProjects({ previewData }) {
                         <div className="upcoming-theater__top-bar">
                             <div className="upcoming-theater__badges">
                                 <span className="upcoming-theater__badge upcoming-theater__badge--gold">
-                                    <Sparkles size={12} /> GRAND PRE-LAUNCH
+                                    <Sparkles size={12} /> {currentProject.badgeText || "GRAND PRE-LAUNCH"}
                                 </span>
                                 <span className="upcoming-theater__badge upcoming-theater__badge--dark">
-                                    <MapPin size={12} /> New Kharadi, Pune
+                                    <MapPin size={12} /> {currentProject.locality ? `${currentProject.locality}, Pune` : currentProject.location}
                                 </span>
                                 <span className="upcoming-theater__badge upcoming-theater__badge--rera">
-                                    <ShieldCheck size={12} /> MahaRERA Applied
+                                    <ShieldCheck size={12} /> {currentProject.reraStatus || "MahaRERA Applied"}
                                 </span>
                             </div>
 
@@ -202,14 +285,14 @@ export default function UpcomingProjects({ previewData }) {
                         <div className="upcoming-showcase-bar__left">
                             <div className="upcoming-showcase-brand">
                                 <Building2 size={15} className="upcoming-showcase-icon" />
-                                <span>VTP REALTY • TOWNSHIP CODENAME PEGASUS</span>
+                                <span>{currentProject.brandSubtext || `${currentProject.developer || "PPI"} • PRE-LAUNCH`}</span>
                             </div>
                             <h3 className="upcoming-showcase-title">
-                                VTP Aurelia
+                                {currentProject.title}
                             </h3>
                             <p className="upcoming-showcase-loc">
                                 <MapPin size={13} />
-                                <span>New Kharadi - Riverside Corridor, Pune</span>
+                                <span>{currentProject.location}</span>
                             </p>
                         </div>
 
@@ -220,9 +303,9 @@ export default function UpcomingProjects({ previewData }) {
                                     <Bed size={13} /> Configurations
                                 </span>
                                 <strong className="upcoming-metric-val">
-                                    2, 3 & 4.5 BHK
+                                    {currentProject.configurations || "2 & 3 BHK"}
                                 </strong>
-                                <span className="upcoming-metric-sub">Forest & River Views</span>
+                                <span className="upcoming-metric-sub">{currentProject.configurationsSub || "Luxury Views"}</span>
                             </div>
 
                             <div className="upcoming-metric-item">
@@ -230,9 +313,9 @@ export default function UpcomingProjects({ previewData }) {
                                     <Tag size={13} /> Inaugural Pricing
                                 </span>
                                 <strong className="upcoming-metric-val">
-                                    Starting ₹ 85 Lacs*
+                                    {currentProject.price || "Contact for Price"}
                                 </strong>
-                                <span className="upcoming-metric-sub">Zero Floor Rise in EOI</span>
+                                <span className="upcoming-metric-sub">{currentProject.priceSub || "Early Bird Token"}</span>
                             </div>
 
                             <div className="upcoming-metric-item">
@@ -240,9 +323,9 @@ export default function UpcomingProjects({ previewData }) {
                                     <Calendar size={13} /> Launch Timeline
                                 </span>
                                 <strong className="upcoming-metric-val">
-                                    Pre-Launch 2026–2027
+                                    {currentProject.launchTimeline || "Pre-Launch"}
                                 </strong>
-                                <span className="upcoming-metric-sub">Early Bird Window</span>
+                                <span className="upcoming-metric-sub">{currentProject.launchTimelineSub || "Early Bird Window"}</span>
                             </div>
                         </div>
 
@@ -258,7 +341,9 @@ export default function UpcomingProjects({ previewData }) {
                             </button>
 
                             <a
-                                href="https://wa.me/917398174444?text=Hi%20Pune%20Property%20Investors,%20I%20am%20interested%20in%20pre-registering%20for%20VTP%20Aurelia%20New%20Kharadi."
+                                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                                    `Hi Pune Property Investors, I am interested in pre-registering for ${currentProject.title} (${currentProject.location}).`
+                                )}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="upcoming-cta-btn upcoming-cta-btn--whatsapp"
@@ -299,10 +384,10 @@ export default function UpcomingProjects({ previewData }) {
                                 EXCLUSIVE PRE-LAUNCH INAUGURAL PRIVILEGES
                             </span>
                             <h3 id="upcoming-modal-title" className="upcoming-modal__title">
-                                Pre-Register for VTP Aurelia
+                                Pre-Register for {currentProject.title}
                             </h3>
                             <p className="upcoming-modal__desc">
-                                Lock in inaugural pricing, zero floor-rise, and early unit selection ahead of the public launch in New Kharadi.
+                                Lock in inaugural pricing, zero floor-rise, and early unit selection ahead of the public launch in {currentProject.locality || currentProject.location}.
                             </p>
                         </div>
 

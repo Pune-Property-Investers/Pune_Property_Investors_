@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { propertyShorts, extractYouTubeId } from "../../data/shortsData";
 import { usePublishedCms } from "../../services/liveContent";
+import { propertyShortService } from "../../services/propertyShort.service";
 import "./PropertyReels.css";
 
 // 3 Exact Featured Reels matching user reference screenshot
@@ -61,7 +62,27 @@ const FALLBACK_DURATIONS = ["1:15", "1:28", "1:45", "1:30", "1:50", "1:22", "1:3
 
 export default function PropertyReels({ property = null, previewData = null }) {
     const published = usePublishedCms();
+    const [fetchedReels, setFetchedReels] = useState([]);
     const [selectedReel, setSelectedReel] = useState(null);
+
+    useEffect(() => {
+        let isMounted = true;
+        const loadReels = async () => {
+            try {
+                const res = await propertyShortService.list();
+                const list = Array.isArray(res) ? res : res?.data;
+                if (isMounted && Array.isArray(list) && list.length > 0) {
+                    setFetchedReels(list);
+                }
+            } catch (err) {
+                console.error("Failed to load property reels from DB:", err);
+            }
+        };
+        loadReels();
+        return () => {
+            isMounted = false;
+        };
+    }, []);
 
     const trackRef = useRef(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -82,43 +103,46 @@ export default function PropertyReels({ property = null, previewData = null }) {
 
     // Build the rich scrollable shorts cards list
     const displayReels = useMemo(() => {
-        const list = [...REFERENCE_REELS];
+        // Priority 1: Live DB records
+        let list = fetchedReels.length > 0 ? [...fetchedReels] : [...REFERENCE_REELS];
 
-        // Gather shorts from CMS or propertyShorts
-        const cmsShorts = Array.isArray(published?.shorts)
-            ? published.shorts.filter((s) => s.visible !== false)
-            : [];
-        const sourceShorts = cmsShorts.length > 0 ? cmsShorts : propertyShorts;
+        // Gather shorts from CMS or propertyShorts only if DB list is empty
+        if (fetchedReels.length === 0) {
+            const cmsShorts = Array.isArray(published?.shorts)
+                ? published.shorts.filter((s) => s.visible !== false)
+                : [];
+            const sourceShorts = cmsShorts.length > 0 ? cmsShorts : propertyShorts;
 
-        // Add additional shorts into the list
-        sourceShorts.forEach((short, idx) => {
-            const ytId = extractYouTubeId(short.youtubeUrl);
-            if (!ytId) return;
+            // Add additional shorts into the list
+            sourceShorts.forEach((short, idx) => {
+                const ytId = extractYouTubeId(short.youtubeUrl);
+                if (!ytId) return;
 
-            // Avoid duplicating exact YouTube ID
-            if (list.some((r) => extractYouTubeId(r.youtubeUrl) === ytId && r.title === short.title)) {
-                return;
-            }
+                // Avoid duplicating exact YouTube ID
+                if (list.some((r) => extractYouTubeId(r.youtubeUrl) === ytId && r.title === short.title)) {
+                    return;
+                }
 
-            const cleanTitle = short.title || "Luxury Property Tour";
-            const displayTitle = cleanTitle.length > 15 ? `${cleanTitle.slice(0, 13)}...` : cleanTitle;
-            const fallbackThumb = FALLBACK_THUMBNAILS[idx % FALLBACK_THUMBNAILS.length];
-            const ytThumb = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+                const cleanTitle = short.title || "Luxury Property Tour";
+                const displayTitle = cleanTitle.length > 15 ? `${cleanTitle.slice(0, 13)}...` : cleanTitle;
+                const fallbackThumb = FALLBACK_THUMBNAILS[idx % FALLBACK_THUMBNAILS.length];
+                const ytThumb = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
 
-            list.push({
-                id: short.id || `short-${idx}`,
-                title: cleanTitle,
-                displayTitle,
-                duration: short.duration || FALLBACK_DURATIONS[idx % FALLBACK_DURATIONS.length],
-                location: short.location || `${short.developer || "Prime"}, Pune`,
-                developer: short.developer || "Pune Property Investors",
-                youtubeUrl: short.youtubeUrl,
-                thumbnail: short.thumbnail || ytThumb || fallbackThumb,
+                list.push({
+                    id: short.id || `short-${idx}`,
+                    title: cleanTitle,
+                    displayTitle,
+                    duration: short.duration || FALLBACK_DURATIONS[idx % FALLBACK_DURATIONS.length],
+                    location: short.location || `${short.developer || "Prime"}, Pune`,
+                    developer: short.developer || "Pune Property Investors",
+                    youtubeUrl: short.youtubeUrl,
+                    thumbnail: short.thumbnail || ytThumb || fallbackThumb,
+                });
             });
-        });
+        }
 
         // If specific property has title or video, integrate it seamlessly at position 0
-        if (property?.title) {
+        if (property?.title && list.length > 0) {
             list[0] = {
                 ...list[0],
                 title: property.title,
@@ -131,7 +155,7 @@ export default function PropertyReels({ property = null, previewData = null }) {
         }
 
         return list;
-    }, [property, locality, published?.shorts]);
+    }, [fetchedReels, property, locality, published?.shorts]);
 
     // Check scroll boundaries for arrows
     const checkScroll = useCallback(() => {
@@ -321,7 +345,7 @@ export default function PropertyReels({ property = null, previewData = null }) {
 
                                     {/* Top-Right Duration Badge (e.g. 1:34) */}
                                     <div className="property-reel-item__duration">
-                                        <span>{reel.duration}</span>
+                                        <span>{reel.duration || "1:30"}</span>
                                     </div>
 
                                     {/* Center Circular Play Button */}
@@ -331,7 +355,7 @@ export default function PropertyReels({ property = null, previewData = null }) {
 
                                     {/* Bottom Project Name Pill */}
                                     <div className="property-reel-item__pill">
-                                        <span>{reel.displayTitle}</span>
+                                        <span>{reel.displayTitle || reel.title}</span>
                                     </div>
                                 </div>
                             </div>

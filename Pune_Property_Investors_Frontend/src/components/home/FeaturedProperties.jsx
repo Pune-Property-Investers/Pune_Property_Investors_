@@ -22,6 +22,7 @@ import {
     Play,
 } from "lucide-react";
 import { FaYoutube, FaWhatsapp } from "react-icons/fa";
+import { featuredPropertyService } from "../../services/featuredProperty.service";
 import "./FeaturedProperties.css";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -207,11 +208,14 @@ export const featuredPuneProjects = [
    Mini Gallery Slideshow (Left box in the bottom bar - with smooth slide transition)
    -------------------------------------------------------------------------- */
 function SiteImageSlideshow({ images = [], projectName = "Project" }) {
+    const safeImages = Array.isArray(images) && images.length > 0
+        ? images
+        : [{ url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", label: "Site Elevation & Towers" }];
     const [currentIdx, setCurrentIdx] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
     const [touchStartX, setTouchStartX] = useState(0);
     const [touchEndX, setTouchEndX] = useState(0);
-    const total = images.length || 1;
+    const total = safeImages.length;
 
     useEffect(() => {
         setCurrentIdx(0);
@@ -269,7 +273,7 @@ function SiteImageSlideshow({ images = [], projectName = "Project" }) {
         setTouchEndX(0);
     };
 
-    const currentImg = images[currentIdx] || images[0] || {};
+    const currentImg = safeImages[currentIdx] || safeImages[0] || {};
     const imgLabel = typeof currentImg === "object" && currentImg.label ? currentImg.label : "Site Elevation & Towers";
 
     return (
@@ -287,7 +291,7 @@ function SiteImageSlideshow({ images = [], projectName = "Project" }) {
                 className="pune-gallery-card__track"
                 style={{ transform: `translateX(-${currentIdx * 100}%)` }}
             >
-                {images.map((img, idx) => {
+                {safeImages.map((img, idx) => {
                     const url = typeof img === "string" ? img : img.url;
                     const label = typeof img === "object" && img.label ? img.label : `Photo ${idx + 1}`;
                     return (
@@ -343,7 +347,7 @@ function SiteImageSlideshow({ images = [], projectName = "Project" }) {
 
                     {/* Active Gold Pill + Grey Dots Indicator */}
                     <div className="pune-gallery-card__dots" aria-label="Gallery slide indicators">
-                        {images.map((_, idx) => (
+                        {safeImages.map((_, idx) => (
                             <button
                                 key={idx}
                                 type="button"
@@ -375,8 +379,31 @@ function extractYtId(url, fallbackId) {
 }
 
 export default function FeaturedProperties({ previewData }) {
+    const [fetchedProperties, setFetchedProperties] = useState([]);
+
+    useEffect(() => {
+        let isMounted = true;
+        const loadProperties = async () => {
+            try {
+                const res = await featuredPropertyService.list();
+                const list = Array.isArray(res) ? res : res?.data;
+                if (isMounted && Array.isArray(list) && list.length > 0) {
+                    setFetchedProperties(list);
+                }
+            } catch (err) {
+                console.error("Failed to load featured properties from DB:", err);
+            }
+        };
+        loadProperties();
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
     const activeProjects =
-        Array.isArray(previewData?.items) && previewData.items.length > 0
+        fetchedProperties.length > 0
+            ? fetchedProperties
+            : Array.isArray(previewData?.items) && previewData.items.length > 0
             ? previewData.items
             : featuredPuneProjects;
     const showAllStacked = Boolean(previewData?.showAllStacked);
@@ -391,11 +418,24 @@ export default function FeaturedProperties({ previewData }) {
 
     const totalSlides = activeProjects.length;
 
-    const handlePrevProject = () => {
+    // Safety guard if slide count changes
+    useEffect(() => {
+        if (totalSlides > 0 && activeIndex >= totalSlides) {
+            setActiveIndex(0);
+        }
+    }, [totalSlides, activeIndex]);
+
+    if (totalSlides === 0) {
+        return null;
+    }
+
+    const handlePrevProject = (e) => {
+        if (e && e.stopPropagation) e.stopPropagation();
         setActiveIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
     };
 
-    const handleNextProject = () => {
+    const handleNextProject = (e) => {
+        if (e && e.stopPropagation) e.stopPropagation();
         setActiveIndex((prev) => (prev + 1) % totalSlides);
     };
 
@@ -440,11 +480,30 @@ export default function FeaturedProperties({ previewData }) {
     // Keyboard Arrow Left/Right controls
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.key === "ArrowLeft") handlePrevProject();
-            else if (e.key === "ArrowRight") handleNextProject();
+            if (e.key === "ArrowLeft") handlePrevProject(e);
+            else if (e.key === "ArrowRight") handleNextProject(e);
         };
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [totalSlides]);
+
+    // Trackpad horizontal swipe
+    useEffect(() => {
+        const wrapper = stageContainerRef.current;
+        if (!wrapper) return;
+        let lastWheelTime = 0;
+        const handleWheel = (e) => {
+            if (Math.abs(e.deltaX) > 35 && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                const now = Date.now();
+                if (now - lastWheelTime > 400) {
+                    lastWheelTime = now;
+                    if (e.deltaX > 0) handleNextProject();
+                    else handlePrevProject();
+                }
+            }
+        };
+        wrapper.addEventListener("wheel", handleWheel, { passive: true });
+        return () => wrapper.removeEventListener("wheel", handleWheel);
     }, [totalSlides]);
 
     // Touch Swipe Handlers for mobile & tablet
@@ -468,29 +527,25 @@ export default function FeaturedProperties({ previewData }) {
         setTouchEndX(0);
     };
 
-    // Mouse Drag Handlers for laptop
+    // Robust Window-Level Mouse Drag for laptop / desktop
     const handleMouseDown = (e) => {
+        // Skip drag if user is clicking on interactive elements
+        if (e.target.closest("button, a, input, select, textarea, iframe, .pune-gallery-card")) return;
         setIsDragging(true);
-        setTouchStartX(e.clientX);
-    };
+        const startX = e.clientX;
 
-    const handleMouseMove = (e) => {
-        if (!isDragging) return;
-        setTouchEndX(e.clientX);
-    };
+        const onMouseUp = (upEvent) => {
+            window.removeEventListener("mouseup", onMouseUp);
+            setIsDragging(false);
+            const diff = startX - upEvent.clientX;
+            if (diff > 45) {
+                handleNextProject();
+            } else if (diff < -45) {
+                handlePrevProject();
+            }
+        };
 
-    const handleMouseUp = () => {
-        if (!isDragging) return;
-        setIsDragging(false);
-        if (!touchStartX || !touchEndX) return;
-        const diff = touchStartX - touchEndX;
-        if (diff > 50) {
-            handleNextProject();
-        } else if (diff < -50) {
-            handlePrevProject();
-        }
-        setTouchStartX(0);
-        setTouchEndX(0);
+        window.addEventListener("mouseup", onMouseUp);
     };
 
     return (
@@ -534,9 +589,33 @@ export default function FeaturedProperties({ previewData }) {
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
                     onMouseDown={handleMouseDown}
-                    onMouseMove={handleMouseMove}
-                    onMouseUp={handleMouseUp}
                 >
+                    {/* Floating Side Navigation Arrows for Desktop */}
+                    {!showAllStacked && totalSlides > 1 && (
+                        <>
+                            <button
+                                type="button"
+                                onClick={handlePrevProject}
+                                onMouseDown={(e) => e.stopPropagation()}
+                                className="pune-slider-floating-arrow pune-slider-floating-arrow--prev"
+                                aria-label="Previous project"
+                                title="Previous project (Left arrow)"
+                            >
+                                <ChevronLeft size={24} strokeWidth={2.4} />
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleNextProject}
+                                onMouseDown={(e) => e.stopPropagation()}
+                                className="pune-slider-floating-arrow pune-slider-floating-arrow--next"
+                                aria-label="Next project"
+                                title="Next project (Right arrow)"
+                            >
+                                <ChevronRight size={24} strokeWidth={2.4} />
+                            </button>
+                        </>
+                    )}
+
                     <div
                         className="pune-projects-slider-track"
                         style={
@@ -555,76 +634,16 @@ export default function FeaturedProperties({ previewData }) {
                                     <div className="pune-project-card">
                                         {/* TOP HALF: Video / Media Stage */}
                                         <div className={`pune-project-stage ${isFullSize ? "pune-project-stage--fill" : ""}`}>
-                                            {/* Huge Typography Watermark on Left Stage */}
-                                            <div className="pune-project-stage__watermark" aria-hidden="true">
-                                                {project.brandName}
-                                            </div>
-
-                                            {/* Top Controls Row (Matches Reference Exactly) */}
-                                            <div className="pune-project-stage__top-row">
-                                                {/* Left Badges: SAMPLE FLAT TOUR + PPI SHORTS */}
-                                                <div className="pune-project-stage__left-badges">
-                                                    <div className="pune-project-stage__tour-badge">
-                                                        <span className="pune-project-stage__tour-dot" />
-                                                        <span>{project.badge}</span>
-                                                    </div>
-
-                                                    <a
-                                                        href={project.youtubeUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="pune-stage-pill-btn pune-stage-pill-btn--shorts"
-                                                        title="Watch on PPI Shorts"
-                                                    >
-                                                        <span className="pune-stage-pill-dot--white" />
-                                                        <span>PPI SHORTS</span>
-                                                    </a>
-                                                </div>
-
-                                                {/* Right Action Controls: Sound Off, Fullscreen, YouTube */}
-                                                <div className="pune-project-stage__top-actions">
-                                                    <button
-                                                        type="button"
-                                                        onClick={toggleSound}
-                                                        className="pune-stage-pill-btn"
-                                                        title={isMuted ? "Turn Sound On" : "Turn Sound Off"}
-                                                    >
-                                                        {isMuted ? <VolumeX size={13} /> : <Volume2 size={13} />}
-                                                        <span>{isMuted ? "Sound Off" : "Sound On"}</span>
-                                                    </button>
-
-                                                    <button
-                                                        type="button"
-                                                        onClick={toggleFullscreen}
-                                                        className="pune-stage-pill-btn pune-stage-pill-btn--icon"
-                                                        title="View Fullscreen"
-                                                    >
-                                                        <Maximize2 size={13} />
-                                                    </button>
-
-                                                    <a
-                                                        href={project.youtubeUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="pune-stage-yt-btn"
-                                                        aria-label="Open YouTube"
-                                                        title="Open YouTube video"
-                                                    >
-                                                        <FaYoutube size={15} color="#ffffff" />
-                                                        <ExternalLink size={11} color="rgba(255,255,255,0.85)" />
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            {/* Side Navigation Arrow: Left (Slides sideways) */}
+                                            {/* Top-Right Mute / Unmute Button (Only icon control kept on container) */}
                                             <button
                                                 type="button"
-                                                onClick={handlePrevProject}
-                                                className="pune-stage-nav-arrow pune-stage-nav-arrow--left"
-                                                aria-label="Previous property"
-                                                title="Previous property"
+                                                onClick={toggleSound}
+                                                className="pune-stage-pill-btn pune-stage-top-right-mute"
+                                                title={isMuted ? "Turn Sound On" : "Turn Sound Off"}
+                                                aria-label={isMuted ? "Unmute audio" : "Mute audio"}
                                             >
-                                                <ChevronLeft size={22} />
+                                                {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                                                <span>{isMuted ? "Sound Off" : "Sound On"}</span>
                                             </button>
 
                                             {/* Center Stage: Widescreen Video Player or Poster */}
@@ -642,7 +661,7 @@ export default function FeaturedProperties({ previewData }) {
                                                 ) : (
                                                     <div className="pune-project-stage__poster">
                                                         <img
-                                                            src={project.thumbnail}
+                                                            src={project.thumbnail || project.thumbnailUrl || "/images/mantra-magnus-shorts-thumb.jpg"}
                                                             alt={project.name}
                                                             className="pune-project-stage__poster-img"
                                                             loading="lazy"
@@ -654,61 +673,6 @@ export default function FeaturedProperties({ previewData }) {
                                                         </div>
                                                     </div>
                                                 )}
-
-                                                {/* Watermark logo badge in top right of video */}
-                                                <div className="pune-video-watermark-pill" aria-hidden="true">
-                                                    <img
-                                                        src={`${basePath}/images/logo.png`}
-                                                        alt="PPI Logo"
-                                                        className="pune-video-watermark-logo"
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            {/* Right Action Column (Matches Reference Image) */}
-                                            <div className="pune-stage-right-actions">
-                                                {/* Like Button */}
-                                                <button
-                                                    type="button"
-                                                    onClick={() => toggleLike(project.id)}
-                                                    className={`pune-stage-side-circle-btn ${isLiked ? "pune-stage-side-circle-btn--liked" : ""}`}
-                                                    aria-label="Like property"
-                                                    title="Like property"
-                                                >
-                                                    <ThumbsUp size={16} />
-                                                </button>
-
-                                                {/* Next Property Arrow with Glowing Green Border */}
-                                                <button
-                                                    type="button"
-                                                    onClick={handleNextProject}
-                                                    className="pune-stage-side-circle-btn pune-stage-side-circle-btn--next"
-                                                    aria-label="Next property"
-                                                    title="Next property"
-                                                >
-                                                    <ChevronRight size={20} />
-                                                </button>
-
-                                                {/* Share Button */}
-                                                <button
-                                                    type="button"
-                                                    onClick={(e) => handleShare(project, e)}
-                                                    className="pune-stage-side-circle-btn"
-                                                    aria-label="Share property"
-                                                    title="Share property"
-                                                >
-                                                    <Share2 size={16} />
-                                                </button>
-
-                                                {/* White Circular CTA with Arrow */}
-                                                <Link
-                                                    href={`/buy`}
-                                                    className="pune-stage-circle-cta"
-                                                    aria-label={`View ${project.name} details`}
-                                                    title="View details"
-                                                >
-                                                    <ArrowUpRight size={18} strokeWidth={2.4} />
-                                                </Link>
                                             </div>
 
                                             {/* Bottom Stage Overlay: Project Details Headline */}
@@ -729,7 +693,7 @@ export default function FeaturedProperties({ previewData }) {
                                             {/* LEFT COLUMN: Gallery Preview Card matching reference */}
                                             <div className="pune-project-bottom-bar__left">
                                                 <SiteImageSlideshow
-                                                    images={project.siteImages}
+                                                    images={Array.isArray(project.siteImages) && project.siteImages.length > 0 ? project.siteImages : [{ url: project.thumbnail || project.thumbnailUrl || "/images/mantra-magnus-site-elevation.jpg", label: project.name }]}
                                                     projectName={project.name}
                                                 />
                                             </div>
@@ -803,6 +767,7 @@ export default function FeaturedProperties({ previewData }) {
                                                             <button
                                                                 type="button"
                                                                 onClick={handlePrevProject}
+                                                                onMouseDown={(e) => e.stopPropagation()}
                                                                 className="pune-action-nav-btn"
                                                                 aria-label="Previous project"
                                                             >
@@ -811,6 +776,7 @@ export default function FeaturedProperties({ previewData }) {
                                                             <button
                                                                 type="button"
                                                                 onClick={handleNextProject}
+                                                                onMouseDown={(e) => e.stopPropagation()}
                                                                 className="pune-action-nav-btn"
                                                                 aria-label="Next project"
                                                             >
@@ -827,7 +793,7 @@ export default function FeaturedProperties({ previewData }) {
 
                                                         {/* Project Name • Locality (Desktop/Laptop) */}
                                                         <span className="pune-action-project-name">
-                                                            {project.name} • {project.localityName}
+                                                            {project.name} • {project.localityName || project.location}
                                                         </span>
                                                     </div>
 

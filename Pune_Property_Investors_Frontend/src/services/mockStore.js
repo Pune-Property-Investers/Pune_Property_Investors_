@@ -176,7 +176,7 @@ const DEFAULT_HOMEPAGE_SECTIONS = [
         id: "testimonials",
         type: "testimonials",
         label: "Customer Testimonials",
-        enabled: false,
+        enabled: true,
         order: 12,
         data: {
             eyebrow: "CLIENT EXPERIENCES",

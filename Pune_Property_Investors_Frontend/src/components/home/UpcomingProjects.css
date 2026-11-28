@@ -888,3 +888,41 @@
     }
 }
 
+/* ==========================================================================
+   UPCOMING PROJECT SWITCHER PILLS (Multi-Project Navigation)
+   ========================================================================== */
+.upcoming-project-pills {
+    display: inline-flex;
+    align-items: center;
+    background: #f1f5f9;
+    padding: 3px;
+    border-radius: 999px;
+    border: 1px solid #e2e8f0;
+    gap: 3px;
+}
+
+.upcoming-project-pill {
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: none;
+    background: transparent;
+    font-family: var(--font-sans), "Inter", sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.upcoming-project-pill:hover {
+    color: #0f172a;
+}
+
+.upcoming-project-pill--active {
+    background: #0f172a;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
+}
+
+

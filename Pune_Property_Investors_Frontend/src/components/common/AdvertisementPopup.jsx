@@ -4,6 +4,9 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { X, Volume2, VolumeX, Maximize2 } from "lucide-react";
 
+import { propertyShortService } from "../../services/propertyShort.service.js";
+import { advertisementService } from "../../services/advertisement.service.js";
+import { advertisementPopupService } from "../../services/advertisementPopup.service.js";
 import { propertyShorts, extractYouTubeId } from "../../data/shortsData.js";
 import advertisementData from "../../data/advertisementData.js";
 import "./AdvertisementPopup.css";
@@ -23,14 +26,70 @@ function AdvertisementPopup({ customAds }) {
     const [isDismissed, setIsDismissed] = useState(false);
     const [isMuted, setIsMuted] = useState(true);
 
+    const [popupConfig, setPopupConfig] = useState(null);
+    const [dbShorts, setDbShorts] = useState([]);
+    const [dbAds, setDbAds] = useState([]);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        advertisementPopupService
+            .getSettings()
+            .then((res) => {
+                const data = res?.data || res;
+                if (isMounted && data) {
+                    setPopupConfig(data);
+                    if (data.autoMute !== undefined) {
+                        setIsMuted(Boolean(data.autoMute));
+                    }
+                }
+            })
+            .catch((err) => console.error("Failed to load popup settings:", err));
+
+        propertyShortService
+            .list()
+            .then((res) => {
+                const list = Array.isArray(res) ? res : res?.data;
+                if (isMounted && Array.isArray(list) && list.length > 0) {
+                    setDbShorts(list);
+                }
+            })
+            .catch((err) => console.error("Failed to load shorts for popup:", err));
+
+        advertisementService
+            .list()
+            .then((res) => {
+                const list = Array.isArray(res) ? res : res?.data;
+                if (isMounted && Array.isArray(list) && list.length > 0) {
+                    setDbAds(list);
+                }
+            })
+            .catch((err) => console.error("Failed to load ads for popup:", err));
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
     const shortsList = useMemo(() => {
-        // Collect from propertyShorts first (true vertical shorts), fallback to customAds / advertisementData
         const list = [];
 
-        if (Array.isArray(propertyShorts) && propertyShorts.length > 0) {
-            propertyShorts.forEach((short) => {
+        // 1. Pinned Video if set in MySQL settings
+        if (popupConfig?.pinnedVideoId) {
+            list.push({
+                id: "pinned-popup",
+                title: popupConfig.pinnedTitle || "Featured Property Reel",
+                videoId: resolveVideoId({ videoId: popupConfig.pinnedVideoId }),
+                link: popupConfig.pinnedLink || "/shorts",
+            });
+        }
+
+        // 2. Database Property Shorts (or fallback to static propertyShorts)
+        const sourceShorts = dbShorts.length > 0 ? dbShorts : propertyShorts;
+        if (Array.isArray(sourceShorts) && sourceShorts.length > 0) {
+            sourceShorts.forEach((short) => {
                 const vid = resolveVideoId(short);
-                if (vid) {
+                if (vid && !list.some((item) => item.videoId === vid)) {
                     list.push({
                         id: short.id,
                         title: short.title,
@@ -41,7 +100,14 @@ function AdvertisementPopup({ customAds }) {
             });
         }
 
-        const sourceAds = Array.isArray(customAds) && customAds.length > 0 ? customAds : advertisementData;
+        // 3. Database Advertisements (or customAds / advertisementData)
+        const sourceAds =
+            Array.isArray(customAds) && customAds.length > 0
+                ? customAds
+                : dbAds.length > 0
+                ? dbAds
+                : advertisementData;
+
         sourceAds.forEach((ad) => {
             const vid = resolveVideoId(ad);
             if (vid && !list.some((item) => item.videoId === vid)) {
@@ -55,17 +121,19 @@ function AdvertisementPopup({ customAds }) {
         });
 
         return list;
-    }, [customAds]);
+    }, [popupConfig, dbShorts, dbAds, customAds]);
 
     useEffect(() => {
+        if (popupConfig && popupConfig.isEnabled === false) return;
         if (isDismissed || shortsList.length === 0) return undefined;
 
+        const delay = (Number(popupConfig?.delaySeconds) || 3) * 1000;
         const timer = setTimeout(() => {
             setIsVisible(true);
-        }, 3000);
+        }, delay);
 
         return () => clearTimeout(timer);
-    }, [isDismissed, shortsList.length]);
+    }, [isDismissed, shortsList.length, popupConfig]);
 
     if (isDismissed || !isVisible || shortsList.length === 0) {
         return null;

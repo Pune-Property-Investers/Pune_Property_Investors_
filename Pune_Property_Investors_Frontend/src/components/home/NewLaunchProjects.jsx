@@ -15,6 +15,7 @@ import {
     Camera,
     MapPin,
 } from "lucide-react";
+import { newLaunchService } from "../../services/newLaunch.service";
 import "./NewLaunchProjects.css";
 
 /* 8 Distinct New Launch Projects with full photography and specifications */
@@ -158,10 +159,32 @@ export const newLaunchProjects = [
 ];
 
 export default function NewLaunchProjects({ previewData }) {
+    const [fetchedProjects, setFetchedProjects] = useState(null);
+
+    useEffect(() => {
+        let isCancelled = false;
+        newLaunchService
+            .list()
+            .then((data) => {
+                if (!isCancelled && Array.isArray(data) && data.length > 0) {
+                    setFetchedProjects(data);
+                }
+            })
+            .catch(() => {
+                // Keep static fallback
+            });
+        return () => {
+            isCancelled = true;
+        };
+    }, []);
+
+    // Prioritize live MySQL database records as primary source of truth!
     const activeProjects =
-        Array.isArray(previewData?.items) && previewData.items.length > 0
-            ? previewData.items
-            : newLaunchProjects;
+        Array.isArray(fetchedProjects) && fetchedProjects.length > 0
+            ? fetchedProjects
+            : (Array.isArray(previewData?.items) && previewData.items.length > 0
+                ? previewData.items
+                : newLaunchProjects);
     const [activeIndex, setActiveIndex] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
     const [imgIndices, setImgIndices] = useState({});
@@ -173,10 +196,12 @@ export default function NewLaunchProjects({ previewData }) {
     const totalProjects = activeProjects.length;
 
     const handlePrev = useCallback(() => {
+        if (totalProjects <= 0) return;
         setActiveIndex((prev) => (prev - 1 + totalProjects) % totalProjects);
     }, [totalProjects]);
 
     const handleNext = useCallback(() => {
+        if (totalProjects <= 0) return;
         setActiveIndex((prev) => (prev + 1) % totalProjects);
     }, [totalProjects]);
 
@@ -260,6 +285,10 @@ export default function NewLaunchProjects({ previewData }) {
             [projectId]: !prev[projectId],
         }));
     };
+
+    if (!activeProjects || activeProjects.length === 0) {
+        return null;
+    }
 
     return (
         <section
@@ -354,6 +383,12 @@ export default function NewLaunchProjects({ previewData }) {
                         style={{ transform: `translateX(-${activeIndex * 100}%)` }}
                     >
                         {activeProjects.map((project, pIdx) => {
+                            const projectImages =
+                                Array.isArray(project.images) && project.images.length > 0
+                                    ? project.images
+                                    : (Array.isArray(project.gallery) && project.gallery.length > 0
+                                        ? project.gallery
+                                        : [project.image || "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85"]);
                             const projectImgIdx = imgIndices[project.id] || 0;
                             const isFav = favoriteItems[project.id] ?? (project.id === 1);
                             const isCompared = comparedItems[project.id] ?? false;
@@ -362,17 +397,17 @@ export default function NewLaunchProjects({ previewData }) {
                                 <div className="new-launch-slide-wrapper" key={project.id}>
                                     <article
                                         className="new-launch-project-card"
-                                        aria-label={`${project.title} (${project.propertyType})`}
+                                        aria-label={`${project.title || project.name} (${project.propertyType || project.type})`}
                                     >
                                         {/* Full-Bleed Background Image with Crossfade */}
                                         <div className="new-launch-project-card__bg">
-                                            {project.images.map((imgUrl, iIdx) => (
+                                            {projectImages.map((imgUrl, iIdx) => (
                                                 <img
                                                     key={iIdx}
                                                     src={imgUrl}
-                                                    alt={`${project.title} photo ${iIdx + 1}`}
+                                                    alt={`${project.title || project.name} photo ${iIdx + 1}`}
                                                     className={`new-launch-project-card__img ${
-                                                        iIdx === (projectImgIdx % project.images.length)
+                                                        iIdx === (projectImgIdx % projectImages.length)
                                                             ? "new-launch-project-card__img--active"
                                                             : ""
                                                     }`}
@@ -385,24 +420,24 @@ export default function NewLaunchProjects({ previewData }) {
                                         {/* Top Badges & Action Buttons */}
                                         <div className="new-launch-project-card__topbar">
                                             <div className="new-launch-project-card__badges">
-                                                {project.isFeatured && (
+                                                {(project.isFeatured || project.featured) && (
                                                     <span className="nl-badge-featured">
                                                         <Sparkles size={11} /> FEATURED
                                                     </span>
                                                 )}
                                                 <span className="nl-badge-type">
-                                                    {project.typeBadge}
+                                                    {project.typeBadge || project.badge || "New Launch"}
                                                 </span>
                                                 <button
                                                     type="button"
                                                     className="nl-badge-count"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        switchProjectImage(project.id, project.images.length);
+                                                        switchProjectImage(project.id, projectImages.length);
                                                     }}
                                                     title="Switch photo"
                                                 >
-                                                    <Camera size={12} /> {(projectImgIdx % project.images.length) + 1}/{project.images.length}
+                                                    <Camera size={12} /> {(projectImgIdx % projectImages.length) + 1}/{projectImages.length}
                                                 </button>
                                             </div>
 

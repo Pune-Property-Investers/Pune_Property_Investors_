@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
 import PropertyCard from "../properties/PropertyCard";
 import { projects } from "../../data/projects";
+import { featuredProjectService } from "../../services/featuredProject.service";
 import "./FeaturedProjects.css";
 
 export default function FeaturedProjects({ previewData, customProjects }) {
@@ -13,12 +14,34 @@ export default function FeaturedProjects({ previewData, customProjects }) {
     const [isVisible, setIsVisible] = useState(false);
     const [activeSlideIndex, setActiveSlideIndex] = useState(0);
     const [isGrabbing, setIsGrabbing] = useState(false);
+    const [fetchedProjects, setFetchedProjects] = useState(null);
 
-    const projectList =
-        Array.isArray(previewData?.items) && previewData.items.length > 0
-            ? previewData.items
-            : (Array.isArray(previewData) && previewData.length > 0 ? previewData : projects);
-    const filteredProjects = Array.isArray(customProjects) && customProjects.length > 0 ? customProjects : projectList;
+    useEffect(() => {
+        let isCancelled = false;
+        featuredProjectService
+            .list()
+            .then((data) => {
+                if (!isCancelled && Array.isArray(data) && data.length > 0) {
+                    setFetchedProjects(data);
+                }
+            })
+            .catch(() => {
+                // Keep static fallback
+            });
+        return () => {
+            isCancelled = true;
+        };
+    }, []);
+
+    // Prioritize live MySQL database records as primary source of truth!
+    const filteredProjects =
+        Array.isArray(fetchedProjects) && fetchedProjects.length > 0
+            ? fetchedProjects
+            : (Array.isArray(previewData?.items) && previewData.items.length > 0
+                ? previewData.items
+                : (Array.isArray(customProjects) && customProjects.length > 0
+                    ? customProjects
+                    : projects));
 
     // Mouse drag support for desktop slider
     const isMouseDownRef = useRef(false);

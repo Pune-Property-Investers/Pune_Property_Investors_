@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { heroSettingService } from "../../services/heroSetting.service";
+import { locationService } from "../../services/location.service";
 
 import {
     Search,
@@ -14,7 +16,22 @@ import {
     ShieldCheck,
     Bed,
     ChevronDown,
+    Sparkles,
+    CirclePercent,
+    Percent,
+    Calendar,
 } from "lucide-react";
+
+const ICON_MAP = {
+    ShieldCheck,
+    Building2,
+    MapPin,
+    Users,
+    Star,
+    CirclePercent,
+    Percent,
+    Calendar,
+};
 
 const GUMLET_VIDEO_URL =
     "https://play.gumlet.io/embed/6aec1cf3981592d058d2775e?background=true&autoplay=true&loop=true&disable_player_controls=true&preload=true";
@@ -79,11 +96,12 @@ const searchTabs = [
 ];
 
 const trustStats = [
-    { icon: Building2, strong: "500+", text: "Verified Projects" },
+    { icon: ShieldCheck, strong: "Since 2022", text: "in Pune" },
+    { icon: Star, strong: "4.9/5", text: "Client Rating" },
+    { icon: CirclePercent, strong: "0%", text: "Brokerage" },
+    { icon: Users, strong: "20,000+", text: "Happy Families" },
+    { icon: Building2, strong: "200+", text: "Team Size" },
     { icon: MapPin, strong: "30+", text: "Pune Localities" },
-    { icon: Users, strong: "15,000+", text: "Happy Families" },
-    { icon: Star, strong: "4.9/5", text: "Client Trust" },
-    { icon: ShieldCheck, strong: "Since 2015", text: "in Pune" },
 ];
 
 function HeroSection({ activeTab = "projects", onTabChange, previewData }) {
@@ -94,16 +112,73 @@ function HeroSection({ activeTab = "projects", onTabChange, previewData }) {
     const [bhk, setBhk] = useState("Any");
     const [budget, setBudget] = useState("Any Budget");
 
-    const heroEyebrow = previewData?.eyebrow ?? "YOUR PROPERTY PARTNER IN PUNE";
-    const heroHeading1 = previewData?.headingLine1 ?? "Find Your Dream Home.";
-    const heroHeading2 = previewData?.headingLine2 ?? "Invest in Your Future";
-    const heroSubtitle = previewData?.subtitle ?? "";
-    const heroVideoUrl = previewData?.videoUrl || GUMLET_VIDEO_URL;
-    const heroBgImage = previewData?.backgroundImage || "";
-    const showCategoryTabs = previewData?.showCategoryTabs !== false;
-    const showSearchCard = previewData?.showSearchCard !== false;
-    const ctaText = previewData?.primaryCtaText || "";
-    const ctaUrl = previewData?.primaryCtaUrl || "/buy";
+    const [dbHero, setDbHero] = useState(null);
+    const [dbLocalities, setDbLocalities] = useState([]);
+
+    useEffect(() => {
+        let isMounted = true;
+        heroSettingService
+            .get({ full: true })
+            .then((res) => {
+                const data = res?.data || res;
+                if (isMounted && data) {
+                    setDbHero(data);
+                }
+            })
+            .catch((err) => console.error("Failed to load hero settings:", err));
+
+        locationService
+            .list()
+            .then((res) => {
+                const list = Array.isArray(res) ? res : res?.data;
+                if (isMounted && Array.isArray(list) && list.length > 0) {
+                    setDbLocalities(list);
+                }
+            })
+            .catch((err) => console.error("Failed to load localities for hero:", err));
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    const locationOptions = useMemo(() => {
+        if (dbLocalities.length > 0) {
+            return ["All Locations", ...dbLocalities.map((l) => l.name || l.title)];
+        }
+        return locations;
+    }, [dbLocalities]);
+
+    const badgesList = useMemo(() => {
+        if (Array.isArray(dbHero?.trustBadges) && dbHero.trustBadges.length > 0) {
+            return dbHero.trustBadges.map((b) => ({
+                icon: ICON_MAP[b.iconName] || ShieldCheck,
+                strong: b.strongText || b.strong,
+                text: b.labelText || b.text,
+            }));
+        }
+        return trustStats;
+    }, [dbHero?.trustBadges]);
+
+    const heroEyebrow =
+        (previewData?.eyebrow && previewData.eyebrow.trim()) ||
+        (dbHero?.eyebrow && dbHero.eyebrow.trim()) ||
+        "YOUR PROPERTY PARTNER IN PUNE";
+    const heroHeading1 =
+        (previewData?.headingLine1 && previewData.headingLine1.trim()) ||
+        (dbHero?.headingLine1 && dbHero.headingLine1.trim()) ||
+        "Find Your Dream Home.";
+    const heroHeading2 =
+        (previewData?.headingLine2 && previewData.headingLine2.trim()) ||
+        (dbHero?.headingLine2 && dbHero.headingLine2.trim()) ||
+        "Invest in Your Future";
+    const heroSubtitle = previewData?.subtitle ?? dbHero?.subtitle ?? "";
+    const heroVideoUrl = previewData?.videoUrl || dbHero?.videoUrl || GUMLET_VIDEO_URL;
+    const heroBgImage = previewData?.backgroundImage || dbHero?.backgroundImage || "";
+    const showCategoryTabs = previewData?.showCategoryTabs ?? dbHero?.showCategoryTabs ?? true;
+    const showSearchCard = previewData?.showSearchCard ?? dbHero?.showSearchCard ?? true;
+    const ctaText = previewData?.primaryCtaText || dbHero?.primaryCtaText || "";
+    const ctaUrl = previewData?.primaryCtaUrl || dbHero?.primaryCtaUrl || "/buy";
 
     // Category tab handling
     const handleTabChange = (tabKey) => {
@@ -211,7 +286,8 @@ function HeroSection({ activeTab = "projects", onTabChange, previewData }) {
 
                 {/* Eyebrow */}
                 <span className="hero-oyo-eyebrow">
-                    {heroEyebrow}
+                    <Sparkles size={13} style={{ color: "#d6b36a" }} />
+                    <span>{heroEyebrow}</span>
                 </span>
 
                 {/* Main Heading */}
@@ -222,42 +298,6 @@ function HeroSection({ activeTab = "projects", onTabChange, previewData }) {
                         {heroHeading2}
                     </span>
                 </h1>
-
-                {heroSubtitle && (
-                    <p
-                        style={{
-                            color: "rgba(255,255,255,0.88)",
-                            fontSize: "15px",
-                            maxWidth: "600px",
-                            margin: "4px auto 14px",
-                            textAlign: "center",
-                        }}
-                    >
-                        {heroSubtitle}
-                    </p>
-                )}
-
-                {previewData && ctaText && (
-                    <div style={{ marginBottom: "14px" }}>
-                        <Link
-                            href={ctaUrl}
-                            style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "8px",
-                                padding: "10px 22px",
-                                borderRadius: "9999px",
-                                background: "#a77a48",
-                                color: "#ffffff",
-                                fontWeight: 600,
-                                fontSize: "14px",
-                                textDecoration: "none",
-                            }}
-                        >
-                            {ctaText}
-                        </Link>
-                    </div>
-                )}
 
                 {/* Category Tabs */}
                 {showCategoryTabs && (
@@ -323,7 +363,7 @@ function HeroSection({ activeTab = "projects", onTabChange, previewData }) {
                                         e.g. Baner, Wakad, Kharadi...
                                     </option>
 
-                                    {locations
+                                    {locationOptions
                                         .filter((l) => l !== "All Locations")
                                         .map((item) => (
                                             <option key={item} value={item}>
@@ -512,10 +552,10 @@ function HeroSection({ activeTab = "projects", onTabChange, previewData }) {
                     <div className="hero-oyo-trust-track">
 
                         {[
-                            ...trustStats,
-                            ...trustStats,
-                            ...trustStats,
-                            ...trustStats,
+                            ...badgesList,
+                            ...badgesList,
+                            ...badgesList,
+                            ...badgesList,
                         ].map((item, idx) => (
                             <div
                                 key={idx}

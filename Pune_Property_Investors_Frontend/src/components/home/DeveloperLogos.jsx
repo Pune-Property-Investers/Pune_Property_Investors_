@@ -1,43 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { developerService } from "../../services/developer.service";
 import "./DeveloperLogos.css";
 
 export const developers = [
-    { name: "Shapoorji Pallonji", domain: "shapoorjirealestate.com" },
-    { name: "Vilas Javdekar", domain: "vilasjavdekar.com" },
-    { name: "Pride Purple", domain: "pridepurpleproperties.com" },
-    { name: "Kohinoor Group", domain: "kohinoorpune.com" },
-    { name: "Kolte Patil", domain: "koltepatil.com" },
-    { name: "Gera Developments", domain: "gera.in" },
-    { name: "VTP Realty", domain: "vtprealty.in" },
-    { name: "K Raheja Corp", domain: "kraheja.com" },
-    { name: "SS Group", domain: "ssgroupindia.com" },
-    { name: "Pristine Developers", domain: "pristineproperties.com" },
-    { name: "Lodha", domain: "lodhagroup.com" },
-    { name: "Godrej Properties", domain: "godrejproperties.com" },
-    { name: "Mahindra Lifespaces", domain: "mahindralifespaces.com" },
+    { id: 1, name: "Shapoorji Pallonji", slug: "shapoorji-pallonji", domain: "shapoorjirealestate.com", logoUrl: "/images/logos/shapoorji.svg" },
+    { id: 2, name: "Vilas Javdekar", slug: "vilas-javdekar", domain: "vilasjavdekar.com" },
+    { id: 3, name: "Pride Purple", slug: "pride-purple", domain: "pridepurpleproperties.com" },
+    { id: 4, name: "Kohinoor Group", slug: "kohinoor-group", domain: "kohinoorpune.com", logoUrl: "/images/logos/kohinoor.png" },
+    { id: 5, name: "Kolte Patil", slug: "kolte-patil", domain: "koltepatil.com", logoUrl: "/images/logos/kolte-patil.jpg" },
+    { id: 6, name: "Gera Developments", slug: "gera-developments", domain: "gera.in" },
+    { id: 7, name: "VTP Realty", slug: "vtp-realty", domain: "vtprealty.in", logoUrl: "/images/logos/vtp.png" },
+    { id: 8, name: "K Raheja Corp", slug: "k-raheja-corp", domain: "krahejacorp.com", logoUrl: "/images/logos/kraheja.jpg" },
+    { id: 9, name: "SS Group", slug: "ss-group", domain: "ssgroupindia.com" },
+    { id: 10, name: "Pristine Developers", slug: "pristine-developers", domain: "pristineproperties.com" },
+    { id: 11, name: "Lodha", slug: "lodha-group", domain: "lodhagroup.com", logoUrl: "/images/logos/lodha.png" },
+    { id: 12, name: "Godrej Properties", slug: "godrej-properties", domain: "godrejproperties.com", logoUrl: "/images/logos/godrej.svg" },
+    { id: 13, name: "Mahindra Lifespaces", slug: "mahindra-lifespaces", domain: "mahindralifespaces.com" },
+    { id: 14, name: "JP Morgan", slug: "jp-morgan", domain: "jpmorgan.com" },
 ];
 
 function DeveloperCard({ developer }) {
     const [imageFailed, setImageFailed] = useState(false);
 
     // Loads custom logo if provided, otherwise website icon from Google's favicon service.
-    const imageUrl = developer.logoUrl || `https://www.google.com/s2/favicons?domain=${developer.domain}&sz=128`;
+    const imageUrl =
+        developer.logoUrl ||
+        developer.logo_url ||
+        (developer.domain ? `https://www.google.com/s2/favicons?domain=${developer.domain}&sz=128` : "");
 
     return (
         <div className="developer-logo-card">
-            {!imageFailed ? (
+            {!imageFailed && imageUrl ? (
                 <img
                     className="developer-logo-img"
                     src={imageUrl}
-                    alt={`${developer.name} website icon`}
+                    alt={`${developer.name} brand logo`}
                     loading="lazy"
                     onError={() => setImageFailed(true)}
                 />
             ) : (
                 <span className="developer-logo-fallback">
-                    {developer.name.charAt(0)}
+                    {developer.name?.charAt(0) || "P"}
                 </span>
             )}
 
@@ -47,7 +52,7 @@ function DeveloperCard({ developer }) {
 }
 
 function DeveloperTrack({ reverse = false, items = developers }) {
-    const repeatedDevelopers = [...items, ...items];
+    const repeatedDevelopers = useMemo(() => [...items, ...items], [items]);
 
     return (
         <div className="developer-track-window">
@@ -58,7 +63,7 @@ function DeveloperTrack({ reverse = false, items = developers }) {
             >
                 {repeatedDevelopers.map((developer, index) => (
                     <DeveloperCard
-                        key={`${developer.name}-${index}`}
+                        key={`${developer.slug || developer.name}-${index}`}
                         developer={developer}
                     />
                 ))}
@@ -68,10 +73,37 @@ function DeveloperTrack({ reverse = false, items = developers }) {
 }
 
 export default function DeveloperLogos({ previewData }) {
-    const activeDevelopers =
-        Array.isArray(previewData?.items) && previewData.items.length > 0
-            ? previewData.items
-            : developers;
+    const [fetchedDevelopers, setFetchedDevelopers] = useState([]);
+
+    useEffect(() => {
+        let isMounted = true;
+        const loadDevelopers = async () => {
+            try {
+                const res = await developerService.list();
+                const list = Array.isArray(res) ? res : res?.data;
+                if (isMounted && Array.isArray(list) && list.length > 0) {
+                    setFetchedDevelopers(list);
+                }
+            } catch (err) {
+                console.error("Failed to load developers from DB:", err);
+            }
+        };
+        loadDevelopers();
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    const activeDevelopers = useMemo(() => {
+        if (Array.isArray(previewData?.items) && previewData.items.length > 0) {
+            return previewData.items;
+        }
+        if (fetchedDevelopers.length > 0) {
+            return fetchedDevelopers;
+        }
+        return developers;
+    }, [previewData?.items, fetchedDevelopers]);
+
     return (
         <section className="developer-logos-section">
             <div className="developer-logos-heading">
@@ -90,7 +122,7 @@ export default function DeveloperLogos({ previewData }) {
                 </h2>
 
                 <p>
-                    Explore trusted developers and quality properties across Pune.
+                    {previewData?.subtitle || "Explore trusted developers and quality properties across Pune."}
                 </p>
 
                 <div className="developer-heading-line" />
