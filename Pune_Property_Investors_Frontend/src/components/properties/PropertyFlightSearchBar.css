@@ -419,8 +419,10 @@
     top: calc(100% + 8px);
     left: 0;
     min-width: 210px;
-    max-height: min(200px, 30vh);
+    max-height: min(240px, 45vh);
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     background: #ffffff;
     border-radius: 14px;
     border: 1px solid #e2e8f0;
@@ -480,6 +482,9 @@
 }
 
 .property-chip-search-box {
+    position: sticky;
+    top: 0;
+    z-index: 2;
     display: flex;
     align-items: center;
     gap: 7px;
@@ -579,32 +584,74 @@
         gap: 4px;
     }
 
-    /* Mobile Bottom-Sheet Dropdowns */
+    /* Mobile Dropdown Menus (Opens downward from the chip) */
     .property-chip-menu {
-        position: fixed;
-        top: auto;
-        bottom: 20px;
-        left: 16px;
-        right: 16px;
-        min-width: auto;
-        max-width: none;
-        border-radius: 20px;
-        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
-        border: none;
-        z-index: 10000;
-        padding: 12px;
-        animation: propertyMobileModalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        position: absolute;
+        top: calc(100% + 6px);
+        bottom: auto;
+        left: 0;
+        right: auto;
+        min-width: 180px;
+        max-width: min(280px, calc(100vw - 24px));
+        max-height: min(220px, 45vh);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        background: #ffffff;
+        border-radius: 14px;
+        border: 1px solid #e2e8f0;
+        box-shadow:
+            0 14px 34px -4px rgba(15, 23, 42, 0.18),
+            0 4px 12px rgba(15, 23, 42, 0.08);
+        z-index: 1000;
+        padding: 6px;
+        animation: propertyChipMenuDown 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    @keyframes propertyMobileModalIn {
-        from {
+    .property-chip-menu--wide {
+        min-width: 240px;
+        max-width: min(300px, calc(100vw - 24px));
+    }
+
+    .property-chip-menu--right {
+        left: auto;
+        right: 0;
+    }
+
+    .property-chip-menu__list {
+        max-height: 190px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+
+    .property-chip-menu__item {
+        font-size: 13px !important;
+        font-weight: 500;
+        padding: 8px 12px;
+    }
+
+    @keyframes propertyChipMenuDown {
+        0% {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(-6px) scale(0.98);
         }
 
-        to {
+        100% {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
+    }
+}
+
+@media (max-width: 600px) {
+    /* Prevent middle and right chips from overflowing mobile screen width */
+    .property-chip-anchor:nth-child(2) .property-chip-menu--wide {
+        left: -35px;
+    }
+
+    .property-chip-anchor:nth-child(3) .property-chip-menu {
+        left: auto;
+        right: 0;
     }
 }

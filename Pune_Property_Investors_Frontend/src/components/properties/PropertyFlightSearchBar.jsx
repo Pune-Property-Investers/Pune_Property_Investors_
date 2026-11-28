@@ -166,7 +166,11 @@ export default function PropertyFlightSearchBar({
             }
         }
         document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+        document.addEventListener("touchstart", handleClickOutside, { passive: true });
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside);
+        };
     }, []);
 
     // Keep BHK / Area / Property Type row static (always visible when showFilterChips is true)
