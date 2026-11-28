@@ -110,6 +110,18 @@ const locationsData = [
         image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80",
         searchLocation: "NIBM",
     },
+    {
+        id: 11,
+        name: "Dhanori",
+        zone: "North-East Pune",
+        subtitle: "Airport Corridor & High-Growth Residential Belt",
+        description: "Airport Corridor & High-Growth...",
+        avgRate: "₹6,800 / sq.ft",
+        listingsCount: "22 Properties",
+        image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
+        searchLocation: "Dhanori",
+        isFeatured: true,
+    },
 ];
 
 export default locationsData;

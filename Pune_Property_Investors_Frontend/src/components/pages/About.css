@@ -11,6 +11,16 @@
     overflow-x: hidden;
 }
 
+/* Ensure completely transparent header with zero black shadow/backdrop at top of About page */
+.about-luxury-page .site-header:not(.site-header--scrolled) {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
 /* ==========================================================================
    1. ARCHITECTURAL EDITORIAL HERO
    ========================================================================== */
@@ -41,26 +51,11 @@
 .about-hero__bg-image {
     object-fit: cover;
     object-position: center;
-    filter: brightness(0.92) contrast(1.02);
+    filter: none;
 }
 
 .about-hero__overlay {
-    position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0, 0, 0, 0.4) 0%,
-            rgba(0, 0, 0, 0.15) 55%,
-            rgba(0, 0, 0, 0.05) 100%
-        ),
-        linear-gradient(
-            180deg,
-            rgba(0, 0, 0, 0.45) 0%,
-            rgba(0, 0, 0, 0.15) 40%,
-            rgba(0, 0, 0, 0.55) 100%
-        );
-    z-index: 2;
+    display: none;
 }
 
 .about-hero__content {

@@ -418,16 +418,33 @@
     position: absolute;
     top: calc(100% + 8px);
     left: 0;
-    min-width: 200px;
+    min-width: 210px;
+    max-height: min(200px, 30vh);
+    overflow-y: auto;
     background: #ffffff;
-    border-radius: 16px;
-    border: none;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
     box-shadow:
-        0 16px 36px -6px rgba(15, 23, 42, 0.16),
-        0 4px 12px rgba(15, 23, 42, 0.05);
+        0 16px 36px -6px rgba(15, 23, 42, 0.18),
+        0 4px 12px rgba(15, 23, 42, 0.06);
     padding: 6px;
     z-index: 1000;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
     animation: propertyChipMenuIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.property-chip-menu::-webkit-scrollbar {
+    width: 5px;
+}
+
+.property-chip-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.property-chip-menu::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
 }
 
 .property-chip-menu--wide {
@@ -504,7 +521,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: 8px 12px;
     border: none;
     background: transparent;
@@ -514,21 +531,25 @@
     font-weight: 500;
     text-align: left;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: background 0.15s ease, color 0.15s ease;
 }
 
 .property-chip-menu__item:hover {
-    background: #f1f5f9;
+    background: #fdf8f0;
 }
 
 .property-chip-menu__item.is-active {
-    background: #f0fdf4;
-    color: #15803d;
+    background: #fbf2e3;
+    color: #a77a48;
     font-weight: 600;
 }
 
+.property-chip-checkbox {
+    display: none !important;
+}
+
 .property-check-icon {
-    color: #15803d;
+    color: #ffffff;
 }
 
 .property-chip-remove {

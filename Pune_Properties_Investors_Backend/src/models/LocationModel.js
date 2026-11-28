@@ -150,6 +150,21 @@ const DEFAULT_LOCALITIES = [
         searchLocation: "NIBM",
         isFeatured: false,
         displayOrder: 10
+    },
+    {
+        id: 11,
+        slug: "dhanori",
+        name: "Dhanori",
+        zone: "North-East Pune",
+        subtitle: "Airport Corridor & High-Growth Residential Belt",
+        description: "Airport Corridor & High-Growth...",
+        avgRate: "₹6,800 / sq.ft",
+        numericAvgRate: 6800,
+        listingsCount: "22 Properties",
+        image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
+        searchLocation: "Dhanori",
+        isFeatured: true,
+        displayOrder: 11
     }
 ];
 
@@ -212,7 +227,7 @@ export const LocationModel = {
                     if (fallbackRows && fallbackRows.length > 0) {
                         return fallbackRows.map(mapRowToLocality);
                     }
-                } catch (_) {}
+                } catch (_) { }
             }
         }
         return [...memoryLocations];
@@ -231,7 +246,7 @@ export const LocationModel = {
                 if (rows && rows.length > 0) {
                     return mapRowToLocality(rows[0]);
                 }
-            } catch (_) {}
+            } catch (_) { }
         }
         return (
             memoryLocations.find(

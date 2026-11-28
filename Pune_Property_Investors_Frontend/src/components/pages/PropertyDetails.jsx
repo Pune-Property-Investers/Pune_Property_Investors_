@@ -482,11 +482,13 @@ function PropertyDetailsContent({ property }) {
         ? "Ready to Move"
         : property.possession || "Ready to Move";
 
-    const carpetAreaText = property.carpetArea
-        ? `${property.carpetArea} sq.ft`
-        : property.area
-            ? `${property.area} sq.ft`
-            : "1,120 sq.ft";
+    const cleanAreaStr = (val) => {
+        if (!val) return "";
+        const str = String(val).replace(/\s*sq\.?\s*ft\.?/gi, "").trim();
+        return str ? `${str} sq.ft` : "";
+    };
+
+    const carpetAreaText = cleanAreaStr(property.carpetArea) || cleanAreaStr(property.area) || "1,120 sq.ft";
 
     const possessionText = property.possession || "Dec 2028";
     const builderProfile = resolvePropertyBuilder(property);
@@ -510,7 +512,7 @@ function PropertyDetailsContent({ property }) {
                 carpetArea: p.carpetArea,
                 image: p.image || "",
             });
-            if (items.length >= 4) break;
+            if (items.length >= 8) break;
         }
         if (items.length === 0) {
             items.push({ label: bhkBadge, price: priceClean, carpetArea: null, image: "" });
@@ -529,7 +531,7 @@ function PropertyDetailsContent({ property }) {
             : uniqueImages[0]) ||
         "/images/properties/default.jpg";
     const displayCarpetArea = selectedBhkItem?.carpetArea
-        ? `${Number(selectedBhkItem.carpetArea).toLocaleString("en-IN")} sq.ft`
+        ? cleanAreaStr(selectedBhkItem.carpetArea)
         : carpetAreaText;
     const displayPropertyPrice = selectedBhkItem?.price || priceClean;
 

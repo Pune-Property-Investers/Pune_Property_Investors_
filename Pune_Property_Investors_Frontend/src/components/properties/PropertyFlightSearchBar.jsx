@@ -363,9 +363,6 @@ export default function PropertyFlightSearchBar({
                                         onClick={() => handleBhkClick(bhk.value)}
                                     >
                                         <span>{bhk.label}</span>
-                                        {selectedBhk === bhk.value && (
-                                            <Check size={14} className="property-check-icon" />
-                                        )}
                                     </button>
                                 ))}
                             </div>
@@ -400,27 +397,22 @@ export default function PropertyFlightSearchBar({
                                     />
                                 </div>
                                 <div className="property-chip-menu__list">
-                                    {filteredLocalities.map((loc) => (
-                                        <button
-                                            key={loc}
-                                            type="button"
-                                            className={`property-chip-menu__item ${(loc === "All Pune" && selectedLocation === "all") ||
-                                                loc === selectedLocation
-                                                ? "is-active"
-                                                : ""
-                                                }`}
-                                            onClick={() => {
-                                                handleLocationSelect(loc);
-                                                setAreaSearch("");
-                                            }}
-                                        >
-                                            <span>{loc}</span>
-                                            {((loc === "All Pune" && selectedLocation === "all") ||
-                                                loc === selectedLocation) && (
-                                                    <Check size={14} className="property-check-icon" />
-                                                )}
-                                        </button>
-                                    ))}
+                                    {filteredLocalities.map((loc) => {
+                                        const isSelected = (loc === "All Pune" && selectedLocation === "all") || loc === selectedLocation;
+                                        return (
+                                            <button
+                                                key={loc}
+                                                type="button"
+                                                className={`property-chip-menu__item ${isSelected ? "is-active" : ""}`}
+                                                onClick={() => {
+                                                    handleLocationSelect(loc);
+                                                    setAreaSearch("");
+                                                }}
+                                            >
+                                                <span>{loc}</span>
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         )}
@@ -452,9 +444,6 @@ export default function PropertyFlightSearchBar({
                                         onClick={() => handleTypeSelect(opt.value)}
                                     >
                                         <span>{opt.label}</span>
-                                        {selectedCategory === opt.value && (
-                                            <Check size={14} className="property-check-icon" />
-                                        )}
                                     </button>
                                 ))}
                             </div>
@@ -518,9 +507,6 @@ export default function PropertyFlightSearchBar({
                                         onClick={() => handleSortSelect(opt.value)}
                                     >
                                         <span>{opt.label}</span>
-                                        {selectedSort === opt.value && (
-                                            <Check size={14} className="property-check-icon" />
-                                        )}
                                     </button>
                                 ))}
                             </div>

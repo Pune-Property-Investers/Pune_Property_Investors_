@@ -17,6 +17,9 @@ import "./PropertyListingCard.css";
 const FALLBACK_IMAGE =
     "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=85";
 
+const BLANK_PLACEHOLDER_IMAGE =
+    "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%20viewBox%3D%220%200%20800%20600%22%3E%3Crect%20fill%3D%22%230f172a%22%20width%3D%22800%22%20height%3D%22600%22%2F%3E%3Crect%20x%3D%2220%22%20y%3D%2220%22%20width%3D%22760%22%20height%3D%22560%22%20fill%3D%22none%22%20stroke%3D%22%231e293b%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%228%208%22%20rx%3D%2216%22%2F%3E%3Ctext%20fill%3D%22%23475569%22%20font-family%3D%22system-ui%2Csans-serif%22%20font-size%3D%2222%22%20font-weight%3D%22500%22%20x%3D%2250%25%22%20y%3D%2248%25%22%20text-anchor%3D%22middle%22%3EImages%20Coming%20Soon%3C%2Ftext%3E%3Ctext%20fill%3D%22%23334155%22%20font-family%3D%22system-ui%2Csans-serif%22%20font-size%3D%2215%22%20x%3D%2250%25%22%20y%3D%2255%25%22%20text-anchor%3D%22middle%22%3EVerified%20Listing%3C%2Ftext%3E%3C%2Fsvg%3E";
+
 const CURATED_IMAGE_POOLS = [
     [
         "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85",
@@ -57,6 +60,15 @@ const CURATED_IMAGE_POOLS = [
 ];
 
 function resolvePropertyImages(property) {
+    // If property explicitly has images kept blank
+    const isExplicitlyBlank =
+        (property?.image === "" || property?.image === null) &&
+        (!property?.images || (Array.isArray(property?.images) && property.images.length === 0));
+
+    if (isExplicitlyBlank) {
+        return [BLANK_PLACEHOLDER_IMAGE];
+    }
+
     const rawList = [
         property?.image,
         ...(Array.isArray(property?.images) ? property.images : []),

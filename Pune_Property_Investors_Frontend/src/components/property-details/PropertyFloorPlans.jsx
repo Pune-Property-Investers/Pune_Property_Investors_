@@ -526,23 +526,7 @@ export function getFloorPlansData(property = {}) {
     const generatedPlans = filteredResidential.length > 0 ? filteredResidential : allResidentialPlans;
 
     if (customPlans) {
-        const merged = [...customPlans];
-        const customBhks = Array.from(new Set(customPlans.map((p) => p.bhkCategory || p.bhk).filter(Boolean)));
-        for (const bhkLabel of customBhks) {
-            const existingForBhk = merged.filter((p) => (p.bhkCategory || p.bhk) === bhkLabel);
-            if (existingForBhk.length < 3) {
-                const extras = allResidentialPlans.filter(
-                    (p) =>
-                        (p.bhkCategory === bhkLabel || p.bhk === bhkLabel) &&
-                        !existingForBhk.some((ex) => Number(ex.carpetArea) === Number(p.carpetArea))
-                );
-                for (const extra of extras) {
-                    if (merged.filter((p) => (p.bhkCategory || p.bhk) === bhkLabel).length >= 4) break;
-                    merged.push(extra);
-                }
-            }
-        }
-        return merged;
+        return customPlans;
     }
 
     return generatedPlans;

@@ -222,7 +222,7 @@ export default function AboutPage() {
 
     return (
         <div className="about-luxury-page">
-            <Header transparentAtTop={true} />
+            <Header />
 
             <main>
                 {/* 1. ARCHITECTURAL EDITORIAL HERO */}

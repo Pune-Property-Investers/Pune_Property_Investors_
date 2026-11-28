@@ -144,54 +144,109 @@
    Category Tabs Bar (Pills Centered Above Capsule)
    -------------------------------------------------------------------------- */
 
-.hero-oyo-tabs {
-    display: inline-flex;
+.hero-oyo-tabs-wrapper {
+    position: relative;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 5px;
-    margin: 0 auto 22px auto;
-    background: rgba(10, 8, 7, 0.52);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: min(96%, 980px);
+    margin: 0 auto 24px auto;
+    width: 100%;
+}
+
+.hero-oyo-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 6px 8px;
+    background: rgba(10, 8, 7, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.28);
     border-radius: 9999px;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    max-width: 95vw;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    max-width: 100%;
     overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    margin: 0 auto;
 }
 
 .hero-oyo-tabs::-webkit-scrollbar {
     display: none;
 }
 
-.hero-oyo-tab {
-    padding: 8px 18px;
-    border-radius: 9999px;
-    border: none;
-    background: transparent;
-    color: rgba(255, 255, 255, 0.88);
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 13px;
-    font-weight: 600;
+.hero-oyo-tabs-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(14, 11, 9, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.hero-oyo-tabs-arrow:hover {
+    background: #ffffff;
+    color: #0a0807;
+    border-color: #ffffff;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.hero-oyo-tabs-arrow--left {
+    left: -12px;
+}
+
+.hero-oyo-tabs-arrow--right {
+    right: -12px;
+}
+
+.hero-oyo-tab {
+    padding: 9px 20px;
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.92);
+    font-family: var(--font-sans), Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     white-space: nowrap;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .hero-oyo-tab:hover {
     color: #ffffff;
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
 }
 
 .hero-oyo-tab--active {
     background: #ffffff !important;
-    color: #111827 !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    color: #0a0807 !important;
+    font-weight: 700 !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
 }
 
 /* --------------------------------------------------------------------------
@@ -230,6 +285,9 @@
     gap: 2px;
     box-sizing: border-box;
     transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
 }
 
 .hero-search-card__field:first-of-type {
@@ -252,23 +310,23 @@
 /* Small Upper Label (Matched with Page Warm Gold Accent) */
 .hero-search-card__label {
     display: block;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 9.5px;
-    font-weight: 700;
-    letter-spacing: 0.7px;
+    font-family: var(--font-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 7.5px;
+    font-weight: 400 !important;
+    letter-spacing: 0.35px;
     text-transform: uppercase;
     color: #f6d28b;
     line-height: 1.2;
     cursor: pointer;
     text-align: left;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    text-shadow: none;
 }
 
 /* Input / Select Row */
 .hero-search-card__input-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     width: 100%;
 }
 
@@ -276,16 +334,16 @@
 .hero-search-card__icon {
     color: #c49866;
     flex-shrink: 0;
-    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+    filter: none;
 }
 
 /* Select Dropdown */
 .hero-search-card__select {
     flex: 1;
     min-width: 0;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 13.5px;
-    font-weight: 700;
+    font-family: var(--font-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 9.5px;
+    font-weight: 400 !important;
     color: #ffffff;
     border: none;
     outline: none;
@@ -297,7 +355,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+    text-shadow: none;
 }
 
 .hero-search-card__select:focus {
@@ -307,15 +365,140 @@
 .hero-search-card__select option {
     background: #181512;
     color: #ffffff;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 11px;
+    font-weight: 400;
 }
 
-/* Chevron Down */
+/* Display Value in Custom Dropdown Field */
+.hero-search-card__display-val {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--font-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 9.5px;
+    font-weight: 400 !important;
+    color: #ffffff;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-shadow: none;
+    text-align: left;
+}
+
+/* Chevron Down with Rotation on Open */
 .hero-search-card__chevron {
     color: rgba(255, 255, 255, 0.65);
     flex-shrink: 0;
     pointer-events: none;
+    transition: transform 0.2s ease;
+}
+
+.hero-search-card__chevron.is-open {
+    transform: rotate(180deg);
+}
+
+/* Custom Dropdown Popup (Opens Downward, Rounded Shape, Small Font Size with Checkbox on Right) */
+.hero-custom-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 230px;
+    width: 100%;
+    max-height: min(165px, 22vh);
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 16px 36px -6px rgba(15, 23, 42, 0.22), 0 4px 12px rgba(15, 23, 42, 0.08);
+    padding: 6px;
+    z-index: 1000;
+    animation: heroDropdownIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.hero-custom-dropdown--right {
+    left: auto;
+    right: 0;
+    min-width: 180px;
+}
+
+@keyframes heroDropdownIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.hero-custom-dropdown__list {
+    max-height: min(150px, calc(22vh - 15px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f8fafc;
+}
+
+.hero-custom-dropdown__list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.hero-custom-dropdown__list::-webkit-scrollbar-track {
+    background: #f8fafc;
+    border-radius: 4px;
+}
+
+.hero-custom-dropdown__list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.hero-custom-dropdown__list::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+.hero-custom-dropdown__item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.hero-custom-dropdown__item:hover {
+    background: #fdf8f0;
+}
+
+.hero-custom-dropdown__item.is-active {
+    background: #fbf2e3;
+}
+
+.hero-custom-dropdown__item.is-active .hero-custom-dropdown__text {
+    color: #a77a48;
+    font-weight: 600;
+}
+
+.hero-custom-dropdown__text {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1e293b;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hero-custom-dropdown__checkbox {
+    display: none !important;
 }
 
 /* Bottom Split Row (Unwrapped on Desktop/Laptop so all 5 items sit in a single line) */
@@ -326,9 +509,9 @@
 /* Luxury Architectural Bronze/Gold Search Button (Matched with Brand Palette) */
 .hero-search-card__submit-btn {
     flex: 0 0 auto;
-    min-width: 125px;
+    min-width: 100px;
     min-height: 52px;
-    padding: 0 20px;
+    padding: 0 16px;
     background: linear-gradient(135deg, #c49866 0%, #a77a48 100%);
     color: #ffffff;
     border: none;
@@ -336,11 +519,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    font-family: var(--font-sans), Inter, sans-serif;
-    font-size: 14.5px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
+    gap: 6px;
+    font-family: var(--font-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 12.5px;
+    font-weight: 500 !important;
+    letter-spacing: 0.2px;
     cursor: pointer;
     box-shadow: 0 6px 18px rgba(167, 122, 72, 0.45);
     transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
@@ -601,30 +784,41 @@
         line-height: 1.2;
     }
 
-    /* Category Pill Tabs (Centered & All Visible on Mobile) */
+    /* Category Pill Tabs Wrapper & Slider */
+    .hero-oyo-tabs-wrapper {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto 16px auto;
+        padding: 0 4px;
+    }
+
+    .hero-oyo-tabs-arrow {
+        display: none;
+    }
+
     .hero-oyo-tabs {
         display: flex;
         width: fit-content;
         max-width: 100%;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
-        gap: 3px;
-        padding: 4px 5px;
-        margin: 0 auto 14px auto;
+        gap: 5px;
+        padding: 4px 6px;
+        margin: 0 auto;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
         scroll-snap-type: x mandatory;
-        background: rgba(12, 10, 8, 0.68);
-        border: 1px solid rgba(255, 255, 255, 0.22);
+        background: rgba(12, 10, 8, 0.72);
+        border: 1px solid rgba(255, 255, 255, 0.25);
         border-radius: 9999px;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
     }
 
     .hero-oyo-tab {
-        padding: 6px 8px;
-        font-size: 10px;
+        padding: 7px 14px;
+        font-size: 13px;
         font-weight: 600;
         border-radius: 9999px;
         white-space: nowrap;
@@ -642,7 +836,47 @@
         padding: 4px 5px;
         gap: 4px;
         border-radius: 13px;
+        overflow: visible;
+    }
+
+    .hero-custom-dropdown {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        min-width: 190px;
+        width: max-content;
+        max-width: 85vw;
+        max-height: min(140px, 20vh);
+        border-radius: 12px;
+        padding: 5px;
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+        z-index: 9999;
         overflow: hidden;
+    }
+
+    .hero-custom-dropdown--right {
+        left: auto;
+        right: 0;
+    }
+
+    .hero-custom-dropdown__list {
+        max-height: min(130px, calc(20vh - 10px));
+        overflow-y: auto;
+    }
+
+    .hero-custom-dropdown__item {
+        padding: 7px 10px;
+    }
+
+    .hero-custom-dropdown__text {
+        font-size: 12.5px;
+    }
+
+    .hero-search-card__display-val {
+        font-family: var(--font-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        font-size: 8.5px;
+        font-weight: 400;
+        text-shadow: none;
     }
 
     .hero-search-card__field {
@@ -661,11 +895,14 @@
     }
 
     .hero-search-card__label {
-        font-size: 6.5px;
+        font-family: var(--font-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        font-size: 5.5px;
+        font-weight: 500;
         letter-spacing: 0.2px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        text-shadow: none;
     }
 
     .hero-search-card__input-row {
@@ -675,6 +912,7 @@
     .hero-search-card__icon {
         width: 11px;
         height: 11px;
+        filter: none;
     }
 
     .hero-search-card__chevron {
@@ -682,8 +920,10 @@
     }
 
     .hero-search-card__select {
-        font-size: 10px;
-        font-weight: 600;
+        font-family: var(--font-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        font-size: 8.5px;
+        font-weight: 400;
+        text-shadow: none;
     }
 
     .hero-search-card__bottom-row {
@@ -741,9 +981,9 @@
 
     .hero-search-card__submit-btn span {
         color: #ffffff !important;
-        font-family: var(--font-sans), Inter, sans-serif;
-        font-size: 10.5px;
-        font-weight: 700;
+        font-family: var(--font-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        font-size: 10px;
+        font-weight: 500 !important;
         letter-spacing: 0.15px;
         white-space: nowrap;
     }
@@ -823,13 +1063,14 @@
     }
 
     .hero-oyo-tabs {
-        gap: 2px;
-        padding: 3px 4px;
+        gap: 4px;
+        padding: 3px 5px;
+        justify-content: flex-start;
     }
 
     .hero-oyo-tab {
-        padding: 5px 7px;
-        font-size: 9.5px;
+        padding: 6px 12px;
+        font-size: 12px;
     }
 
     .hero-search-card {

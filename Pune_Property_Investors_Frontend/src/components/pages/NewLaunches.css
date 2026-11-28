@@ -2261,11 +2261,14 @@
     }
 
     .nl-hero-mobile-search .hero-search-card__label {
-        font-size: 6.5px;
+        font-family: var(--font-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        font-size: 5.5px;
+        font-weight: 500;
         letter-spacing: 0.2px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        text-shadow: none;
     }
 
     .nl-hero-mobile-search .hero-search-card__input-row {
@@ -2275,6 +2278,7 @@
     .nl-hero-mobile-search .hero-search-card__icon {
         width: 11px;
         height: 11px;
+        filter: none;
     }
 
     .nl-hero-mobile-search .hero-search-card__chevron {
@@ -2282,8 +2286,10 @@
     }
 
     .nl-hero-mobile-search .hero-search-card__select {
-        font-size: 10px;
-        font-weight: 600;
+        font-family: var(--font-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        font-size: 8.5px;
+        font-weight: 400;
+        text-shadow: none;
     }
 
     .nl-hero-mobile-search .hero-search-card__bottom-row {
@@ -2312,8 +2318,9 @@
         border: none;
         border-radius: 9px;
         color: #ffffff;
-        font-weight: 700;
-        font-size: 10.5px;
+        font-family: var(--font-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        font-weight: 500;
+        font-size: 10px;
         display: flex;
         align-items: center;
         justify-content: center;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { heroSettingService } from "../../services/heroSetting.service";
@@ -16,10 +16,13 @@ import {
     ShieldCheck,
     Bed,
     ChevronDown,
+    ChevronLeft,
+    ChevronRight,
     Sparkles,
     CirclePercent,
     Percent,
     Calendar,
+    Check,
 } from "lucide-react";
 
 const ICON_MAP = {
@@ -111,6 +114,50 @@ function HeroSection({ activeTab = "projects", onTabChange, previewData }) {
     const [propertyType, setPropertyType] = useState("Residential");
     const [bhk, setBhk] = useState("Any");
     const [budget, setBudget] = useState("Any Budget");
+    const [activeDropdown, setActiveDropdown] = useState(null); // 'location' | 'type' | 'budget' | 'bhk' | null
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (!e.target.closest(".hero-search-card__field")) {
+                setActiveDropdown(null);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    // Tabs slider scroll & navigation
+    const tabsTrackRef = useRef(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(false);
+
+    const checkTabScroll = () => {
+        const el = tabsTrackRef.current;
+        if (el) {
+            setCanScrollLeft(el.scrollLeft > 6);
+            setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 6);
+        }
+    };
+
+    useEffect(() => {
+        const el = tabsTrackRef.current;
+        if (!el) return;
+        checkTabScroll();
+        el.addEventListener("scroll", checkTabScroll, { passive: true });
+        window.addEventListener("resize", checkTabScroll);
+        return () => {
+            el.removeEventListener("scroll", checkTabScroll);
+            window.removeEventListener("resize", checkTabScroll);
+        };
+    }, []);
+
+    const slideTabs = (direction) => {
+        const el = tabsTrackRef.current;
+        if (el) {
+            const scrollAmount = direction === "left" ? -190 : 190;
+            el.scrollBy({ left: scrollAmount, behavior: "smooth" });
+        }
+    };
 
     const [dbHero, setDbHero] = useState(null);
     const [dbLocalities, setDbLocalities] = useState([]);
@@ -299,28 +346,53 @@ function HeroSection({ activeTab = "projects", onTabChange, previewData }) {
                     </span>
                 </h1>
 
-                {/* Category Tabs */}
+                {/* Category Tabs Slider with Controls */}
                 {showCategoryTabs && (
-                    <div
-                        className="hero-oyo-tabs"
-                        role="tablist"
-                        aria-label="Project category tabs"
-                    >
-                        {searchTabs.map((tab) => (
-                            <Link
-                                key={tab.key}
-                                href={tab.href}
-                                role="tab"
-                                aria-selected={activeTab === tab.key}
-                                className={`hero-oyo-tab ${activeTab === tab.key
-                                    ? "hero-oyo-tab--active"
-                                    : ""
-                                    }`}
-                                onClick={() => handleTabChange(tab.key)}
+                    <div className="hero-oyo-tabs-wrapper">
+                        {canScrollLeft && (
+                            <button
+                                type="button"
+                                className="hero-oyo-tabs-arrow hero-oyo-tabs-arrow--left"
+                                onClick={() => slideTabs("left")}
+                                aria-label="Slide tabs left"
                             >
-                                {tab.label}
-                            </Link>
-                        ))}
+                                <ChevronLeft size={16} />
+                            </button>
+                        )}
+
+                        <div
+                            ref={tabsTrackRef}
+                            className="hero-oyo-tabs"
+                            role="tablist"
+                            aria-label="Project category tabs"
+                        >
+                            {searchTabs.map((tab) => (
+                                <Link
+                                    key={tab.key}
+                                    href={tab.href}
+                                    role="tab"
+                                    aria-selected={activeTab === tab.key}
+                                    className={`hero-oyo-tab ${activeTab === tab.key
+                                        ? "hero-oyo-tab--active"
+                                        : ""
+                                        }`}
+                                    onClick={() => handleTabChange(tab.key)}
+                                >
+                                    {tab.label}
+                                </Link>
+                            ))}
+                        </div>
+
+                        {canScrollRight && (
+                            <button
+                                type="button"
+                                className="hero-oyo-tabs-arrow hero-oyo-tabs-arrow--right"
+                                onClick={() => slideTabs("right")}
+                                aria-label="Slide tabs right"
+                            >
+                                <ChevronRight size={16} />
+                            </button>
+                        )}
                     </div>
                 )}
 
@@ -335,189 +407,216 @@ function HeroSection({ activeTab = "projects", onTabChange, previewData }) {
                     >
 
                         {/* Location */}
-                        <div className="hero-search-card__field">
-
-                            <label
-                                htmlFor="search-location"
-                                className="hero-search-card__label"
-                            >
+                        <div
+                            className={`hero-search-card__field ${activeDropdown === "location" ? "is-dropdown-open" : ""}`}
+                            onClick={() => setActiveDropdown((prev) => (prev === "location" ? null : "location"))}
+                        >
+                            <label className="hero-search-card__label">
                                 LOCATION IN PUNE
                             </label>
 
                             <div className="hero-search-card__input-row">
-
                                 <MapPin
                                     className="hero-search-card__icon"
                                     size={16}
                                 />
-
-                                <select
-                                    id="search-location"
-                                    value={location}
-                                    onChange={(e) =>
-                                        setLocation(e.target.value)
-                                    }
-                                    className="hero-search-card__select"
-                                >
-                                    <option value="All Locations">
-                                        e.g. Baner, Wakad, Kharadi...
-                                    </option>
-
-                                    {locationOptions
-                                        .filter((l) => l !== "All Locations")
-                                        .map((item) => (
-                                            <option key={item} value={item}>
-                                                {item}, Pune
-                                            </option>
-                                        ))}
-                                </select>
-
+                                <span className="hero-search-card__display-val">
+                                    {location === "All Locations" ? "e.g. Baner, Wakad, Kharadi..." : `${location}, Pune`}
+                                </span>
                                 <ChevronDown
-                                    className="hero-search-card__chevron"
+                                    className={`hero-search-card__chevron ${activeDropdown === "location" ? "is-open" : ""}`}
                                     size={14}
                                 />
-
                             </div>
+
+                            {activeDropdown === "location" && (
+                                <div className="hero-custom-dropdown" onClick={(e) => e.stopPropagation()}>
+                                    <div className="hero-custom-dropdown__list">
+                                        <button
+                                            type="button"
+                                            className={`hero-custom-dropdown__item ${location === "All Locations" ? "is-active" : ""}`}
+                                            onClick={() => {
+                                                setLocation("All Locations");
+                                                setActiveDropdown(null);
+                                            }}
+                                        >
+                                            <span className="hero-custom-dropdown__text">All Locations</span>
+                                        </button>
+                                        {locationOptions
+                                            .filter((l) => l !== "All Locations")
+                                            .map((item) => (
+                                                <button
+                                                    key={item}
+                                                    type="button"
+                                                    className={`hero-custom-dropdown__item ${location === item ? "is-active" : ""}`}
+                                                    onClick={() => {
+                                                        setLocation(item);
+                                                        setActiveDropdown(null);
+                                                    }}
+                                                >
+                                                    <span className="hero-custom-dropdown__text">{item}, Pune</span>
+                                                </button>
+                                            ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         {/* Property Type */}
-                        <div className="hero-search-card__field">
-
-                            <label
-                                htmlFor="search-type"
-                                className="hero-search-card__label"
-                            >
+                        <div
+                            className={`hero-search-card__field ${activeDropdown === "type" ? "is-dropdown-open" : ""}`}
+                            onClick={() => setActiveDropdown((prev) => (prev === "type" ? null : "type"))}
+                        >
+                            <label className="hero-search-card__label">
                                 PROPERTY TYPE
                             </label>
 
                             <div className="hero-search-card__input-row">
-
                                 <Building2
                                     className="hero-search-card__icon"
                                     size={16}
                                 />
-
-                                <select
-                                    id="search-type"
-                                    value={propertyType}
-                                    onChange={(e) =>
-                                        setPropertyType(e.target.value)
-                                    }
-                                    className="hero-search-card__select"
-                                >
-                                    <option value="Residential">
-                                        All Types
-                                    </option>
-
-                                    {propertyTypes.map((item) => (
-                                        <option
-                                            key={item.value}
-                                            value={item.value}
-                                        >
-                                            {item.label}
-                                        </option>
-                                    ))}
-                                </select>
-
+                                <span className="hero-search-card__display-val">
+                                    {propertyTypes.find((p) => p.value === propertyType)?.label || (propertyType === "Residential" ? "All Types" : propertyType)}
+                                </span>
                                 <ChevronDown
-                                    className="hero-search-card__chevron"
+                                    className={`hero-search-card__chevron ${activeDropdown === "type" ? "is-open" : ""}`}
                                     size={14}
                                 />
-
                             </div>
+
+                            {activeDropdown === "type" && (
+                                <div className="hero-custom-dropdown" onClick={(e) => e.stopPropagation()}>
+                                    <div className="hero-custom-dropdown__list">
+                                        <button
+                                            type="button"
+                                            className={`hero-custom-dropdown__item ${propertyType === "Residential" ? "is-active" : ""}`}
+                                            onClick={() => {
+                                                setPropertyType("Residential");
+                                                setActiveDropdown(null);
+                                            }}
+                                        >
+                                            <span className="hero-custom-dropdown__text">All Types</span>
+                                        </button>
+                                        {propertyTypes.map((item) => (
+                                            <button
+                                                key={item.value}
+                                                type="button"
+                                                className={`hero-custom-dropdown__item ${propertyType === item.value ? "is-active" : ""}`}
+                                                onClick={() => {
+                                                    setPropertyType(item.value);
+                                                    setActiveDropdown(null);
+                                                }}
+                                            >
+                                                <span className="hero-custom-dropdown__text">{item.label}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         {/* Budget */}
-                        <div className="hero-search-card__field">
-
-                            <label
-                                htmlFor="search-budget"
-                                className="hero-search-card__label"
-                            >
+                        <div
+                            className={`hero-search-card__field ${activeDropdown === "budget" ? "is-dropdown-open" : ""}`}
+                            onClick={() => setActiveDropdown((prev) => (prev === "budget" ? null : "budget"))}
+                        >
+                            <label className="hero-search-card__label">
                                 BUDGET
                             </label>
 
                             <div className="hero-search-card__input-row">
-
                                 <IndianRupee
                                     className="hero-search-card__icon"
                                     size={15}
                                 />
-
-                                <select
-                                    id="search-budget"
-                                    value={budget}
-                                    onChange={(e) =>
-                                        setBudget(e.target.value)
-                                    }
-                                    className="hero-search-card__select"
-                                >
-                                    {budgetOptions.map((item) => (
-                                        <option
-                                            key={item.value}
-                                            value={item.value}
-                                        >
-                                            {item.label}
-                                        </option>
-                                    ))}
-                                </select>
-
+                                <span className="hero-search-card__display-val">
+                                    {budgetOptions.find((b) => b.value === budget)?.label || budget}
+                                </span>
                                 <ChevronDown
-                                    className="hero-search-card__chevron"
+                                    className={`hero-search-card__chevron ${activeDropdown === "budget" ? "is-open" : ""}`}
                                     size={14}
                                 />
-
                             </div>
+
+                            {activeDropdown === "budget" && (
+                                <div className="hero-custom-dropdown" onClick={(e) => e.stopPropagation()}>
+                                    <div className="hero-custom-dropdown__list">
+                                        {budgetOptions.map((item) => (
+                                            <button
+                                                key={item.value}
+                                                type="button"
+                                                className={`hero-custom-dropdown__item ${budget === item.value ? "is-active" : ""}`}
+                                                onClick={() => {
+                                                    setBudget(item.value);
+                                                    setActiveDropdown(null);
+                                                }}
+                                            >
+                                                <span className="hero-custom-dropdown__text">{item.label}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         {/* Bedrooms and Search Button */}
                         <div className="hero-search-card__bottom-row">
 
                             {/* Bedrooms */}
-                            <div className="hero-search-card__field hero-search-card__field--half">
-
-                                <label
-                                    htmlFor="search-bhk"
-                                    className="hero-search-card__label"
-                                >
+                            <div
+                                className={`hero-search-card__field hero-search-card__field--half ${activeDropdown === "bhk" ? "is-dropdown-open" : ""}`}
+                                onClick={() => setActiveDropdown((prev) => (prev === "bhk" ? null : "bhk"))}
+                            >
+                                <label className="hero-search-card__label">
                                     BEDROOMS
                                 </label>
 
                                 <div className="hero-search-card__input-row">
-
                                     <Bed
                                         className="hero-search-card__icon"
                                         size={16}
                                     />
-
-                                    <select
-                                        id="search-bhk"
-                                        value={bhk}
-                                        onChange={(e) =>
-                                            setBhk(e.target.value)
-                                        }
-                                        className="hero-search-card__select"
-                                    >
-                                        <option value="Any">BHK</option>
-
-                                        {bhkOptions
-                                            .filter((b) => b.value !== "Any")
-                                            .map((item) => (
-                                                <option
-                                                    key={item.value}
-                                                    value={item.value}
-                                                >
-                                                    {item.label}
-                                                </option>
-                                            ))}
-                                    </select>
-
+                                    <span className="hero-search-card__display-val">
+                                        {bhk === "Any" ? "BHK" : `${bhk} BHK`}
+                                    </span>
                                     <ChevronDown
-                                        className="hero-search-card__chevron"
+                                        className={`hero-search-card__chevron ${activeDropdown === "bhk" ? "is-open" : ""}`}
                                         size={14}
                                     />
-
                                 </div>
+
+                                {activeDropdown === "bhk" && (
+                                    <div className="hero-custom-dropdown hero-custom-dropdown--right" onClick={(e) => e.stopPropagation()}>
+                                        <div className="hero-custom-dropdown__list">
+                                            <button
+                                                type="button"
+                                                className={`hero-custom-dropdown__item ${bhk === "Any" ? "is-active" : ""}`}
+                                                onClick={() => {
+                                                    setBhk("Any");
+                                                    setActiveDropdown(null);
+                                                }}
+                                            >
+                                                <span className="hero-custom-dropdown__text">Any BHK</span>
+                                            </button>
+                                            {bhkOptions
+                                                .filter((b) => b.value !== "Any")
+                                                .map((item) => (
+                                                    <button
+                                                        key={item.value}
+                                                        type="button"
+                                                        className={`hero-custom-dropdown__item ${bhk === item.value ? "is-active" : ""}`}
+                                                        onClick={() => {
+                                                            setBhk(item.value);
+                                                            setActiveDropdown(null);
+                                                        }}
+                                                    >
+                                                        <span className="hero-custom-dropdown__text">{item.label}</span>
+                                                    </button>
+                                                ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Search Button */}
